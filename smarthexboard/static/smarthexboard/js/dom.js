@@ -37,5 +37,5 @@ function makeVisible(tag) {
 
 function makeHidden(tag) {
 	document.getElementById(tag).style.display = "none";
-	document.getElementById('game').focus() //focus back the game canvas
+	document.getElementById('game').focus() // focus back the game canvas
 }

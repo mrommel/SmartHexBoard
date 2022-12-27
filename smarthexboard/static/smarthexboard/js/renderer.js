@@ -9,9 +9,9 @@
 function Renderer(mapObj) {
 
     // Hex sizes compatible with PG2 sizes
-	this.s = 72;  // hexagon segment size                    |\
-	this.h = this.s/2; // hexagon height h = sin(30)*s           r| \ s
-	this.r = 46;  // hexagon radius r = cos(30)*s ~ s*0.833  -h-
+	this.s = 36;  // hexagon segment size                    |\
+	this.h = this.s * 0.5; // hexagon height h = sin(30)*s           r| \ s
+	this.r = this.s * 0.64;  // hexagon radius r = s*0,64  -h-
 
 	// Canvas offset from the browser window (leaves space for top menu)
 	this.canvasOffsetX = 0;
@@ -108,7 +108,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
             } else {
                 img = this.imgTerrains['terrain_grass@3x.png'];
             }
-            this.terrainsCtx.drawImage(img, x0, y0);
+            this.terrainsCtx.drawImage(img, x0, y0, 72, 72);
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
         }
     }

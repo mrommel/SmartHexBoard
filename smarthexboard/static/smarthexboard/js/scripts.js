@@ -17,6 +17,8 @@ jQuery(function ($) {
     $(document).ready(function () {
         drawMap();
 
+        initUI();
+
         // hide pre-loader
         $('#preloader').delay(200).fadeOut('fade');
     });
@@ -25,6 +27,7 @@ jQuery(function ($) {
 
 var mouse = { x: 0, y: 0 };
 var renderer;
+var uiRenderer = new UIBuilder();
 
 function resizeCanvas() {
     drawMap();
@@ -86,4 +89,15 @@ function handleMouseMove(e) {
 	mouse.x = e.pageX;
     mouse.Y = e.pageY;
     // console.log('mouse move: ' + mouse.x + ', ' + mouse.y);
+}
+
+function initUI() {
+    // makeVisible('ui-message');
+    uiRenderer.message('abc', 'def');
+
+    $('#uiokbut').click(function (event) {
+        event.preventDefault();
+
+        makeHidden('ui-message');
+    });
 }
