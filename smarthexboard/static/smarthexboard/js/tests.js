@@ -68,9 +68,9 @@ function test3_HexCube_constructor() {
 }
 
 function test4_HexCube_fromHexPoint() {
-    var cb = new HexCube(0, 0, 0);
     var pt = new HexPoint(1, 1);
-    cb.fromHexPoint(pt);
+    var cb = new HexCube(pt);
+    // cb.fromHexPoint(pt);
 
     if (cb.q == 0 && cb.r == -1 && cb.s == 1) {
         $('#tests').append('<p>Test3 successful</p>');

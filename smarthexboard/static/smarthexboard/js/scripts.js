@@ -82,7 +82,9 @@ function handleMouseClick(e) {
     var minfo = getMouseInfo(terrainCanvas, e);
 	var cell = renderer.screenToCell(minfo.x, minfo.y);
 
-    console.log('mouse click on: ' + cell.col + ', ' + cell.row);
+    var text = 'mouse click on: ' + cell.col + ', ' + cell.row;
+    console.log(text);
+    uiRenderer.message('mouse clicked', text);
 }
 
 function handleMouseMove(e) {
@@ -93,11 +95,11 @@ function handleMouseMove(e) {
 
 function initUI() {
     // makeVisible('ui-message');
-    uiRenderer.message('abc', 'def');
+    // uiRenderer.message('abc', 'def');
 
-    $('#uiokbut').click(function (event) {
+    /*$('#uiokbut').click(function (event) {
         event.preventDefault();
 
         makeHidden('ui-message');
-    });
+    });*/
 }

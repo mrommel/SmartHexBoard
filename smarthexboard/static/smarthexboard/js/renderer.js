@@ -11,7 +11,7 @@ function Renderer(mapObj) {
     // Hex sizes compatible with PG2 sizes
 	this.s = 36;  // hexagon segment size                    |\
 	this.h = this.s * 0.5; // hexagon height h = sin(30)*s           r| \ s
-	this.r = this.s * 0.64;  // hexagon radius r = s*0,64  -h-
+	this.r = this.s * 0.64;  // hexagon radius r = s*0.833  -h-
 
 	// Canvas offset from the browser window (leaves space for top menu)
 	this.canvasOffsetX = 0;
@@ -19,8 +19,8 @@ function Renderer(mapObj) {
 
 	// Where to start rendering respective to the canvas
 	// Since PG2 maps define even the half and "quarter" hexes that form at the edges we need to offset those
-	this.renderOffsetX = 180 - (this.s + this.h);
-	this.renderOffsetY = 180 - this.r;
+	this.renderOffsetX = 50 - (this.s + this.h);
+	this.renderOffsetY = 50 - this.r;
 
 	// we slice the screen in columns of s + h size
 	this.colSlice = this.s + this.h;
@@ -92,15 +92,21 @@ Renderer.prototype.render = function(orow, ocol, range) {
         for (var col = renderZone.scol; col < renderZone.ecol; col++) {
 
             // hex = map.map[row][col];
+            var hex = new HexPoint(col, row);
+            console.log('hex=' + hex);
+            var screen = hex.toScreen();
+            console.log('screen=' + screen);
+            x0 = screen.x;
+            y0 = screen.y;
 
             // flat-out hex layout
-            if (col & 1) { // odd column
+            /*if (col & 1) { // odd column
                 y0 =  row * 2 * this.r + this.r + this.renderOffsetY;
                 x0 =  col * (this.s + this.h) + this.h + this.renderOffsetX;
             } else {
                 y0 = row * 2 * this.r  + this.renderOffsetY;
                 x0 = col * (this.s + this.h) + this.h + this.renderOffsetX;
-            }
+            }*/
 
             var img = null;
             if ((row + col) % 2 == 0) {

@@ -16,5 +16,10 @@ UIBuilder.prototype.message = function(title, message) {
     makeVisible('ui-message');
     // TODO change to an event
     // game.uiMessageClicked = false;
-    $('#uiokbut').onclick = function() { makeHidden('ui-message'); game.uiMessageClicked = true; }
+    $('#uiokbut').click(function (event) {
+        event.preventDefault();
+
+        makeHidden('ui-message');
+        // game.uiMessageClicked = true;
+    });
 }
