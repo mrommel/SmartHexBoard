@@ -90,3 +90,15 @@ function test5_HexCube_distanceTo() {
         $('#tests').append('<p>Test4 failed: ' + dist + '</p>');
     }
 }
+
+function test6_HexCube_distanceTo() {
+    var cb1 = new HexCube(0, 0, 0);
+    var cb2 = new HexCube(1, 1, 1);
+    var dist = cb1.distanceTo(cb2);
+
+    if (dist === 1) {
+        $('#tests').append('<p>Test4 successful</p>');
+    } else {
+        $('#tests').append('<p>Test4 failed: ' + dist + '</p>');
+    }
+}

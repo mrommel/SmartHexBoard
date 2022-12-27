@@ -80,11 +80,13 @@ function handleMouseClick(e) {
     var terrainCanvas = document.getElementById('terrains');
 
     var minfo = getMouseInfo(terrainCanvas, e);
-	var cell = renderer.screenToCell(minfo.x, minfo.y);
+	// var cell = renderer.screenToCell(minfo.x, minfo.y);
+	var screenPoint = new CGPoint(minfo.x, minfo.y);
+	var cell = new HexPoint(screenPoint);
 
-    var text = 'mouse click on: ' + cell.col + ', ' + cell.row;
+    var text = 'mouse click on: ' + cell.x + ', ' + cell.y;
     console.log(text);
-    uiRenderer.message('mouse clicked', text);
+    // uiRenderer.message('mouse clicked', text);
 }
 
 function handleMouseMove(e) {

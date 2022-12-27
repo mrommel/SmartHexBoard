@@ -38,8 +38,9 @@ HexLayout.prototype.toHex = function(screenPoint) {
     var point = new CGPoint((screenPoint.x - this.origin.x) / this.size.width, (screenPoint.y - this.origin.y) / this.size.height);
     var q = this.orientation.b0 * point.x + this.orientation.b1 * point.y;
     var r = this.orientation.b2 * point.x + this.orientation.b3 * point.y;
+    var s = -q - r;
 
-    return new HexCube(q, r);
+    return new HexCube(q, r, s);
 }
 
 HexLayout.prototype.toScreen = function(hexCube) {
@@ -56,7 +57,15 @@ var layout = new HexLayout();
 
 function HexPoint(x, y) {
     if (x instanceof HexCube && typeof (y) == 'undefined') {
+        // construct HexPoint from HexCube
         var hexCube = x;
+        this.x = hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2;
+        this.y = hexCube.s;
+    } else if (x instanceof CGPoint && typeof (y) == 'undefined') {
+        // construct HexPoint from screen Point: CGPoint
+        var screenPoint = x;
+        var hexCube = new HexCube(screenPoint);
+        console.log('hexCube=' + hexCube);
         this.x = hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2;
         this.y = hexCube.s;
     } else if (typeof (x) == 'undefined' && typeof (y) == 'undefined') {
@@ -166,6 +175,13 @@ function HexCube(q, r, s) {
         this.q = hex.x - (hex.y + (hex.y&1)) / 2;
         this.s = hex.y;
         this.r = -this.q - this.s
+    } else if (q instanceof CGPoint && typeof (r) == 'undefined' && typeof (s) == 'undefined') {
+        var screenPoint = q;
+        var hexCube = layout.toHex(screenPoint);
+
+        this.q = hexCube.q;
+        this.s = hexCube.s;
+        this.r = hexCube.r;
     } else {
 	    this.q = q;
 	    this.r = r;
