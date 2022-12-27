@@ -1,6 +1,7 @@
 # Smart Hex Board
 
 Smart test for rendering of hex board 
+Javascript based tile visualization (python + django as server)
 
 ## Technique
 
@@ -17,3 +18,4 @@ python3 manage.py runserver 8081
 
 * https://realpython.com/django-setup/
 * https://www.freepik.com/free-photo/grunge-black-concrete-textured-background_17118014.htm
+* https://favicon.io/
