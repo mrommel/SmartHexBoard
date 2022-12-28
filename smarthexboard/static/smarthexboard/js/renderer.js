@@ -72,7 +72,6 @@ function Renderer(mapObj) {
 Renderer.prototype.render = function(orow, ocol, range) {
 
     // console.log('==> render tile at: ' + ocol + ', ' + orow);
-    var x0, y0;
 
     // the map (cell) coords that will be cleared by clearRect
     var clearZone = this.getZoneRangeLimits(orow, ocol, range + 1);
@@ -87,34 +86,22 @@ Renderer.prototype.render = function(orow, ocol, range) {
 
     this.terrainsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
+    // console.log('render x=' + renderZone.srow + ' - ' + renderZone.erow);
     for (var row = renderZone.srow; row < renderZone.erow; row++) {
         // we space the hexagons on each line next column being on the row below
         for (var col = renderZone.scol; col < renderZone.ecol; col++) {
 
             // hex = map.map[row][col];
             var hex = new HexPoint(col, row);
-            console.log('hex=' + hex);
+            // console.log('hex=' + hex);
             var screen = hex.toScreen();
-            console.log('screen=' + screen);
-            x0 = screen.x;
-            y0 = screen.y;
+            // console.log('screen=' + screen);
 
-            // flat-out hex layout
-            /*if (col & 1) { // odd column
-                y0 =  row * 2 * this.r + this.r + this.renderOffsetY;
-                x0 =  col * (this.s + this.h) + this.h + this.renderOffsetX;
-            } else {
-                y0 = row * 2 * this.r  + this.renderOffsetY;
-                x0 = col * (this.s + this.h) + this.h + this.renderOffsetX;
-            }*/
-
-            var img = null;
-            if ((row + col) % 2 == 0) {
-                img = this.imgTerrains['terrain_desert@3x.png'];
-            } else {
-                img = this.imgTerrains['terrain_grass@3x.png'];
-            }
-            this.terrainsCtx.drawImage(img, x0, y0, 72, 72);
+            var terrain = this.map.terrainAt(hex);
+            // console.log('terrain=' + terrain.texture);
+            var img = this.imgTerrains[terrain.texture];
+            // console.log('img=' + img);
+            this.terrainsCtx.drawImage(img, screen.x, screen.y, 72, 72);
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
         }
     }
@@ -166,7 +153,7 @@ Renderer.prototype.cellToScreen = function(row, col, absolute) {
         y0 += this.canvasOffsetY - vp.clientTop - vp.offsetTop;
     }
 
-    return new ScreenPos(x0, y0);
+    return new CGPoint(x0, y0);
 }
 
 // Converts from screen x,y to row,col in map array
@@ -191,6 +178,10 @@ Renderer.prototype.cacheImages = function(callbackFunction) {
 	var imgList = [];
     imgList.push('terrain_desert@3x.png');
     imgList.push('terrain_grass@3x.png');
+    imgList.push('terrain_ocean@3x.png');
+    imgList.push('terrain_plain@3x.png');
+    imgList.push('terrain_snow@3x.png');
+    imgList.push('terrain_tundra@3x.png');
 
     var loaded = 0;
     var toLoad = Object.keys(imgList).length;

@@ -22,10 +22,10 @@
     <title>Smart Hex Board</title>
 
      <!--favicon icon-->
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'smarthexboard/img/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'smarthexboard/img/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'smarthexboard/img/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'smarthexboard/img/site.webmanifest' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'smarthexboard/img/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'smarthexboard/img/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'smarthexboard/img/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'smarthexboard/img/icons/site.webmanifest' %}">
 
     <!--custom css-->
     <link rel="stylesheet" href="{% static 'smarthexboard/css/style.css' %}">
@@ -43,22 +43,18 @@
     </div>
     <!--loader end-->
 
-    <!--full screen canvas-->
+    <!--full screen canvas container-->
     <div id="game"></div>
+
+    <!--ui element container-->
+    <div id="ui"></div>
 
     <!--top menu bar-->
     <div class="topMenu">
         <ul>
-            <li><a href="#">Game</a></li>
+            <li><a href="#" id="menuGame">Game</a></li>
             <li><a href="#">Options</a></li>
         </ul>
-    </div>
-
-    <!--ui-message-->
-    <div id="ui-message">
-        <div id="title">SmartHexBoard</div>
-        <div id="message">Open source HTML5 Turn Based strategy game.<br> (c) 2022 MiRo.</div>
-        <div id="uiokbut"></div>
     </div>
 
     <!--jQuery-->
@@ -67,9 +63,10 @@
     <!--custom js-->
     <script src="{% static 'smarthexboard/js/prototypes.js' %}"></script>
     <script src="{% static 'smarthexboard/js/dom.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/point.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/map.js' %}"></script>
     <script src="{% static 'smarthexboard/js/renderer.js' %}"></script>
     <script src="{% static 'smarthexboard/js/ui.js' %}"></script>
-    <script src="{% static 'smarthexboard/js/point.js' %}"></script>
     <script src="{% static 'smarthexboard/js/scripts.js' %}"></script>
 </body>
 </html>

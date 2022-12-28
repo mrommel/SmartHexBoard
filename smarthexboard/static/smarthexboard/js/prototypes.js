@@ -6,14 +6,14 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-function ScreenPos(x, y) {
-	this.x = x;
-	this.y = y;
+function CGSize(width, height) {
+    this.width = width;
+    this.height = height;
 }
 
-function Cell(row, col) {
-	this.row = row;
-	this.col = col;
+function CGPoint(x, y) {
+    this.x = x;
+    this.y = y;
 }
 
 function MouseInfo(x, y, right_click) {

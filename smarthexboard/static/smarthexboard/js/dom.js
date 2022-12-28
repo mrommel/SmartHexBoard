@@ -12,11 +12,15 @@ function addTag(parent, tag) {
 	var e;
 	var t = document.createElement(tag);
 
-	if (typeof(parent) === 'string') {	e = document.getElementById(parent); }
-	else {e = parent;}
+	if (typeof(parent) === 'string') {
+	    e = document.getElementById(parent);
+	} else {
+	    e = parent;
+	}
 
-	if (e !== null)
+	if (e !== null) {
 		e.appendChild(t);
+	}
 
 	return t;
 }
@@ -24,8 +28,9 @@ function addTag(parent, tag) {
 function isVisible(tag) {
 	var v = document.getElementById(tag).style.display;
 
-	if (v != "" && v != "none")
+	if (v != "" && v != "none") {
 		return true;
+	}
 
 	return false;
 }

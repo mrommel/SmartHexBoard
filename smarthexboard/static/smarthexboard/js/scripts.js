@@ -28,15 +28,13 @@ jQuery(function ($) {
 var mouse = { x: 0, y: 0 };
 var renderer;
 var uiRenderer = new UIBuilder();
+var map = new Map();
 
 function resizeCanvas() {
     drawMap();
 }
 
 function drawMap() {
-    var map = {};
-    map.rows = 10;
-    map.cols = 10;
 
     renderer = new Renderer(map);
 
@@ -104,4 +102,9 @@ function initUI() {
 
         makeHidden('ui-message');
     });*/
+    $('#menuGame').click(function (event) {
+        event.preventDefault();
+
+        uiRenderer.message('menu', 'game');
+    });
 }

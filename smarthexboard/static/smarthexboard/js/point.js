@@ -18,16 +18,6 @@ function HexOrientation() {
     this.startAngle = 0.0;
 }
 
-function CGSize(width, height) {
-    this.width = width;
-    this.height = height;
-}
-
-function CGPoint(x, y) {
-    this.x = x;
-    this.y = y;
-}
-
 function HexLayout() {
     this.orientation = new HexOrientation();
     this.size = new CGSize(36.0, 26.0);
@@ -44,7 +34,7 @@ HexLayout.prototype.toHex = function(screenPoint) {
 }
 
 HexLayout.prototype.toScreen = function(hexCube) {
-    console.log('HexLayout.toScreen(' + hexCube + ')');
+    // console.log('HexLayout.toScreen(' + hexCube + ')');
     var x = (this.orientation.f0 * hexCube.q + this.orientation.f1 * hexCube.r) * this.size.width;
     var y = (this.orientation.f2 * hexCube.q + this.orientation.f3 * hexCube.r) * this.size.height;
 
@@ -65,7 +55,7 @@ function HexPoint(x, y) {
         // construct HexPoint from screen Point: CGPoint
         var screenPoint = x;
         var hexCube = new HexCube(screenPoint);
-        console.log('hexCube=' + hexCube);
+        // console.log('hexCube=' + hexCube);
         this.x = hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2;
         this.y = hexCube.s;
     } else if (typeof (x) == 'undefined' && typeof (y) == 'undefined') {
@@ -96,7 +86,7 @@ HexPoint.prototype.fromHexCube = function(hexCube) {
 
 HexPoint.prototype.toScreen = function() {
     var hexCube = new HexCube(this);
-    console.log('HexPoint.toScreen=' + hexCube);
+    // console.log('HexPoint.toScreen=' + hexCube);
     return hexCube.toScreen();
 }
 
