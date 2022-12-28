@@ -22,15 +22,6 @@ function UIBuilder() {
 
         var ui_message_button = addTag(ui_message, 'div');
         ui_message_button.id = 'uiokbut';
-
-        /*
-        <!--ui-message-->
-        <div id="ui-message">
-            <div id="title">SmartHexBoard</div>
-            <div id="message">Open source HTML5 Turn Based strategy game.<br> (c) 2022 MiRo.</div>
-            <div id="uiokbut"></div>
-        </div>
-        */
     }
 }
 

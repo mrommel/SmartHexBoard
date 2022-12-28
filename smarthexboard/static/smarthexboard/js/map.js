@@ -24,6 +24,7 @@ const TerrainTypes = {
 	grass: new TerrainType("grass", "terrain_grass@3x.png"),
 	ocean: new TerrainType("ocean", "terrain_ocean@3x.png"),
 	plain: new TerrainType("plain", "terrain_plain@3x.png"),
+	shore: new TerrainType("shore", "terrain_shore@3x.png"),
 	snow: new TerrainType("snow", "terrain_snow@3x.png"),
 	tundra: new TerrainType("tundra", "terrain_tundra@3x.png"),
 }

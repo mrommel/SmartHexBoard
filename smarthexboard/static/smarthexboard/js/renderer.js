@@ -176,12 +176,7 @@ Renderer.prototype.screenToCell = function(x, y) {
 // Caches images, func a function to call upon cache completion
 Renderer.prototype.cacheImages = function(callbackFunction) {
 	var imgList = [];
-    imgList.push('terrain_desert@3x.png');
-    imgList.push('terrain_grass@3x.png');
-    imgList.push('terrain_ocean@3x.png');
-    imgList.push('terrain_plain@3x.png');
-    imgList.push('terrain_snow@3x.png');
-    imgList.push('terrain_tundra@3x.png');
+	Object.values(TerrainTypes).map(terrainType => imgList.push(terrainType.texture));
 
     var loaded = 0;
     var toLoad = Object.keys(imgList).length;
