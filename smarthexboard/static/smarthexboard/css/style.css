@@ -3,6 +3,16 @@ html, body {
     padding: 0 !important;
 }
 
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    overflow: auto;
+}
+
 body {
     background-image: url("../img/background.jpg");
     background-repeat: no-repeat;
@@ -119,8 +129,8 @@ body {
     position: absolute;
     height: 20px;
     width: 100%;
-    background-color: gray;
-    border-bottom: 1px solid white;
+    background-color: rgba(32,32,32,0.5);
+    // border-bottom: 1px solid white;
 }
 
 .topMenu ul {
