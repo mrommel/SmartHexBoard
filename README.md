@@ -11,7 +11,8 @@ based on
 ## Start
 
 ```
-python3 manage.py runserver 8081
+# python3 manage.py runserver 8081
+make run
 ```
 
 ## Links
@@ -20,3 +21,4 @@ python3 manage.py runserver 8081
 * https://www.freepik.com/free-photo/grunge-black-concrete-textured-background_17118014.htm
 * https://favicon.io/
 * https://www.longitude.one/maps
+* https://www.garmuri.com/game_ui/109237

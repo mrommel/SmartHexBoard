@@ -26,6 +26,9 @@ jQuery(function ($) {
 }); // JQuery end
 
 var mouse = { x: 0, y: 0 };
+var mouseIsDown = false;
+var offset = { x: 0, y: 0 };
+
 var renderer;
 var uiRenderer = new UIBuilder();
 var map = new Map();
@@ -40,7 +43,9 @@ function drawMap() {
 
     renderer.cacheImages(function() {
         setupCanvas();
-        renderer.render();  // Full page rendering
+
+        // Full page rendering
+        renderer.render();
         // renderer.render(ctx, 8, 2, 0);
         // renderer.render(ctx, 2, 8, 0);
     });
@@ -54,8 +59,10 @@ function setupCanvas() {
     terrainCanvas.height = window.innerHeight;
 
     // attach mouse events
-    terrainCanvas.addEventListener("mousedown", handleMouseClick, false);
-    terrainCanvas.addEventListener("mousemove", handleMouseMove, false);
+    var vp = document.getElementById('game');
+    vp.addEventListener("mousedown", handleMouseDown, true);
+    vp.addEventListener("mousemove", handleMouseMove, true);
+    vp.addEventListener("mouseup", handleMouseUp, true);
 }
 
 function getMouseInfo(canvas, e) {
@@ -70,27 +77,45 @@ function getMouseInfo(canvas, e) {
 	return new MouseInfo(mx, my, right_click);
 }
 
-function handleMouseClick(e) {
-    mouse.x = e.pageX;
-    mouse.Y = e.pageY;
+function handleMouseDown(event) {
+    mouse.x = event.pageX;
+    mouse.Y = event.pageY;
+    mouseIsDown = true;
+
+    var vp = document.getElementById('game');
+    offset.x = vp.offsetLeft - event.clientX;
+    offset.y = vp.offsetTop - event.clientY;
 
     // Get the canvas element form the page
     var terrainCanvas = document.getElementById('terrains');
 
-    var minfo = getMouseInfo(terrainCanvas, e);
+    var minfo = getMouseInfo(terrainCanvas, event);
 	// var cell = renderer.screenToCell(minfo.x, minfo.y);
 	var screenPoint = new CGPoint(minfo.x, minfo.y);
 	var cell = new HexPoint(screenPoint);
 
-    var text = 'mouse click on: ' + cell.x + ', ' + cell.y;
-    console.log(text);
+    // var text = 'mouse click on: ' + cell.x + ', ' + cell.y;
+    // console.log(text);
     // uiRenderer.message('mouse clicked', text);
 }
 
-function handleMouseMove(e) {
-	mouse.x = e.pageX;
-    mouse.Y = e.pageY;
-    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y);
+function handleMouseMove(event) {
+    event.preventDefault();
+	mouse.x = event.pageX;
+    mouse.Y = event.pageY;
+    console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
+
+    if (mouseIsDown) {
+        var vp = document.getElementById('game');
+        vp.style.left = (event.clientX + offset.x) + 'px';
+        vp.style.top  = (event.clientY + offset.y) + 'px';
+
+        console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
+    }
+}
+
+function handleMouseUp(event) {
+    mouseIsDown = false;
 }
 
 function initUI() {

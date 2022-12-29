@@ -148,7 +148,7 @@ Renderer.prototype.cellToScreen = function(row, col, absolute) {
     }
 
     if (absolute) {
-        var vp =document.getElementById('game');
+        var vp = document.getElementById('game');
         x0 += this.canvasOffsetX - vp.clientLeft - vp.offsetLeft;
         y0 += this.canvasOffsetY - vp.clientTop - vp.offsetTop;
     }
