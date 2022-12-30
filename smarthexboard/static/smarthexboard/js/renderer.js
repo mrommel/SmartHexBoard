@@ -30,11 +30,15 @@ function Renderer(mapObj) {
 	this.map = mapObj;
 
 	// canvases and contexts
-	this.terrainCanvas = null;
+	this.terrainsCanvas = null;
 	this.terrainsCtx = null;
+	this.resourcesCanvas = null;
+	this.resourcesCtx = null;
 
-	// image cache dict
+	// image cache dicts
 	this.imgTerrains = {};
+	this.imgResources = {};
+	this.imgFeatures = {};
 
 	createLayers();
 
@@ -42,19 +46,34 @@ function Renderer(mapObj) {
 	function createLayers() {
 		// Check if the canvases already exists in the current document to prevent
 		// overlaying multiple rendering instances
-		if ((this.terrainCanvas = document.getElementById('terrains')) === null) {
-		    this.terrainCanvas = addTag('game', 'canvas');
+		if ((this.terrainsCanvas = document.getElementById('terrains')) === null) {
+		    this.terrainsCanvas = addTag('game', 'canvas');
 		}
-		this.terrainCanvas.id = "terrains";
-		console.log('canvas created');
+		this.terrainsCanvas.id = "terrains";
+		this.terrainsCtx = this.terrainsCanvas.getContext('2d');
+		console.log('terrain canvas created');
 
-		this.terrainsCtx = this.terrainCanvas.getContext('2d');
+		if ((this.featuresCanvas = document.getElementById('features')) === null) {
+		    this.featuresCanvas = addTag('game', 'canvas');
+		}
+		this.featuresCanvas.id = "features";
+		this.featuresCtx = this.featuresCanvas.getContext('2d');
+		console.log('features canvas created');
+
+		if ((this.resourcesCanvas = document.getElementById('resources')) === null) {
+		    this.resourcesCanvas = addTag('game', 'canvas');
+		}
+		this.resourcesCanvas.id = "resources";
+		this.resourcesCtx = this.resourcesCanvas.getContext('2d');
+		console.log('resource canvas created');
 
 		// canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
 		if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
 
 		// Center the canvases
-		this.terrainCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+		this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+		this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+		this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 		/*terrains.style.cssText += "background-image:url('" + imgMapBackground.src + "');"
 				+ "background-size: 100% 100%;"
 				+ "background-repeat: no-repeat;"
@@ -81,10 +100,13 @@ Renderer.prototype.render = function(orow, ocol, range) {
     var spos = this.cellToScreen(clearZone.srow, clearZone.scol, false);
     var epos = this.cellToScreen(clearZone.erow, clearZone.ecol, false);
 
-    this.terrainCanvas = document.getElementById('terrains');
-    this.terrainsCtx = this.terrainCanvas.getContext('2d');
-
+    this.terrainsCanvas = document.getElementById('terrains');
+    this.terrainsCtx = this.terrainsCanvas.getContext('2d');
     this.terrainsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+
+    this.resourcesCanvas = document.getElementById('resources');
+    this.resourcesCtx = this.resourcesCanvas.getContext('2d');
+    this.resourcesCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
     // console.log('render x=' + renderZone.srow + ' - ' + renderZone.erow);
     for (var row = renderZone.srow; row < renderZone.erow; row++) {
@@ -98,11 +120,18 @@ Renderer.prototype.render = function(orow, ocol, range) {
             // console.log('screen=' + screen);
 
             var terrain = this.map.terrainAt(hex);
-            // console.log('terrain=' + terrain.texture);
+            // console.log('terrain=' + terrain + ', at=' + hex);
             var img = this.imgTerrains[terrain.texture];
             // console.log('img=' + img);
             this.terrainsCtx.drawImage(img, screen.x, screen.y, 72, 72);
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
+
+            var resource = this.map.resourceAt(hex);
+            if (resource !== ResourceTypes.none) {
+                console.log('resource=' + resource + ', at=' + hex);
+                var img = this.imgResources[resource.texture];
+                this.resourcesCtx.drawImage(img, screen.x, screen.y, 72, 72);
+            }
         }
     }
 }
@@ -174,32 +203,73 @@ Renderer.prototype.screenToCell = function(x, y) {
 }
 
 // Caches images, func a function to call upon cache completion
-Renderer.prototype.cacheImages = function(callbackFunction) {
+Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 	var imgList = [];
 	Object.values(TerrainTypes).map(terrainType => imgList.push(terrainType.texture));
+	Object.values(FeatureTypes).map(featureType => imgList.push(featureType.texture));
+	Object.values(ResourceTypes).map(resourceType => imgList.push(resourceType.texture));
 
     var loaded = 0;
     var toLoad = Object.keys(imgList).length;
 
-    for (var i in imgList) {
-        if (typeof this.imgTerrains[imgList[i]] !== "undefined") {
-            // console.log("Already loaded");
-            loaded++;
-            continue;
-        }
+    console.log('start caching ' + toLoad + ' images');
 
+    for (var i in imgList) {
         var imgName = imgList[i];
 
-        this.imgTerrains[imgName] = new Image();
-        this.imgTerrains[imgName].onload = function() {
-            // console.log('Cached ' + this.src);
-            loaded++;
-            if (loaded == toLoad) {
-                console.log('Loaded ' + loaded + ' terrain assets');
-                if (callbackFunction) callbackFunction();
+        if (imgName.startsWith('terrain_')) {
+            if (typeof this.imgTerrains[imgName] !== "undefined") {
+                loaded++;
+                continue;
             }
+
+            this.imgTerrains[imgName] = new Image();
+            this.imgTerrains[imgName].onload = function() {
+                console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' terrain assets');
+                    if (callbackFunction) callbackFunction();
+                }
+            }
+            this.imgTerrains[imgName].src = '/static/smarthexboard/img/terrains/' + imgName;
+
+        } else if (imgName.startsWith('feature_')) {
+            if (typeof this.imgFeatures[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgFeatures[imgName] = new Image();
+            this.imgFeatures[imgName].onload = function() {
+                console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' terrain assets');
+                    if (callbackFunction) callbackFunction();
+                }
+            }
+            this.imgFeatures[imgName].src = '/static/smarthexboard/img/features/' + imgName;
+
+        } else if (imgName.startsWith('resource_')) {
+            if (typeof this.imgResources[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgResources[imgName] = new Image();
+            this.imgResources[imgName].onload = function() {
+                console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' terrain assets');
+                    if (callbackFunction) callbackFunction();
+                }
+            }
+            this.imgResources[imgName].src = '/static/smarthexboard/img/resources/' + imgName;
+        } else {
+            throw new Error('image type not handled: ' + imgName);
         }
-        this.imgTerrains[imgName].src = '/static/smarthexboard/img/map/' + imgName;
     }
 }
 

@@ -31,7 +31,26 @@ var offset = { x: 0, y: 0 };
 
 var renderer;
 var uiRenderer = new UIBuilder();
-var map = new Map();
+var map = new Map(10, 10);
+map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(1, 2));
+map.modifyResourceAt(ResourceTypes.whales, new HexPoint(4, 2));
+
+/**
+ * Preloads the image, and invokes the callback as soon
+ * as the image is loaded.
+ * https://gist.github.com/enyo/5697533
+ */
+function preload(src, callback) {
+    // Create a temporary image.
+    var img = new Image();
+
+    // Invoke the callback as soon as the image is loaded
+    // Has to be set **before** the .src attribute. Otherwise
+    // `onload` could fire before the handler is set.
+    $(img).load(callback);
+
+    img.src = src;
+};
 
 function resizeCanvas() {
     drawMap();
@@ -41,7 +60,7 @@ function drawMap() {
 
     renderer = new Renderer(map);
 
-    renderer.cacheImages(function() {
+    renderer.cacheTerrainImages(function() {
         setupCanvas();
 
         // Full page rendering
@@ -53,10 +72,20 @@ function drawMap() {
 
 function setupCanvas() {
     // get the canvas
-    var terrainCanvas = document.getElementById('terrains');
+    var terrainsCanvas = document.getElementById('terrains');
 
-    terrainCanvas.width = window.innerWidth;
-    terrainCanvas.height = window.innerHeight;
+    terrainsCanvas.width = window.innerWidth;
+    terrainsCanvas.height = window.innerHeight;
+
+    var resourcesCanvas = document.getElementById('resources');
+
+    resourcesCanvas.width = window.innerWidth;
+    resourcesCanvas.height = window.innerHeight;
+
+    var featuresCanvas = document.getElementById('features');
+
+    featuresCanvas.width = window.innerWidth;
+    featuresCanvas.height = window.innerHeight;
 
     // attach mouse events
     var vp = document.getElementById('game');

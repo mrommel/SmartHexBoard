@@ -21,7 +21,7 @@ function HexOrientation() {
 function HexLayout() {
     this.orientation = new HexOrientation();
     this.size = new CGSize(36.0, 26.0);
-    this.origin = new CGPoint(250.0, 450.0);
+    this.origin = new CGPoint(270.0, 470.0);
 }
 
 HexLayout.prototype.toHex = function(screenPoint) {
