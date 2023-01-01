@@ -74,10 +74,6 @@ function Renderer(mapObj) {
 		this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 		this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 		this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-		/*terrains.style.cssText += "background-image:url('" + imgMapBackground.src + "');"
-				+ "background-size: 100% 100%;"
-				+ "background-repeat: no-repeat;"
-				+ "background-attachment: scroll;";*/
 
 		// Set the width/height of the container div to browser window width/height
 		// This improves the performance. User will scroll the div instead of window
@@ -126,9 +122,18 @@ Renderer.prototype.render = function(orow, ocol, range) {
             this.terrainsCtx.drawImage(img, screen.x, screen.y, 72, 72);
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
 
+            var feature = this.map.featureAt(hex);
+            if (feature !== FeatureTypes.none) {
+                // console.log('feature=' + feature + ', at=' + hex);
+                var index = Math.abs(hex.x + hex.y) % feature.textures.length;
+                var textureName = feature.textures[index];
+                var img = this.imgFeatures[textureName];
+                this.resourcesCtx.drawImage(img, screen.x, screen.y, 72, 72);
+            }
+
             var resource = this.map.resourceAt(hex);
             if (resource !== ResourceTypes.none) {
-                console.log('resource=' + resource + ', at=' + hex);
+                // console.log('resource=' + resource + ', at=' + hex);
                 var img = this.imgResources[resource.texture];
                 this.resourcesCtx.drawImage(img, screen.x, screen.y, 72, 72);
             }
@@ -205,9 +210,17 @@ Renderer.prototype.screenToCell = function(x, y) {
 // Caches images, func a function to call upon cache completion
 Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 	var imgList = [];
-	Object.values(TerrainTypes).map(terrainType => imgList.push(terrainType.texture));
-	Object.values(FeatureTypes).map(featureType => imgList.push(featureType.texture));
-	Object.values(ResourceTypes).map(resourceType => imgList.push(resourceType.texture));
+	Object.values(TerrainTypes).forEach(terrainType => {
+	    imgList.push(terrainType.texture);
+	});
+	Object.values(FeatureTypes).forEach(featureType => {
+	    featureType.textures.forEach(featureTexture => {
+	        imgList.push(featureTexture);
+	    });
+	});
+	Object.values(ResourceTypes).forEach(resourceType => {
+	    imgList.push(resourceType.texture);
+	});
 
     var loaded = 0;
     var toLoad = Object.keys(imgList).length;
@@ -225,7 +238,7 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 
             this.imgTerrains[imgName] = new Image();
             this.imgTerrains[imgName].onload = function() {
-                console.log('Cached ' + this.src);
+                // console.log('Cached ' + this.src);
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');
@@ -242,7 +255,7 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 
             this.imgFeatures[imgName] = new Image();
             this.imgFeatures[imgName].onload = function() {
-                console.log('Cached ' + this.src);
+                // console.log('Cached ' + this.src);
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');
@@ -259,7 +272,7 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 
             this.imgResources[imgName] = new Image();
             this.imgResources[imgName].onload = function() {
-                console.log('Cached ' + this.src);
+                // console.log('Cached ' + this.src);
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');

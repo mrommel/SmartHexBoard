@@ -33,13 +33,13 @@ const TerrainTypes = {
 
 // FeatureType Constructor
 
-function FeatureType(name, texture) {
+function FeatureType(name, textures) {
     this.name = name;
-    this.texture = texture;
+    this.textures = textures;
 }
 
 FeatureType.prototype.clone = function() {
-    return new FeatureType(this.name, this.texture);
+    return new FeatureType(this.name, this.textures);
 }
 
 FeatureType.prototype.toString = function() {
@@ -47,8 +47,19 @@ FeatureType.prototype.toString = function() {
 }
 
 const FeatureTypes = {
-    none: new FeatureType("none", "feature_none@3x.png"),
-	// ...
+    none: new FeatureType("none", ["feature_none@3x.png"]),
+    atoll: new FeatureType("atoll", ["feature_atoll@3x.png"]),
+    fallout: new FeatureType("fallout", ["feature_fallout@3x.png"]),
+    floodplains: new FeatureType("floodplains", ["feature_floodplains@3x.png"]),
+    forest: new FeatureType("forest", ["feature_forest1@3x.png", "feature_forest2@3x.png"]),
+    ice: new FeatureType("ice", ["feature_ice1@3x.png", "feature_ice2@3x.png", "feature_ice3@3x.png", "feature_ice4@3x.png", "feature_ice5@3x.png", "feature_ice6@3x.png"]),
+	marsh: new FeatureType("marsh", ["feature_marsh1@3x.png", "feature_marsh2@3x.png"]),
+	mountains: new FeatureType("mountains", ["feature_mountains1@3x.png", "feature_mountains2@3x.png", "feature_mountains3@3x.png"]),
+	oasis: new FeatureType("oasis", ["feature_oasis@3x.png"]),
+	// special case for pine forest
+	pine: new FeatureType("pine", ["feature_pine1@3x.png", "feature_pine2@3x.png"]),
+	rainforest: new FeatureType("rainforest", ["feature_rainforest1@3x.png", "feature_rainforest2@3x.png"]),
+	reef: new FeatureType("reef", ["feature_reef1@3x.png", "feature_reef2@3x.png", "feature_reef3@3x.png"]),
 }
 
 // ResourceType Constructor
@@ -59,7 +70,7 @@ function ResourceType(name, texture) {
 }
 
 ResourceType.prototype.clone = function() {
-    return new ResourceType(this.name, this.texture);
+    return new ResourceType(this.name, this.textures);
 }
 
 ResourceType.prototype.toString = function() {
@@ -70,6 +81,10 @@ const ResourceTypes = {
     none: new ResourceType("none", "resource_none@3x.png"),
 	aluminium: new ResourceType("aluminium", "resource_aluminium@3x.png"),
 	antiquitySite: new ResourceType("antiquitySite", "resource_antiquitySite@3x.png"),
+	banana: new ResourceType("banana", "resource_banana@3x.png"),
+	cattle: new ResourceType("cattle", "resource_cattle@3x.png"),
+	citrus: new ResourceType("citrus", "resource_citrus@3x.png"),
+	coal: new ResourceType("coal", "resource_coal@3x.png"),
 	fish: new ResourceType("fish", "resource_fish@3x.png"),
 	oil: new ResourceType("oil", "resource_oil@3x.png"),
 	sheep: new ResourceType("sheep", "resource_sheep@3x.png"),
@@ -148,25 +163,91 @@ Map.prototype.copy = function(map) {
     });
 }
 
+/**
+ * check if hexPoint is on the map
+ *
+ * @param {HexPoint} hexPoint point to be checked
+ * @return true if point is on the map
+ */
+Map.prototype.valid = function(hexPoint) {
+    return 0 <= hexPoint.x && hexPoint.x < this.cols && 0 <= hexPoint.y && hexPoint.y < this.rows;
+}
+
 Map.prototype.tileAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
     return this.tiles[hexPoint.x][hexPoint.y];
 }
 
 Map.prototype.terrainAt = function(hexPoint) {
-    // console.log(this);
-    // console.log('terrainAt(' + hexPoint + ') = ' + this.tiles[hexPoint.x][hexPoint.y]);
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
     return this.tiles[hexPoint.x][hexPoint.y].terrainType;
 }
 
 Map.prototype.modifyTerrainAt = function(terrainType, hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    // check terrainType is of correct type
+    if (!(terrainType instanceof TerrainType)) {
+        throw new Error(terrainType + ' is not of type TerrainType');
+    }
+
     this.tiles[hexPoint.x][hexPoint.y].terrainType = terrainType;
 }
 
+Map.prototype.featureAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    return this.tiles[hexPoint.x][hexPoint.y].featureType;
+}
+
+Map.prototype.modifyFeatureAt = function(featureType, hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    // check featureType is of correct type
+    if (!(featureType instanceof FeatureType)) {
+        throw new Error(featureType + ' is not of type FeatureType');
+    }
+
+    this.tiles[hexPoint.x][hexPoint.y].featureType = featureType;
+}
+
 Map.prototype.resourceAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
     return this.tiles[hexPoint.x][hexPoint.y].resourceType;
 }
 
 Map.prototype.modifyResourceAt = function(resourceType, hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    // check resourceType is of correct type
+    if (!(resourceType instanceof ResourceType)) {
+        throw new Error(resourceType + ' is not of type ResourceType');
+    }
+
     this.tiles[hexPoint.x][hexPoint.y].resourceType = resourceType;
 }
 

@@ -159,7 +159,7 @@ body {
 
 #ui-message {
 	position: fixed;
-	width: 306px;
+	width: 390px;
 	height: 201px;
 	left:50%;
 	margin-left: -153px;
@@ -170,46 +170,59 @@ body {
 	font-family: Arial;
 	font-size: 12px;
 	text-shadow: 0.1em 0.1em 0.2em black;
-	background-image: url('../img/ui/ui-message.png');
 	z-index:97;
 	overflow-y: auto;
 	display: none;
 	overflow: hidden;
 }
 
+#ui-message #header {
+    background-image: url('../img/ui/dialog_header.png');
+    display: flex;
+    flex-direction: column;
+    min-height: 65px;
+}
+
 #ui-message #title {
 	border: 0px #fff solid;
-	position:absolute;
-	top:10px;
-	left:5px;
-	width:305px;
+	width: 310px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-top: 30px;
 	text-align: center;
 }
 
 #ui-message #message {
 	border: 0px #fff solid;
-	position:absolute;
-	top:30px;
-	left:5px;
-	width:300px;
+	width: 310px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-top: 10px;
+	padding-bottom: 40px;
 	text-align: center;
 	color: #fff;
 	font-weight:normal;
-	height: 130px;
+	background-image: url('../img/ui/dialog_body.png');
+}
+
+#ui-message #footer {
+    background-image: url('../img/ui/dialog_bottom.png');
+    display: flex;
+    flex-direction: column;
+    min-height: 25px;
 }
 
 #ui-message #uiokbut {
 	background-image: url('../img/ui/ok.png');
 	background-repeat: no-repeat;
 	border: 0px #fff solid;
-	position:absolute;
-	top:165px;
-	left:270px;
-	width:30px;
+	width: 30px;
 	height: 30px;
 	text-align: center;
 	color: #fff;
-	font-weight:normal;
+	font-weight: normal;
+	margin-left: 320px;
+    margin-top: -16px;
 }
 
 /*=========================================

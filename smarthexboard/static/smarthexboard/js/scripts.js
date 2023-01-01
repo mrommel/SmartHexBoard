@@ -34,6 +34,7 @@ var uiRenderer = new UIBuilder();
 var map = new Map(10, 10);
 map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(1, 2));
 map.modifyResourceAt(ResourceTypes.whales, new HexPoint(4, 2));
+map.modifyFeatureAt(FeatureTypes.forest, new HexPoint(3, 3));
 
 /**
  * Preloads the image, and invokes the callback as soon
@@ -132,14 +133,14 @@ function handleMouseMove(event) {
     event.preventDefault();
 	mouse.x = event.pageX;
     mouse.Y = event.pageY;
-    console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
+    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
 
     if (mouseIsDown) {
         var vp = document.getElementById('game');
         vp.style.left = (event.clientX + offset.x) + 'px';
         vp.style.top  = (event.clientY + offset.y) + 'px';
 
-        console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
+        // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
     }
 }
 
@@ -149,7 +150,7 @@ function handleMouseUp(event) {
 
 function initUI() {
     // makeVisible('ui-message');
-    // uiRenderer.message('abc', 'def');
+    uiRenderer.message('abc', 'def');
 
     /*$('#uiokbut').click(function (event) {
         event.preventDefault();

@@ -14,13 +14,19 @@ function UIBuilder() {
         var ui_message = addTag('ui', 'div');
         ui_message.id = 'ui-message';
 
-        var ui_message_title = addTag(ui_message, 'div');
+        var ui_message_header = addTag(ui_message, 'div');
+        ui_message_header.id = 'header';
+
+        var ui_message_title = addTag(ui_message_header, 'div');
         ui_message_title.id = 'title';
 
         var ui_message_message = addTag(ui_message, 'div');
         ui_message_message.id = 'message';
 
-        var ui_message_button = addTag(ui_message, 'div');
+        var ui_message_footer = addTag(ui_message, 'div');
+        ui_message_footer.id = 'footer';
+
+        var ui_message_button = addTag(ui_message_footer, 'div');
         ui_message_button.id = 'uiokbut';
     }
 }
