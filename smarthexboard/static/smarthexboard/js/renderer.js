@@ -6,6 +6,10 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
+import { TerrainTypes } from './map/TerrainType.js';
+import { FeatureTypes } from './map/FeatureType.js';
+import { ResourceTypes } from './map/ResourceType.js';
+
 function Renderer(mapObj) {
 
     // Hex sizes compatible with PG2 sizes
@@ -40,48 +44,43 @@ function Renderer(mapObj) {
 	this.imgResources = {};
 	this.imgFeatures = {};
 
-	createLayers();
+    // Check if the canvases already exists in the current document to prevent
+    // overlaying multiple rendering instances
+    if ((this.terrainsCanvas = document.getElementById('terrains')) === null) {
+        this.terrainsCanvas = addTag('game', 'canvas');
+    }
+    this.terrainsCanvas.id = "terrains";
+    this.terrainsCtx = this.terrainsCanvas.getContext('2d');
+    console.log('terrain canvas created');
 
-	// "Private"
-	function createLayers() {
-		// Check if the canvases already exists in the current document to prevent
-		// overlaying multiple rendering instances
-		if ((this.terrainsCanvas = document.getElementById('terrains')) === null) {
-		    this.terrainsCanvas = addTag('game', 'canvas');
-		}
-		this.terrainsCanvas.id = "terrains";
-		this.terrainsCtx = this.terrainsCanvas.getContext('2d');
-		console.log('terrain canvas created');
+    if ((this.featuresCanvas = document.getElementById('features')) === null) {
+        this.featuresCanvas = addTag('game', 'canvas');
+    }
+    this.featuresCanvas.id = "features";
+    this.featuresCtx = this.featuresCanvas.getContext('2d');
+    console.log('features canvas created');
 
-		if ((this.featuresCanvas = document.getElementById('features')) === null) {
-		    this.featuresCanvas = addTag('game', 'canvas');
-		}
-		this.featuresCanvas.id = "features";
-		this.featuresCtx = this.featuresCanvas.getContext('2d');
-		console.log('features canvas created');
+    if ((this.resourcesCanvas = document.getElementById('resources')) === null) {
+        this.resourcesCanvas = addTag('game', 'canvas');
+    }
+    this.resourcesCanvas.id = "resources";
+    this.resourcesCtx = this.resourcesCanvas.getContext('2d');
+    console.log('resource canvas created');
 
-		if ((this.resourcesCanvas = document.getElementById('resources')) === null) {
-		    this.resourcesCanvas = addTag('game', 'canvas');
-		}
-		this.resourcesCanvas.id = "resources";
-		this.resourcesCtx = this.resourcesCanvas.getContext('2d');
-		console.log('resource canvas created');
+    // canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
+    if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
 
-		// canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
-		if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
+    // Center the canvases
+    this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 
-		// Center the canvases
-		this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-		this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-		this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-
-		// Set the width/height of the container div to browser window width/height
-		// This improves the performance. User will scroll the div instead of window
-		document.getElementById('game').style.width = window.innerWidth + "px";
-		document.getElementById('game').style.height = window.innerHeight + "px";
-		document.getElementById('game').tabIndex = 1; // For focusing the game area
-		document.getElementById('game').focus();
-	}
+    // Set the width/height of the container div to browser window width/height
+    // This improves the performance. User will scroll the div instead of window
+    document.getElementById('game').style.width = window.innerWidth + "px";
+    document.getElementById('game').style.height = window.innerHeight + "px";
+    document.getElementById('game').tabIndex = 1; // For focusing the game area
+    document.getElementById('game').focus();
 }
 
 Renderer.prototype.render = function(orow, ocol, range) {
@@ -296,3 +295,5 @@ Renderer.prototype.cleanupTerrainImagesCache = function(imgList) {
         }
     }
 }
+
+export { Renderer };

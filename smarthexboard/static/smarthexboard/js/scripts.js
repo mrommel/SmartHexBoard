@@ -5,6 +5,12 @@
  Author: MiRo
 =======================*/
 
+import { TerrainTypes } from './map/TerrainType.js';
+import { ResourceTypes } from './map/ResourceType.js';
+import { FeatureTypes } from './map/FeatureType.js';
+import { Map } from './map.js';
+import { Renderer } from './renderer.js';
+
 // TABLE OF CONTENTS
 // 1. preloader
 // 2. canvas full screen
@@ -150,7 +156,7 @@ function handleMouseUp(event) {
 
 function initUI() {
     // makeVisible('ui-message');
-    uiRenderer.message('abc', 'def');
+    // uiRenderer.message('abc', 'def');
 
     /*$('#uiokbut').click(function (event) {
         event.preventDefault();
