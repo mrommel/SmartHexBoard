@@ -6,9 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { TerrainType } from './TerrainType.js';
-import { FeatureType, FeatureTypes } from './FeatureType.js';
-import { ResourceType, ResourceTypes } from './ResourceType.js';
+import { TerrainType, FeatureType, FeatureTypes, ResourceType, ResourceTypes } from './types.js';
 
 // Tile Constructor
 

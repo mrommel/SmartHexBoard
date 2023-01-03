@@ -5,10 +5,9 @@
  Author: MiRo
 =======================*/
 
-import { TerrainTypes } from './map/TerrainType.js';
-import { ResourceTypes } from './map/ResourceType.js';
-import { FeatureTypes } from './map/FeatureType.js';
-import { Map } from './map.js';
+import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { Map } from './map/map.js';
+import { MapOptions, MapGenerator } from './map/generator.js';
 import { Renderer } from './renderer.js';
 
 // TABLE OF CONTENTS
@@ -37,16 +36,13 @@ var offset = { x: 0, y: 0 };
 
 var renderer;
 var uiRenderer = new UIBuilder();
-var map = new Map(10, 10);
-map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(1, 2));
-map.modifyResourceAt(ResourceTypes.whales, new HexPoint(4, 2));
-map.modifyFeatureAt(FeatureTypes.forest, new HexPoint(3, 3));
+var map = null;
 
 /**
  * Preloads the image, and invokes the callback as soon
  * as the image is loaded.
  * https://gist.github.com/enyo/5697533
- */
+
 function preload(src, callback) {
     // Create a temporary image.
     var img = new Image();
@@ -57,7 +53,7 @@ function preload(src, callback) {
     $(img).load(callback);
 
     img.src = src;
-};
+};*/
 
 function resizeCanvas() {
     drawMap();
@@ -70,10 +66,23 @@ function drawMap() {
     renderer.cacheTerrainImages(function() {
         setupCanvas();
 
-        // Full page rendering
-        renderer.render();
-        // renderer.render(ctx, 8, 2, 0);
-        // renderer.render(ctx, 2, 8, 0);
+        var options = new MapOptions();
+        var generator = new MapGenerator(options);
+
+        generator.generate(function(text, progress, mapObj) {
+
+            console.log(text);
+            if (progress == 1.0) {
+                // keep the map
+                map = mapObj;
+                renderer.map = mapObj;
+
+                // Full page rendering
+                renderer.render();
+                // renderer.render(ctx, 8, 2, 0);
+                // renderer.render(ctx, 2, 8, 0);
+            }
+        });
     });
 }
 

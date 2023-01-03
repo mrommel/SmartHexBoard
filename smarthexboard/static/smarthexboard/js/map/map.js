@@ -6,14 +6,13 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { TerrainType, TerrainTypes } from './map/TerrainType.js';
-import { ResourceType } from './map/ResourceType.js';
-import { FeatureType } from './map/FeatureType.js';
-import { Tile } from './map/Tile.js';
+import { TerrainType, TerrainTypes, FeatureType, ResourceType } from './types.js';
+import { Tile } from './tile.js';
 
 // Map Constructor
 
 function Map(cols, rows) {
+
     if (typeof (cols) == 'undefined' && typeof (rows) == 'undefined') {
         this.cols = 10;
 	    this.rows = 10;
@@ -29,6 +28,9 @@ function Map(cols, rows) {
             this.tiles[i][j] = new Tile(TerrainTypes.ocean.clone());
         }
     }
+
+    this.units = []
+    this.cities = []
 }
 
 // Map Object Public Methods

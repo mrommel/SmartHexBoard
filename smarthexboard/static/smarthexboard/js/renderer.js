@@ -6,9 +6,8 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { TerrainTypes } from './map/TerrainType.js';
-import { FeatureTypes } from './map/FeatureType.js';
-import { ResourceTypes } from './map/ResourceType.js';
+import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { Map } from './map/map.js';
 
 function Renderer(mapObj) {
 
