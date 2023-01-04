@@ -36,7 +36,6 @@ var offset = { x: 0, y: 0 };
 
 var renderer;
 var uiRenderer = new UIBuilder();
-var map = null;
 
 /**
  * Preloads the image, and invokes the callback as soon
@@ -61,7 +60,7 @@ function resizeCanvas() {
 
 function drawMap() {
 
-    renderer = new Renderer(map);
+    renderer = new Renderer(null);
 
     renderer.cacheTerrainImages(function() {
         setupCanvas();
@@ -73,8 +72,7 @@ function drawMap() {
 
             console.log(text);
             if (progress == 1.0) {
-                // keep the map
-                map = mapObj;
+                // update the map
                 renderer.map = mapObj;
 
                 // Full page rendering

@@ -8,6 +8,7 @@
 
 import { TerrainType, TerrainTypes, FeatureType, FeatureTypes, ResourceType, ResourceTypes, MapSize, MapSizes } from './types.js';
 import { Tile } from './tile.js';
+import { HeightMap } from './heightmap.js';
 import { Map } from './map.js';
 
 // MapType Constructor
@@ -82,6 +83,24 @@ MapGenerator.prototype.generate = function(callbackFunction) {
     }
 
     var map = new Map(this.options.size.cols, this.options.size.rows);
+
+    var heightmap = new HeightMap(this.options.size.cols, this.options.size.rows);
+    heightmap.generate();
+
+    // console.log(heightmap);
+
+    for (var i = 0; i < this.options.size.cols; i++) {
+        for (var j = 0; j < this.options.size.rows; j++) {
+
+            if (heightmap.values[i][j] > 0.0) {
+                // console.log('below zero at ' + new HexPoint(i, j));
+                map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(i, j));
+            } else {
+                // console.log('above zero at ' + new HexPoint(i, j));
+                map.modifyTerrainAt(TerrainTypes.desert, new HexPoint(i, j));
+            }
+        }
+    }
 
     map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(1, 2));
     map.modifyResourceAt(ResourceTypes.whales, new HexPoint(4, 2));

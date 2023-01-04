@@ -54,6 +54,12 @@ Map.prototype.valid = function(hexPoint) {
     return 0 <= hexPoint.x && hexPoint.x < this.cols && 0 <= hexPoint.y && hexPoint.y < this.rows;
 }
 
+/**
+ * returns the tile at hexPoint
+ *
+ * @param {HexPoint} hexPoint point to return the tile for
+ * @return {Tile} at hexPoint
+ */
 Map.prototype.tileAt = function(hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -63,6 +69,12 @@ Map.prototype.tileAt = function(hexPoint) {
     return this.tiles[hexPoint.x][hexPoint.y];
 }
 
+/**
+ * returns the terrain at hexPoint
+ *
+ * @param {HexPoint} hexPoint point to return the terrain for
+ * @return {TerrainType} at hexPoint
+ */
 Map.prototype.terrainAt = function(hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -72,6 +84,12 @@ Map.prototype.terrainAt = function(hexPoint) {
     return this.tiles[hexPoint.x][hexPoint.y].terrainType;
 }
 
+/**
+ * modifies the terrain at hexPoint
+ *
+ * @param {TerrainType} terrainType new terrainType
+ * @param {HexPoint} hexPoint point to modify the terrain
+ */
 Map.prototype.modifyTerrainAt = function(terrainType, hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -86,6 +104,12 @@ Map.prototype.modifyTerrainAt = function(terrainType, hexPoint) {
     this.tiles[hexPoint.x][hexPoint.y].terrainType = terrainType;
 }
 
+/**
+ * returns the feature at hexPoint
+ *
+ * @param {HexPoint} hexPoint point to return the feature for
+ * @return {FeatureType} at hexPoint
+ */
 Map.prototype.featureAt = function(hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -95,6 +119,12 @@ Map.prototype.featureAt = function(hexPoint) {
     return this.tiles[hexPoint.x][hexPoint.y].featureType;
 }
 
+/**
+ * modifies the feature at hexPoint
+ *
+ * @param {FeatureType} featureType new featureType
+ * @param {HexPoint} hexPoint point to modify the terrain
+ */
 Map.prototype.modifyFeatureAt = function(featureType, hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -109,6 +139,12 @@ Map.prototype.modifyFeatureAt = function(featureType, hexPoint) {
     this.tiles[hexPoint.x][hexPoint.y].featureType = featureType;
 }
 
+/**
+ * returns the resource at hexPoint
+ *
+ * @param {HexPoint} hexPoint point to return the resource for
+ * @return {ResourceType} at hexPoint
+ */
 Map.prototype.resourceAt = function(hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -118,6 +154,12 @@ Map.prototype.resourceAt = function(hexPoint) {
     return this.tiles[hexPoint.x][hexPoint.y].resourceType;
 }
 
+/**
+ * modifies the resource at hexPoint
+ *
+ * @param {ResourceType} resourceType new resourceType
+ * @param {HexPoint} hexPoint point to modify the resource
+ */
 Map.prototype.modifyResourceAt = function(resourceType, hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {

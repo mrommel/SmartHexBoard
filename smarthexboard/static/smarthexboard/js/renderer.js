@@ -18,7 +18,7 @@ function Renderer(mapObj) {
 
 	// Canvas offset from the browser window (leaves space for top menu)
 	this.canvasOffsetX = 0;
-	this.canvasOffsetY = 30;
+	this.canvasOffsetY = 0;
 
 	// Where to start rendering respective to the canvas
 	// Since PG2 maps define even the half and "quarter" hexes that form at the edges we need to offset those
