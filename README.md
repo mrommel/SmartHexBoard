@@ -28,3 +28,4 @@ make run
 * https://demos.creative-tim.com/soft-ui-design-system-pro/presentation.html
 * https://www.behance.net/gallery/57207157/League-of-Legends-In-Game-UI-Style-Guide-2016
 * https://github.com/josephg/noisejs
+* https://fontmeme.com/dawngate-font/

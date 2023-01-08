@@ -9,7 +9,7 @@
 import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { Map } from './map/map.js';
 
-function Renderer(mapObj) {
+function Renderer() {
 
     // Hex sizes compatible with PG2 sizes
 	this.s = 36;  // hexagon segment size                    |\
@@ -30,8 +30,6 @@ function Renderer(mapObj) {
 	// add an offset for better rounding of mouse position in a column
 	this.mousePrecisionOffset = this.s/100;
 
-	this.map = mapObj;
-
 	// canvases and contexts
 	this.terrainsCanvas = null;
 	this.terrainsCtx = null;
@@ -42,6 +40,7 @@ function Renderer(mapObj) {
 	this.imgTerrains = {};
 	this.imgResources = {};
 	this.imgFeatures = {};
+	this.texturesLoaded = false;
 
     // Check if the canvases already exists in the current document to prevent
     // overlaying multiple rendering instances
@@ -240,7 +239,9 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) callbackFunction();
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
                 }
             }
             this.imgTerrains[imgName].src = '/static/smarthexboard/img/terrains/' + imgName;
@@ -257,7 +258,9 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) callbackFunction();
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
                 }
             }
             this.imgFeatures[imgName].src = '/static/smarthexboard/img/features/' + imgName;
@@ -274,7 +277,9 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
                 loaded++;
                 if (loaded == toLoad) {
                     // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) callbackFunction();
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
                 }
             }
             this.imgResources[imgName].src = '/static/smarthexboard/img/resources/' + imgName;

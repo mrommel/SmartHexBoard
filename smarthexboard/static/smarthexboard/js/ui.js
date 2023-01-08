@@ -44,3 +44,20 @@ UIBuilder.prototype.message = function(title, message) {
         // game.uiMessageClicked = true;
     });
 }
+
+// https://masteringjs.io/tutorials/fundamentals/enum
+class UIState {
+    static splash = new UIState('Splash');
+    static menu = new UIState('Menu');
+    static generate = new UIState('Generate');
+    static game = new UIState('Game');
+    static options = new UIState('Options');
+
+    constructor(name) {
+        this.name = name;
+    }
+
+    toString() {
+        return `UIState.${this.name}`;
+    }
+}

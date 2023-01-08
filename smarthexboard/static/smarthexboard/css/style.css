@@ -8,9 +8,25 @@ html {
     height: 100%;
 }
 
+@font-face {
+    font-family: 'Cinzel Decorative';
+    src: url('../font/CinzelDecorative-Regular.eot');
+    src: url('../font/CinzelDecorative-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../font/CinzelDecorative-Regular.woff2') format('woff2'),
+        url('../font/CinzelDecorative-Regular.woff') format('woff'),
+        url('../font/CinzelDecorative-Regular.ttf') format('truetype'),
+        url('../font/CinzelDecorative-Regular.svg#CinzelDecorative-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     height: 100%;
     overflow: auto;
+    font-family: 'Cinzel Decorative';
+    font-weight: normal;
+    font-style: normal;
 }
 
 body {
@@ -50,7 +66,6 @@ body {
     width: 100%;
     height: 100%;
     z-index: 9999;
-    background: #fff;
 }
 
 .loader1 {
@@ -75,32 +90,31 @@ body {
 .loader1 span:nth-child(1) {
     -webkit-animation-delay: -1s;
     animation-delay: -1s;
-    background:  rgba(41, 103, 230, 0.6);
+    background:  rgba(248, 224, 100, 0.6);
 }
 
 .loader1 span:nth-child(2) {
     -webkit-animation-delay: -0.8s;
     animation-delay: -0.8s;
-    background:  rgba(41, 103, 230, 0.8);
+    background:  rgba(248, 224, 100, 0.8);
 }
 
 .loader1 span:nth-child(3) {
     -webkit-animation-delay: -0.26666s;
     animation-delay: -0.26666s;
-    background: rgba(41, 103, 230, 1);
+    background: rgba(248, 224, 100, 1);
 }
 
 .loader1 span:nth-child(4) {
     -webkit-animation-delay: -0.8s;
     animation-delay: -0.8s;
-    background:  rgba(41, 103, 230, 0.8);
-
+    background:  rgba(248, 224, 100, 0.8);
 }
 
 .loader1 span:nth-child(5) {
     -webkit-animation-delay: -1s;
     animation-delay: -1s;
-    background:  rgba(41, 103, 230, 0.4);
+    background:  rgba(248, 224, 100, 0.4);
 }
 
 @keyframes loader1 {
@@ -122,10 +136,130 @@ body {
 }
 
 /*=========================================
+            Main UI CSS
+============================================*/
+
+#uistate-splash {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+}
+
+#uistate-splash .logo {
+    width: 256px;
+    height: 256px;
+}
+
+#uistate-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+}
+
+#uistate-menu .container {
+    padding: 20px;
+    width: 640px;
+    height: 256px;
+    display: flex;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%)
+}
+
+#uistate-menu .logo {
+    width: 256px;
+    height: 256px;
+
+    margin: 20px 30px 0 0;
+    width: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+#uistate-menu .container_text {
+    flex: 1 1 auto;
+}
+
+#uistate-menu h1 {
+    clear: left;
+    padding-top: 30px;
+}
+
+#uistate-menu h3 {
+    clear: left;
+}
+
+#uistate-menu a {
+    text-decoration: none;
+    color: white;
+}
+
+#uistate-generate {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+}
+
+#uistate-generate .container {
+    padding: 20px;
+    width: 640px;
+    height: 256px;
+    display: flex;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%)
+}
+
+#uistate-generate .logo {
+    width: 256px;
+    height: 256px;
+
+    margin: 20px 30px 0 0;
+    width: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+#uistate-generate .container_text {
+    flex: 1 1 auto;
+}
+
+#uistate-generate h1 {
+    clear: left;
+    padding-top: 30px;
+}
+
+#uistate-generate h3 {
+    clear: left;
+}
+
+/*=========================================
             Menu CSS
 ============================================*/
 
 .topMenu {
+    display: none;
     color: #ffffff;
     position: absolute;
     height: 20px;
@@ -156,6 +290,16 @@ body {
 /*=========================================
             Message CSS
 ============================================*/
+
+#ui {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.blurred {
+    backdrop-filter: blur(6px);
+}
 
 #ui-message {
 	position: fixed;

@@ -21,7 +21,10 @@
     <!--title-->
     <title>Smart Hex Board</title>
 
-     <!--favicon icon-->
+    <!-- font -->
+    <link rel="preload" href="{% static 'smarthexboard/font/CinzelDecorative-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
+
+    <!--favicon icon-->
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'smarthexboard/img/icons/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'smarthexboard/img/icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'smarthexboard/img/icons/favicon-16x16.png' %}">
@@ -31,23 +34,51 @@
     <link rel="stylesheet" href="{% static 'smarthexboard/css/style.css' %}">
 </head>
 <body onresize="resizeCanvas(event)">
-    <!--loader start-->
-    <div id="preloader">
-        <div class="loader1">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </div>
-    <!--loader end-->
 
     <!--full screen canvas container-->
     <div id="game"></div>
 
     <!--ui element container-->
-    <div id="ui"></div>
+    <div id="ui" class="blurred">
+        <!--ui state: splash-->
+        <div id="uistate-splash">
+            <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
+            <!--loader start-->
+            <div id="preloader">
+                <div class="loader1">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            <!--loader end-->
+        </div>
+
+        <!--ui state: menu-->
+        <div id="uistate-menu">
+            <div class="container">
+                <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
+                <div class="container_text">
+                    <h1>SmartHexBoard</h1>
+                    <h3><a href="#" onclick="play()">Play</a></h3>
+                    <h3><a href="#" onclick="options()">Options</a></h3>
+                </div>
+            </div>
+        </div>
+
+        <!--ui state: generate-->
+        <div id="uistate-generate">
+            <div class="container">
+                <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
+                <div class="container_text">
+                    <h1>SmartHexBoard</h1>
+                    <h3>Generating Map ...</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!--top menu bar-->
     <div class="topMenu">

@@ -88,16 +88,18 @@ MapGenerator.prototype.generate = function(callbackFunction) {
     heightmap.generate();
 
     // console.log(heightmap);
+    var threshold = heightmap.findThresholdAbove(0.40);
+    console.log('threshold=' + threshold);
 
     for (var i = 0; i < this.options.size.cols; i++) {
         for (var j = 0; j < this.options.size.rows; j++) {
 
-            if (heightmap.values[i][j] > 0.0) {
+            if (heightmap.values[i][j] > threshold) {
                 // console.log('below zero at ' + new HexPoint(i, j));
                 map.modifyTerrainAt(TerrainTypes.grass, new HexPoint(i, j));
             } else {
                 // console.log('above zero at ' + new HexPoint(i, j));
-                map.modifyTerrainAt(TerrainTypes.desert, new HexPoint(i, j));
+                map.modifyTerrainAt(TerrainTypes.ocean, new HexPoint(i, j));
             }
         }
     }

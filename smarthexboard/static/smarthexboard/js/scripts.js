@@ -18,70 +18,35 @@ jQuery(function ($) {
 
     'use strict';
 
-    // make canvas full screen
     $(document).ready(function () {
-        drawMap();
-
         initUI();
-
-        // hide pre-loader
-        $('#preloader').delay(200).fadeOut('fade');
     });
-
 }); // JQuery end
 
 var mouse = { x: 0, y: 0 };
 var mouseIsDown = false;
 var offset = { x: 0, y: 0 };
 
-var renderer;
+var renderer = new Renderer(null);
 var uiRenderer = new UIBuilder();
+var uiState = UIState.Splash;
 
-/**
- * Preloads the image, and invokes the callback as soon
- * as the image is loaded.
- * https://gist.github.com/enyo/5697533
-
-function preload(src, callback) {
-    // Create a temporary image.
-    var img = new Image();
-
-    // Invoke the callback as soon as the image is loaded
-    // Has to be set **before** the .src attribute. Otherwise
-    // `onload` could fire before the handler is set.
-    $(img).load(callback);
-
-    img.src = src;
-};*/
-
-function resizeCanvas() {
-    drawMap();
+window.resizeCanvas = function resizeCanvas() {
+    if (uiState == UIState.game) {
+        drawMap();
+    }
 }
 
 function drawMap() {
 
-    renderer = new Renderer(null);
-
-    renderer.cacheTerrainImages(function() {
+    if (renderer.texturesLoaded) {
         setupCanvas();
 
-        var options = new MapOptions();
-        var generator = new MapGenerator(options);
-
-        generator.generate(function(text, progress, mapObj) {
-
-            console.log(text);
-            if (progress == 1.0) {
-                // update the map
-                renderer.map = mapObj;
-
-                // Full page rendering
-                renderer.render();
-                // renderer.render(ctx, 8, 2, 0);
-                // renderer.render(ctx, 2, 8, 0);
-            }
-        });
-    });
+        // Full page rendering
+        renderer.render();
+    } else {
+        throw new Error('no textures loaded');
+    }
 }
 
 function setupCanvas() {
@@ -101,6 +66,9 @@ function setupCanvas() {
     featuresCanvas.width = window.innerWidth;
     featuresCanvas.height = window.innerHeight;
 
+    document.getElementById('game').style.width = window.innerWidth + "px";
+    document.getElementById('game').style.height = window.innerHeight + "px";
+
     // attach mouse events
     var vp = document.getElementById('game');
     vp.addEventListener("mousedown", handleMouseDown, true);
@@ -110,7 +78,7 @@ function setupCanvas() {
 
 function getMouseInfo(canvas, e) {
 	var mx, my, right_click;
-	var viewport = document.getElementById("game");
+	var viewport = document.getElementById("terrains");
 	if (e.which) right_click = (e.which == 3);
 	else if (e.button) right_click = (e.button == 2);
 
@@ -125,7 +93,7 @@ function handleMouseDown(event) {
     mouse.Y = event.pageY;
     mouseIsDown = true;
 
-    var vp = document.getElementById('game');
+    var vp = document.getElementById('terrains');
     offset.x = vp.offsetLeft - event.clientX;
     offset.y = vp.offsetTop - event.clientY;
 
@@ -149,9 +117,17 @@ function handleMouseMove(event) {
     // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
 
     if (mouseIsDown) {
-        var vp = document.getElementById('game');
-        vp.style.left = (event.clientX + offset.x) + 'px';
-        vp.style.top  = (event.clientY + offset.y) + 'px';
+        var terrains = document.getElementById('terrains');
+        terrains.style.left = (event.clientX + offset.x) + 'px';
+        terrains.style.top  = (event.clientY + offset.y) + 'px';
+
+        var features = document.getElementById('features');
+        features.style.left = (event.clientX + offset.x) + 'px';
+        features.style.top  = (event.clientY + offset.y) + 'px';
+
+        var resources = document.getElementById('resources');
+        resources.style.left = (event.clientX + offset.x) + 'px';
+        resources.style.top  = (event.clientY + offset.y) + 'px';
 
         // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
     }
@@ -161,7 +137,66 @@ function handleMouseUp(event) {
     mouseIsDown = false;
 }
 
+function changeUIState(newState) {
+    uiState = newState;
+
+    if (uiState == UIState.menu) {
+        // images are cached, we can show the menu
+        console.log('uistate > menu');
+        $('#uistate-splash').hide();
+        $('#uistate-menu').show();
+        $('#uistate-generate').hide();
+    }
+
+    if (uiState == UIState.generate) {
+        // user selected 'play', we can generate a map now
+        console.log('uistate > generate');
+        $('#uistate-splash').hide();
+        $('#uistate-menu').hide();
+        $('#uistate-generate').show();
+
+        var options = new MapOptions();
+        var generator = new MapGenerator(options);
+
+        generator.generate(function(text, progress, mapObj) {
+
+            console.log(text);
+            if (progress == 1.0) {
+                // update the map
+                renderer.map = mapObj;
+
+                setupCanvas();
+
+                changeUIState(UIState.game);
+            }
+        });
+    }
+
+    if (uiState == UIState.game) {
+        // map is generated, we can render it now
+        console.log('uistate > game');
+        $('#uistate-splash').hide();
+        $('#uistate-menu').hide();
+        $('#uistate-generate').hide();
+
+        // Full page rendering
+        renderer.render();
+
+        $('#ui').removeClass('blurred');
+    }
+}
+
 function initUI() {
+
+    // current state is splash
+
+    // start caching images
+    renderer.cacheTerrainImages(function() {
+        renderer.texturesLoaded = true;
+        changeUIState(UIState.menu);
+    });
+
+
     // makeVisible('ui-message');
     // uiRenderer.message('abc', 'def');
 
@@ -169,10 +204,14 @@ function initUI() {
         event.preventDefault();
 
         makeHidden('ui-message');
-    });*/
+    });
     $('#menuGame').click(function (event) {
         event.preventDefault();
 
         uiRenderer.message('menu', 'game');
-    });
+    });*/
+}
+
+window.play = function play() {
+    changeUIState(UIState.generate);
 }
