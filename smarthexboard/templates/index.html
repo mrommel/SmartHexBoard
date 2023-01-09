@@ -84,33 +84,59 @@
         <!--ui state: splash-->
         <div id="uistate-game">
             <div id="top-bar">
-                <div id="scienceYield" class="yield"></div>
-                <div id="cultureYield" class="yield"></div>
-                <div id="faithYield" class="yield"></div>
-                <div id="goldYield" class="yield"></div>
-                <div id="tourismYield" class="yield"></div>
+                <div id="scienceYield" class="yield">
+                    <img src="{% static 'smarthexboard/img/ui/yields/science@3x.png' %}" class="yield-icon" />
+                    <span id="scienceYieldValue" class="yield-value">+0.0</span>
+                </div>
+                <div id="cultureYield" class="yield">
+                    <img src="{% static 'smarthexboard/img/ui/yields/culture@3x.png' %}" class="yield-icon" />
+                    <span id="cultureYieldValue" class="yield-value">+0.0</span>
+                </div>
+                <div id="faithYield" class="yield">
+                    <img src="{% static 'smarthexboard/img/ui/yields/faith@3x.png' %}" class="yield-icon" />
+                    <span id="faithYieldValue" class="yield-value">+0.0</span>
+                </div>
+                <div id="goldYield" class="yield">
+                    <img src="{% static 'smarthexboard/img/ui/yields/gold@3x.png' %}" class="yield-icon" />
+                    <span id="goldYieldValue" class="yield-value">+0.0</span>
+                </div>
+                <div id="tourismYield" class="yield">
+                    <img src="{% static 'smarthexboard/img/ui/yields/tourism@3x.png' %}" class="yield-icon" />
+                    <span id="tourismYieldValue" class="yield-value">+0.0</span>
+                </div>
+                <!--spacer-->
+                <div id="btnMenu"></div>
             </div>
-            <div id="header-bar">
+            <div id="header-bar-left">
                 <div class="header">
-                    <a id="scienceHeader" href="#" onlick="openTechDialog()">&nbsp;</a>
+                    <a id="scienceHeader" href="#" onclick="openTechDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="cultureHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="cultureHeader" href="#" onclick="openCivicDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="governmentHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="governmentHeader" href="#" onclick="openGovernmentDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="religionHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="religionHeader" href="#" onclick="openReligionDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="greatPeopleHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="greatPeopleHeader" href="#" onclick="openGreatPeoplesDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="governorsHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="governorsHeader" href="#" onclick="openGovernorsDialog();">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="momentsHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                    <a id="momentsHeader" href="#" onclick="openMomentsDialog();">&nbsp;</a>
+                </div>
+            </div>
+
+            <div id="header-bar-right">
+                <div class="header">
+                    <a id="abHeader" href="#" onclick="openADCDialog();">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="cdHeader" href="#" onclick="openBdeialog();">&nbsp;</a>
                 </div>
             </div>
         </div>

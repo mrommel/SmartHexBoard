@@ -298,14 +298,49 @@ body {
     background-image: url("../img/ui/top-bar@3x.png");
 }
 
-#uistate-game #header-bar {
-    // width: 100%;
+#uistate-game #top-bar .yield {
+    height: 28px;
+    width: auto;
+    min-width: 64px;
+    display: flex;
+}
+
+#uistate-game #top-bar .yield-icon {
+    width: 22px;
+    height: 22px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+#uistate-game #top-bar .yield-value {
+    height: 22px;
+    font-size: 16px;
+    padding-right: 8px;
+    padding-top: 4px;
+    padding-left: 4px;
+}
+
+#scienceYield {
+    border-image: url("../img/ui/yield-boxes/box-science@0x.png") 8 fill repeat;
+    border-image-width: 8px;
+    border-image-outset: 0px;
+}
+
+#cultureYield {
+    border-image: url("../img/ui/yield-boxes/box-culture@0x.png") 8 fill repeat;
+    border-image-width: 8px;
+    border-image-outset: 0px;
+}
+
+/** header bar ******************/
+
+#uistate-game #header-bar-left {
     height: 48px;
 
     display: inline-flex;
 }
 
-#uistate-game #header-bar .header {
+#uistate-game #header-bar-left .header {
     width: 60px;
     height: 48px;
 
@@ -313,7 +348,7 @@ body {
     background-size: 100% 100%;
 }
 
-#uistate-game #header-bar .header a {
+#uistate-game #header-bar-left .header a {
     width: 44px;
     height: 44px;
 
@@ -333,13 +368,72 @@ body {
     background-image: url("../img/ui/headers/header-button-culture-active@3x.png");
 }
 
-#header-bar::after {
+#governmentHeader {
+    background-image: url("../img/ui/headers/header-button-government-active@3x.png");
+}
+
+#religionHeader {
+    background-image: url("../img/ui/headers/header-button-religion-active@3x.png");
+}
+
+#greatPeopleHeader {
+    background-image: url("../img/ui/headers/header-button-greatPeople-active@3x.png");
+}
+
+#governorsHeader {
+    background-image: url("../img/ui/headers/header-button-governors-active@3x.png");
+}
+
+#momentsHeader {
+    background-image: url("../img/ui/headers/header-button-log-active@3x.png");
+}
+
+#header-bar-left::after {
     width: 48px;
     height: 48px;
 
     content: '';
 
     background-image: url("../img/ui/header-bar-left@3x.png");
+    background-size: 100% 100%;
+}
+
+#uistate-game #header-bar-right {
+    height: 48px;
+
+    display: inline-flex;
+    float: right;
+}
+
+#uistate-game #header-bar-right .header {
+    width: 60px;
+    height: 48px;
+
+    background-image: url("../img/ui/header-bar-button@3x.png");
+    background-size: 100% 100%;
+}
+
+#uistate-game #header-bar-right .header a {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+
+    background-size: 100% 100%;
+
+    margin-left: 8px;
+    margin-top: 2px;
+}
+
+/* buttons */
+
+#header-bar-right::before {
+    width: 48px;
+    height: 48px;
+
+    content: '';
+
+    background-image: url("../img/ui/header-bar-right@3x.png");
     background-size: 100% 100%;
 }
 

@@ -218,3 +218,31 @@ function initUI() {
 window.play = function play() {
     changeUIState(UIState.generate);
 }
+
+window.openTechDialog = function openTechDialog() {
+    console.log('openTechDialog');
+}
+
+window.openCivicDialog = function openCivicDialog() {
+    console.log('openCivicDialog');
+}
+
+window.openGovernmentDialog = function openGovernmentDialog() {
+    console.log('openGovernmentDialog');
+}
+
+window.openReligionDialog = function openReligionDialog() {
+    console.log('openReligionDialog');
+}
+
+window.openGreatPeoplesDialog = function openGreatPeoplesDialog() {
+    console.log('openGreatPeoplesDialog');
+}
+
+window.openGovernorsDialog = function openGovernorsDialog() {
+    console.log('openGovernorsDialog');
+}
+
+window.openMomentsDialog = function openMomentsDialog() {
+    console.log('openMomentsDialog');
+}
