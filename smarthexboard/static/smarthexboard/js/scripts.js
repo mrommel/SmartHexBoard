@@ -146,6 +146,7 @@ function changeUIState(newState) {
         $('#uistate-splash').hide();
         $('#uistate-menu').show();
         $('#uistate-generate').hide();
+        $('#uistate-game').hide();
     }
 
     if (uiState == UIState.generate) {
@@ -154,6 +155,7 @@ function changeUIState(newState) {
         $('#uistate-splash').hide();
         $('#uistate-menu').hide();
         $('#uistate-generate').show();
+        $('#uistate-game').hide();
 
         var options = new MapOptions();
         var generator = new MapGenerator(options);
@@ -178,6 +180,7 @@ function changeUIState(newState) {
         $('#uistate-splash').hide();
         $('#uistate-menu').hide();
         $('#uistate-generate').hide();
+        $('#uistate-game').show();
 
         // Full page rendering
         renderer.render();

@@ -62,8 +62,10 @@
                 <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
-                    <h3><a href="#" onclick="play()">Play</a></h3>
-                    <h3><a href="#" onclick="options()">Options</a></h3>
+                    <ul class="menu">
+                        <li><a href="#" onclick="play()">Play</a></h3></li>
+                        <li><a href="#" onclick="options()">Options</a></h3></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -75,6 +77,40 @@
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
                     <h3>Generating Map ...</h3>
+                </div>
+            </div>
+        </div>
+
+        <!--ui state: splash-->
+        <div id="uistate-game">
+            <div id="top-bar">
+                <div id="scienceYield" class="yield"></div>
+                <div id="cultureYield" class="yield"></div>
+                <div id="faithYield" class="yield"></div>
+                <div id="goldYield" class="yield"></div>
+                <div id="tourismYield" class="yield"></div>
+            </div>
+            <div id="header-bar">
+                <div class="header">
+                    <a id="scienceHeader" href="#" onlick="openTechDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="cultureHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="governmentHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="religionHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="greatPeopleHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="governorsHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
+                </div>
+                <div class="header">
+                    <a id="momentsHeader" href="#" onlick="openAbcDialog()">&nbsp;</a>
                 </div>
             </div>
         </div>
