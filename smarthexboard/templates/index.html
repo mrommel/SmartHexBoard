@@ -81,31 +81,40 @@
             </div>
         </div>
 
-        <!--ui state: splash-->
+        <!--ui state: game-->
         <div id="uistate-game">
             <div id="top-bar">
-                <div id="scienceYield" class="yield">
-                    <img src="{% static 'smarthexboard/img/ui/yields/science@3x.png' %}" class="yield-icon" />
-                    <span id="scienceYieldValue" class="yield-value">+0.0</span>
-                </div>
-                <div id="cultureYield" class="yield">
-                    <img src="{% static 'smarthexboard/img/ui/yields/culture@3x.png' %}" class="yield-icon" />
-                    <span id="cultureYieldValue" class="yield-value">+0.0</span>
-                </div>
-                <div id="faithYield" class="yield">
-                    <img src="{% static 'smarthexboard/img/ui/yields/faith@3x.png' %}" class="yield-icon" />
-                    <span id="faithYieldValue" class="yield-value">+0.0</span>
-                </div>
-                <div id="goldYield" class="yield">
-                    <img src="{% static 'smarthexboard/img/ui/yields/gold@3x.png' %}" class="yield-icon" />
-                    <span id="goldYieldValue" class="yield-value">+0.0</span>
-                </div>
-                <div id="tourismYield" class="yield">
-                    <img src="{% static 'smarthexboard/img/ui/yields/tourism@3x.png' %}" class="yield-icon" />
-                    <span id="tourismYieldValue" class="yield-value">+0.0</span>
+                <div id="top-bar-left">
+                    <div id="scienceYield" class="yield">
+                        <img src="{% static 'smarthexboard/img/ui/yields/science@3x.png' %}" class="yield-icon" />
+                        <span id="scienceYieldValue" class="yield-value">+0.0</span>
+                    </div>
+                    <div id="cultureYield" class="yield">
+                        <img src="{% static 'smarthexboard/img/ui/yields/culture@3x.png' %}" class="yield-icon" />
+                        <span id="cultureYieldValue" class="yield-value">+0.0</span>
+                    </div>
+                    <div id="faithYield" class="yield">
+                        <img src="{% static 'smarthexboard/img/ui/yields/faith@3x.png' %}" class="yield-icon" />
+                        <span id="faithYieldValue" class="yield-value">+0.0</span>
+                    </div>
+                    <div id="goldYield" class="yield">
+                        <img src="{% static 'smarthexboard/img/ui/yields/gold@3x.png' %}" class="yield-icon" />
+                        <span id="goldYieldValue" class="yield-value">+0.0</span>
+                    </div>
+                    <div id="tourismYield" class="yield">
+                        <img src="{% static 'smarthexboard/img/ui/yields/tourism@3x.png' %}" class="yield-icon" />
+                        <span id="tourismYieldValue" class="yield-value">+0.0</span>
+                    </div>
                 </div>
                 <!--spacer-->
-                <div id="btnMenu"></div>
+                <div id="top-bar-right">
+
+                    <div id="btnMenu">
+                        <a href="#" onclick="openGameMenu(); return false;">
+                            <img src="{% static 'smarthexboard/img/ui/menu@3x.png' %}" class="menu-icon" />
+                        </a>
+                    </div>
+                </div>
             </div>
             <div id="header-bar-left">
                 <div class="header">
@@ -138,6 +147,14 @@
                 <div class="header">
                     <a id="cdHeader" href="#" onclick="openBdeialog();">&nbsp;</a>
                 </div>
+            </div>
+        </div>
+
+        <!--ui state: game-menu-->
+        <div id="uistate-game-menu">
+            <div id="game-menu-list">
+                <a href="#" onclick="closeMenu(); return false;" class="game-menu-item">Exit Menu</a>
+                <a href="#" onclick="restartGame(); return false;" class="game-menu-item">Restart Game</a>
             </div>
         </div>
     </div>

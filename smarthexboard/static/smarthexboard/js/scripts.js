@@ -181,11 +181,22 @@ function changeUIState(newState) {
         $('#uistate-menu').hide();
         $('#uistate-generate').hide();
         $('#uistate-game').show();
+        $('#uistate-gameMenu').hide();
 
         // Full page rendering
         renderer.render();
 
         $('#ui').removeClass('blurred');
+    }
+
+    if (uiState == UIState.gameMenu) {
+        // we are inside the game but need to show the in-game menu
+        console.log('uistate > game-menu');
+        $('#uistate-splash').hide();
+        $('#uistate-menu').hide();
+        $('#uistate-generate').hide();
+        $('#uistate-game').show();
+        $('#uistate-game-menu').show();
     }
 }
 
@@ -245,4 +256,9 @@ window.openGovernorsDialog = function openGovernorsDialog() {
 
 window.openMomentsDialog = function openMomentsDialog() {
     console.log('openMomentsDialog');
+}
+
+window.openGameMenu = function openGameMenu() {
+    console.log('openGameMenu');
+    changeUIState(UIState.gameMenu);
 }

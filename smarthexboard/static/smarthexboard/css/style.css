@@ -175,7 +175,7 @@ body {
     position: absolute;
     top:50%;
     left: 50%;
-    transform: translate(-50% , -50%)
+    transform: translate(-50% , -50%);
 }
 
 #uistate-menu .logo {
@@ -293,26 +293,28 @@ body {
     width: 100%;
     height: 33px;
 
-    display: flex;
-
     background-image: url("../img/ui/top-bar@3x.png");
 }
 
-#uistate-game #top-bar .yield {
+#uistate-game #top-bar-left {
+    display: inline-flex;
+}
+
+#uistate-game #top-bar-left .yield {
     height: 28px;
     width: auto;
     min-width: 64px;
     display: flex;
 }
 
-#uistate-game #top-bar .yield-icon {
+#uistate-game #top-bar-left .yield-icon {
     width: 22px;
     height: 22px;
     margin-top: 3px;
     margin-left: 3px;
 }
 
-#uistate-game #top-bar .yield-value {
+#uistate-game #top-bar-left .yield-value {
     height: 22px;
     font-size: 16px;
     padding-right: 8px;
@@ -330,6 +332,29 @@ body {
     border-image: url("../img/ui/yield-boxes/box-culture@0x.png") 8 fill repeat;
     border-image-width: 8px;
     border-image-outset: 0px;
+}
+
+#faithYield {
+    border-image: url("../img/ui/yield-boxes/box-faith@0x.png") 8 fill repeat;
+    border-image-width: 8px;
+    border-image-outset: 0px;
+}
+
+#goldYield {
+    border-image: url("../img/ui/yield-boxes/box-gold@0x.png") 8 fill repeat;
+    border-image-width: 8px;
+    border-image-outset: 0px;
+}
+
+#tourismYield {
+    border-image: url("../img/ui/yield-boxes/box-tourism@0x.png") 8 fill repeat;
+    border-image-width: 8px;
+    border-image-outset: 0px;
+}
+
+#uistate-game #top-bar-right {
+    display: inline-flex;
+    float: right;
 }
 
 /** header bar ******************/
@@ -435,6 +460,28 @@ body {
 
     background-image: url("../img/ui/header-bar-right@3x.png");
     background-size: 100% 100%;
+}
+
+/* game menu */
+#uistate-game-menu {
+    padding: 20px;
+
+    display: none;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+#uistate-game-menu #game-menu-list {
+    background-image: url("../img/ui/menu-background.png");
+    width: 298px;
+    height: 620px;
+}
+
+#game-menu-item {
+    font-size: 10px;
 }
 
 /*=========================================

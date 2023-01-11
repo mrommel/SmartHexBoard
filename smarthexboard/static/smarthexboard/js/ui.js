@@ -51,6 +51,7 @@ class UIState {
     static menu = new UIState('Menu');
     static generate = new UIState('Generate');
     static game = new UIState('Game');
+    static gameMenu = new UIState('GameMenu');
     static options = new UIState('Options');
 
     constructor(name) {
