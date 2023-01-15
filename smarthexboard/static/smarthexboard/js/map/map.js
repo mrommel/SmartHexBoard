@@ -78,7 +78,7 @@ Map.prototype.canvasOffset = function() {
 
     console.log('offset x: ' + pt0.x + ', y: ' + (content_y - pt0.y));
 
-    return new CGPoint(pt0.x + 52, content_y - pt0.y - 72);
+    return new CGPoint(pt0.x + 52, content_y - pt0.y);
 }
 
 /**

@@ -96,6 +96,7 @@ Renderer.prototype.coastTextureNameAt = function(hexPoint) {
 
     var textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
     var _this = this; // context this is not visible on forEach loop
+    // console.log(Object.values(HexDirections));
     Object.values(HexDirections).forEach(function(direction) {
         const neighborPoint = hexPoint.neighborIn(direction, 1);
 
@@ -181,6 +182,8 @@ Renderer.prototype.render = function(orow, ocol, range) {
             var hex = new HexPoint(col, row);
             // console.log('hex=' + hex);
             var screen = hex.toScreen();
+            // console.log('canvasSize.height=' + canvasSize.height + ', screen.y=' + (screen.y + canvasOffset.y));
+            screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
             // console.log('screen=' + screen);
 
             var img = this.terrainImageAt(hex);
