@@ -21,3 +21,5 @@ function MouseInfo(x, y, right_click) {
 	this.y = y;
 	this.right_click = right_click;
 }
+
+export { CGSize, CGPoint, MouseInfo };

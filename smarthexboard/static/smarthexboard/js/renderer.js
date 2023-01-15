@@ -6,7 +6,9 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { CGPoint } from './base/prototypes.js';
+import { HexPoint, HexDirections, HexDirection } from './base/point.js';
+import { TerrainTypes, BeachTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { Map } from './map/map.js';
 
 function Renderer() {
@@ -81,6 +83,63 @@ function Renderer() {
     document.getElementById('game').focus();
 }
 
+Renderer.prototype.coastTextureNameAt = function(hexPoint) {
+    if (!(hexPoint instanceof HexPoint)) {
+        throw new Error(hexPoint + ' is not a HexPoint');
+    }
+
+    const terrain = this.map.terrainAt(hexPoint);
+
+    if (!terrain.isWater()) {
+        return null;
+    }
+
+    var textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
+    var _this = this; // context this is not visible on forEach loop
+    Object.values(HexDirections).forEach(function(direction) {
+        const neighborPoint = hexPoint.neighborIn(direction, 1);
+
+        if (!_this.map.valid(neighborPoint)) {
+            return;
+        }
+
+        var neighborTerrain = _this.map.terrainAt(neighborPoint);
+        if (!neighborTerrain.isWater()) {
+            textureName = textureName + "-" + direction.short();
+        }
+    });
+
+    console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
+
+    if (textureName == "beach") {
+        return null;
+    }
+
+    return textureName + '@3x.png';
+}
+
+Renderer.prototype.terrainImageAt = function(hexPoint) {
+    if (!(hexPoint instanceof HexPoint)) {
+        throw new Error(hexPoint + ' is not a HexPoint');
+    }
+
+    var textureName = "";
+    const coastTexture = this.coastTextureNameAt(hexPoint);
+    if (coastTexture != null) {
+        textureName = coastTexture;
+    } else {
+        var terrain = this.map.terrainAt(hexPoint);
+        textureName = terrain.texture;
+        /*if tile.hasHills() {
+            textureName = tile.terrain().textureNamesHills().item(from: point)
+        } else {
+            textureName = tile.terrain().textureNames().item(from: point)
+        }*/
+    }
+
+    return this.imgTerrains[textureName];
+}
+
 Renderer.prototype.render = function(orow, ocol, range) {
 
     // console.log('==> render tile at: ' + ocol + ', ' + orow);
@@ -97,9 +156,21 @@ Renderer.prototype.render = function(orow, ocol, range) {
     this.terrainsCtx = this.terrainsCanvas.getContext('2d');
     this.terrainsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
+    this.featuresCanvas = document.getElementById('features');
+    this.featuresCtx = this.featuresCanvas.getContext('2d');
+    this.featuresCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+
     this.resourcesCanvas = document.getElementById('resources');
     this.resourcesCtx = this.resourcesCanvas.getContext('2d');
     this.resourcesCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+
+    // debug - fill complete canvas
+    var canvasSize = this.map.canvasSize();
+    var canvasOffset = this.map.canvasOffset();
+    this.terrainsCtx.beginPath();
+    this.terrainsCtx.rect(0, 0, canvasSize.width, canvasSize.height);
+    this.terrainsCtx.fillStyle = "black";
+    this.terrainsCtx.fill();
 
     // console.log('render x=' + renderZone.srow + ' - ' + renderZone.erow);
     for (var row = renderZone.srow; row < renderZone.erow; row++) {
@@ -112,11 +183,8 @@ Renderer.prototype.render = function(orow, ocol, range) {
             var screen = hex.toScreen();
             // console.log('screen=' + screen);
 
-            var terrain = this.map.terrainAt(hex);
-            // console.log('terrain=' + terrain + ', at=' + hex);
-            var img = this.imgTerrains[terrain.texture];
-            // console.log('img=' + img);
-            this.terrainsCtx.drawImage(img, screen.x, screen.y, 72, 72);
+            var img = this.terrainImageAt(hex);
+            this.terrainsCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
 
             var feature = this.map.featureAt(hex);
@@ -125,14 +193,14 @@ Renderer.prototype.render = function(orow, ocol, range) {
                 var index = Math.abs(hex.x + hex.y) % feature.textures.length;
                 var textureName = feature.textures[index];
                 var img = this.imgFeatures[textureName];
-                this.resourcesCtx.drawImage(img, screen.x, screen.y, 72, 72);
+                this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
 
             var resource = this.map.resourceAt(hex);
             if (resource !== ResourceTypes.none) {
                 // console.log('resource=' + resource + ', at=' + hex);
                 var img = this.imgResources[resource.texture];
-                this.resourcesCtx.drawImage(img, screen.x, screen.y, 72, 72);
+                this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
         }
     }
@@ -210,6 +278,9 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 	Object.values(TerrainTypes).forEach(terrainType => {
 	    imgList.push(terrainType.texture);
 	});
+	Object.values(BeachTypes).forEach(beachType => {
+	    imgList.push(beachType.texture);
+	});
 	Object.values(FeatureTypes).forEach(featureType => {
 	    featureType.textures.forEach(featureTexture => {
 	        imgList.push(featureTexture);
@@ -245,6 +316,25 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
                 }
             }
             this.imgTerrains[imgName].src = '/static/smarthexboard/img/terrains/' + imgName;
+
+        } else if (imgName.startsWith('beach-')) {
+            if (typeof this.imgTerrains[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgTerrains[imgName] = new Image();
+            this.imgTerrains[imgName].onload = function() {
+                // console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' terrain assets');
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
+                }
+            }
+            this.imgTerrains[imgName].src = '/static/smarthexboard/img/beaches/' + imgName;
 
         } else if (imgName.startsWith('feature_')) {
             if (typeof this.imgFeatures[imgName] !== "undefined") {

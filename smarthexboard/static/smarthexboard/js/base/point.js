@@ -6,6 +6,8 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
+ import { CGSize, CGPoint } from './prototypes.js';
+
 function HexOrientation() {
     this.f0 = 3.0 / 2.0;
     this.f1 = 0.0;
@@ -90,17 +92,95 @@ HexPoint.prototype.toScreen = function() {
     return hexCube.toScreen();
 }
 
+HexPoint.prototype.neighborIn = function(direction, distance) {
+    if (Number.isInteger(direction)) {
+        direction = Object.values(HexDirections)[direction];
+    } else if (!(direction instanceof HexDirection)) {
+        // console.log(typeof direction);
+        throw new Error(direction + ' is not a HexDirection (' + Number.isInteger(direction) + ')');
+    }
+
+    // console.log('try to get neighborIn ' + direction + ' of ' + this);
+    var dir = direction.cubeDirection();
+    dir = dir.mul(distance);
+    // console.log('dir=' + dir);
+
+    var cubeNeighbor = new HexCube(this);
+    // console.log('cubeNeighbor1=' + cubeNeighbor);
+    cubeNeighbor = cubeNeighbor.add(dir);
+    // console.log('cubeNeighbor2=' + cubeNeighbor);
+
+    return new HexPoint(cubeNeighbor);
+}
+
+HexPoint.prototype.neighbors = function() {
+    var neighboring = [];
+
+    neighboring.push(this.neighborIn(HexDirections.north, 1));
+    neighboring.push(this.neighborIn(HexDirections.northEast, 1));
+    neighboring.push(this.neighborIn(HexDirections.southEast, 1));
+    neighboring.push(this.neighborIn(HexDirections.south, 1));
+    neighboring.push(this.neighborIn(HexDirections.southWest, 1));
+    neighboring.push(this.neighborIn(HexDirections.northWest, 1));
+
+    return neighboring;
+}
+
 HexPoint.prototype.toString = function() {
   return '[HexPoint x: ' + this.x + ', y: ' + this.y + ']';
 }
 
+// HexDirection Constructor
+
+function HexDirection(name) {
+    this.name = name;
+}
+
+HexDirection.prototype.cubeDirection = function() {
+    switch (this) {
+    case HexDirections.north:
+        return new HexCube(0, 1, -1);
+    case HexDirections.northEast:
+        return new HexCube(1, 0, -1);
+    case HexDirections.southEast:
+        return new HexCube(1, -1, 0);
+    case HexDirections.south:
+        return new HexCube(0, -1, 1);
+    case HexDirections.southWest:
+        return new HexCube(-1, 0, 1);
+    case HexDirections.northWest:
+        return new HexCube(-1, 1, 0);
+    }
+}
+
+HexDirection.prototype.short = function() {
+    switch (this) {
+    case HexDirections.north:
+        return 'n';
+    case HexDirections.northEast:
+        return 'ne';
+    case HexDirections.southEast:
+        return 'se';
+    case HexDirections.south:
+        return 's';
+    case HexDirections.southWest:
+        return 'sw';
+    case HexDirections.northWest:
+        return 'nw';
+    }
+}
+
+HexDirection.prototype.toString = function() {
+  return '[HexDirection name: ' + this.name + ']';
+}
+
 const HexDirections = {
-	north: Symbol("north"),
-	northEast: Symbol("northEast"),
-	southEast: Symbol("southEast"),
-	south: Symbol("south"),
-	southWest: Symbol("southWest"),
-	northWest: Symbol("northWest"),
+	north: new HexDirection("north"),
+	northEast: new HexDirection("northEast"),
+	southEast: new HexDirection("southEast"),
+	south: new HexDirection("south"),
+	southWest: new HexDirection("southWest"),
+	northWest: new HexDirection("northWest"),
 
     /*
     public var opposite: HexDirection {
@@ -180,6 +260,10 @@ function HexCube(q, r, s) {
 }
 
 HexCube.prototype.fromHexPoint = function(hex) {
+    if (!(hex instanceof HexPoint)) {
+        throw new Error(hex + 'is not a HexPoint');
+    }
+
     // even-q
     this.q = hex.x - (hex.y + (hex.y&1)) / 2;
     this.s = hex.y;
@@ -190,15 +274,25 @@ HexCube.prototype.fromHexPoint = function(hex) {
 }
 
 HexCube.prototype.distanceTo = function(hexCube) {
+    if (!(hexCube instanceof HexCube)) {
+        throw new Error(hexCube + 'is not a HexCube');
+    }
+
     return Math.max(Math.abs(this.q - hexCube.q), Math.abs(this.r - hexCube.r), Math.abs(this.s - hexCube.s));
 }
 
 HexCube.prototype.add = function(rightHexCube) {
-    return HexCube(this.q + rightHexCube.q, this.r + rightHexCube.r, this.s + rightHexCube.s);
+    if (!(rightHexCube instanceof HexCube)) {
+        throw new Error(rightHexCube + ' is not a HexCube');
+    }
+
+    // console.log('HexCube.add q=' + this.q + ', right.q=' + rightHexCube.q + ', r=' + this.r + ', right.r=' + rightHexCube.r+ ', s=' + this.s + ', right.s=' + rightHexCube.s);
+
+    return new HexCube(this.q + rightHexCube.q, this.r + rightHexCube.r, this.s + rightHexCube.s);
 }
 
 HexCube.prototype.mul = function(factor) {
-    return HexCube(this.q * factor, this.r * factor, this.s * factor);
+    return new HexCube(this.q * factor, this.r * factor, this.s * factor);
 }
 
 HexCube.prototype.toScreen = function() {
@@ -206,5 +300,7 @@ HexCube.prototype.toScreen = function() {
 }
 
 HexCube.prototype.toString = function() {
-  return '[HexCube q: ' + this.q + ', r: ' + this.r + ', s: ' + this.s + ']';
+    return '[HexCube q: ' + this.q + ', r: ' + this.r + ', s: ' + this.s + ']';
 }
+
+export { HexPoint, HexDirections, HexDirection };

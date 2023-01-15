@@ -6,6 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
+import { HexPoint } from '../base/point.js';
 import { TerrainType, TerrainTypes, FeatureType, FeatureTypes, ResourceType, ResourceTypes, MapSize, MapSizes } from './types.js';
 import { Tile } from './tile.js';
 import { HeightMap } from './heightmap.js';

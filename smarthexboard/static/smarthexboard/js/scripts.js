@@ -5,6 +5,8 @@
  Author: MiRo
 =======================*/
 
+import { MouseInfo, CGPoint } from './base/prototypes.js';
+import { HexPoint } from './base/point.js';
 import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { Map } from './map/map.js';
 import { MapOptions, MapGenerator } from './map/generator.js';
@@ -49,22 +51,28 @@ function drawMap() {
     }
 }
 
-function setupCanvas() {
+function setupCanvas(canvasSize) {
+
+    if (!renderer.texturesLoaded) {
+        return;
+    }
+
+    if (typeof (canvasSize) == 'undefined') {
+        canvasSize = renderer.map.canvasSize();
+    }
+
     // get the canvas
     var terrainsCanvas = document.getElementById('terrains');
-
-    terrainsCanvas.width = window.innerWidth;
-    terrainsCanvas.height = window.innerHeight;
+    terrainsCanvas.width = canvasSize.width;
+    terrainsCanvas.height = canvasSize.height;
 
     var resourcesCanvas = document.getElementById('resources');
-
-    resourcesCanvas.width = window.innerWidth;
-    resourcesCanvas.height = window.innerHeight;
+    resourcesCanvas.width = canvasSize.width;
+    resourcesCanvas.height = canvasSize.height;
 
     var featuresCanvas = document.getElementById('features');
-
-    featuresCanvas.width = window.innerWidth;
-    featuresCanvas.height = window.innerHeight;
+    featuresCanvas.width = canvasSize.width;
+    featuresCanvas.height = canvasSize.height;
 
     document.getElementById('game').style.width = window.innerWidth + "px";
     document.getElementById('game').style.height = window.innerHeight + "px";
@@ -74,6 +82,7 @@ function setupCanvas() {
     vp.addEventListener("mousedown", handleMouseDown, true);
     vp.addEventListener("mousemove", handleMouseMove, true);
     vp.addEventListener("mouseup", handleMouseUp, true);
+    vp.addEventListener("mouseleave", handleMouseLeave, true);
 }
 
 function getMouseInfo(canvas, e) {
@@ -137,6 +146,10 @@ function handleMouseUp(event) {
     mouseIsDown = false;
 }
 
+function handleMouseLeave(event) {
+    mouseIsDown = false;
+}
+
 function changeUIState(newState) {
     uiState = newState;
 
@@ -147,6 +160,7 @@ function changeUIState(newState) {
         $('#uistate-menu').show();
         $('#uistate-generate').hide();
         $('#uistate-game').hide();
+        $('#uistate-game-menu').hide();
     }
 
     if (uiState == UIState.generate) {
@@ -156,6 +170,7 @@ function changeUIState(newState) {
         $('#uistate-menu').hide();
         $('#uistate-generate').show();
         $('#uistate-game').hide();
+        $('#uistate-game-menu').hide();
 
         var options = new MapOptions();
         var generator = new MapGenerator(options);
@@ -167,7 +182,9 @@ function changeUIState(newState) {
                 // update the map
                 renderer.map = mapObj;
 
-                setupCanvas();
+                var canvasSize = mapObj.canvasSize();
+                // create canvas with this size
+                setupCanvas(canvasSize);
 
                 changeUIState(UIState.game);
             }
@@ -181,7 +198,7 @@ function changeUIState(newState) {
         $('#uistate-menu').hide();
         $('#uistate-generate').hide();
         $('#uistate-game').show();
-        $('#uistate-gameMenu').hide();
+        $('#uistate-game-menu').hide();
 
         // Full page rendering
         renderer.render();
@@ -261,4 +278,9 @@ window.openMomentsDialog = function openMomentsDialog() {
 window.openGameMenu = function openGameMenu() {
     console.log('openGameMenu');
     changeUIState(UIState.gameMenu);
+}
+
+window.closeMenu = function closeMenu() {
+    console.log('closeMenu');
+    changeUIState(UIState.game);
 }

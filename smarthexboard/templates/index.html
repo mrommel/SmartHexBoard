@@ -63,8 +63,8 @@
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
                     <ul class="menu">
-                        <li><a href="#" onclick="play()">Play</a></h3></li>
-                        <li><a href="#" onclick="options()">Options</a></h3></li>
+                        <li><a href="#" onclick="play(); return false;">Play</a></h3></li>
+                        <li><a href="#" onclick="options(); return false;">Options</a></h3></li>
                     </ul>
                 </div>
             </div>
@@ -118,34 +118,34 @@
             </div>
             <div id="header-bar-left">
                 <div class="header">
-                    <a id="scienceHeader" href="#" onclick="openTechDialog();">&nbsp;</a>
+                    <a id="scienceHeader" href="#" onclick="openTechDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="cultureHeader" href="#" onclick="openCivicDialog();">&nbsp;</a>
+                    <a id="cultureHeader" href="#" onclick="openCivicDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="governmentHeader" href="#" onclick="openGovernmentDialog();">&nbsp;</a>
+                    <a id="governmentHeader" href="#" onclick="openGovernmentDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="religionHeader" href="#" onclick="openReligionDialog();">&nbsp;</a>
+                    <a id="religionHeader" href="#" onclick="openReligionDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="greatPeopleHeader" href="#" onclick="openGreatPeoplesDialog();">&nbsp;</a>
+                    <a id="greatPeopleHeader" href="#" onclick="openGreatPeoplesDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="governorsHeader" href="#" onclick="openGovernorsDialog();">&nbsp;</a>
+                    <a id="governorsHeader" href="#" onclick="openGovernorsDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="momentsHeader" href="#" onclick="openMomentsDialog();">&nbsp;</a>
+                    <a id="momentsHeader" href="#" onclick="openMomentsDialog(); return false;">&nbsp;</a>
                 </div>
             </div>
 
             <div id="header-bar-right">
                 <div class="header">
-                    <a id="abHeader" href="#" onclick="openADCDialog();">&nbsp;</a>
+                    <a id="abHeader" href="#" onclick="openADCDialog(); return false;">&nbsp;</a>
                 </div>
                 <div class="header">
-                    <a id="cdHeader" href="#" onclick="openBdeialog();">&nbsp;</a>
+                    <a id="cdHeader" href="#" onclick="openBdeialog(); return false;">&nbsp;</a>
                 </div>
             </div>
         </div>
@@ -153,8 +153,15 @@
         <!--ui state: game-menu-->
         <div id="uistate-game-menu">
             <div id="game-menu-list">
-                <a href="#" onclick="closeMenu(); return false;" class="game-menu-item">Exit Menu</a>
-                <a href="#" onclick="restartGame(); return false;" class="game-menu-item">Restart Game</a>
+                <h3>Menu</h3>
+                <a href="#" onclick="closeMenu(); return false;" class="game-menu-item">Return To Game</a>
+                <a href="#" onclick="quicksaveGame(); return false;" class="game-menu-item">Quick Save Game</a>
+                <a href="#" onclick="saveGame(); return false;" class="game-menu-item">Save Game</a>
+                <a href="#" onclick="loadGame(); return false;" class="game-menu-item">Save Game</a>
+                <a href="#" onclick="options(); return false;" class="game-menu-item">Options</a>
+                <a href="#" onclick="retireGame(); return false;" class="game-menu-item">Retire</a>
+                <a href="#" onclick="restartGame(); return false;" class="game-menu-item">Save Game</a>
+                <a href="#" onclick="exitGame(); return false;" class="game-menu-item">Exit to Main Menu</a>
             </div>
         </div>
     </div>
@@ -189,9 +196,9 @@
     <script src="{% static 'smarthexboard/js/jquery-3.4.1.min.js' %}"></script>
 
     <!--custom js-->
-    <script src="{% static 'smarthexboard/js/prototypes.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/prototypes.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/point.js' %}"></script>
     <script src="{% static 'smarthexboard/js/dom.js' %}"></script>
-    <script src="{% static 'smarthexboard/js/point.js' %}"></script>
     <script type="module" src="{% static 'smarthexboard/js/renderer.js' %}"></script>
     <script src="{% static 'smarthexboard/js/ui.js' %}"></script>
 

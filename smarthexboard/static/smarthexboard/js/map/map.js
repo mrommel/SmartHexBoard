@@ -6,6 +6,8 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
+import { HexPoint } from '../base/point.js';
+import { CGSize, CGPoint } from '../base/prototypes.js';
 import { TerrainType, TerrainTypes, FeatureType, ResourceType } from './types.js';
 import { Tile } from './tile.js';
 
@@ -42,6 +44,41 @@ Map.prototype.copy = function(map) {
 	this.tiles = map.tiles.map(function(arr) {
         return arr.slice();
     });
+
+    // @todo: copy cities, units
+}
+
+Map.prototype.canvasSize = function() {
+    var pt0 = new HexPoint(0, 0).toScreen();
+    var pt1 = new HexPoint(this.cols, 0).toScreen();
+    var pt2 = new HexPoint(0, this.rows).toScreen();
+    var pt3 = new HexPoint(this.cols, this.rows).toScreen();
+
+    var min_x = Math.min(Math.min(pt0.x, pt1.x), Math.min(pt2.x, pt3.x));
+    var max_x = Math.max(Math.max(pt0.x, pt1.x), Math.max(pt2.x, pt3.x));
+
+    var min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
+    var max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
+
+    // console.log('size minx: ' + minx + ', maxx: ' + maxx);
+    // console.log('size miny: ' + miny + ', maxy: ' + maxy);
+
+    return new CGSize(max_x - min_x + 16, max_y - min_y);
+}
+
+Map.prototype.canvasOffset = function() {
+    var pt0 = new HexPoint(0, 0).toScreen();
+    var pt1 = new HexPoint(this.cols, 0).toScreen();
+    var pt2 = new HexPoint(0, this.rows).toScreen();
+    var pt3 = new HexPoint(this.cols, this.rows).toScreen();
+
+    var min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
+    var max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
+    var content_y = max_y - min_y;
+
+    console.log('offset x: ' + pt0.x + ', y: ' + (content_y - pt0.y));
+
+    return new CGPoint(pt0.x + 52, content_y - pt0.y - 72);
 }
 
 /**
@@ -102,6 +139,38 @@ Map.prototype.modifyTerrainAt = function(terrainType, hexPoint) {
     }
 
     this.tiles[hexPoint.x][hexPoint.y].terrainType = terrainType;
+}
+
+/**
+ * returns if the tile at hexPoint is coastal - on land and adjacent to water
+ *
+ * @param {HexPoint} hexPoint point to return if the land! tile is coastal for
+ * @return {Boolean} if the tile at hexPoint is coastal
+ */
+Map.prototype.isCoastalAt = function(hexPoint) {
+
+    // console.log('Debug: isCoastalAt(' + hexPoint + ') - isWater: ' + this.terrainAt(hexPoint).isWater());
+
+    // we are only coastal if we are on land
+    if (this.terrainAt(hexPoint).isWater()) {
+        return false;
+    }
+
+    for (const neighborPoint of hexPoint.neighbors()) {
+
+        if (!this.valid(neighborPoint)) {
+            continue;
+        }
+
+        const neighborTerrain = this.terrainAt(neighborPoint);
+        console.log('Debug: neighbor ' + neighborPoint + ' has ' + neighborTerrain);
+
+        if (neighborTerrain.isWater()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**
