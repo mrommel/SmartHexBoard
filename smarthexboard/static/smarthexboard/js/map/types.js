@@ -66,10 +66,16 @@ const TerrainTypes = {
 	desert: new TerrainType("desert", "terrain_desert@3x.png"),
 	grass: new TerrainType("grass", "terrain_grass@3x.png"),
 	ocean: new TerrainType("ocean", "terrain_ocean@3x.png"),
-	plain: new TerrainType("plain", "terrain_plain@3x.png"),
+	plains: new TerrainType("plains", "terrain_plains@3x.png"),
 	shore: new TerrainType("shore", "terrain_shore@3x.png"),
 	snow: new TerrainType("snow", "terrain_snow@3x.png"),
 	tundra: new TerrainType("tundra", "terrain_tundra@3x.png"),
+}
+
+// map generation
+const GenerationTypes = {
+    water: new TerrainType("water", "water@3x.png"),
+	land: new TerrainType("land", "land@3x.png"),
 }
 
 const BeachTypes = {
@@ -199,4 +205,15 @@ const ResourceTypes = {
 	wheat: new ResourceType("wheat", "resource_wheat@3x.png"),
 }
 
-export { TerrainType, TerrainTypes, BeachTypes, FeatureType, FeatureTypes, ResourceType, ResourceTypes, MapSize, MapSizes };
+export {
+    TerrainType,
+    TerrainTypes,
+    GenerationTypes,
+    BeachTypes,
+    FeatureType,
+    FeatureTypes,
+    ResourceType,
+    ResourceTypes,
+    MapSize,
+    MapSizes
+};

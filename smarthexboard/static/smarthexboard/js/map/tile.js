@@ -42,10 +42,12 @@ function Tile(terrainType, featureType, resourceType) {
     } else {
         this.resourceType = resourceType;
     }
+
+    this.isHills = false;
 }
 
 Tile.prototype.toString = function() {
-    return '[Tile: terrain=' + this.terrainType + ', feature=' + this.featureType + ', resource=' + this.resourceType + ']';
+    return '[Tile: terrain=' + this.terrainType + ', hills=' + this.isHills + ', feature=' + this.featureType + ', resource=' + this.resourceType + ']';
 }
 
 export { Tile };

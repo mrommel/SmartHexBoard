@@ -173,6 +173,15 @@ Map.prototype.isCoastalAt = function(hexPoint) {
     return false;
 }
 
+Map.prototype.modifyHillsAt = function(isHills, hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    this.tiles[hexPoint.x][hexPoint.y].isHills = isHills;
+}
+
 /**
  * returns the feature at hexPoint
  *
