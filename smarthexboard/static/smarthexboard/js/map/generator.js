@@ -7,7 +7,7 @@
  */
 
 import { HexPoint, HexDirections } from '../base/point.js';
-import { TerrainType, TerrainTypes, GenerationTypes, FeatureType, FeatureTypes, ResourceType, ResourceTypes, MapSize, MapSizes } from './types.js';
+import { TerrainType, TerrainTypes, GenerationTypes, FeatureType, FeatureTypes, ResourceType, ResourceTypes, MapSize, MapSizes, ClimateZones } from './types.js';
 import { Tile } from './tile.js';
 import { HeightMap } from './heightmap.js';
 import { Map } from './map.js';
@@ -33,17 +33,6 @@ const MapTypes = {
 	continents: new MapType("continents"),
     // case archipelago
     // case inlandsea
-}
-
-
-// ClimateZones
-
-const ClimateZones = {
-	polar: Symbol("polar"),
-	sub_polar: Symbol("sub-polar"),
-	temperate: Symbol("temperate"),
-	sub_tropic: Symbol("sub-tropic"),
-	tropic: Symbol("tropic"),
 }
 
 
@@ -346,13 +335,17 @@ MapGenerator.prototype.refineTerrain = function(grid, heightMap, moistureMap, cl
             if (grid.terrainAt(gridPoint) == GenerationTypes.water) {
 
                 // check is next continent
-                /*let nextToContinent: Bool = gridPoint.neighbors()
-                    .map { grid.terrain(at: $0).isLand() }
-                    .contains(true)*/
-                @todo: implement
-                var nextToContinent = true;
+                var nextToContinent = gridPoint
+                    .neighbors()
+                    .map(neighbor => {
+                        return grid.valid(neighbor) && grid.terrainAt(neighbor).isLand();
+                    })
+                    .reduce(
+                        (previousValue, currentValue) => previousValue || currentValue,
+                        false
+                    );
 
-                if (heightMap.values[x][y] > 0.1 || nextToContinent) {
+                if (heightMap.values[x][y] > 0.4 || nextToContinent) {
                     grid.modifyTerrainAt(TerrainTypes.shore, gridPoint);
                 } else {
                     grid.modifyTerrainAt(TerrainTypes.ocean, gridPoint);
@@ -362,18 +355,20 @@ MapGenerator.prototype.refineTerrain = function(grid, heightMap, moistureMap, cl
 
                 this.updateBiome(gridPoint, grid, heightMap.values[x][y], moistureMap.values[x][y], climateZones[x][y]);
             }
+
+            grid.modifyClimateZoneAt(climateZones[x][y], gridPoint);
         }
     }
 
     // make all ocean tiles directly adjacent to land as shore
-    for (var x = 0; x < this.options.size.cols; x++) {
+    /*for (var x = 0; x < this.options.size.cols; x++) {
         for (var y = 0; y < this.options.size.rows; y++) {
             const gridPoint = new HexPoint(x, y);
 
             if (grid.terrainAt(gridPoint) == TerrainTypes.ocean) {
                 var shouldBeShore = false;
 
-                for (neighborPoint in gridPoint.neighbors()) {
+                for (const neighborPoint in gridPoint.neighbors()) {
 
                     if (grid.isValid(neighborPoint)) {
                         continue;
@@ -392,7 +387,7 @@ MapGenerator.prototype.refineTerrain = function(grid, heightMap, moistureMap, cl
                 }
             }
         }
-    }
+    }*/
 
     // Expanding coasts (MapGenerator.Lua)
     // Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.

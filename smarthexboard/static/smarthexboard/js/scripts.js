@@ -85,7 +85,7 @@ function setupCanvas(canvasSize) {
     vp.addEventListener("mouseleave", handleMouseLeave, true);
 }
 
-function getMouseInfo(canvas, e) {
+/*function getMouseInfo(canvas, e) {
 	var mx, my, right_click;
 	var viewport = document.getElementById("terrains");
 	if (e.which) right_click = (e.which == 3);
@@ -95,7 +95,7 @@ function getMouseInfo(canvas, e) {
 	my = e.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
 
 	return new MouseInfo(mx, my, right_click);
-}
+}*/
 
 function handleMouseDown(event) {
     mouse.x = event.pageX;
@@ -105,18 +105,6 @@ function handleMouseDown(event) {
     var vp = document.getElementById('terrains');
     offset.x = vp.offsetLeft - event.clientX;
     offset.y = vp.offsetTop - event.clientY;
-
-    // Get the canvas element form the page
-    var terrainCanvas = document.getElementById('terrains');
-
-    var minfo = getMouseInfo(terrainCanvas, event);
-	// var cell = renderer.screenToCell(minfo.x, minfo.y);
-	var screenPoint = new CGPoint(minfo.x, minfo.y);
-	var cell = new HexPoint(screenPoint);
-
-    // var text = 'mouse click on: ' + cell.x + ', ' + cell.y;
-    // console.log(text);
-    // uiRenderer.message('mouse clicked', text);
 }
 
 function handleMouseMove(event) {
@@ -124,6 +112,41 @@ function handleMouseMove(event) {
 	mouse.x = event.pageX;
     mouse.Y = event.pageY;
     // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
+
+    var viewport = document.getElementById('game');
+    var canvas = document.getElementById('terrains');
+
+    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
+	var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
+
+    var canvasSize = renderer.map.canvasSize();
+    var canvasOffset = renderer.map.canvasOffset();
+
+    // screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
+            // console.log('screen=' + screen);
+    // screen.x + canvasOffset.x, screen.y + canvasOffset.y
+    mx = mx - canvasOffset.x;
+    my = my - canvasOffset.y;
+    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y;
+
+    var point_on_canvas = new CGPoint(mx, my);
+    // var screen_position = new CGPoint(event.clientX - canvas.offsetLeft, (event.clientY - canvas.offsetTop));
+    var screen_position = new CGPoint(mx, my);
+    var map_position = new HexPoint(screen_position);
+
+    var terrainText = '<invalid>';
+    var climateZoneText = '<invalid>';
+    if (renderer.map.valid(map_position)) {
+        terrainText = renderer.map.terrainAt(map_position);
+        climateZoneText = renderer.map.climateZoneAt(map_position);
+    }
+
+    var tooltipSpan = document.getElementById('tooltip');
+    var x = event.clientX, y = event.clientY;
+    tooltipSpan.style.top = (y + 20) + 'px';
+    tooltipSpan.style.left = (x + 0) + 'px';
+    tooltipSpan.style.display = 'block';
+    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
 
     if (mouseIsDown) {
         var terrains = document.getElementById('terrains');
@@ -153,67 +176,89 @@ function handleMouseLeave(event) {
 function changeUIState(newState) {
     uiState = newState;
 
-    if (uiState == UIState.menu) {
-        // images are cached, we can show the menu
-        console.log('uistate > menu');
-        $('#uistate-splash').hide();
-        $('#uistate-menu').show();
-        $('#uistate-generate').hide();
-        $('#uistate-game').hide();
-        $('#uistate-game-menu').hide();
-    }
+    switch (uiState) {
 
-    if (uiState == UIState.generate) {
-        // user selected 'play', we can generate a map now
-        console.log('uistate > generate');
-        $('#uistate-splash').hide();
-        $('#uistate-menu').hide();
-        $('#uistate-generate').show();
-        $('#uistate-game').hide();
-        $('#uistate-game-menu').hide();
+        case UIState.menu:
+            // images are cached, we can show the menu
+            console.log('uistate > menu');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').show();
+            $('#uistate-options').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
+            break;
 
-        var options = new MapOptions();
-        var generator = new MapGenerator(options);
+        case UIState.options:
+            console.log('uistate > options');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-options').show();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
 
-        generator.generate(function(text, progress, mapObj) {
+            $('#ui').addClass('blurred');
+            break;
 
-            console.log(text);
-            if (progress == 1.0) {
-                // update the map
-                renderer.map = mapObj;
+        case UIState.generate:
+            // user selected 'play', we can generate a map now
+            console.log('uistate > generate');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-options').hide();
+            $('#uistate-generate').show();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
 
-                var canvasSize = mapObj.canvasSize();
-                // create canvas with this size
-                setupCanvas(canvasSize);
+            var options = new MapOptions();
+            var generator = new MapGenerator(options);
 
-                changeUIState(UIState.game);
-            }
-        });
-    }
+            generator.generate(function(text, progress, mapObj) {
 
-    if (uiState == UIState.game) {
-        // map is generated, we can render it now
-        console.log('uistate > game');
-        $('#uistate-splash').hide();
-        $('#uistate-menu').hide();
-        $('#uistate-generate').hide();
-        $('#uistate-game').show();
-        $('#uistate-game-menu').hide();
+                console.log(text);
+                if (progress == 1.0) {
+                    // update the map
+                    renderer.map = mapObj;
 
-        // Full page rendering
-        renderer.render();
+                    var canvasSize = mapObj.canvasSize();
+                    // create canvas with this size
+                    setupCanvas(canvasSize);
 
-        $('#ui').removeClass('blurred');
-    }
+                    changeUIState(UIState.game);
+                }
+            });
+            break;
 
-    if (uiState == UIState.gameMenu) {
-        // we are inside the game but need to show the in-game menu
-        console.log('uistate > game-menu');
-        $('#uistate-splash').hide();
-        $('#uistate-menu').hide();
-        $('#uistate-generate').hide();
-        $('#uistate-game').show();
-        $('#uistate-game-menu').show();
+        case UIState.game:
+            // map is generated, we can render it now
+            console.log('uistate > game');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-options').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').show();
+            $('#uistate-game-menu').hide();
+
+            // Full page rendering
+            renderer.render();
+
+            $('#ui').removeClass('blurred');
+            break;
+
+        case UIState.gameMenu:
+            // we are inside the game but need to show the in-game menu
+            console.log('uistate > game-menu');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-options').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').show();
+            $('#uistate-game-menu').show();
+            break;
+
+        default:
+            throw new Error(uiState + ' not handled');
     }
 }
 
@@ -226,25 +271,21 @@ function initUI() {
         renderer.texturesLoaded = true;
         changeUIState(UIState.menu);
     });
-
-
-    // makeVisible('ui-message');
-    // uiRenderer.message('abc', 'def');
-
-    /*$('#uiokbut').click(function (event) {
-        event.preventDefault();
-
-        makeHidden('ui-message');
-    });
-    $('#menuGame').click(function (event) {
-        event.preventDefault();
-
-        uiRenderer.message('menu', 'game');
-    });*/
 }
 
 window.play = function play() {
+    console.log('play');
     changeUIState(UIState.generate);
+}
+
+window.options = function options() {
+    console.log('options');
+    changeUIState(UIState.options);
+}
+
+window.quitOptions = function quitOptions() {
+    console.log('quitOptions');
+    changeUIState(UIState.menu);
 }
 
 window.openTechDialog = function openTechDialog() {
@@ -283,4 +324,9 @@ window.openGameMenu = function openGameMenu() {
 window.closeMenu = function closeMenu() {
     console.log('closeMenu');
     changeUIState(UIState.game);
+}
+
+window.exitGame = function exitGame() {
+    console.log('exitGame');
+    changeUIState(UIState.menu);
 }

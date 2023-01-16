@@ -56,10 +56,13 @@ function HexPoint(x, y) {
     } else if (x instanceof CGPoint && typeof (y) == 'undefined') {
         // construct HexPoint from screen Point: CGPoint
         var screenPoint = x;
+        // hm, not sure why this is needed
+        screenPoint.x -= 20;
+        screenPoint.y -= 15;
         var hexCube = new HexCube(screenPoint);
         // console.log('hexCube=' + hexCube);
-        this.x = hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2;
-        this.y = hexCube.s;
+        this.x = Math.floor(hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2);
+        this.y = Math.floor(hexCube.s);
     } else if (typeof (x) == 'undefined' && typeof (y) == 'undefined') {
         this.x = 0;
 	    this.y = 0;

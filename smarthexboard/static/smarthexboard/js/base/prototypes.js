@@ -11,9 +11,17 @@ function CGSize(width, height) {
     this.height = height;
 }
 
+CGSize.prototype.toString = function() {
+  return '[CGSize width: ' + this.width + ', height: ' + this.height + ']';
+}
+
 function CGPoint(x, y) {
     this.x = x;
     this.y = y;
+}
+
+CGPoint.prototype.toString = function() {
+  return '[CGPoint x: ' + this.x + ', y: ' + this.y + ']';
 }
 
 function MouseInfo(x, y, right_click) {

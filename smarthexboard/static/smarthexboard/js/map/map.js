@@ -173,6 +173,15 @@ Map.prototype.isCoastalAt = function(hexPoint) {
     return false;
 }
 
+Map.prototype.isHillsAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    return this.tiles[hexPoint.x][hexPoint.y].isHills;
+}
+
 Map.prototype.modifyHillsAt = function(isHills, hexPoint) {
     // check point is on map
     if (!this.valid(hexPoint)) {
@@ -250,6 +259,24 @@ Map.prototype.modifyResourceAt = function(resourceType, hexPoint) {
     }
 
     this.tiles[hexPoint.x][hexPoint.y].resourceType = resourceType;
+}
+
+Map.prototype.climateZoneAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    return this.tiles[hexPoint.x][hexPoint.y].climateZone;
+}
+
+Map.prototype.modifyClimateZoneAt = function(climateZone, hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    this.tiles[hexPoint.x][hexPoint.y].climateZone = climateZone;
 }
 
 Map.prototype.toString = function() {

@@ -110,7 +110,7 @@ Renderer.prototype.coastTextureNameAt = function(hexPoint) {
         }
     });
 
-    console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
+    // console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
 
     if (textureName == "beach") {
         return null;
@@ -124,18 +124,23 @@ Renderer.prototype.terrainImageAt = function(hexPoint) {
         throw new Error(hexPoint + ' is not a HexPoint');
     }
 
+    //
     var textureName = "";
     const coastTexture = this.coastTextureNameAt(hexPoint);
     if (coastTexture != null) {
         textureName = coastTexture;
     } else {
         var terrain = this.map.terrainAt(hexPoint);
-        textureName = terrain.texture;
-        /*if tile.hasHills() {
-            textureName = tile.terrain().textureNamesHills().item(from: point)
+        var textureNames = [];
+
+        if (this.map.isHillsAt(hexPoint)) {
+            textureNames = terrain.hillsTextures;
         } else {
-            textureName = tile.terrain().textureNames().item(from: point)
-        }*/
+            textureNames = terrain.textures;
+        }
+
+        var index = Math.abs(hexPoint.x + hexPoint.y) % textureNames.length;
+        textureName = textureNames[index];
     }
 
     return this.imgTerrains[textureName];
@@ -279,10 +284,15 @@ Renderer.prototype.screenToCell = function(x, y) {
 Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 	var imgList = [];
 	Object.values(TerrainTypes).forEach(terrainType => {
-	    imgList.push(terrainType.texture);
+	    terrainType.textures.forEach(terrainTexture => {
+	        imgList.push(terrainTexture);
+	    });
+	    terrainType.hillsTextures.forEach(terrainTexture => {
+	        imgList.push(terrainTexture);
+	    });
 	});
 	Object.values(BeachTypes).forEach(beachType => {
-	    imgList.push(beachType.texture);
+	    imgList.push(beachType.textures[0]);
 	});
 	Object.values(FeatureTypes).forEach(featureType => {
 	    featureType.textures.forEach(featureTexture => {

@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { TerrainType, FeatureType, FeatureTypes, ResourceType, ResourceTypes } from './types.js';
+import { TerrainType, FeatureType, FeatureTypes, ResourceType, ResourceTypes, ClimateZones } from './types.js';
 
 // Tile Constructor
 
@@ -44,6 +44,7 @@ function Tile(terrainType, featureType, resourceType) {
     }
 
     this.isHills = false;
+    this.climateZone = ClimateZones.temperate;
 }
 
 Tile.prototype.toString = function() {

@@ -36,7 +36,10 @@
 <body onresize="resizeCanvas(event)">
 
     <!--full screen canvas container-->
-    <div id="game"></div>
+    <div id="game">
+        <div id="tooltip">Tile</div>
+    </div>
+
 
     <!--ui element container-->
     <div id="ui" class="blurred">
@@ -65,6 +68,22 @@
                     <ul class="menu">
                         <li><a href="#" onclick="play(); return false;">Play</a></h3></li>
                         <li><a href="#" onclick="options(); return false;">Options</a></h3></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--ui state: options-->
+        <div id="uistate-options">
+            <div class="container">
+                <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
+                <div class="container_text">
+                    <h1>SmartHexBoard</h1>
+                    <ul class="menu">
+                        <li><a href="#" onclick="return false;">Option 1</a></h3></li>
+                        <li><a href="#" onclick="return false;">Option 2</a></h3></li>
+                        <li class="noBullet">&nbsp;</li>
+                        <li><a href="#" onclick="quitOptions(); return false;">Back to Menu</a></h3></li>
                     </ul>
                 </div>
             </div>
@@ -148,6 +167,17 @@
                     <a id="cdHeader" href="#" onclick="openBdeialog(); return false;">&nbsp;</a>
                 </div>
             </div>
+
+            <div id="tech_progress">
+                <img src="{% static 'smarthexboard/img/science_progress/science_progress_0.png' %}" id="tech_progress_value" />
+                <img src="{% static 'smarthexboard/img/techs/tech-default@3x.png' %}" id="tech_progress_icon" />
+                <span id="tech_progress_title">Title</span>
+            </div>
+            <div id="civic_progress">
+                <img src="{% static 'smarthexboard/img/culture_progress/culture_progress_0.png' %}" id="civic_progress_value" />
+                <img src="{% static 'smarthexboard/img/civics/civic-default@3x.png' %}" id="civic_progress_icon" />
+                <span id="civic_progress_title">Title</span>
+            </div>
         </div>
 
         <!--ui state: game-menu-->
@@ -164,14 +194,6 @@
                 <a href="#" onclick="exitGame(); return false;" class="game-menu-item">Exit to Main Menu</a>
             </div>
         </div>
-    </div>
-
-    <!--top menu bar-->
-    <div class="topMenu">
-        <ul>
-            <li><a href="#" id="menuGame">Game</a></li>
-            <li><a href="#">Options</a></li>
-        </ul>
     </div>
 
     <!--<div>

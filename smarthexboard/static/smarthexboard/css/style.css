@@ -30,8 +30,8 @@ body {
 }
 
 body {
-    background-image: url("../img/background.jpg");
-    background-repeat: no-repeat;
+    /*background-image: url("../img/background.jpg");
+    background-repeat: no-repeat;*/
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -157,6 +157,8 @@ body {
     height: 256px;
 }
 
+/** menu ************************/
+
 #uistate-menu {
     display: none;
     position: fixed;
@@ -237,6 +239,95 @@ body {
     text-decoration: none;
     color: white;
 }
+
+/** options ***********/
+
+#uistate-options {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+
+    pointer-events: all;
+}
+
+#uistate-options .container {
+    padding: 20px;
+    width: 640px;
+    height: 256px;
+    display: flex;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+#uistate-options .logo {
+    width: 256px;
+    height: 256px;
+
+    margin: 20px 30px 0 0;
+    width: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+#uistate-options .container_text {
+    flex: 1 1 auto;
+}
+
+#uistate-options h1 {
+    clear: left;
+    padding-top: 30px;
+}
+
+#uistate-options ul.menu {
+    clear: left;
+    align-items: center;
+    margin: 10px 0;
+
+    line-height: 30px;
+
+    list-style: none;
+    padding-inline-start: 10px;
+}
+
+#uistate-options ul.menu li {
+    display: flex;
+    align-self: flex-start;
+}
+
+#uistate-options ul.menu li:before {
+    display: block;
+    flex-shrink: 0;
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+
+    vertical-align: middle;
+
+    background: url('../img/ui/checkbox-selected.png') no-repeat left center;
+    background-size: contain;
+
+    content: '';
+}
+
+#uistate-options ul.menu li.noBullet:before {
+    background: none;
+}
+
+#uistate-options a {
+    text-decoration: none;
+    color: white;
+}
+
+/** generate ***********/
 
 #uistate-generate {
     display: none;
@@ -461,9 +552,7 @@ body {
     margin-top: 2px;
 }
 
-/* buttons */
-
-#header-bar-right::before {
+#uistate-game #header-bar-right::before {
     width: 48px;
     height: 48px;
 
@@ -471,6 +560,72 @@ body {
 
     background-image: url("../img/ui/header-bar-right@3x.png");
     background-size: 100% 100%;
+}
+
+/* buttons */
+
+#uistate-game #tech_progress {
+    width: 197px;
+    height: 64px;
+    background-image: url("../img/ui/science-progress@3x.png");
+    background-size: 100% 100%;
+}
+
+#uistate-game #tech_progress_value {
+    width: 36px;
+    height: 36px;
+    top: 5px;
+    left: 3px;
+    position: relative;
+    z-index: 20;
+}
+
+#uistate-game #tech_progress_icon {
+    width: 26px;
+    height: 26px;
+    top: 0px;
+    left: -32px;
+    position: relative;
+    z-index: 21;
+}
+
+#uistate-game #tech_progress_title {
+    position: relative;
+    top: -20px;
+    left: -20px;
+    font-size: 14px;
+}
+
+#uistate-game #civic_progress {
+    width: 197px;
+    height: 64px;
+    background-image: url("../img/ui/culture-progress@3x.png");
+    background-size: 100% 100%;
+}
+
+#uistate-game #civic_progress_value {
+    width: 36px;
+    height: 36px;
+    top: 5px;
+    left: 3px;
+    position: relative;
+    z-index: 20;
+}
+
+#uistate-game #civic_progress_icon {
+    width: 26px;
+    height: 26px;
+    top: 0px;
+    left: -32px;
+    position: relative;
+    z-index: 21;
+}
+
+#uistate-game #civic_progress_title {
+    position: relative;
+    top: -20px;
+    left: -20px;
+    font-size: 14px;
 }
 
 /* game menu */
@@ -517,36 +672,13 @@ body {
 }
 
 /*=========================================
-            Menu CSS
+            Game CSS
 ============================================*/
 
-.topMenu {
-    display: none;
-    color: #ffffff;
+#tooltip {
+    z-index: 200;
     position: absolute;
-    height: 20px;
-    width: 100%;
-    background-color: rgba(32,32,32,0.5);
-    // border-bottom: 1px solid white;
-}
-
-.topMenu ul {
-    padding-left: 0px;
-    margin-bottom: 0;
-    margin-top: 0;
-    list-style: none;
-}
-
-.topMenu li {
-    display: inline-block;
-    position: relative;
-    padding-left: 10px;
-}
-
-.topMenu a {
-    color: #162e66;
-    text-decoration: none;
-    background-color: transparent;
+    display: none;
 }
 
 /*=========================================
