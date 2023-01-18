@@ -1,3 +1,4 @@
-from django.contrib import admin
+# module description
+# from django.contrib import admin
 
 # Register your models here.

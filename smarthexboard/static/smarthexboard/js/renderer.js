@@ -8,7 +8,7 @@
 
 import { CGPoint } from './base/prototypes.js';
 import { HexPoint, HexDirections, HexDirection } from './base/point.js';
-import { TerrainTypes, BeachTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { TerrainTypes, BeachTypes, SnowTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { Map } from './map/map.js';
 
 function Renderer() {
@@ -146,6 +146,39 @@ Renderer.prototype.terrainImageAt = function(hexPoint) {
     return this.imgTerrains[textureName];
 }
 
+Renderer.prototype.snowImageAt = function(hexPoint) {
+    if (!(hexPoint instanceof HexPoint)) {
+        throw new Error(hexPoint + ' is not a HexPoint');
+    }
+
+    var textureName = "snow"; // "snow-n-ne-se-s-sw-nw"
+
+    const terrain = this.map.terrainAt(hexPoint);
+    if (terrain.isWater()) {
+        textureName = "snow-to-water";
+    }
+
+    var _this = this; // context this is not visible on forEach loop
+    Object.values(HexDirections).forEach(function(direction) {
+        const neighborPoint = hexPoint.neighborIn(direction, 1);
+
+        if (!_this.map.valid(neighborPoint)) {
+            return;
+        }
+
+        const neighborTerrain = _this.map.terrainAt(neighborPoint);
+        if (neighborTerrain == TerrainTypes.snow) {
+            textureName = textureName + ("-" + direction.short());
+        }
+    });
+
+    if (textureName == "snow" || textureName == "snow-to-water") {
+        return null;
+    }
+
+    return this.imgTerrains[textureName];
+}
+
 Renderer.prototype.render = function(orow, ocol, range) {
 
     // console.log('==> render tile at: ' + ocol + ', ' + orow);
@@ -191,8 +224,13 @@ Renderer.prototype.render = function(orow, ocol, range) {
             screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
             // console.log('screen=' + screen);
 
-            var img = this.terrainImageAt(hex);
-            this.terrainsCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
+            var terrainImage = this.terrainImageAt(hex);
+            this.terrainsCtx.drawImage(terrainImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
+
+            var snowImage = this.snowImageAt(hex);
+            if (snowImage != null) {
+                this.terrainsCtx.drawImage(snowImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
+            }
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
 
             var feature = this.map.featureAt(hex);
@@ -291,6 +329,9 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
 	        imgList.push(terrainTexture);
 	    });
 	});
+	Object.values(SnowTypes).forEach(snowType => {
+	    imgList.push(snowType.textures[0]);
+	});
 	Object.values(BeachTypes).forEach(beachType => {
 	    imgList.push(beachType.textures[0]);
 	});
@@ -348,6 +389,25 @@ Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
                 }
             }
             this.imgTerrains[imgName].src = '/static/smarthexboard/img/beaches/' + imgName;
+
+        } else if (imgName.startsWith('snow-')) {
+            if (typeof this.imgTerrains[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgTerrains[imgName] = new Image();
+            this.imgTerrains[imgName].onload = function() {
+                // console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' terrain assets');
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
+                }
+            }
+            this.imgTerrains[imgName].src = '/static/smarthexboard/img/snow/' + imgName;
 
         } else if (imgName.startsWith('feature_')) {
             if (typeof this.imgFeatures[imgName] !== "undefined") {

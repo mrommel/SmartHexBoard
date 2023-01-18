@@ -12,7 +12,8 @@ $(VENV)/bin/activate: requirements.txt
 venv: $(VENV)/bin/activate
 
 pylint: venv
-	./$(VENV)/bin/pylint --disable=C0303,R0903,R0915,C0103,E1101,E0102,R0913,W0123,R0912,R0801 simulation map population
+	# --disable=C0303,R0903,R0915,C0103,E1101,E0102,R0913,W0123,R0912,R0801 simulation map population
+	./$(VENV)/bin/pylint smarthexboard
 
 tests: venv
 	./$(VENV)/bin/python3 -m unittest
