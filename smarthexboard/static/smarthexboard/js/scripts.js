@@ -211,7 +211,9 @@ function changeUIState(newState) {
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
 
-            var options = new MapOptions();
+            startMapGeneration();
+
+            /*var options = new MapOptions();
             var generator = new MapGenerator(options);
 
             generator.generate(function(text, progress, mapObj) {
@@ -227,7 +229,7 @@ function changeUIState(newState) {
 
                     changeUIState(UIState.game);
                 }
-            });
+            });*/
             break;
 
         case UIState.game:
@@ -270,6 +272,80 @@ function initUI() {
     renderer.cacheTerrainImages(function() {
         renderer.texturesLoaded = true;
         changeUIState(UIState.menu);
+    });
+}
+
+function handleError(xhr, textStatus, exception) {
+
+    if (xhr.status === 0) {
+        console.log('Not connect.\n Verify Network.');
+    } else if (xhr.status == 404) {
+        // 404 page error
+        console.log('Requested page not found. [404]');
+    } else if (xhr.status == 500) {
+        // 500 Internal Server error
+        console.log('Internal Server Error [500].');
+    } else if (exception === 'parsererror') {
+        // Requested JSON parse
+        console.log('Requested JSON parse failed.');
+    } else if (exception === 'timeout') {
+        // Time out error
+        console.log('Time out error.');
+    } else if (exception === 'abort') {
+        // request aborted
+        console.log('Ajax request aborted.');
+    } else {
+        console.log('Uncaught Error.\n' + xhr.responseText);
+    }
+}
+
+var check_timer;
+var map_uuid;
+function startMapGeneration() {
+    // reset map_uuid
+    map_uuid = '';
+
+    $.ajax({
+        type:"GET",
+        url: "/smarthexboard/generate_map",
+        /*contentType: "application/json",
+        data: JSON.stringify(formData), <= map type, size, etc
+        dataType: "json",*/
+        success: function(response) {
+            map_uuid = response.uuid;
+            console.log('started generating map ' + map_uuid);
+
+            /* start checking status */
+            check_timer = setInterval(checkMapGeneration, 1000);
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
+// to be called when you want to stop the timer
+function abortTimer() {
+    clearInterval(check_timer);
+}
+
+function checkMapGeneration() {
+    $.ajax({
+        type:"GET",
+        url: "/smarthexboard/generate_status/" + map_uuid + "/",
+        success: function(response) {
+            console.log('refresh map generation status: ' + response.status);
+
+            // $('#refresh_status').text(response.status);
+            if (response.status == 'Ready') {
+                abortTimer();
+
+                console.log('Todo: load map');
+            }
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
     });
 }
 

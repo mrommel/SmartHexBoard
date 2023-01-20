@@ -9,15 +9,6 @@ from smarthexboard.map.map import Map
 from django.test import Client
 
 
-def is_valid_uuid(value):
-    try:
-        uuid.UUID(str(value))
-
-        return True
-    except ValueError:
-        return False
-
-
 class TestArray2D(unittest.TestCase):
 	def test_constructor(self):
 		"""Test the Array2D constructor"""
@@ -102,7 +93,8 @@ class TestMapGenerationRequest(unittest.TestCase):
 		self.assertEqual(response.status_code, 201)
 
 		json_object = json.loads(response.content)
-		self.assertEqual(is_valid_uuid(json_object['uuid']), True)
+		map_uuid = json_object['uuid']
+		self.assertEqual(is_valid_uuid(map_uuid), True)
 
 
 if __name__ == '__main__':
