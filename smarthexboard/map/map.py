@@ -1,7 +1,7 @@
 import json
 from json import JSONEncoder
 
-from smarthexboard.map.base import Array2D, Size
+from smarthexboard.map.base import Array2D, Size, HexPoint
 from smarthexboard.map.types import TerrainType, FeatureType, ResourceType, ClimateZone
 
 
@@ -46,13 +46,38 @@ class Map:
 
 		self.tiles = Array2D(self.width, self.height, Tile(TerrainType.ocean))
 
-	def terrainAt(self, x_or_hex, y=None):
+	def valid(self, x_or_hex, y=None):
 		if isinstance(x_or_hex, HexPoint) and y is None:
-			hexPoint = x_or_hex
-			return self.tiles[hexPoint.y][hexPoint.x]
+			hex_point = x_or_hex
+			return 0 <= hex_point.x < self.width and 0 <= hex_point.y < self.height
 		elif isinstance(x_or_hex, int) and isinstance(y, int):
 			x = x_or_hex
-			return self.tiles[y][x]
+			return 0 <= x < self.width and 0 <= y < self.height
+		else:
+			raise AttributeError(f'Map.valid with wrong attributes: {x_or_hex} / {y}')
+
+	def terrainAt(self, x_or_hex, y=None):
+		if isinstance(x_or_hex, HexPoint) and y is None:
+			hex_point = x_or_hex
+			return self.tiles.values[hex_point.y][hex_point.x].terrain
+		elif isinstance(x_or_hex, int) and isinstance(y, int):
+			x = x_or_hex
+			return self.tiles.values[y][x].terrain
+		else:
+			raise AttributeError(f'Map.terrainAt with wrong attributes: {x_or_hex} / {y}')
+
+	def modifyTerrainAt(self, x_or_hex, y_or_terrain, terrain=None):
+		if isinstance(x_or_hex, HexPoint) and isinstance(y_or_terrain, TerrainType) and terrain is None:
+			hex_point = x_or_hex
+			terrain_type = y_or_terrain
+			self.tiles.values[hex_point.y][hex_point.x].terrain = terrain_type
+		elif isinstance(x_or_hex, int) and isinstance(y_or_terrain, int) and isinstance(terrain, TerrainType):
+			x = x_or_hex
+			y = y_or_terrain
+			terrain_type = terrain
+			self.tiles.values[y][x].terrain = terrain_type
+		else:
+			raise AttributeError(f'Map.modifyTerrainAt with wrong attributes: {x_or_hex} / {y_or_terrain} / {terrain}')
 
 	def to_dict(self):
 		return {

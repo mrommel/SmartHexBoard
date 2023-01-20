@@ -52,7 +52,7 @@ function TerrainType(name, textures, hillsTextures) {
 }
 
 TerrainType.prototype.clone = function() {
-    return new TerrainType(this.name, this.texture);
+    return new TerrainType(this.name, this.textures, this.hillsTextures);
 }
 
 TerrainType.prototype.isWater = function() {
@@ -75,6 +75,26 @@ const TerrainTypes = {
 	shore: new TerrainType("shore", ["terrain_shore@3x.png"], []),
 	snow: new TerrainType("snow", ["terrain_snow@3x.png"], ["terrain_snow_hills@3x.png", "terrain_snow_hills2@3x.png", "terrain_snow_hills3@3x.png"]),
 	tundra: new TerrainType("tundra", ["terrain_tundra@3x.png", "terrain_tundra2@3x.png", "terrain_tundra3@3x.png"], ["terrain_tundra_hills@3x.png"]),
+}
+
+TerrainType.fromString = function(terrain_name) {
+
+    switch (terrain_name) {
+        case 'desert':
+            return TerrainTypes.desert.clone();
+        case 'grass':
+            return TerrainTypes.grass.clone();
+        case 'ocean':
+            return TerrainTypes.ocean.clone();
+        case 'plains':
+            return TerrainTypes.plains.clone();
+        case 'shore':
+            return TerrainTypes.shore.clone();
+        case 'snow':
+            return TerrainTypes.snow.clone();
+        case 'tundra':
+            return TerrainTypes.tundra.clone();
+    }
 }
 
 // map generation

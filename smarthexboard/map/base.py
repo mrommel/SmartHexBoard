@@ -130,6 +130,18 @@ class HexPoint(Point):
 
 		return HexPoint(cube_neighbor)
 
+	def neighbors(self):
+		neighboring = []
+
+		neighboring.append(self.neighbor(HexDirection.north))
+		neighboring.append(self.neighbor(HexDirection.northEast))
+		neighboring.append(self.neighbor(HexDirection.southEast))
+		neighboring.append(self.neighbor(HexDirection.south))
+		neighboring.append(self.neighbor(HexDirection.southWest))
+		neighboring.append(self.neighbor(HexDirection.northWest))
+
+		return neighboring
+
 	def __eq__(self, other):
 		"""Overrides the default implementation"""
 		if isinstance(other, HexPoint):

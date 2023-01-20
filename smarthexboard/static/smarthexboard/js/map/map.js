@@ -37,6 +37,26 @@ function Map(cols, rows) {
 
 // Map Object Public Methods
 
+Map.prototype.fromJson = function(json_dict) {
+
+    this.cols = json_dict['width'];
+	this.rows = json_dict['height'];
+
+	this.tiles = Array(this.cols).fill().map(()=>Array(this.rows).fill());
+
+    for (var j = 0; j < this.rows; j++) {
+	    for (var i = 0; i < this.cols; i++) {
+	        const terrain_name = json_dict['tiles']['values']['' + j][i]['terrain'];
+	        const terrain_type = TerrainType.fromString(terrain_name);
+            console.log('terrain: ' + terrain_type);
+            this.tiles[i][j] = new Tile(terrain_type);
+        }
+    }
+
+    this.units = []
+    this.cities = []
+}
+
 Map.prototype.copy = function(map) {
     this.rows = map.rows;
 	this.cols = map.cols;

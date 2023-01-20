@@ -212,24 +212,6 @@ function changeUIState(newState) {
             $('#uistate-game-menu').hide();
 
             startMapGeneration();
-
-            /*var options = new MapOptions();
-            var generator = new MapGenerator(options);
-
-            generator.generate(function(text, progress, mapObj) {
-
-                console.log(text);
-                if (progress == 1.0) {
-                    // update the map
-                    renderer.map = mapObj;
-
-                    var canvasSize = mapObj.canvasSize();
-                    // create canvas with this size
-                    setupCanvas(canvasSize);
-
-                    changeUIState(UIState.game);
-                }
-            });*/
             break;
 
         case UIState.game:
@@ -339,9 +321,34 @@ function checkMapGeneration() {
             // $('#refresh_status').text(response.status);
             if (response.status == 'Ready') {
                 abortTimer();
-
-                console.log('Todo: load map');
+                loadMap(response.uuid);
             }
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
+function loadMap(map_loadMap) {
+
+    $.ajax({
+        type:"GET",
+        dataType: "json",
+        url: "/smarthexboard/generated_map/" + map_uuid + "/",
+        success: function(json_obj) {
+            console.log('load map: ' + map_uuid);
+
+            var mapObj = new Map();
+            mapObj.fromJson(json_obj);
+            console.log('map: ' + map_uuid + ' loaded');
+            renderer.map = mapObj;
+
+            var canvasSize = mapObj.canvasSize();
+            // create canvas with this size
+            setupCanvas(canvasSize);
+
+            changeUIState(UIState.game);
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);

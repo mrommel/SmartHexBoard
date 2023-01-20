@@ -40,6 +40,12 @@ class TerrainType(Enum):
 	land = 'land'
 	sea = 'sea'
 
+	def isWater(self):
+		return self == TerrainType.sea or self == TerrainType.ocean or self == TerrainType.shore
+
+	def isLand(self):
+		return not self.isWater()
+
 
 class FeatureType(Enum):
 	none = 'none'

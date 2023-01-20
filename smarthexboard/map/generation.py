@@ -250,9 +250,147 @@ class MapGenerator:
 				if distance < 2:
 					self.climate_zones.values[y][x] = self.climate_zones.values[y][x].moderate()
 
-
+	# 3rd step methods
 	def _refineTerrain(self, grid, height_map, moisture_map):
-		pass
+		land_plots = 0
+
+		for x in range(self.width):
+			for y in range(self.height):
+				grid_point = HexPoint(x, y)
+
+				if self.plots.values[y][x] == TerrainType.sea:
+					# check is next continent
+					next_to_continent = any(map(lambda neighbor: grid.valid(neighbor) and grid.terrainAt(neighbor).isLand(), grid_point.neighbors()))
+
+					if height_map.values[y][x] > 0.1 or next_to_continent:
+						grid.modifyTerrainAt(grid_point, TerrainType.shore)
+					else:
+						grid.modifyTerrainAt(grid_point, TerrainType.ocean)
+					print('ocean')
+				else:
+					land_plots = land_plots + 1
+
+					grid.modifyTerrainAt(grid_point, TerrainType.grass)
+					print('land')
+
+		#
+		#                     self.updateBiome(
+		#                         at: gridPoint,
+		#                         on: grid,
+		#                         elevation: heightMap[x, y]!,
+		#                         moisture: moistureMap[x, y]!,
+		#                         climate: self.climateZones[x, y]!
+		#                     )
+		# 				}
+		# 			}
+		# 		}
+		#
+		#         for x in 0..<width {
+		#             for y in 0..<height {
+		#                 let gridPoint = HexPoint(x: x, y: y)
+		#
+		#                 if grid.terrain(at: gridPoint) == .ocean {
+		#                     var shouldBeShore: Bool = false
+		#
+		#                     for neighbor in gridPoint.neighbors() {
+		#
+		#                         guard let neighborTile = grid.tile(at: neighbor) else {
+		#                             continue
+		#                         }
+		#
+		#                         if neighborTile.isLand() {
+		#                             shouldBeShore = true
+		#                             break
+		#                         }
+		#                     }
+		#
+		#                     if shouldBeShore {
+		#                         grid.set(terrain: .shore, at: gridPoint)
+		#                     }
+		#                 }
+		#             }
+		#         }
+		#
+		#         // Expanding coasts (MapGenerator.Lua)
+		#         // Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
+		#         // Default is two passes at 1/4 chance per eligible plot on each pass.
+		#         for _ in 0..<2 {
+		#             var shallowWaterPlots: [HexPoint] = []
+		#             for x in 0..<width {
+		#                 for y in 0..<height {
+		#                     let gridPoint = HexPoint(x: x, y: y)
+		#
+		#                     if grid.terrain(at: gridPoint) == .ocean {
+		#                         var isAdjacentToShallowWater: Bool = false
+		#                         for neighbor in gridPoint.neighbors() {
+		#
+		#                             guard let neighborTile = grid.tile(at: neighbor) else {
+		#                                 continue
+		#                             }
+		#
+		#                             if neighborTile.terrain() == .shore && Int.random(number: 5) == 0 {
+		#                                 isAdjacentToShallowWater = true
+		#                                 break
+		#                             }
+		#                         }
+		#
+		#                         if isAdjacentToShallowWater {
+		#                             shallowWaterPlots.append(gridPoint)
+		#                         }
+		#                     }
+		#                 }
+		#             }
+		#
+		#             for shallowWaterPlot in shallowWaterPlots {
+		#                 grid.set(terrain: .shore, at: shallowWaterPlot)
+		#             }
+		#         }
+		#
+		#         // get highest percent tiles from height map
+		#         let combinedPercentage = self.options.mountainsPercentage * self.options.landPercentage
+		#         let mountainThresold = heightMap.findThresholdAbove(percentage: combinedPercentage)
+		#
+		#         var numberOfMountains: Int = 0
+		#
+		#         for x in 0..<width {
+		#             for y in 0..<height {
+		#                 let gridPoint = HexPoint(x: x, y: y)
+		#
+		#                 if heightMap[gridPoint]! >= mountainThresold {
+		#                     grid.set(feature: .mountains, at: gridPoint)
+		#                     numberOfMountains += 1
+		#                 }
+		#             }
+		#         }
+		#
+		#         // remove some mountains, where there are mountain neighbors
+		#         let points = grid.points().shuffled
+		#
+		#         for gridPoint in points {
+		#
+		#             var mountainNeighbors = 0
+		#             var numberNeighbors = 0
+		#
+		#             for neighbor in gridPoint.neighbors() {
+		#
+		#                 guard let neighborTile = grid.tile(at: neighbor) else {
+		#                     continue
+		#                 }
+		#
+		#                 if neighborTile.feature() == .mountains || neighborTile.feature() == .mountEverest || neighborTile.feature() == .mountKilimanjaro {
+		#                     mountainNeighbors += 1
+		#                 }
+		#
+		#                 numberNeighbors += 1
+		#             }
+		#
+		#             if (numberNeighbors == 6 && mountainNeighbors >= 5) || (numberNeighbors == 5 && mountainNeighbors >= 4) {
+		#                 grid.set(feature: .none, at: gridPoint)
+		#                 print("mountain removed")
+		#             }
+		#         }
+		#
+		#         print("Number of Mountains: \(numberOfMountains)")
 
 	def _blendTerrains(self, grid):
 		pass
