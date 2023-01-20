@@ -2,6 +2,13 @@
 from enum import Enum
 
 
+class ExtendedEnum(Enum):
+
+	@classmethod
+	def list(cls):
+		return list(map(lambda c: c, cls))
+
+
 class Size:
 	"""class that store a size object with a width and a height parameter"""
 
@@ -65,14 +72,39 @@ class HexCube:
 		else:
 			raise AttributeError(f'HexCube with wrong attributes: {q_or_hex_point} / {r} / {s}')
 
+	def mul(self, factor):
+		return HexCube(int(self.q * factor), int(self.r * factor), int(self.s * factor))
 
-class HexDirection(Enum):
+	def add(self, right):
+		return HexCube(int(self.q + right.q), int(self.r + right.r), int(self.s + right.s))
+
+
+class HexDirection(ExtendedEnum):
 	north = 'north'
 	northEast = 'northEast'
 	southEast = 'southEast'
 	south = 'south'
 	southWest = 'southWest'
 	northWest = 'northWest'
+
+	def cubeDirection(self):
+		if self == HexDirection.north:
+			return HexCube(0, 1, -1)
+		elif self == HexDirection.northEast:
+			return HexCube(1, 0, -1)
+		elif self == HexDirection.southEast:
+			return HexCube(1, -1, 0)
+		elif self == HexDirection.south:
+			return HexCube(0, -1, 1)
+		elif self == HexDirection.southWest:
+			return HexCube(-1, 0, 1)
+		elif self == HexDirection.northWest:
+			return HexCube(-1, 1, 0)
+		else:
+			raise AttributeError(f'HexDirection {self} can\'t get cubeDirection')
+
+	def __str__(self):
+		return f'[HexDirection {self.value}]'
 
 
 class HexPoint(Point):
@@ -84,17 +116,32 @@ class HexPoint(Point):
 		elif isinstance(x_or_hex_cube, HexCube) and y is None:
 			hex_cube = x_or_hex_cube
 			# even-q
-			self.x = hex_cube.q + (hex_cube.s + (hex_cube.s & 1)) / 2
+			self.x = int(hex_cube.q + (hex_cube.s + (hex_cube.s & 1)) / 2)
 			self.y = hex_cube.s
 		else:
 			raise AttributeError(f'HexPoint with wrong attributes: {x_or_hex_cube} / {y}')
 
 	def neighbor(self, direction: HexDirection, distance: int = 1):
-		hex_cube = HexCube(self)
-		cube_neighbor = hex_cube + direction.cubeDirection * distance
+		cube_direction = direction.cubeDirection()
+		cube_direction = cube_direction.mul(distance)
+
+		cube_neighbor = HexCube(self)
+		cube_neighbor = cube_neighbor.add(cube_direction)
+
 		return HexPoint(cube_neighbor)
 
+	def __eq__(self, other):
+		"""Overrides the default implementation"""
+		if isinstance(other, HexPoint):
+			return self.x == other.x and self.y == other.y
+
+		return False
+
 	def __str__(self):
+		"""returns a string representation of the HexPoint"""
+		return f'[HexPoint x: {self.x}, y: {self.y}]'
+
+	def __reor__(self):
 		"""returns a string representation of the HexPoint"""
 		return f'[HexPoint x: {self.x}, y: {self.y}]'
 
@@ -144,6 +191,11 @@ class Array2D:
 			raise AttributeError(f'Array2D.valid with wrong attributes: {point_or_x} / {y}')
 
 		return 0 <= x_val < self.width and 0 <= y_val < self.height
+
+	def fill(self, value):
+		for y in range(self.height):
+			for x in range(self.width):
+				self.values[y][x] = value
 
 	def __str__(self):
 		mtx_str = '------------- output -------------\n'

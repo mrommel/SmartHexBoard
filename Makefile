@@ -15,8 +15,14 @@ pylint: venv
 	# --disable=C0303,R0903,R0915,C0103,E1101,E0102,R0913,W0123,R0912,R0801 simulation map population
 	./$(VENV)/bin/pylint smarthexboard
 
+# tests: venv
+#	./$(VENV)/bin/python3 -m unittest
+
 tests: venv
-	./$(VENV)/bin/python3 -m unittest
+	./$(VENV)/bin/pytest -q smarthexboard/tests.py
+
+run-qcluster: venv
+	./$(VENV)/bin/python3 manage.py qcluster
 
 run: venv
 	./$(VENV)/bin/python3 manage.py runserver 8081

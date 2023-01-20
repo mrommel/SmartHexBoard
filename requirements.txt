@@ -1,5 +1,8 @@
 asgiref==3.6.0
 Django==4.1.5
 sqlparse==0.4.3
+django-q==1.3.9
+redis==3.5.3  # version required by django-q
 
 pylint==2.15.10
+pytest-django==4.5.2

@@ -1,6 +1,7 @@
 import math
+import sys
 
-from smarthexboard.map.base import Array2D, Point
+from smarthexboard.map.base import Array2D, Point, HexPoint, HexDirection
 from smarthexboard.map.map import Map
 from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType
 from smarthexboard.perlin_noise.perlin_noise import PerlinNoise
@@ -118,7 +119,7 @@ class MapGenerator:
 		callback(MapGeneratorState(0.3, "TXT_KEY_MAP_GENERATOR_ELEVATION"))
 
 		# 2nd step: climate
-		self._setClimateZones()
+		self._setClimateZones(grid)
 
 		callback(MapGeneratorState(0.35, "TXT_KEY_MAP_GENERATOR_CLIMATE"))
 
@@ -210,10 +211,45 @@ class MapGenerator:
 
 
 	def _prepareDistanceToCoast(self):
-		pass
+		self.distance_to_coast.fill(sys.maxsize)
+
+		action_happened = True
+		while action_happened:
+			# reset
+			action_happened = False
+
+			for x in range(self.width):
+				for y in range(self.height):
+					# this needs to be analyzed
+					if self.distance_to_coast.values[y][x] == sys.maxsize:
+						# if field is ocean = > no distance
+						if self.plots.values[y][x] == TerrainType.sea:
+							self.distance_to_coast.values[y][x] = 0
+							action_happened = True
+						else:
+							# check neighbors
+							distance = sys.maxsize
+							point = HexPoint(x, y)
+
+							for direction in HexDirection.list():
+								neighbor = point.neighbor(direction, 1)
+
+								if 0 <= neighbor.x < self.width and 0 <= neighbor.y < self.height:
+									if self.distance_to_coast.values[neighbor.y][neighbor.x] < sys.maxsize:
+										distance = min(distance, self.distance_to_coast.values[neighbor.y][neighbor.x] + 1)
+
+							if distance < sys.maxsize:
+								self.distance_to_coast.values[y][x] = distance
+								action_happened = True
 
 	def _refineClimate(self):
-		pass
+		for x in range(self.width):
+			for y in range(self.height):
+				distance = self.distance_to_coast.values[y][x]
+
+				if distance < 2:
+					self.climate_zones.values[y][x] = self.climate_zones.values[y][x].moderate()
+
 
 	def _refineTerrain(self, grid, height_map, moisture_map):
 		pass

@@ -8,5 +8,6 @@ urlpatterns = [
     path('home', views.index, name='index'),
 
     path('tests', views.tests, name='tests'),
-    path('generate', views.generate, name='generate'),
+    path('generate_map', views.generate_map, name='generate_map'),
+    path('generate_status/<str:map_uuid>/', views.generate_status, name='generate_status'),
 ]

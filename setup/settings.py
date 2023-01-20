@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q',  # add Django Q
 ]
 
 MIDDLEWARE = [
@@ -99,6 +100,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+Q_CLUSTER = {
+    'name': 'smarthexboard_q_django',
+    'label': 'Django Q',
+    'retry': 25,
+    'timeout': 20,
+    'redis': {
+        'host': '127.0.0.1',
+        'port': 6379,
+        'db': 0,
+    }
+}
 
 
 # Internationalization

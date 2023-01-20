@@ -1,6 +1,6 @@
 from enum import Enum
 
-from smarthexboard.map.base import Size
+from smarthexboard.map.base import Size, ExtendedEnum
 
 
 class MapType(Enum):
@@ -71,9 +71,21 @@ class ResourceType(Enum):
 	wheat = 'wheat'
 
 
-class ClimateZone(Enum):
+class ClimateZone(ExtendedEnum):
 	polar = 'polar'
 	sub_polar = 'sub_polar'
 	temperate = 'temperate'
 	sub_tropic = 'sub_tropic'
 	tropic = 'tropic'
+
+	def moderate(self):
+		if self == ClimateZone.polar:
+			return ClimateZone.sub_polar
+		elif self == ClimateZone.sub_polar:
+			return ClimateZone.temperate
+		elif self == ClimateZone.temperate:
+			return ClimateZone.sub_tropic
+		elif self == ClimateZone.sub_tropic:
+			return ClimateZone.tropic
+		else:
+			return ClimateZone.tropic
