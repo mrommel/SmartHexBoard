@@ -1,4 +1,5 @@
 import math
+import random
 import sys
 
 from smarthexboard.map.base import Array2D, Point, HexPoint, HexDirection
@@ -98,9 +99,19 @@ class MapGenerator:
 		self.height = options.map_size.size().height
 
 		# prepare terrain, distanceToCoast and zones
-		self.plots = Array2D(self.width, self.height, TerrainType.sea)
+		self.plots = Array2D(self.width, self.height)
+
+		for y in range(self.height):
+			for x in range(self.width):
+				self.plots.values[y][x] = TerrainType.sea
+
 		self.distance_to_coast = Array2D(self.width, self.height, 0)
-		self.climate_zones = Array2D(self.width, self.height, ClimateZone.polar)
+		self.climate_zones = Array2D(self.width, self.height)
+
+		for y in range(self.height):
+			for x in range(self.width):
+				self.climate_zones.values[y][x] = ClimateZone.polar
+
 		self.spring_locations = []
 
 	def generate(self, callback):
@@ -114,6 +125,8 @@ class MapGenerator:
 
 		# 1st step: land / water
 		threshold = height_map.findThresholdAbove(0.40)  # 40 % is land
+		# print(height_map.to_dict())
+		# print(f'threshold: {threshold}')
 		self._fillFromElevation(height_map, threshold)
 
 		callback(MapGeneratorState(0.3, "TXT_KEY_MAP_GENERATOR_ELEVATION"))
@@ -190,6 +203,10 @@ class MapGenerator:
 				tile_height = height_map.values[y][x]
 				if tile_height > threshold:
 					self.plots.values[y][x] = TerrainType.land
+					print('above threshold')
+				else:
+					self.plots.values[y][x] = TerrainType.sea
+					print('below threshold')
 
 	def _setClimateZones(self, grid):
 		self.climate_zones.fill(ClimateZone.temperate)
@@ -208,7 +225,6 @@ class MapGenerator:
 					self.climate_zones.values[y][x] = ClimateZone.sub_tropic
 				else:
 					self.climate_zones.values[y][x] = ClimateZone.tropic
-
 
 	def _prepareDistanceToCoast(self):
 		self.distance_to_coast.fill(sys.maxsize)
@@ -266,24 +282,12 @@ class MapGenerator:
 						grid.modifyTerrainAt(grid_point, TerrainType.shore)
 					else:
 						grid.modifyTerrainAt(grid_point, TerrainType.ocean)
-					print('ocean')
 				else:
 					land_plots = land_plots + 1
 
-					grid.modifyTerrainAt(grid_point, TerrainType.grass)
-					print('land')
+					# grid.modifyTerrainAt(grid_point, TerrainType.grass)
+					self._updateBiome(grid_point, grid, height_map.values[y][x], moisture_map.values[y][x], self.climate_zones.values[y][x])
 
-		#
-		#                     self.updateBiome(
-		#                         at: gridPoint,
-		#                         on: grid,
-		#                         elevation: heightMap[x, y]!,
-		#                         moisture: moistureMap[x, y]!,
-		#                         climate: self.climateZones[x, y]!
-		#                     )
-		# 				}
-		# 			}
-		# 		}
 		#
 		#         for x in 0..<width {
 		#             for y in 0..<height {
@@ -311,9 +315,9 @@ class MapGenerator:
 		#             }
 		#         }
 		#
-		#         // Expanding coasts (MapGenerator.Lua)
-		#         // Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
-		#         // Default is two passes at 1/4 chance per eligible plot on each pass.
+		#         # Expanding coasts (MapGenerator.Lua)
+		#         # Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
+		#         # Default is two passes at 1/4 chance per eligible plot on each pass.
 		#         for _ in 0..<2 {
 		#             var shallowWaterPlots: [HexPoint] = []
 		#             for x in 0..<width {
@@ -391,6 +395,91 @@ class MapGenerator:
 		#         }
 		#
 		#         print("Number of Mountains: \(numberOfMountains)")
+
+	def _updateBiome(self, grid_point, grid, elevation, moisture, climate_zone):
+		# from http://www.redblobgames.com/maps/terrain-from-noise/
+		if climate_zone == ClimateZone.polar:
+			self._updateBiomeForPolar(grid_point, grid, elevation, moisture)
+		elif climate_zone == ClimateZone.sub_polar:
+			self._updateBiomeForSubpolar(grid_point, grid, elevation, moisture)
+		elif climate_zone == ClimateZone.temperate:
+			self._updateBiomeForTemperate(grid_point, grid, elevation, moisture)
+		elif climate_zone == ClimateZone.sub_tropic:
+			self._updateBiomeForSubtropic(grid_point, grid, elevation, moisture)
+		else:  # tropic
+			self._updateBiomeForTropic(grid_point, grid, elevation, moisture)
+
+	def _updateBiomeForPolar(self, grid_point, grid, elevation, moisture):
+		if random.random() > 0.5:
+			grid.modifyIsHillsAt(grid_point, True)
+
+		grid.modifyTerrainAt(grid_point, TerrainType.snow)
+
+	def _updateBiomeForSubpolar(self, grid_point, grid, elevation, moisture):
+		if elevation > 0.7 and random.random() > 0.7:
+			grid.modifyIsHillsAt(grid_point, True)
+			grid.modifyTerrainAt(grid_point, TerrainType.snow)
+			return
+
+		if elevation > 0.5 and random.random() > 0.6:
+			grid.modifyTerrainAt(grid_point, TerrainType.snow)
+			return
+
+		if random.random() > 0.85:
+			grid.modifyIsHillsAt(grid_point, True)
+
+		grid.modifyTerrainAt(grid_point, TerrainType.tundra)
+
+	def _updateBiomeForTemperate(self, grid_point, grid, elevation, moisture):
+		if elevation > 0.7 and random.random() > 0.7:
+			grid.modifyIsHillsAt(grid_point, True)
+			grid.modifyTerrainAt(grid_point, TerrainType.grass)
+			return
+
+		if random.random() > 0.85:
+			grid.modifyIsHillsAt(grid_point, True)
+
+		if moisture < 0.5:
+			grid.modifyTerrainAt(grid_point, TerrainType.plains)
+		else:
+			grid.modifyTerrainAt(grid_point, TerrainType.grass)
+
+	def _updateBiomeForSubtropic(self, grid_point, grid, elevation, moisture):
+		if elevation > 0.7 and random.random() > 0.7:
+			grid.modifyIsHillsAt(grid_point, True)
+			grid.modifyTerrainAt(grid_point, TerrainType.plains)
+			return
+
+		if random.random() > 0.85:
+			grid.modifyIsHillsAt(grid_point, True)
+
+		if moisture < 0.2:
+			if random.random() < 0.3:
+				grid.modifyTerrainAt(grid_point, TerrainType.desert)
+			else:
+				grid.modifyTerrainAt(grid_point, TerrainType.plains)
+		elif moisture < 0.6:
+			grid.modifyTerrainAt(grid_point, TerrainType.plains)
+		else:
+			grid.modifyTerrainAt(grid_point, TerrainType.grass)
+
+	def _updateBiomeForTropic(self, grid_point, grid, elevation, moisture):
+		if elevation > 0.7 and random.random() > 0.7:
+			grid.modifyIsHillsAt(grid_point, True)
+			grid.modifyTerrainAt(grid_point, TerrainType.plains)
+			return
+
+		if random.random() > 0.85:
+			grid.modifyIsHillsAt(grid_point, True)
+
+		# arid
+		if moisture < 0.3:
+			if random.random() < 0.4:
+				grid.modifyTerrainAt(grid_point, TerrainType.desert)
+			else:
+				grid.modifyTerrainAt(grid_point, TerrainType.plains)
+		else:
+			grid.modifyTerrainAt(grid_point, TerrainType.plains)
 
 	def _blendTerrains(self, grid):
 		pass

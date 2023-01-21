@@ -230,7 +230,10 @@ class Array2D:
 			row_array = []
 
 			for i in range(self.width):
-				row_array.append(self.values[j][i].to_dict())
+				if getattr(self.values[j][i], "to_dict", None) is not None:
+					row_array.append(self.values[j][i].to_dict())
+				else:
+					row_array.append(str(self.values[j][i]))
 
 			values_dict[j] = row_array
 
