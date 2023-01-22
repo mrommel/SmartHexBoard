@@ -184,6 +184,10 @@ class MapGenerator:
 
 		callback(MapGeneratorState(0.99, "TXT_KEY_MAP_GENERATOR_GOODIES"))
 
+		# debug
+		# grid.modifyIsHillsAt(2, 2, True)
+		# grid.modifyIsHillsAt(2, 3, True)
+
 		return grid
 
 	def _generateHeightMap(self):

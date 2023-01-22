@@ -48,8 +48,11 @@ Map.prototype.fromJson = function(json_dict) {
 	    for (var i = 0; i < this.cols; i++) {
 	        const terrain_name = json_dict['tiles']['values']['' + j][i]['terrain'];
 	        const terrain_type = TerrainType.fromString(terrain_name);
-            console.log('terrain: ' + terrain_type);
+            // console.log('terrain: ' + terrain_type);
+            var isHills = json_dict['tiles']['values']['' + j][i]['isHills'];
+            // console.log('isHills: ' + isHills + ' <= ' + json_dict['tiles']['values']['' + j][i]['isHills']);
             this.tiles[i][j] = new Tile(terrain_type);
+            this.modifyHillsAt(isHills, new HexPoint(i, j));
         }
     }
 

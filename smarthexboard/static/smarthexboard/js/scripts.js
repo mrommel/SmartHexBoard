@@ -135,9 +135,13 @@ function handleMouseMove(event) {
     var map_position = new HexPoint(screen_position);
 
     var terrainText = '<invalid>';
+    var hillsText = 'no hills';
     var climateZoneText = '<invalid>';
     if (renderer.map.valid(map_position)) {
         terrainText = renderer.map.terrainAt(map_position);
+        if (renderer.map.isHillsAt(map_position)) {
+            hillsText = 'has hills';
+        }
         climateZoneText = renderer.map.climateZoneAt(map_position);
     }
 
@@ -146,7 +150,7 @@ function handleMouseMove(event) {
     tooltipSpan.style.top = (y + 20) + 'px';
     tooltipSpan.style.left = (x + 0) + 'px';
     tooltipSpan.style.display = 'block';
-    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
+    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + ' ' + hillsText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
 
     if (mouseIsDown) {
         var terrains = document.getElementById('terrains');
