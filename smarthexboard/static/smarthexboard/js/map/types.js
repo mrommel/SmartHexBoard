@@ -67,16 +67,6 @@ TerrainType.prototype.toString = function() {
     return '[TerrainType: ' + this.name + ']';
 }
 
-const TerrainTypes = {
-	desert: new TerrainType("desert", ["terrain_desert@3x.png"], ["terrain_desert_hills@3x.png", "terrain_desert_hills2@3x.png", "terrain_desert_hills3@3x.png"]),
-	grass: new TerrainType("grass", ["terrain_grass@3x.png"], ["terrain_grass_hills@3x.png", "terrain_grass_hills2@3x.png", "terrain_grass_hills3@3x.png"]),
-	ocean: new TerrainType("ocean", ["terrain_ocean@3x.png"], []),
-	plains: new TerrainType("plains", ["terrain_plains@3x.png"], ["terrain_plains_hills@3x.png", "terrain_plains_hills2@3x.png", "terrain_plains_hills3@3x.png"]),
-	shore: new TerrainType("shore", ["terrain_shore@3x.png"], []),
-	snow: new TerrainType("snow", ["terrain_snow@3x.png"], ["terrain_snow_hills@3x.png", "terrain_snow_hills2@3x.png", "terrain_snow_hills3@3x.png"]),
-	tundra: new TerrainType("tundra", ["terrain_tundra@3x.png", "terrain_tundra2@3x.png", "terrain_tundra3@3x.png"], ["terrain_tundra_hills@3x.png"]),
-}
-
 TerrainType.fromString = function(terrain_name) {
 
     switch (terrain_name) {
@@ -95,6 +85,16 @@ TerrainType.fromString = function(terrain_name) {
         case 'tundra':
             return TerrainTypes.tundra.clone();
     }
+}
+
+const TerrainTypes = {
+	desert: new TerrainType("desert", ["terrain_desert@3x.png"], ["terrain_desert_hills@3x.png", "terrain_desert_hills2@3x.png", "terrain_desert_hills3@3x.png"]),
+	grass: new TerrainType("grass", ["terrain_grass@3x.png"], ["terrain_grass_hills@3x.png", "terrain_grass_hills2@3x.png", "terrain_grass_hills3@3x.png"]),
+	ocean: new TerrainType("ocean", ["terrain_ocean@3x.png"], []),
+	plains: new TerrainType("plains", ["terrain_plains@3x.png"], ["terrain_plains_hills@3x.png", "terrain_plains_hills2@3x.png", "terrain_plains_hills3@3x.png"]),
+	shore: new TerrainType("shore", ["terrain_shore@3x.png"], []),
+	snow: new TerrainType("snow", ["terrain_snow@3x.png"], ["terrain_snow_hills@3x.png", "terrain_snow_hills2@3x.png", "terrain_snow_hills3@3x.png"]),
+	tundra: new TerrainType("tundra", ["terrain_tundra@3x.png", "terrain_tundra2@3x.png", "terrain_tundra3@3x.png"], ["terrain_tundra_hills@3x.png"]),
 }
 
 // map generation
@@ -312,6 +312,36 @@ FeatureType.prototype.clone = function() {
 
 FeatureType.prototype.toString = function() {
     return '[FeatureType: ' + this.name + ']';
+}
+
+FeatureType.fromString = function(feature_name) {
+
+    switch (feature_name) {
+        case 'none':
+            return FeatureTypes.none.clone();
+        case 'atoll':
+            return FeatureTypes.atoll.clone();
+        case 'fallout':
+            return FeatureTypes.fallout.clone();
+        case 'floodplains':
+            return FeatureTypes.floodplains.clone();
+        case 'forest':
+            return FeatureTypes.forest.clone();
+        case 'ice':
+            return FeatureTypes.ice.clone();
+        case 'marsh':
+            return FeatureTypes.marsh.clone();
+        case 'mountains':
+            return FeatureTypes.mountains.clone();
+        case 'oasis':
+            return FeatureTypes.oasis.clone();
+        case 'pine':
+            return FeatureTypes.pine.clone();
+        case 'rainforest':
+            return FeatureTypes.rainforest.clone();
+        case 'reef':
+            return FeatureTypes.reef.clone();
+    }
 }
 
 const FeatureTypes = {

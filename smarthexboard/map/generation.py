@@ -4,7 +4,7 @@ import sys
 
 from smarthexboard.map.base import Array2D, Point, HexPoint, HexDirection
 from smarthexboard.map.map import Map
-from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType
+from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType, FeatureType, MapAge
 from smarthexboard.perlin_noise.perlin_noise import PerlinNoise
 
 
@@ -24,10 +24,10 @@ class HeightMap(Array2D):
 			@param octaves: object
 		"""
 
-		noise1 = PerlinNoise(octaves=1*octaves)
-		noise2 = PerlinNoise(octaves=2*octaves)
-		noise3 = PerlinNoise(octaves=4*octaves)
-		noise4 = PerlinNoise(octaves=8*octaves)
+		noise1 = PerlinNoise(octaves=1 * octaves)
+		noise2 = PerlinNoise(octaves=2 * octaves)
+		noise3 = PerlinNoise(octaves=4 * octaves)
+		noise4 = PerlinNoise(octaves=8 * octaves)
 
 		for x in range(self.width):
 			for y in range(self.height):
@@ -84,6 +84,41 @@ class MapOptions:
 		self.map_size = map_size
 		self.map_type = map_type
 		self.rivers = 20
+		self.age = MapAge.normal
+
+	def mountains_percentage(self):
+		""" Percentage of mountain on land """
+		if self.age == MapAge.young:
+			return 0.08
+		elif self.age == MapAge.normal:
+			return 0.06
+		elif self.age == MapAge.old:
+			return 0.04
+
+	def waterPercentage(self):
+		""" abc """
+		if self.map_type == MapType.continents:
+			return 0.52  # low
+		elif self.map_type == MapType.earth:
+			return 0.65
+		elif self.map_type == MapType.pangaea:
+			return 0.65
+		elif self.map_type == MapType.archipelago:
+			return 0.65
+		#
+		#         case .custom:
+		#
+		#             switch enhanced.sealevel {
+		#
+		#             case .low:
+		#                 return 0.52
+		#             case .normal:
+		#                 return 0.65
+		#             case .high:
+		#                 return 0.81
+
+	def land_percentage(self):
+		return 1.0 - self.waterPercentage()
 
 
 class MapGeneratorState:
@@ -125,8 +160,6 @@ class MapGenerator:
 
 		# 1st step: land / water
 		threshold = height_map.findThresholdAbove(0.40)  # 40 % is land
-		# print(height_map.to_dict())
-		# print(f'threshold: {threshold}')
 		self._fillFromElevation(height_map, threshold)
 
 		callback(MapGeneratorState(0.3, "TXT_KEY_MAP_GENERATOR_ELEVATION"))
@@ -256,7 +289,8 @@ class MapGenerator:
 
 								if 0 <= neighbor.x < self.width and 0 <= neighbor.y < self.height:
 									if self.distance_to_coast.values[neighbor.y][neighbor.x] < sys.maxsize:
-										distance = min(distance, self.distance_to_coast.values[neighbor.y][neighbor.x] + 1)
+										distance = min(distance,
+										               self.distance_to_coast.values[neighbor.y][neighbor.x] + 1)
 
 							if distance < sys.maxsize:
 								self.distance_to_coast.values[y][x] = distance
@@ -280,7 +314,9 @@ class MapGenerator:
 
 				if self.plots.values[y][x] == TerrainType.sea:
 					# check is next continent
-					next_to_continent = any(map(lambda neighbor: grid.valid(neighbor) and grid.terrainAt(neighbor).isLand(), grid_point.neighbors()))
+					next_to_continent = any(
+						map(lambda neighbor: grid.valid(neighbor) and grid.terrainAt(neighbor).isLand(),
+						    grid_point.neighbors()))
 
 					if height_map.values[y][x] > 0.1 or next_to_continent:
 						grid.modifyTerrainAt(grid_point, TerrainType.shore)
@@ -290,88 +326,76 @@ class MapGenerator:
 					land_plots = land_plots + 1
 
 					# grid.modifyTerrainAt(grid_point, TerrainType.grass)
-					self._updateBiome(grid_point, grid, height_map.values[y][x], moisture_map.values[y][x], self.climate_zones.values[y][x])
+					self._updateBiome(
+						grid_point,
+						grid,
+						height_map.values[y][x],
+						moisture_map.values[y][x],
+						self.climate_zones.values[y][x]
+					)
 
+		for x in range(self.width):
+			for y in range(self.height):
+				grid_point = HexPoint(x, y)
+
+				if grid.terrainAt(grid_point) == TerrainType.ocean:
+					should_be_shore = False
+
+					for neighbor in grid_point.neighbors():
+						if not grid.valid(neighbor):
+							continue
+
+						neighbor_terrain = grid.terrainAt(neighbor)
+
+						if neighbor_terrain.isLand():
+							should_be_shore = True
+							break
+
+					if should_be_shore:
+						grid.modifyTerrainAt(grid_point, TerrainType.shore)
+
+		# Expanding coasts (MapGenerator.Lua)
+		# Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
+		# Default is two passes at 1/4 chance per eligible plot on each pass.
+		for _ in range(2):
+			shallow_water_plots = []
+			for x in range(self.width):
+				for y in range(self.height):
+					grid_point = HexPoint(x, y)
+
+					if grid.terrainAt(grid_point) == TerrainType.ocean:
+						is_adjacent_to_shallow_water = False
+
+						for neighbor in grid_point.neighbors():
+							if not grid.valid(neighbor):
+								continue
+							neighbor_terrain = grid.terrainAt(neighbor)
+
+							if neighbor_terrain == TerrainType.shore and random.random() <= 0.2:
+								is_adjacent_to_shallow_water = True
+								break
+
+						if is_adjacent_to_shallow_water:
+							shallow_water_plots.append(grid_point)
+
+			for shallow_water_plot in shallow_water_plots:
+				grid.modifyTerrainAt(shallow_water_plot, TerrainType.shore)
+
+		# get the highest percent tiles from height map
+		combined_percentage = self.options.mountains_percentage() * self.options.land_percentage()
+		mountain_threshold = height_map.findThresholdAbove(combined_percentage)
+
+		number_of_mountains = 0
+
+		for x in range(self.width):
+			for y in range(self.height):
+				grid_point = HexPoint(x, y)
+
+				if height_map.values[y][x] >= mountain_threshold:
+					grid.modifyFeatureAt(grid_point, FeatureType.mountains)
+					number_of_mountains += 1
 		#
-		#         for x in 0..<width {
-		#             for y in 0..<height {
-		#                 let gridPoint = HexPoint(x: x, y: y)
-		#
-		#                 if grid.terrain(at: gridPoint) == .ocean {
-		#                     var shouldBeShore: Bool = false
-		#
-		#                     for neighbor in gridPoint.neighbors() {
-		#
-		#                         guard let neighborTile = grid.tile(at: neighbor) else {
-		#                             continue
-		#                         }
-		#
-		#                         if neighborTile.isLand() {
-		#                             shouldBeShore = true
-		#                             break
-		#                         }
-		#                     }
-		#
-		#                     if shouldBeShore {
-		#                         grid.set(terrain: .shore, at: gridPoint)
-		#                     }
-		#                 }
-		#             }
-		#         }
-		#
-		#         # Expanding coasts (MapGenerator.Lua)
-		#         # Chance for each eligible plot to become an expansion is 1 / iExpansionDiceroll.
-		#         # Default is two passes at 1/4 chance per eligible plot on each pass.
-		#         for _ in 0..<2 {
-		#             var shallowWaterPlots: [HexPoint] = []
-		#             for x in 0..<width {
-		#                 for y in 0..<height {
-		#                     let gridPoint = HexPoint(x: x, y: y)
-		#
-		#                     if grid.terrain(at: gridPoint) == .ocean {
-		#                         var isAdjacentToShallowWater: Bool = false
-		#                         for neighbor in gridPoint.neighbors() {
-		#
-		#                             guard let neighborTile = grid.tile(at: neighbor) else {
-		#                                 continue
-		#                             }
-		#
-		#                             if neighborTile.terrain() == .shore && Int.random(number: 5) == 0 {
-		#                                 isAdjacentToShallowWater = true
-		#                                 break
-		#                             }
-		#                         }
-		#
-		#                         if isAdjacentToShallowWater {
-		#                             shallowWaterPlots.append(gridPoint)
-		#                         }
-		#                     }
-		#                 }
-		#             }
-		#
-		#             for shallowWaterPlot in shallowWaterPlots {
-		#                 grid.set(terrain: .shore, at: shallowWaterPlot)
-		#             }
-		#         }
-		#
-		#         // get highest percent tiles from height map
-		#         let combinedPercentage = self.options.mountainsPercentage * self.options.landPercentage
-		#         let mountainThresold = heightMap.findThresholdAbove(percentage: combinedPercentage)
-		#
-		#         var numberOfMountains: Int = 0
-		#
-		#         for x in 0..<width {
-		#             for y in 0..<height {
-		#                 let gridPoint = HexPoint(x: x, y: y)
-		#
-		#                 if heightMap[gridPoint]! >= mountainThresold {
-		#                     grid.set(feature: .mountains, at: gridPoint)
-		#                     numberOfMountains += 1
-		#                 }
-		#             }
-		#         }
-		#
-		#         // remove some mountains, where there are mountain neighbors
+		#         # remove some mountains, where there are mountain neighbors
 		#         let points = grid.points().shuffled
 		#
 		#         for gridPoint in points {
@@ -398,7 +422,7 @@ class MapGenerator:
 		#             }
 		#         }
 		#
-		#         print("Number of Mountains: \(numberOfMountains)")
+		print(f"Number of Mountains: {number_of_mountains}")
 
 	def _updateBiome(self, grid_point, grid, elevation, moisture, climate_zone):
 		# from http://www.redblobgames.com/maps/terrain-from-noise/
@@ -486,7 +510,57 @@ class MapGenerator:
 			grid.modifyTerrainAt(grid_point, TerrainType.plains)
 
 	def _blendTerrains(self, grid):
-		pass
+		# hillsBlendPercent = 0.45 -- Chance for flat land to become hills per near mountain. Requires at least 2 near mountains.
+		terrain_blend_range = 3  # range to smooth terrain (desert surrounded by plains turns to plains, etc)
+		terrain_blend_random = 0.6  # random modifier for terrain smoothing
+
+		points = grid.points()
+		random.shuffle(points)
+
+		for pt in points:
+			tile = grid.tileAt(pt)
+
+			if tile.terrain.isWater():
+				continue
+
+			if tile.feature == FeatureType.mountains:
+				num_near_mountains = 0
+
+				for neighbor in pt.neighbors():
+					if not grid.valid(neighbor):
+						continue
+
+					neighbor_feature = grid.featureAt(neighbor)
+
+					if neighbor_feature == FeatureType.mountains:
+						num_near_mountains = num_near_mountains + 1
+
+				if 2 <= num_near_mountains <= 4:
+					#self.createPossibleMountainPass(at: tile.point, on: gridRef)
+					print(f'createPossibleMountainPass({pt})')
+					pass
+
+			else:
+				rand_percent = 1.0 + random.random() * 2.0 * terrain_blend_random - terrain_blend_random
+				plot_percents = grid.tileStatistics(pt, terrain_blend_range)
+				if tile.terrain == TerrainType.grass:
+					if plot_percents.desert + plot_percents.snow >= 0.33 * rand_percent:
+						tile.terrain = TerrainType.plains
+						if tile.feature == FeatureType.marsh:
+							tile.feature = FeatureType.forest
+				elif tile.terrain == TerrainType.plains:
+					if plot_percents.desert >= 0.5 * rand_percent:
+						# plot:SetTerrainType(TerrainTypes.TERRAIN_DESERT, true, true)
+						pass
+				elif tile.terrain == TerrainType.desert:
+					if plot_percents.grass + plot_percents.snow >= 0.25 * rand_percent:
+						tile.terrain = TerrainType.plains
+				elif tile.feature == FeatureType.rainforest and tile.feature == FeatureType.marsh:
+					if plot_percents.snow + plot_percents.tundra + plot_percents.desert >= 0.25 * rand_percent:
+						tile.feature = FeatureType.none
+				elif tile.terrain == TerrainType.tundra:
+					if 2.0 * plot_percents.grass + plot_percents.plains + plot_percents.desert >= 0.5 * rand_percent:
+						tile.terrain = TerrainType.plains
 
 	def _placeResources(self, grid):
 		pass

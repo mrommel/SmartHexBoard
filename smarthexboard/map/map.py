@@ -31,6 +31,25 @@ class Tile:
 			'resource': self.resource.value
 		}
 
+class TileStatistics:
+	def __init__(self):
+		self.ocean = 0.0
+		self.shore = 0.0
+		self.plains = 0.0
+		self.grass = 0.0
+		self.desert = 0.0
+		self.tundra = 0.0
+		self.snow = 0.0
+
+	def normalize(self, factor):
+		self.ocean /= factor
+		self.shore /= factor
+		self.plains /= factor
+		self.grass /= factor
+		self.desert /= factor
+		self.tundra /= factor
+		self.snow /= factor
+
 
 class Map:
 	def __init__(self, width, height=None):
@@ -60,6 +79,25 @@ class Map:
 			return 0 <= x < self.width and 0 <= y < self.height
 		else:
 			raise AttributeError(f'Map.valid with wrong attributes: {x_or_hex} / {y}')
+
+	def points(self):
+		point_arr = []
+
+		for x in range(self.width):
+			for y in range(self.height):
+				point_arr.append(HexPoint(x, y))
+
+		return point_arr
+
+	def tileAt(self, x_or_hex, y=None):
+		if isinstance(x_or_hex, HexPoint) and y is None:
+			hex_point = x_or_hex
+			return self.tiles.values[hex_point.y][hex_point.x]
+		elif isinstance(x_or_hex, int) and isinstance(y, int):
+			x = x_or_hex
+			return self.tiles.values[y][x]
+		else:
+			raise AttributeError(f'Map.tileAt with wrong attributes: {x_or_hex} / {y}')
 
 	def terrainAt(self, x_or_hex, y=None):
 		if isinstance(x_or_hex, HexPoint) and y is None:
@@ -105,6 +143,63 @@ class Map:
 			self.tiles.values[y][x].is_hills = is_hills
 		else:
 			raise AttributeError(f'Map.modifyIsHillsAt with wrong attributes: {x_or_hex} / {y_or_is_hills} / {is_hills}')
+
+	def featureAt(self, x_or_hex, y=None):
+		if isinstance(x_or_hex, HexPoint) and y is None:
+			hex_point = x_or_hex
+			return self.tiles.values[hex_point.y][hex_point.x].feature
+		elif isinstance(x_or_hex, int) and isinstance(y, int):
+			x = x_or_hex
+			return self.tiles.values[y][x].feature
+		else:
+			raise AttributeError(f'Map.featureAt with wrong attributes: {x_or_hex} / {y}')
+
+	def modifyFeatureAt(self, x_or_hex, y_or_terrain, feature=None):
+		if isinstance(x_or_hex, HexPoint) and isinstance(y_or_terrain, FeatureType) and feature is None:
+			hex_point = x_or_hex
+			feature_type = y_or_terrain
+			self.tiles.values[hex_point.y][hex_point.x].feature = feature_type
+		elif isinstance(x_or_hex, int) and isinstance(y_or_terrain, int) and isinstance(feature, TerrainType):
+			x = x_or_hex
+			y = y_or_terrain
+			feature_type = feature
+			self.tiles.values[y][x].feature = feature_type
+		else:
+			raise AttributeError(f'Map.modifyTerrainAt with wrong attributes: {x_or_hex} / {y_or_terrain} / {feature}')
+
+
+	def tileStatistics(self, grid_point, radius):
+
+		valid_tiles = 0.0
+		stats = TileStatistics()
+
+		for pt in grid_point.areaWith(radius):
+			if not self.valid(pt):
+				continue
+
+			tile = self.tileAt(pt)
+
+			if tile.terrain == TerrainType.ocean:
+				stats.ocean += 1
+			elif tile.terrain == TerrainType.shore:
+				stats.shore += 1
+			elif tile.terrain == TerrainType.plains:
+				stats.plains += 1
+			elif tile.terrain == TerrainType.grass:
+				stats.grass += 1
+			elif tile.terrain == TerrainType.desert:
+				stats.desert += 1
+			elif tile.terrain == TerrainType.tundra:
+				stats.tundra += 1
+			elif tile.terrain == TerrainType.snow:
+				stats.snow += 1
+
+			valid_tiles += 1.0
+
+		# normalize
+		stats.normalize(valid_tiles)
+
+		return stats
 
 	def to_dict(self):
 		return {

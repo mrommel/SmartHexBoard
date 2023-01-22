@@ -54,6 +54,26 @@ class HexPoint:
 	pass
 
 
+class HexArea:
+	def __init__(self, center, radius):
+		tmp = set([center])
+
+		for _ in range(radius):
+			new_tmp = set()
+			for elem in tmp:
+				new_tmp = new_tmp.union(elem.neighbors())
+			tmp = tmp.union(new_tmp)
+
+		tmp_points = list(tmp)
+		self.points = tmp_points
+
+	def __iter__(self):
+		return self.points.__iter__()
+
+	# def __next__(self):
+	#	return self.points.__next__()
+
+
 class HexCube:
 	def __init__(self, q_or_hex_point, r=None, s=None):
 		if isinstance(q_or_hex_point, HexPoint) and r is None and s is None:
@@ -141,6 +161,12 @@ class HexPoint(Point):
 		neighboring.append(self.neighbor(HexDirection.northWest))
 
 		return neighboring
+
+	def areaWith(self, radius):
+		return HexArea(self, radius)
+
+	def __hash__(self):
+		return self.x * 1000 + self.y
 
 	def __eq__(self, other):
 		"""Overrides the default implementation"""

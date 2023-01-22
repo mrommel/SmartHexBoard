@@ -28,6 +28,12 @@ class MapSize(Enum):
 			return Size(62, 52)
 
 
+class MapAge(Enum):
+	young = 'young'
+	normal = 'normal'
+	old = 'old'
+
+
 class TerrainType(Enum):
 	desert = 'desert'
 	grass = 'grass'
