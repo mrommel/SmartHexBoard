@@ -364,3 +364,27 @@ class MovementType(ExtendedEnum):
 	swimShallow = 'swimShallow'
 
 	max = 1000
+
+
+class RouteType(ExtendedEnum):
+	none = 'none'
+	ancientRoad = 'ancientRoad'
+	classicalRoad = 'classicalRoad'
+	industrialRoad = 'industrialRoad'
+	modernRoad = 'modernRoad'
+
+	def movementCost(self):
+		if self == RouteType.none:
+			return 200
+		elif self == RouteType.ancientRoad:
+			# Starting road, well-packed dirt. Most terrain costs 1 MP; crossing rivers still costs 3 MP.
+			return 1
+		elif self == RouteType.classicalRoad:
+			# Adds bridges over rivers; crossing costs reduced to only 1 MP.
+			return 1
+		elif self == RouteType.industrialRoad:
+			# Paved roads are developed; 0.75 MP per tile.
+			return 0.75
+		elif self == RouteType.modernRoad:
+			# Asphalted roads are developed; 0.50 MP per tile.
+			return 0.5

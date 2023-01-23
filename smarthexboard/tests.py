@@ -1,14 +1,15 @@
 """ unittest module """
 import json
 import unittest
-import uuid
 
-from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
-from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions, MapGeneratorState
-from smarthexboard.map.map import Map
 from django.test import Client
 
-from smarthexboard.map.types import MapSize, MapType
+from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
+from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
+from smarthexboard.map.map import Map, Tile
+from smarthexboard.map.types import MapSize, MapType, MovementType, TerrainType, FeatureType
+from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
+	MoveTypeIgnoreUnitsOptions
 from smarthexboard.utils import is_valid_uuid
 
 
@@ -73,6 +74,33 @@ class TestHeightMap(unittest.TestCase):
 		self.assertEqual(height_map1.findThresholdAbove(0.5), 0.5)
 
 
+class TestTile(unittest.TestCase):
+	def test_constructor(self):
+		"""Test that the tile constructor versions work"""
+		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+
+		self.assertEqual(tile.point, HexPoint(3, 2))
+		self.assertEqual(tile.point.x, 3)
+		self.assertEqual(tile.point.y, 2)
+		self.assertEqual(tile.terrain, TerrainType.tundra)
+
+	def test_river_n(self):
+		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+		tile.river_value = 1
+
+		self.assertEqual(tile.isRiverInNorth(), True)
+		self.assertEqual(tile.isRiverInNorthEast(), False)
+		self.assertEqual(tile.isRiverInSouthEast(), False)
+
+	def test_river_ne(self):
+		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+		tile.river_value = 4
+
+		self.assertEqual(tile.isRiverInNorth(), False)
+		self.assertEqual(tile.isRiverInNorthEast(), True)
+		self.assertEqual(tile.isRiverInSouthEast(), False)
+
+
 class TestMap(unittest.TestCase):
 	def test_constructor(self):
 		"""Test that the map constructor versions work"""
@@ -119,6 +147,29 @@ class TestMapGenerationRequest(unittest.TestCase):
 		json_object = json.loads(response.content)
 		map_uuid = json_object['uuid']
 		self.assertEqual(is_valid_uuid(map_uuid), True)
+
+
+class TestPathfinding(unittest.TestCase):
+	def test_generation_request(self):
+		"""Test astar"""
+		grid = Map(10, 10)
+		for pt in grid.points():
+			grid.modifyTerrainAt(pt, TerrainType.grass)
+
+		grid.modifyFeatureAt(HexPoint(1, 2), FeatureType.mountains)  # put a mountain into the path
+
+		datasource_options = MoveTypeIgnoreUnitsOptions(ignore_sight=False, can_embark=False, can_enter_ocean=False)
+		datasource = MoveTypeIgnoreUnitsPathfinderDataSource(grid, MovementType.walk, datasource_options)
+		finder = AStarPathfinder(datasource)
+
+		path = finder.shortestPath(HexPoint(0, 0), HexPoint(2, 3))
+
+		# print(path)
+		target_path = [HexPoint(0, 0), HexPoint(1, 1), HexPoint(2, 1), HexPoint(2, 2), HexPoint(2, 3), ]
+		self.assertEqual(len(path), 5)
+		for i, n in enumerate(target_path):
+			self.assertEqual(n, path[i])
+
 
 if __name__ == '__main__':
 	unittest.main()

@@ -1,4 +1,5 @@
 """ base types module """
+import math
 from enum import Enum
 
 
@@ -28,7 +29,6 @@ class Size:
 		"""returns a string representation of the Size"""
 		return f'[Size x: {self.width}, y: {self.height}]'
 
-
 class Point:
 	"""class that stores coordinates"""
 
@@ -44,6 +44,7 @@ class Point:
 			self.y = y
 		else:
 			raise AttributeError(f'Point with wrong attributes: {x} / {y}')
+
 
 	def __str__(self):
 		"""returns a string representation of the Point"""
@@ -97,6 +98,23 @@ class HexCube:
 
 	def add(self, right):
 		return HexCube(int(self.q + right.q), int(self.r + right.r), int(self.s + right.s))
+
+	def distance(self, hex_cube):
+		return max(abs(self.q - hex_cube.q), abs(self.r - hex_cube.r), abs(self.s - hex_cube.s))
+
+	def toScreen(self) -> Point:
+		# function HexOrientation() {
+		f0 = 3.0 / 2.0
+		f1 = 0.0
+		f2 = math.sqrt(3.0) / 2.0
+		f3 = math.sqrt(3.0)
+		size = Size(36.0, 26.0)
+		origin = Point(270.0, 470.0)
+
+		x = (f0 * self.q + f1 * self.r) * size.width
+		y = (f2 * self.q + f3 * self.r) * size.height
+
+		return Point(x + origin.x, y + origin.y)
 
 
 class HexDirection(ExtendedEnum):
@@ -162,7 +180,57 @@ class HexPoint(Point):
 
 		return neighboring
 
-	def areaWith(self, radius):
+	def directionTowards(self, target: HexPoint) -> HexDirection:
+		"""
+			returns the direction of the neighbor
+			@param target:
+			@return:
+		"""
+		for direction in HexDirection.list():
+			if self.neighbor(direction, 1) == target:
+				return direction
+
+		angle = HexPoint.screenAngle(target)
+		return HexPoint.degreesToDirection(angle)
+
+	def toScreen(self) -> Point:
+		hex_cube = HexCube(self)
+		return hex_cube.toScreen()
+
+	@staticmethod
+	def screenAngle(from_point, towards_point) -> int:
+		fromScreenPoint = from_point.toScreen()
+		towardsScreenPoint = towards_point.toScreen()
+
+		delta_x = towardsScreenPoint.x - fromScreenPoint.x
+		delta_y = towardsScreenPoint.y - fromScreenPoint.y
+
+		return int(math.atan2(delta_x, delta_y) * (180.0 / math.pi))
+
+	@staticmethod
+	def degreesToDirection(angle: int) -> HexDirection:
+		if angle < 0:
+			angle += 360
+
+		if 30 < angle <= 90:
+			return HexDirection.northEast
+		elif 90 < angle <= 150:
+			return HexDirection.southEast
+		elif 150 < angle <= 210:
+			return HexDirection.south
+		elif 210 < angle <= 270:
+			return HexDirection.southWest
+		elif 270 < angle <= 330:
+			return HexDirection.northWest
+		else:
+			return HexDirection.north
+
+	def distance(self, target: HexPoint) -> int:
+		self_cube = HexCube(self)
+		hex_cube = HexCube(target)
+		return self_cube.distance(hex_cube)
+
+	def areaWith(self, radius: int):
 		return HexArea(self, radius)
 
 	def __hash__(self):
@@ -179,7 +247,7 @@ class HexPoint(Point):
 		"""returns a string representation of the HexPoint"""
 		return f'[HexPoint x: {self.x}, y: {self.y}]'
 
-	def __reor__(self):
+	def __repr__(self):
 		"""returns a string representation of the HexPoint"""
 		return f'[HexPoint x: {self.x}, y: {self.y}]'
 

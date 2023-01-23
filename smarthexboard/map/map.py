@@ -1,8 +1,12 @@
 import json
 from json import JSONEncoder
 
-from smarthexboard.map.base import Array2D, Size, HexPoint
-from smarthexboard.map.types import TerrainType, FeatureType, ResourceType, ClimateZone, MovementType
+from smarthexboard.map.base import Array2D, Size, HexPoint, HexDirection
+from smarthexboard.map.types import TerrainType, FeatureType, ResourceType, ClimateZone, MovementType, RouteType
+
+
+class Tile:
+	pass
 
 
 class Tile:
@@ -11,21 +15,27 @@ class Tile:
 
 		it has a TerrainType, FeatureType, ResourceType and a boolean value for being hilly (or not)
 	"""
-	def __init__(self, terrain: TerrainType):
+	def __init__(self, point: HexPoint, terrain: TerrainType):
 		"""
 			constructs a Tile from a TerrainType
 
+			@param point: location of the tile
 			@param terrain: TerrainType
 		"""
+		self.point = point
 		self.terrain = terrain
 		self.is_hills = False
 		self.feature = FeatureType.none
 		self.resource = ResourceType.none
 		self.river_value = 0
 		self.climate_zone = ClimateZone.temperate
+		self.route = RouteType.none
 
 	def isWater(self):
 		return self.terrain.isWater()
+
+	def isLand(self):
+		return self.terrain.isLand()
 
 	def isImpassable(self, movement_ype):
 		# start with terrain cost
@@ -42,6 +52,69 @@ class Tile:
 
 		return False
 
+	def movementCost(self, movement_type: MovementType, from_tile: Tile) -> int:
+		"""
+			cost to enter a terrain given the specified movement_type
+
+			@param movement_type: type of movement
+			@param from_tile: tile the unit comes from
+			@return: movement cost to go from {from_tile} to this tile
+		"""
+		# start with terrain cost
+		terrain_cost = self.terrain.movementCost(movement_type)
+
+		if terrain_cost == MovementType.max:
+			return MovementType.max
+
+		# hills
+		hill_costs = 1.0 if self.is_hills else 0.0
+
+		# add feature costs
+		feature_costs = 0.0
+		if self.feature != FeatureType.none:
+			feature_cost = self.feature.movementCost(movement_type)
+
+			if feature_cost == MovementType.max:
+				return MovementType.max
+
+			feature_costs = feature_cost
+
+		# add river crossing cost
+		river_cost = 0.0
+		if from_tile.isRiverToCrossTowards(self):
+			river_cost = 3.0  # FIXME - river cost per movementType
+
+		# https://civilization.fandom.com/wiki/Roads_(Civ6)
+		if self.hasAnyRoute():
+			terrain_cost = self.route.movementCost()
+
+			if self.route != RouteType.ancientRoad:
+				river_cost = 0.0
+
+			hill_costs = 0.0
+			feature_costs = 0.0
+
+		return terrain_cost + hill_costs + feature_costs + river_cost
+
+	def isRiverToCrossTowards(self, target: Tile) -> bool:
+		if not self.isNeighborTo(target.point):
+			return False
+
+		direction = self.point.directionTowards(target.point)
+		
+		if direction == HexDirection.north:
+			return self.isRiverInNorth()
+		elif direction == HexDirection.northEast:
+			return self.isRiverInNorthEast()
+		elif direction == HexDirection.southEast:
+			return self.isRiverInSouthEast()
+		elif direction == HexDirection.south:
+			return target.isRiverInNorth()
+		elif direction == HexDirection.southWest:
+			return target.isRiverInNorthEast()
+		elif direction == HexDirection.northWest:
+			return target.isRiverInSouthEast()
+
 	def to_dict(self):
 		return {
 			'terrain': self.terrain.value,
@@ -49,6 +122,30 @@ class Tile:
 			'feature': self.feature.value,
 			'resource': self.resource.value
 		}
+
+	def isNeighborTo(self, candidate: HexPoint) -> bool:
+		return self.point.distance(candidate)
+
+	def isRiverInNorth(self):
+		"""river in north can flow from east or west direction"""
+		# 0x01 => east
+		# 0x02 => west
+		return self.river_value & 0x01 > 0 or self.river_value & 0x02 > 0
+
+	def isRiverInNorthEast(self):
+		"""river in north-east can flow to northwest or southeast direction"""
+		# 0x04 => northWest
+		# 0x08 => southEast
+		return self.river_value & 0x04 > 0 or self.river_value & 0x08 > 0
+
+	def isRiverInSouthEast(self):
+		"""river in south-east can flow to northeast or southwest direction"""
+		# 0x16 => northWest
+		# 0x32 => southEast
+		return self.river_value & 0x10 > 0 or self.river_value & 0x20 > 0
+
+	def hasAnyRoute(self):
+		return False
 
 
 class TileStatistics:
@@ -88,7 +185,7 @@ class Map:
 		# create a unique Tile per place
 		for y in range(self.height):
 			for x in range(self.width):
-				self.tiles.values[y][x] = Tile(TerrainType.ocean)
+				self.tiles.values[y][x] = Tile(HexPoint(x, y), TerrainType.ocean)
 
 	def valid(self, x_or_hex, y=None):
 		if isinstance(x_or_hex, HexPoint) and y is None:

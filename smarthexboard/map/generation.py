@@ -538,9 +538,7 @@ class MapGenerator:
 						num_near_mountains = num_near_mountains + 1
 
 				if 2 <= num_near_mountains <= 4:
-					#self.createPossibleMountainPass(at: tile.point, on: gridRef)
-					print(f'createPossibleMountainPass({pt})')
-					pass
+					self._createPossibleMountainPass(grid, pt)
 			else:
 				rand_percent = 1.0 + random.random() * 2.0 * terrain_blend_random - terrain_blend_random
 				plot_percents = grid.tileStatistics(pt, terrain_blend_range)
@@ -562,6 +560,58 @@ class MapGenerator:
 				elif tile.terrain == TerrainType.tundra:
 					if 2.0 * plot_percents.grass + plot_percents.plains + plot_percents.desert >= 0.5 * rand_percent:
 						tile.terrain = TerrainType.plains
+
+	def _createPossibleMountainPass(self, grid, point):
+
+		if not grid.valid(point):
+			return
+
+		tile = grid.tileAt(point)
+
+		if tile.feature == FeatureType.mountains:
+			return
+
+		return
+	#
+	#         let pathFinderDataSource = MoveTypeIgnoreUnitsPathfinderDataSource(
+	#             in: grid,
+	#             for: .walk,
+	#             for: nil,
+	#             options: MoveTypeIgnoreUnitsOptions(unitMapType: .civilian, canEmbark: false, canEnterOcean: false, wrapX: true)
+	#         )
+	#         let pathFinder = AStarPathfinder(pathFinderDataSource)
+	#
+	#         var longestRoute = 0
+	#
+	#         for dirA in 0...3 {
+	#
+	#             guard let plotA = grid.tile(at: point.neighbor(in: HexDirection(rawValue: dirA)!)) else {
+	#                 continue
+	#             }
+	#
+	#             if plotA.terrain().isLand() && plotA.feature() != .mountains {
+	#
+	#                 for dirB in (dirA + 2)...5 {
+	#
+	#                     guard let plotB = grid.tile(at: point.neighbor(in: HexDirection(rawValue: dirB)!)) else {
+	#                         continue
+	#                     }
+	#
+	#                     if plotB.terrain().isLand() && plotB.feature() != .mountains {
+	#
+	#                         if let path = pathFinder.shortestPath(fromTileCoord: plotA.point, toTileCoord: plotB.point) {
+	#                             longestRoute = max(longestRoute, path.count)
+	#                         }
+	#
+	#                         if longestRoute == 0 || longestRoute > 15 {
+	#                             print("-- CreatePossibleMountainPass path distance = \(longestRoute) - Change to Hills at \(point)")
+	#                             plot.set(feature: .none)
+	#                             plot.set(hills: true)
+	#                         }
+	#                     }
+	#                 }
+	#             }
+	#         }
 
 	def _placeResources(self, grid):
 		pass
