@@ -2,9 +2,9 @@ import math
 import random
 import sys
 
-from smarthexboard.map.base import Array2D, Point, HexPoint, HexDirection
+from smarthexboard.map.base import Array2D, HexPoint, HexDirection
 from smarthexboard.map.map import Map
-from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType, FeatureType, MapAge
+from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType, FeatureType, MapAge, MovementType
 from smarthexboard.perlin_noise.perlin_noise import PerlinNoise
 
 
@@ -221,6 +221,8 @@ class MapGenerator:
 		# grid.modifyIsHillsAt(2, 2, True)
 		# grid.modifyIsHillsAt(2, 3, True)
 
+		callback(MapGeneratorState(1.0, "TXT_KEY_MAP_GENERATOR_READY"))
+
 		return grid
 
 	def _generateHeightMap(self):
@@ -240,10 +242,8 @@ class MapGenerator:
 				tile_height = height_map.values[y][x]
 				if tile_height > threshold:
 					self.plots.values[y][x] = TerrainType.land
-					print('above threshold')
 				else:
 					self.plots.values[y][x] = TerrainType.sea
-					print('below threshold')
 
 	def _setClimateZones(self, grid):
 		self.climate_zones.fill(ClimateZone.temperate)
@@ -394,34 +394,36 @@ class MapGenerator:
 				if height_map.values[y][x] >= mountain_threshold:
 					grid.modifyFeatureAt(grid_point, FeatureType.mountains)
 					number_of_mountains += 1
-		#
-		#         # remove some mountains, where there are mountain neighbors
-		#         let points = grid.points().shuffled
-		#
-		#         for gridPoint in points {
-		#
-		#             var mountainNeighbors = 0
-		#             var numberNeighbors = 0
-		#
-		#             for neighbor in gridPoint.neighbors() {
-		#
-		#                 guard let neighborTile = grid.tile(at: neighbor) else {
-		#                     continue
-		#                 }
-		#
-		#                 if neighborTile.feature() == .mountains || neighborTile.feature() == .mountEverest || neighborTile.feature() == .mountKilimanjaro {
-		#                     mountainNeighbors += 1
-		#                 }
-		#
-		#                 numberNeighbors += 1
-		#             }
-		#
-		#             if (numberNeighbors == 6 && mountainNeighbors >= 5) || (numberNeighbors == 5 && mountainNeighbors >= 4) {
-		#                 grid.set(feature: .none, at: gridPoint)
-		#                 print("mountain removed")
-		#             }
-		#         }
-		#
+
+		# remove some mountains, where there are mountain neighbors
+		points = grid.points()
+		random.shuffle(points)
+
+		for grid_point in points:
+			# just check mountains
+			if grid.featureAt(grid_point) != FeatureType.mountains:
+				continue
+
+			mountain_neighbors = 0
+			number_neighbors = 0
+
+			for neighbor in grid_point.neighbors():
+				if not grid.valid(neighbor):
+					continue
+
+				neighbor_tile = grid.tileAt(neighbor)
+
+				if neighbor_tile.feature == FeatureType.mountains or neighbor_tile.feature == FeatureType.mountEverest or neighbor_tile.feature == FeatureType.mountKilimanjaro:
+					mountain_neighbors += 1
+
+				number_neighbors += 1
+
+			if (number_neighbors == 6 and mountain_neighbors >= 5) or (number_neighbors == 5 and mountain_neighbors >= 4):
+				grid.modifyFeatureAt(grid_point, FeatureType.none)
+				grid.modifyIsHillsAt(grid_point, True)
+				number_of_mountains -= 1
+				print("mountain removed")
+
 		print(f"Number of Mountains: {number_of_mountains}")
 
 	def _updateBiome(self, grid_point, grid, elevation, moisture, climate_zone):
@@ -539,7 +541,6 @@ class MapGenerator:
 					#self.createPossibleMountainPass(at: tile.point, on: gridRef)
 					print(f'createPossibleMountainPass({pt})')
 					pass
-
 			else:
 				rand_percent = 1.0 + random.random() * 2.0 * terrain_blend_random - terrain_blend_random
 				plot_percents = grid.tileStatistics(pt, terrain_blend_range)
@@ -569,7 +570,118 @@ class MapGenerator:
 		pass
 
 	def _refineFeatures(self, grid):
-		pass
+		# presets
+		rainForestPercent = 15
+		forestPercent = 36
+		marshPercent = 3
+		oasisPercent = 1
+		reefPercent = 5
+
+		water_tiles_with_ice_possible = []
+		water_tiles_with_reef_possible = []
+		land_tiles_with_feature_possible = []
+
+		# statistics
+		iceFeatures = 0
+		reefFeatures = 0
+		floodPlainsFeatures = 0
+		oasisFeatures = 0
+		marshFeatures = 0
+		rainForestFeatures = 0
+		forestFeatures = 0
+
+		for x in range(self.width):
+			for y in range(self.height):
+				grid_point = HexPoint(x, y)
+
+				tile = grid.tileAt(grid_point)
+
+				if (tile.isImpassable(MovementType.walk) and tile.isImpassable(MovementType.swim)) or tile.feature != FeatureType.none:
+					continue
+
+				if tile.terrain.isWater():
+					can_have_ice = False
+					if grid.canHaveFeature(grid_point, FeatureType.ice) and not grid.riverAt(grid_point) and (y == 0 or y == self.height - 1):
+						water_tiles_with_ice_possible.append(grid_point)
+						can_have_ice = True
+
+					if not can_have_ice and grid.canHaveFeature(grid_point, FeatureType.reef):
+						water_tiles_with_reef_possible.append(grid_point)
+				else:
+					land_tiles_with_feature_possible.append(grid_point)
+	#
+	#         # ice ice baby
+	#         for iceLocation in waterTilesWithIcePossible {
+	#
+	#             gridRef?.set(feature: .ice, at: iceLocation)
+	#             iceFeatures += 1
+	#         }
+	#
+	#         // reef reef baby => 10% chance for reefs
+	#         for reefLocation in waterTilesWithReefPossible.shuffled where (reefFeatures * 100 / waterTilesWithReefPossible.count) <= reefPercent {
+	#
+	#             // print("add reef at \(reefLocation)")
+	#             gridRef?.set(feature: .reef, at: reefLocation)
+	#             reefFeatures += 1
+	#         }
+	#
+	#         // second pass, add features to all land plots as appropriate based on the count and percentage of that type
+	#         for featureLocation in landTilesWithFeaturePossible.shuffled {
+	#
+	#             guard let featureTile = grid.tile(at: featureLocation) else {
+	#                 continue
+	#             }
+	#
+	#             guard let distance = self.distanceToCoast[featureLocation] else {
+	#                 continue
+	#             }
+	#
+	#             let floodplainsDesertModifier = featureTile.terrain() == .desert ? 0.2 : 0.0
+	#             let randomModifier = Double.random(minimum: 0.0, maximum: 0.1)
+	#             let floodplainsPossibility = distance < 3 ? 0.5 : 0.1 + floodplainsDesertModifier + randomModifier
+	#             if grid.canHave(feature: .floodplains, at: featureLocation) && floodplainsPossibility > Double.random(minimum: 0.0, maximum: 1.0) {
+	#                 gridRef?.set(feature: .floodplains, at: featureLocation)
+	#                 floodPlainsFeatures += 1
+	#
+	#                 continue
+	#             } else if grid.canHave(feature: .oasis, at: featureLocation) &&
+	#                         (oasisFeatures * 100 / landTilesWithFeaturePossible.count) <= oasisPercent {
+	#
+	#                 gridRef?.set(feature: .oasis, at: featureLocation)
+	#                 oasisFeatures += 1
+	#
+	#                 continue
+	#             }
+	#
+	#             if grid.canHave(feature: .marsh, at: featureLocation) && (marshFeatures * 100 / landTilesWithFeaturePossible.count) <= marshPercent {
+	#                 // First check to add Marsh
+	#                 gridRef?.set(feature: .marsh, at: featureLocation)
+	#                 marshFeatures += 1
+	#             } else if grid.canHave(feature: .rainforest, at: featureLocation) &&
+	#                         (rainForestFeatures * 100 / landTilesWithFeaturePossible.count) <= rainForestPercent {
+	#
+	#                 // First check to add Jungle
+	#                 gridRef?.set(feature: .rainforest, at: featureLocation)
+	#                 rainForestFeatures += 1
+	#             } else if grid.canHave(feature: .forest, at: featureLocation) &&
+	#                         (forestFeatures * 100 / landTilesWithFeaturePossible.count) <= forestPercent {
+	#
+	#                 // First check to add Forest
+	#                 gridRef?.set(feature: .forest, at: featureLocation)
+	#                 forestFeatures += 1
+	#             }
+	#         }
+	#
+	#         // stats
+	#         print("----------------------------------------------")
+	#         print("Number of Ices: \(iceFeatures)")
+	#         print("Number of Reefs: \(reefFeatures) / \(reefPercent)%")
+	#         print("Number of Floodplains: \(floodPlainsFeatures)")
+	#         print("Number of Marshes: \(marshFeatures) / \(marshPercent)%")
+	#         print("Number of Jungle: \(rainForestFeatures) / \(rainForestPercent)%")
+	#         print("Number of Forest: \(forestFeatures) / \(forestPercent)%")
+	#         print("Number of Oasis: \(oasisFeatures) / \(oasisPercent)%")
+	#         print("----------------------------------------------")
 
 	def _refineNaturalWonders(self, grid):
 		pass

@@ -2,7 +2,7 @@ import json
 from json import JSONEncoder
 
 from smarthexboard.map.base import Array2D, Size, HexPoint
-from smarthexboard.map.types import TerrainType, FeatureType, ResourceType, ClimateZone
+from smarthexboard.map.types import TerrainType, FeatureType, ResourceType, ClimateZone, MovementType
 
 
 class Tile:
@@ -21,7 +21,26 @@ class Tile:
 		self.is_hills = False
 		self.feature = FeatureType.none
 		self.resource = ResourceType.none
+		self.river_value = 0
 		self.climate_zone = ClimateZone.temperate
+
+	def isWater(self):
+		return self.terrain.isWater()
+
+	def isImpassable(self, movement_ype):
+		# start with terrain cost
+		terrain_cost = self.terrain.movementCost(movement_ype)
+
+		if terrain_cost == MovementType.max:
+			return True
+
+		if self.feature != FeatureType.none:
+			feature_cost = self.feature.movementCost(movement_ype)
+
+			if feature_cost == MovementType.max:
+				return True
+
+		return False
 
 	def to_dict(self):
 		return {
@@ -30,6 +49,7 @@ class Tile:
 			'feature': self.feature.value,
 			'resource': self.resource.value
 		}
+
 
 class TileStatistics:
 	def __init__(self):
@@ -167,8 +187,18 @@ class Map:
 		else:
 			raise AttributeError(f'Map.modifyTerrainAt with wrong attributes: {x_or_hex} / {y_or_terrain} / {feature}')
 
+	def riverAt(self, x_or_hex, y=None):
+		"""@return True, if this tile has a river - False otherwise"""
+		if isinstance(x_or_hex, HexPoint) and y is None:
+			hex_point = x_or_hex
+			return self.tiles.values[hex_point.y][hex_point.x].river_value > 0
+		elif isinstance(x_or_hex, int) and isinstance(y, int):
+			x = x_or_hex
+			return self.tiles.values[y][x].river_value > 0
+		else:
+			raise AttributeError(f'Map.riverAt with wrong attributes: {x_or_hex} / {y}')
 
-	def tileStatistics(self, grid_point, radius):
+	def tileStatistics(self, grid_point: HexPoint, radius: int):
 
 		valid_tiles = 0.0
 		stats = TileStatistics()
@@ -200,6 +230,23 @@ class Map:
 		stats.normalize(valid_tiles)
 
 		return stats
+
+	def canHaveFeature(self, grid_point: HexPoint, feature_type: FeatureType):
+		tile = self.tileAt(grid_point)
+
+		# check tile itself (no surroundings)
+		if feature_type.isPossibleOn(tile):
+			# additional check for flood plains
+			if feature_type == FeatureType.floodplains:
+				return self.riverAt(grid_point)
+
+			#  no natural wonders on resources
+			if feature_type.isNaturalWonder() and tile.hasAnyResourceFor(None):
+				return False
+
+			return True
+
+		return False
 
 	def to_dict(self):
 		return {

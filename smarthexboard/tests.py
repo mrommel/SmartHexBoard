@@ -4,9 +4,12 @@ import unittest
 import uuid
 
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
-from smarthexboard.map.generation import HeightMap
+from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions, MapGeneratorState
 from smarthexboard.map.map import Map
 from django.test import Client
+
+from smarthexboard.map.types import MapSize, MapType
+from smarthexboard.utils import is_valid_uuid
 
 
 class TestArray2D(unittest.TestCase):
@@ -85,6 +88,27 @@ class TestMap(unittest.TestCase):
 			_ = Map(5.2, 1)
 
 
+class TestMapGenerator(unittest.TestCase):
+
+	def setUp(self):
+		self.last_state_value = 0.0
+
+	def test_constructor(self):
+		"""Test the MapGenerator constructor"""
+		def _callback(state):
+			print(f'Progress: {state.value} - {state.message} ')
+			self.last_state_value = state.value
+
+		options = MapOptions(map_size=MapSize.duel, map_type=MapType.continents)
+		generator = MapGenerator(options)
+
+		grid = generator.generate(_callback)
+
+		self.assertEqual(grid.width, 32)
+		self.assertEqual(grid.height, 22)
+		self.assertEqual(self.last_state_value, 1.0)
+
+
 class TestMapGenerationRequest(unittest.TestCase):
 	def test_generation_request(self):
 		"""Test that the map generation request (async)"""
@@ -95,7 +119,6 @@ class TestMapGenerationRequest(unittest.TestCase):
 		json_object = json.loads(response.content)
 		map_uuid = json_object['uuid']
 		self.assertEqual(is_valid_uuid(map_uuid), True)
-
 
 if __name__ == '__main__':
 	unittest.main()
