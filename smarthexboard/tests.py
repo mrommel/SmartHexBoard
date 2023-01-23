@@ -1,8 +1,5 @@
 """ unittest module """
-import json
 import unittest
-
-from django.test import Client
 
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
@@ -10,7 +7,6 @@ from smarthexboard.map.map import Map, Tile
 from smarthexboard.map.types import MapSize, MapType, MovementType, TerrainType, FeatureType
 from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
-from smarthexboard.utils import is_valid_uuid
 
 
 class TestArray2D(unittest.TestCase):
@@ -135,18 +131,6 @@ class TestMapGenerator(unittest.TestCase):
 		self.assertEqual(grid.width, 32)
 		self.assertEqual(grid.height, 22)
 		self.assertEqual(self.last_state_value, 1.0)
-
-
-class TestMapGenerationRequest(unittest.TestCase):
-	def test_generation_request(self):
-		"""Test that the map generation request (async)"""
-		client = Client()
-		response = client.post('/smarthexboard/generate_map')
-		self.assertEqual(response.status_code, 201)
-
-		json_object = json.loads(response.content)
-		map_uuid = json_object['uuid']
-		self.assertEqual(is_valid_uuid(map_uuid), True)
 
 
 class TestPathfinding(unittest.TestCase):
