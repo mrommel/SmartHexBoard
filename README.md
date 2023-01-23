@@ -1,6 +1,6 @@
 # Smart Hex Board
 
-![pytest workflow](https://github.com/github/docs/actions/workflows/pytest.yml/badge.svg)
+![pytest workflow](https://raw.githubusercontent.com/mrommel/SmartHexBoard/coverage-badge/coverage.svg?raw=true)
 
 Smart test for rendering of hex board 
 Javascript based tile visualization (python + django as server)
