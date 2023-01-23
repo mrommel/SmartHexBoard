@@ -1,4 +1,4 @@
-name: Python testing
+name: pytesting
 
 on: [push]
 
