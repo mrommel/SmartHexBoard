@@ -108,11 +108,11 @@ class HexCube:
 		f1 = 0.0
 		f2 = math.sqrt(3.0) / 2.0
 		f3 = math.sqrt(3.0)
-		size = Size(36.0, 26.0)
-		origin = Point(270.0, 470.0)
+		size = Size(36, 26)
+		origin = Point(270, 470)
 
-		x = (f0 * self.q + f1 * self.r) * size.width
-		y = (f2 * self.q + f3 * self.r) * size.height
+		x = int((f0 * self.q + f1 * self.r) * size.width)
+		y = int((f2 * self.q + f3 * self.r) * size.height)
 
 		return Point(x + origin.x, y + origin.y)
 
@@ -190,7 +190,7 @@ class HexPoint(Point):
 			if self.neighbor(direction, 1) == target:
 				return direction
 
-		angle = HexPoint.screenAngle(target)
+		angle = HexPoint.screenAngle(self, target)
 		return HexPoint.degreesToDirection(angle)
 
 	def toScreen(self) -> Point:

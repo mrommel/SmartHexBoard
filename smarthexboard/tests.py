@@ -36,16 +36,37 @@ class TestHexPoint(unittest.TestCase):
 		# north
 		hex1 = HexPoint(27, 5)
 		neighbor_n = hex1.neighbor(HexDirection.north, 1)
+
 		self.assertEqual(neighbor_n, HexPoint(26, 4))
 		self.assertEqual(neighbor_n.neighbor(HexDirection.south, 1), hex1)
 
 	def test_neighbor_ne_sw(self):
-		"""Test the HexPoint neighbor"""
+		"""Test the HexPoint neighbor in north-east and south-west"""
 		# north
 		hex1 = HexPoint(27, 5)
 		neighbor_ne = hex1.neighbor(HexDirection.northEast, 1)
+
 		self.assertEqual(neighbor_ne, HexPoint(27, 4))
 		self.assertEqual(neighbor_ne.neighbor(HexDirection.southWest, 1), hex1)
+
+	def test_neighbors(self):
+		"""Test the HexPoint neighbors"""
+		expected = [HexPoint(26, 4), HexPoint(27, 4), HexPoint(28, 5), HexPoint(27, 6), HexPoint(26, 6), HexPoint(26, 5)]
+		hex1 = HexPoint(27, 5)
+		neighbors = hex1.neighbors()
+
+		self.assertEqual(len(neighbors), 6)
+		for index in range(6):
+			self.assertEqual(neighbors[index], expected[index])
+
+	def test_directionTowards(self):
+		"""Test the HexPoint neighbors"""
+		hex1 = HexPoint(27, 5)
+		far_direction = hex1.directionTowards(HexPoint(10, 5))
+		near_direction = hex1.directionTowards(HexPoint(28, 5))
+
+		self.assertEqual(far_direction, HexDirection.northWest)
+		self.assertEqual(near_direction, HexDirection.southEast)
 
 
 class TestHeightMap(unittest.TestCase):
