@@ -51,7 +51,14 @@ class TestHexPoint(unittest.TestCase):
 
 	def test_neighbors(self):
 		"""Test the HexPoint neighbors"""
-		expected = [HexPoint(26, 4), HexPoint(27, 4), HexPoint(28, 5), HexPoint(27, 6), HexPoint(26, 6), HexPoint(26, 5)]
+		expected = [
+			HexPoint(26, 4),
+			HexPoint(27, 4),
+			HexPoint(28, 5),
+			HexPoint(27, 6),
+			HexPoint(26, 6),
+			HexPoint(26, 5)
+		]
 		hex1 = HexPoint(27, 5)
 		neighbors = hex1.neighbors()
 
@@ -117,6 +124,28 @@ class TestTile(unittest.TestCase):
 		self.assertEqual(tile.isRiverInNorthEast(), True)
 		self.assertEqual(tile.isRiverInSouthEast(), False)
 
+	def test_isWater(self):
+		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+
+		self.assertEqual(tile.isWater(), False)
+
+	def test_isLand(self):
+		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+
+		self.assertEqual(tile.isLand(), True)
+
+	def test_movementCost(self):
+		tundra_tile = Tile(HexPoint(3, 2), TerrainType.tundra)
+
+		grass_tile = Tile(HexPoint(3, 1), TerrainType.grass)
+		mountains_tile = Tile(HexPoint(3, 1), TerrainType.grass)
+		mountains_tile.feature = FeatureType.mountains
+		ocean_tile = Tile(HexPoint(3, 1), TerrainType.shore)
+
+		self.assertEqual(grass_tile.movementCost(MovementType.walk, tundra_tile), 1)
+		self.assertEqual(mountains_tile.movementCost(MovementType.walk, tundra_tile), 3)
+		self.assertEqual(ocean_tile.movementCost(MovementType.walk, tundra_tile), MovementType.max)
+
 
 class TestMap(unittest.TestCase):
 	def test_constructor(self):
@@ -132,6 +161,31 @@ class TestMap(unittest.TestCase):
 		with self.assertRaises(AttributeError):
 			_ = Map(5.2, 1)
 
+	def test_valid(self):
+		"""Test that a point is on the map (or not)"""
+		map1 = Map(3, 4)
+
+		self.assertEqual(map1.valid(2, 3), True)
+		self.assertEqual(map1.valid(HexPoint(2, 3)), True)
+
+		self.assertEqual(map1.valid(-1, 3), False)
+		self.assertEqual(map1.valid(HexPoint(-1, 3)), False)
+
+	def test_points(self):
+		"""Test that points returns all map points"""
+		expected = [
+			HexPoint(0, 0),
+			HexPoint(0, 1),
+			HexPoint(1, 0),
+			HexPoint(1, 1),
+		]
+		map1 = Map(2, 2)
+		map_points = map1.points()
+
+		self.assertEqual(len(map_points), 4)
+		for index in range(4):
+			self.assertEqual(map_points[index], expected[index])
+
 
 class TestMapGenerator(unittest.TestCase):
 
@@ -140,6 +194,7 @@ class TestMapGenerator(unittest.TestCase):
 
 	def test_constructor(self):
 		"""Test the MapGenerator constructor"""
+
 		def _callback(state):
 			print(f'Progress: {state.value} - {state.message} ')
 			self.last_state_value = state.value
