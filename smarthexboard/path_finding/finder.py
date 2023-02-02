@@ -99,4 +99,9 @@ class AStarPathfinder(AStar):
 		if self.data_source is None:
 			print('no datasource')
 
-		return list(self.astar(from_point, to_point, False))
+		pts_or_none = self.astar(from_point, to_point, False)
+
+		if pts_or_none is not None:
+			return list(pts_or_none)
+
+		return None

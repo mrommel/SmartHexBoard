@@ -75,6 +75,146 @@ class TestHexPoint(unittest.TestCase):
 		self.assertEqual(far_direction, HexDirection.northWest)
 		self.assertEqual(near_direction, HexDirection.southEast)
 
+	def test_distance(self):
+		"""Test the HexPoint distance"""
+		hex1 = HexPoint(3, 2)
+		hex2 = HexPoint(5, 4)
+		hex3 = HexPoint(17, 5)
+
+		self.assertEqual(hex1.distance(hex1), 0)
+		self.assertEqual(hex1.distance(hex2), 3)
+		self.assertEqual(hex2.distance(hex1), 3)
+		self.assertEqual(hex1.distance(hex3), 15)
+		self.assertEqual(hex3.distance(hex1), 15)
+		self.assertEqual(hex2.distance(hex3), 12)
+		self.assertEqual(hex3.distance(hex2), 12)
+
+	def test_areaWith(self):
+		"""Test the HexPoint areaWith"""
+		hex1 = HexPoint(3, 2)
+
+		area1 = hex1.areaWith(1)
+		area2 = hex1.areaWith(2)
+
+		self.assertEqual(len(area1.points), 7)  # 1 + 6
+		self.assertEqual(len(area2.points), 19)  # 1 + 6 + 12
+
+
+class TestFeatureType(unittest.TestCase):
+	def test_isPossibleOn(self):
+		"""Test isPossibleOn"""
+		tile = Tile(HexPoint(0, 0), TerrainType.grass)
+		feature = FeatureType.none
+
+		# cannot place FeatureType.none on any tile
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# forest
+		feature = FeatureType.forest
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.snow
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# rainforest
+		feature = FeatureType.rainforest
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# floodplains
+		feature = FeatureType.floodplains
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# marsh
+		feature = FeatureType.marsh
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# oasis
+		feature = FeatureType.oasis
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.desert
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# reef
+		feature = FeatureType.reef
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.shore
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# ice
+		feature = FeatureType.ice
+		tile.terrain = TerrainType.snow
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.shore
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# atoll
+		feature = FeatureType.atoll
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.shore
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# volcano
+		feature = FeatureType.volcano
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.tundra
+		self.assertEqual(feature.isPossibleOn(tile), False)
+
+		# mountains
+		feature = FeatureType.mountains
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.desert
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# lake
+		feature = FeatureType.lake
+		tile.terrain = TerrainType.grass
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.desert
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
+		# fallout
+		feature = FeatureType.fallout
+		tile.terrain = TerrainType.ocean
+		self.assertEqual(feature.isPossibleOn(tile), False)
+		tile.terrain = TerrainType.desert
+		self.assertEqual(feature.isPossibleOn(tile), True)
+		tile.terrain = TerrainType.plains
+		self.assertEqual(feature.isPossibleOn(tile), True)
+
 
 class TestHeightMap(unittest.TestCase):
 	def test_constructor(self):

@@ -11,22 +11,24 @@ class Tile:
 
 class Tile:
 	"""
-		class that holds a single tile of a Map
+        class that holds a single tile of a Map
 
-		it has a TerrainType, FeatureType, ResourceType and a boolean value for being hilly (or not)
-	"""
+        it has a TerrainType, FeatureType, ResourceType and a boolean value for being hilly (or not)
+    """
+
 	def __init__(self, point: HexPoint, terrain: TerrainType):
 		"""
-			constructs a Tile from a TerrainType
+            constructs a Tile from a TerrainType
 
-			@param point: location of the tile
-			@param terrain: TerrainType
-		"""
+            @param point: location of the tile
+            @param terrain: TerrainType
+        """
 		self.point = point
 		self.terrain = terrain
 		self.is_hills = False
 		self.feature = FeatureType.none
-		self.resource = ResourceType.none
+		self._resource = ResourceType.none  # property is hidden
+		self.resource_quantity = 0
 		self.river_value = 0
 		self.climate_zone = ClimateZone.temperate
 		self.route = RouteType.none
@@ -36,6 +38,29 @@ class Tile:
 
 	def isLand(self):
 		return self.terrain.isLand()
+
+	def resourceFor(self, player) -> ResourceType:
+		"""if no player is provided, no check for tech"""
+		if self._resource != ResourceType.none:
+			valid = True
+
+			# check if already visible to player
+			reveal_tech = self._resource._data().reveal_tech
+			if reveal_tech is not None:
+				if player is not None:
+					if not player.has(reveal_tech):
+						valid = False
+
+			reveal_civic = self._resource._data().reveal_civic
+			if reveal_civic is not None:
+				if player is not None:
+					if not player.has(reveal_civic):
+						valid = False
+
+			if valid:
+				return self._resource
+
+		return ResourceType.none
 
 	def isImpassable(self, movement_ype):
 		# start with terrain cost
@@ -54,12 +79,12 @@ class Tile:
 
 	def movementCost(self, movement_type: MovementType, from_tile: Tile) -> int:
 		"""
-			cost to enter a terrain given the specified movement_type
+            cost to enter a terrain given the specified movement_type
 
-			@param movement_type: type of movement
-			@param from_tile: tile the unit comes from
-			@return: movement cost to go from {from_tile} to this tile
-		"""
+            @param movement_type: type of movement
+            @param from_tile: tile the unit comes from
+            @return: movement cost to go from {from_tile} to this tile
+        """
 		# start with terrain cost
 		terrain_cost = self.terrain.movementCost(movement_type)
 
@@ -101,7 +126,7 @@ class Tile:
 			return False
 
 		direction = self.point.directionTowards(target.point)
-		
+
 		if direction == HexDirection.north:
 			return self.isRiverInNorth()
 		elif direction == HexDirection.northEast:
@@ -124,7 +149,7 @@ class Tile:
 		}
 
 	def isNeighborTo(self, candidate: HexPoint) -> bool:
-		return self.point.distance(candidate)
+		return self.point.distance(candidate) == 1
 
 	def isRiverInNorth(self):
 		"""river in north can flow from east or west direction"""
@@ -146,6 +171,56 @@ class Tile:
 
 	def hasAnyRoute(self):
 		return False
+
+	def canHaveResource(self, grid, resource: ResourceType, ignore_latitude: bool = False) -> bool:
+
+		if resource == ResourceType.none:
+			return True
+
+		# only one resource per tile
+		if self._resource != ResourceType.none:
+			return False
+
+		# no resources on natural wonders
+		if self.feature.isNaturalWonder():
+			return False
+
+		# no resources on mountains
+		if self.feature == FeatureType.mountains:
+			return False
+
+		if self.feature != FeatureType.none:
+			if not resource.canBePlacedOnFeature(self.feature):
+				return False
+
+			if not resource.canBePlacedOnFeatureTerrain(self.terrain):
+				return False
+		else:
+			# only checked if no feature
+			if not resource.canBePlacedOnTerrain(self.terrain):
+				return False
+
+		if self.is_hills:
+			if not resource.canBePlacedOnHills():
+				return False
+		elif self.isFlatlands():
+			if not resource.canBePlacedOnFlatlands():
+				return False
+
+		if grid.riverAt(self.point):
+			if not resource.canBePlacedOnRiverSide():
+				return False
+
+		return True
+
+	def isFlatlands(self):
+		if not self.terrain.isLand():
+			return False
+
+		if self.feature == FeatureType.mountains or self.feature == FeatureType.mountEverest or self.feature == FeatureType.mountKilimanjaro:
+			return False
+
+		return True
 
 
 class TileStatistics:
@@ -259,7 +334,8 @@ class Map:
 			y = y_or_is_hills
 			self.tiles.values[y][x].is_hills = is_hills
 		else:
-			raise AttributeError(f'Map.modifyIsHillsAt with wrong attributes: {x_or_hex} / {y_or_is_hills} / {is_hills}')
+			raise AttributeError(
+				f'Map.modifyIsHillsAt with wrong attributes: {x_or_hex} / {y_or_is_hills} / {is_hills}')
 
 	def featureAt(self, x_or_hex, y=None):
 		if isinstance(x_or_hex, HexPoint) and y is None:

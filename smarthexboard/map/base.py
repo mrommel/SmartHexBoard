@@ -29,6 +29,7 @@ class Size:
 		"""returns a string representation of the Size"""
 		return f'[Size x: {self.width}, y: {self.height}]'
 
+
 class Point:
 	"""class that stores coordinates"""
 
@@ -116,6 +117,8 @@ class HexCube:
 
 		return Point(x + origin.x, y + origin.y)
 
+class HexDirection:
+	pass
 
 class HexDirection(ExtendedEnum):
 	north = 'north'
@@ -140,6 +143,54 @@ class HexDirection(ExtendedEnum):
 			return HexCube(-1, 1, 0)
 		else:
 			raise AttributeError(f'HexDirection {self} can\'t get cubeDirection')
+
+	def opposite(self) -> HexDirection:
+		if self == HexDirection.north:
+			return HexDirection.south
+		elif self == HexDirection.northEast:
+			return HexDirection.southWest
+		elif self == HexDirection.southEast:
+			return HexDirection.northWest
+		elif self == HexDirection.south:
+			return HexDirection.north
+		elif self == HexDirection.southWest:
+			return HexDirection.northEast
+		elif self == HexDirection.northWest:
+			return HexDirection.southEast
+		else:
+			raise AttributeError(f'HexDirection {self} can\'t get opposite')
+
+	def clockwiseNeighbor(self) -> HexDirection:
+		if self == HexDirection.north:
+			return HexDirection.northEast
+		elif self == HexDirection.northEast:
+			return HexDirection.southEast
+		elif self == HexDirection.southEast:
+			return HexDirection.south
+		elif self == HexDirection.south:
+			return HexDirection.southWest
+		elif self == HexDirection.southWest:
+			return HexDirection.northWest
+		elif self == HexDirection.northWest:
+			return HexDirection.north
+		else:
+			raise AttributeError(f'HexDirection {self} can\'t get clockwiseNeighbor')
+
+	def counterClockwiseNeighbor(self) -> HexDirection:
+		if self == HexDirection.north:
+			return HexDirection.northWest
+		elif self == HexDirection.northEast:
+			return HexDirection.north
+		elif self == HexDirection.southEast:
+			return HexDirection.northEast
+		elif self == HexDirection.south:
+			return HexDirection.southEast
+		elif self == HexDirection.southWest:
+			return HexDirection.south
+		elif self == HexDirection.northWest:
+			return HexDirection.southWest
+		else:
+			raise AttributeError(f'HexDirection {self} can\'t get counterClockwiseNeighbor')
 
 	def __str__(self):
 		return f'[HexDirection {self.value}]'
@@ -169,16 +220,14 @@ class HexPoint(Point):
 		return HexPoint(cube_neighbor)
 
 	def neighbors(self):
-		neighboring = []
-
-		neighboring.append(self.neighbor(HexDirection.north))
-		neighboring.append(self.neighbor(HexDirection.northEast))
-		neighboring.append(self.neighbor(HexDirection.southEast))
-		neighboring.append(self.neighbor(HexDirection.south))
-		neighboring.append(self.neighbor(HexDirection.southWest))
-		neighboring.append(self.neighbor(HexDirection.northWest))
-
-		return neighboring
+		return [
+			self.neighbor(HexDirection.north),
+			self.neighbor(HexDirection.northEast),
+			self.neighbor(HexDirection.southEast),
+			self.neighbor(HexDirection.south),
+			self.neighbor(HexDirection.southWest),
+			self.neighbor(HexDirection.northWest)
+		]
 
 	def directionTowards(self, target: HexPoint) -> HexDirection:
 		"""
