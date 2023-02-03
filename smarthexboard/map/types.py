@@ -244,32 +244,34 @@ class FeatureType(Enum):
         return False
 
     def _isFloodplainsPossibleOn(self, tile):
-        """Modifies Deserts and also Plains and Grassland."""
+        """Floodplains modifies Deserts and also Plains and Grassland."""
         if tile.is_hills:
             return False
 
-        if tile.terrain != TerrainType.desert and tile.terrain != TerrainType.grass and tile.terrain != TerrainType.plains:
-            return False
+        if tile.terrain in [TerrainType.desert, TerrainType.grass, TerrainType.plains]:
+            return True
 
-        return True
+        return False
 
     def _isMarshPossibleOn(self, tile):
+        """Marsh modifies Grassland"""
         if tile.is_hills:
             return False
 
-        if tile.terrain != TerrainType.grass:
-            return False
+        if tile.terrain == TerrainType.grass:
+            return True
 
-        return True
+        return False
 
     def _isOasisPossibleOn(self, tile):
+        """Oasis modifies Desert"""
         if tile.is_hills:
             return False
 
-        if tile.terrain != TerrainType.desert:
-            return False
+        if tile.terrain == TerrainType.desert:
+            return True
 
-        return True
+        return False
 
     def _isReefPossibleOn(self, tile):
         """
@@ -288,39 +290,48 @@ class FeatureType(Enum):
         return True
 
     def _isIcePossibleOn(self, tile):
-        if not tile.isWater():
-            return False
+        """Ice modifies Ocean and Shore"""
+        if tile.isWater():
+            return True
 
-        return True
+        return False
 
     def _isAtollPossibleOn(self, tile):
-        if not tile.isWater():
-            return False
+        """Atoll modifies Ocean and Shore"""
+        if tile.isWater():
+            return True
 
-        return True
+        return False
 
     def _isVolcanoPossibleOn(self, tile):
-        if tile.feature != FeatureType.mountains:
-            return False
+        """Volcano modifies Mountains"""
+        if tile.feature == FeatureType.mountains:
+            return True
 
-        return True
+        return False
 
     def _isMountainPossibleOn(self, tile):
+        """Mountain modifies hilly Desert, Grassland, Plains, Tundra and Snow"""
         if tile.is_hills:
             return False
 
-        if tile.terrain == TerrainType.desert or tile.terrain == TerrainType.grass or tile.terrain == TerrainType.plains or tile.terrain == TerrainType.tundra or tile.terrain == TerrainType.snow:
+        if tile.terrain in [TerrainType.desert, TerrainType.grass, TerrainType.plains, TerrainType.tundra, TerrainType.snow]:
             return True
 
         return False
 
     def _isLakePossibleOn(self, tile):
+        """Lake modifies all non-hilly terrain"""
         if tile.is_hills:
+            return False
+
+        if tile.isWater():
             return False
 
         return True
 
     def _isFalloutPossibleOn(self, tile):
+        """Fallout modifies all land tiles"""
         if tile.isWater():
             return False
 
@@ -730,9 +741,6 @@ class ResourceType(ExtendedEnum):
 
         raise AttributeError(f'cant determine data of {self}')
 
-    def __str__(self):
-        return self.value
-
     def canBePlacedOnFeature(self, feature: FeatureType) -> bool:
         return feature in self._data().place_on_features
 
@@ -756,6 +764,23 @@ class ResourceType(ExtendedEnum):
             return 10
 
         return 25
+
+    def revealTech(self):
+        """
+            returns the tech that reveals the resource
+            :return: tech that is needed to reveal the resource
+        """
+        return self._data().reveal_tech
+
+    def revealCivic(self):
+        """
+            returns the civic that reveals the resource
+            :return: civic that is needed to reveal the resource
+        """
+        return self._data().reveal_civic
+
+    def __str__(self):
+        return self.value
 
 
 class ClimateZone(ExtendedEnum):

@@ -9,6 +9,7 @@ class Tile:
 	pass
 
 
+# noinspection PyRedeclaration
 class Tile:
 	"""
 		class that holds a single tile of a Map
@@ -34,24 +35,36 @@ class Tile:
 		self.route = RouteType.none
 
 	def isWater(self):
+		"""
+			returns if this is a water tile
+			:return: True, if this tile is a water tile, False otherwise
+		"""
 		return self.terrain.isWater()
 
 	def isLand(self):
+		"""
+			returns if this is a land tile
+			:return: True, if this tile is a land tile, False otherwise
+		"""
 		return self.terrain.isLand()
 
 	def resourceFor(self, player) -> ResourceType:
-		"""if no player is provided, no check for tech"""
+		"""
+			returns the resource of this tile for player
+			if no player is provided, no check for tech
+			:return: resource of this if visible to player (if provided)
+		"""
 		if self._resource != ResourceType.none:
 			valid = True
 
 			# check if already visible to player
-			reveal_tech = self._resource._data().reveal_tech
+			reveal_tech = self._resource.revealTech()
 			if reveal_tech is not None:
 				if player is not None:
 					if not player.has(reveal_tech):
 						valid = False
 
-			reveal_civic = self._resource._data().reveal_civic
+			reveal_civic = self._resource.revealCivic()
 			if reveal_civic is not None:
 				if player is not None:
 					if not player.has(reveal_civic):
