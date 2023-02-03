@@ -368,26 +368,98 @@ function ResourceType(name, texture) {
 }
 
 ResourceType.prototype.clone = function() {
-    return new ResourceType(this.name, this.textures);
+    return new ResourceType(this.name, this.texture);
 }
 
 ResourceType.prototype.toString = function() {
     return '[ResourceType: ' + this.name + ']';
 }
 
+ResourceType.fromString = function(resource_name) {
+
+    switch (resource_name) {
+        case 'none':
+            return ResourceTypes.none.clone();
+
+            // bonus
+        case 'wheat':
+            return ResourceTypes.wheat.clone();
+        case 'rice':
+            return ResourceTypes.rice.clone();
+        case 'deer':
+            return ResourceTypes.deer.clone();
+        case 'sheep':
+            return ResourceTypes.sheep.clone();
+        case 'copper':
+            return ResourceTypes.copper.clone();
+        case 'stone':
+            return ResourceTypes.stone.clone();
+        case 'bananas':
+            return ResourceTypes.bananas.clone();
+        case 'cattle':
+            return ResourceTypes.cattle.clone();
+        case 'fish':
+            return ResourceTypes.fish.clone();
+
+            // luxury
+        case 'citrus':
+            return ResourceTypes.citrus.clone();
+        case 'whales':
+            return ResourceTypes.whales.clone();
+
+            // strategic
+        case 'horses':
+            return ResourceTypes.horses.clone();
+        case 'iron':
+            return ResourceTypes.iron.clone();
+        case 'coal':
+            return ResourceTypes.coal.clone();
+        case 'oil':
+            return ResourceTypes.oil.clone();
+        case 'aluminum':
+            return ResourceTypes.aluminum.clone();
+        case 'uranium':
+            return ResourceTypes.uranium.clone();
+        case 'niter':
+            return ResourceTypes.niter.clone();
+
+        default:
+            console.log('could not find Resource for ' + resource_name)
+            return ResourceTypes.none.clone();
+    }
+}
+
 const ResourceTypes = {
+    // default
     none: new ResourceType("none", "resource_none@3x.png"),
+
+    // bonus
+    wheat: new ResourceType("wheat", "resource_wheat@3x.png"),
+    rice: new ResourceType("rice", "resource_rice@3x.png"),
+    deer: new ResourceType("deer", "resource_deer@3x.png"),
+    sheep: new ResourceType("sheep", "resource_sheep@3x.png"),
+    copper: new ResourceType("copper", "resource_copper@3x.png"),
+    stone: new ResourceType("stone", "resource_stone@3x.png"),
+    bananas: new ResourceType("bananas", "resource_bananas@3x.png"),
+    cattle: new ResourceType("cattle", "resource_cattle@3x.png"),
+    fish: new ResourceType("fish", "resource_fish@3x.png"),
+
+    // luxury
+    citrus: new ResourceType("citrus", "resource_citrus@3x.png"),
+    whales: new ResourceType("whales", "resource_whales@3x.png"),
+
+    // strategic
+    horses: new ResourceType("horses", "resource_horses@3x.png"),
+    iron: new ResourceType("iron", "resource_iron@3x.png"),
+    coal: new ResourceType("coal", "resource_coal@3x.png"),
+    oil: new ResourceType("oil", "resource_oil@3x.png"),
 	aluminium: new ResourceType("aluminium", "resource_aluminium@3x.png"),
+	uranium: new ResourceType("uranium", "resource_uranium@3x.png"),
+	niter: new ResourceType("niter", "resource_niter@3x.png"),
+
+	// artifacts
 	antiquitySite: new ResourceType("antiquitySite", "resource_antiquitySite@3x.png"),
-	banana: new ResourceType("banana", "resource_banana@3x.png"),
-	cattle: new ResourceType("cattle", "resource_cattle@3x.png"),
-	citrus: new ResourceType("citrus", "resource_citrus@3x.png"),
-	coal: new ResourceType("coal", "resource_coal@3x.png"),
-	fish: new ResourceType("fish", "resource_fish@3x.png"),
-	oil: new ResourceType("oil", "resource_oil@3x.png"),
-	sheep: new ResourceType("sheep", "resource_sheep@3x.png"),
-	whales: new ResourceType("whales", "resource_whales@3x.png"),
-	wheat: new ResourceType("wheat", "resource_wheat@3x.png"),
+	shipwreck: new ResourceType("shipwreck", "resource_shipwreck@3x.png"),
 }
 
 // ClimateZones

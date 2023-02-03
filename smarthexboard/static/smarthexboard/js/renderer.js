@@ -244,7 +244,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
 
             var resource = this.map.resourceAt(hex);
             if (resource !== ResourceTypes.none) {
-                // console.log('resource=' + resource + ', at=' + hex);
+                console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
                 var img = this.imgResources[resource.texture];
                 this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }

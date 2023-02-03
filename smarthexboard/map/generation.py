@@ -632,12 +632,19 @@ class MapGenerator:
 
         # Add resources
         for resource in resources:
+            if resource == ResourceType.none:
+                continue
+
             self._addNonUniqueResource(grid, resource)
 
         print("-------------------------------")
 
         # Show number of resources placed
         for resource in resources:
+
+            if resource == ResourceType.none:
+                continue
+
             resource_placed = 0
 
             for x in range(self.width):
@@ -645,7 +652,7 @@ class MapGenerator:
                     grid_point = HexPoint(x, y)
                     tile = grid.tileAt(grid_point)
 
-                    if tile.resource == resource:
+                    if tile._resource == resource:
                         resource_placed += 1
 
             print(f'Counted {resource_placed} of {resource.name()} placed on map')
@@ -671,13 +678,13 @@ class MapGenerator:
                     resource_num = 3
 
                 tile.resource_quantity = resource_num
-                tile.resource = resource
+                tile._resource = resource
 
                 resource_count -= 1
 
                 # FIXME: groups
 
-            if resource_count == 0:
+            if resource_count <= 0:
                 return
 
     def _numberOfResourcesToAdd(self, grid, resource: ResourceType) -> int:
@@ -692,7 +699,7 @@ class MapGenerator:
         if resource.absoluteVarPercent() > 0:
             rand1 = absolute_amount - (absolute_amount * resource.absoluteVarPercent() / 100)
             rand2 = absolute_amount + (absolute_amount * resource.absoluteVarPercent() / 100)
-            absolute_amount = random.uniform(rand1, rand2)
+            absolute_amount = int(random.uniform(rand1, rand2))
 
         absolute_amount -= info.already_placed
 

@@ -11,18 +11,18 @@ class Tile:
 
 class Tile:
 	"""
-        class that holds a single tile of a Map
+		class that holds a single tile of a Map
 
-        it has a TerrainType, FeatureType, ResourceType and a boolean value for being hilly (or not)
-    """
+		it has a TerrainType, FeatureType, ResourceType and a boolean value for being hilly (or not)
+	"""
 
 	def __init__(self, point: HexPoint, terrain: TerrainType):
 		"""
-            constructs a Tile from a TerrainType
+			constructs a Tile from a TerrainType
 
-            @param point: location of the tile
-            @param terrain: TerrainType
-        """
+			@param point: location of the tile
+			@param terrain: TerrainType
+		"""
 		self.point = point
 		self.terrain = terrain
 		self.is_hills = False
@@ -79,12 +79,12 @@ class Tile:
 
 	def movementCost(self, movement_type: MovementType, from_tile: Tile) -> int:
 		"""
-            cost to enter a terrain given the specified movement_type
+			cost to enter a terrain given the specified movement_type
 
-            @param movement_type: type of movement
-            @param from_tile: tile the unit comes from
-            @return: movement cost to go from {from_tile} to this tile
-        """
+			@param movement_type: type of movement
+			@param from_tile: tile the unit comes from
+			@return: movement cost to go from {from_tile} to this tile
+		"""
 		# start with terrain cost
 		terrain_cost = self.terrain.movementCost(movement_type)
 
@@ -145,7 +145,8 @@ class Tile:
 			'terrain': self.terrain.value,
 			'isHills': self.is_hills,
 			'feature': self.feature.value,
-			'resource': self.resource.value
+			'resource': self._resource.value,
+			'resource_quantity': self.resource_quantity
 		}
 
 	def isNeighborTo(self, candidate: HexPoint) -> bool:
