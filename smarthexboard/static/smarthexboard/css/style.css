@@ -628,6 +628,49 @@ body {
     font-size: 14px;
 }
 
+#uistate-game #right_footer_container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#uistate-game #map_container {
+    width: 300px;
+    height: 168px;
+    background-image: url("../img/ui/map_overview_canvas.png");
+    background-size: cover;
+}
+
+#uistate-game #map_lens {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 50px;
+    background-image: url(../img/ui/map-lens@3x.png);
+    background-size: cover;
+}
+
+#uistate-game #map_marker {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 90px;
+    background-image: url("../img/ui/map-marker@3x.png");
+    background-size: cover;
+}
+
+#uistate-game #map_options {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 0;
+    left: 130px;
+    background-image: url("../img/ui/map-options@3x.png");
+    background-size: cover;
+}
+
 /* game menu */
 #uistate-game-menu {
     padding: 20px;
