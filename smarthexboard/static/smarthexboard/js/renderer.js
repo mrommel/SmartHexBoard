@@ -9,6 +9,7 @@
 import { CGPoint } from './base/prototypes.js';
 import { HexPoint, HexDirections, HexDirection } from './base/point.js';
 import { TerrainTypes, BeachTypes, SnowTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { TechTypes } from './game/types.js';
 import { Map } from './map/map.js';
 
 function Renderer() {
@@ -42,6 +43,7 @@ function Renderer() {
 	this.imgTerrains = {};
 	this.imgResources = {};
 	this.imgFeatures = {};
+	this.imgTechs = {};
 	this.texturesLoaded = false;
 
     // Check if the canvases already exists in the current document to prevent
@@ -234,7 +236,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
             // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
 
             var feature = this.map.featureAt(hex);
-            if (feature !== FeatureTypes.none) {
+            if (feature.name != FeatureTypes.none.name) {
                 // console.log('feature=' + feature + ', at=' + hex);
                 var index = Math.abs(hex.x + hex.y) % feature.textures.length;
                 var textureName = feature.textures[index];
@@ -243,8 +245,8 @@ Renderer.prototype.render = function(orow, ocol, range) {
             }
 
             var resource = this.map.resourceAt(hex);
-            if (resource !== ResourceTypes.none) {
-                console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
+            if (resource.name != ResourceTypes.none.name) {
+                // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
                 var img = this.imgResources[resource.texture];
                 this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
@@ -459,6 +461,44 @@ Renderer.prototype.cleanupTerrainImagesCache = function(imgList) {
             // console.log("Removing unused entry %s", imgUnits[i].src);
             imgTerrains[i] = null;
             delete(imgTerrains[i]);
+        }
+    }
+}
+
+// Caches images, func a function to call upon cache completion
+Renderer.prototype.cacheGameImages = function(callbackFunction) {
+	var imgList = [];
+
+	Object.values(TechTypes).forEach(techType => {
+	    imgList.push(techType.texture);
+	});
+
+	var loaded = 0;
+    var toLoad = Object.keys(imgList).length;
+
+    console.log('start caching ' + toLoad + ' game images');
+
+    for (var i in imgList) {
+        var imgName = imgList[i];
+
+        if (imgName.startsWith('tech-')) {
+            if (typeof this.imgTechs[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgTechs[imgName] = new Image();
+            this.imgTechs[imgName].onload = function() {
+                // console.log('Cached ' + this.src);
+                loaded++;
+                if (loaded == toLoad) {
+                    // console.log('Loaded ' + loaded + ' game assets');
+                    if (callbackFunction) {
+                        callbackFunction();
+                    }
+                }
+            }
+            this.imgTechs[imgName].src = '/static/smarthexboard/img/techs/' + imgName;
         }
     }
 }

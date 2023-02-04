@@ -135,14 +135,21 @@ function handleMouseMove(event) {
     var map_position = new HexPoint(screen_position);
 
     var terrainText = '<invalid>';
-    var hillsText = 'no hills';
+    var hillsText = ' (no hills)';
     var climateZoneText = '<invalid>';
+    var resourceText = '<invalid>';
     if (renderer.map.valid(map_position)) {
         terrainText = renderer.map.terrainAt(map_position);
         if (renderer.map.isHillsAt(map_position)) {
-            hillsText = 'has hills';
+            hillsText = ' (has hills)';
         }
         climateZoneText = renderer.map.climateZoneAt(map_position);
+        resourceText = renderer.map.resourceAt(map_position);
+    } else {
+        terrainText = '';
+        hillsText = '';
+        climateZoneText = '';
+        resourceText = '';
     }
 
     var tooltipSpan = document.getElementById('tooltip');
@@ -150,7 +157,7 @@ function handleMouseMove(event) {
     tooltipSpan.style.top = (y + 20) + 'px';
     tooltipSpan.style.left = (x + 0) + 'px';
     tooltipSpan.style.display = 'block';
-    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + ' ' + hillsText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
+    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
 
     if (mouseIsDown) {
         var terrains = document.getElementById('terrains');
@@ -256,8 +263,10 @@ function initUI() {
 
     // start caching images
     renderer.cacheTerrainImages(function() {
-        renderer.texturesLoaded = true;
-        changeUIState(UIState.menu);
+        renderer.cacheGameImages(function() {
+            renderer.texturesLoaded = true;
+            changeUIState(UIState.menu);
+        });
     });
 }
 

@@ -1,7 +1,7 @@
 /**
  * Map - Provides map, player and hex objects
  *
- * Copyright (c) 2020 MiRo
+ * Copyright (c) 2023 MiRo
  * Licensed under the GPL license:
  * http://www.gnu.org/licenses/gpl.html
  */

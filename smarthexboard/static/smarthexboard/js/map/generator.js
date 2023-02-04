@@ -1,7 +1,7 @@
 /**
  * Map Generator - Provides new maps
  *
- * Copyright (c) 2020 MiRo
+ * Copyright (c) 2023 MiRo
  * Licensed under the GPL license:
  * http://www.gnu.org/licenses/gpl.html
  */

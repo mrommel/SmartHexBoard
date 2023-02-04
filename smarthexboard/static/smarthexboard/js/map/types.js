@@ -1,7 +1,7 @@
 /**
  * Map - Provides map, player and hex objects
  *
- * Copyright (c) 2020 MiRo
+ * Copyright (c) 2023 MiRo
  * Licensed under the GPL license:
  * http://www.gnu.org/licenses/gpl.html
  */
@@ -97,7 +97,7 @@ const TerrainTypes = {
 	tundra: new TerrainType("tundra", ["terrain_tundra@3x.png", "terrain_tundra2@3x.png", "terrain_tundra3@3x.png"], ["terrain_tundra_hills@3x.png"]),
 }
 
-// map generation
+// map generation types
 const GenerationTypes = {
     water: new TerrainType("water", ["water@3x.png"], []),
 	land: new TerrainType("land", ["land@3x.png"], []),
