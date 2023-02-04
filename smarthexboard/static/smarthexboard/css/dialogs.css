@@ -14,30 +14,37 @@
     width: 600px;
     height: 400px;
     display: block;
-    padding-top: 32px;
-    padding-bottom: 32px;
+    padding: 0px;
 }
 
 .dialog header {
     width: 600px;
-    height: 24px;
-    background-color: rgba(45,0,0,0.5);
+    height: 44px;
+    background-image: url('../img/ui/dialog/dialog_header.png');
     display: block;
     position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
-
-    padding-left: 16px;
-    padding-right: 16px;
 }
 
 .dialog header title {
     display: block;
     text-align: center;
-    height: 20px;
+    height: 100%;
     width: 100%;
     font-size: 20px;
+    color: white;
+    padding-top: 8px;
+}
+
+.close_button {
+    width: 40px;
+    height: 40px;
+
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }
 
 .dialog content {
@@ -59,12 +66,43 @@
     padding-right: 16px;
 }
 
-/* special styles */
+/* special tech styles */
 
 #techs_dialog {
     display: none; /* initially hidden */
     background-color: rgba(255,0,0,0.5);  /* red */
 }
+
+#tech_wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+    grid-auto-rows: minmax(50px, auto);
+    padding-top: 80px;
+}
+
+.tech {
+    font-size: 12px;
+    background-image: url('../img/ui/techInfo-disabled@3x.png');
+    background-size: 100% 100%;
+}
+
+#tech_pottery {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#tech_mining {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#tech_archery {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+/* special civic styles */
 
 #civics_dialog {
     display: none; /* initially hidden */
