@@ -1,0 +1,72 @@
+#dialogs {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 80px;
+    pointer-events: all; /* forward all mouse events */
+    display: none;
+}
+
+/* generic styles */
+
+.dialog {
+    width: 600px;
+    height: 400px;
+    display: block;
+    padding-top: 32px;
+    padding-bottom: 32px;
+}
+
+.dialog header {
+    width: 600px;
+    height: 24px;
+    background-color: rgba(45,0,0,0.5);
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.dialog header title {
+    display: block;
+    text-align: center;
+    height: 20px;
+    width: 100%;
+    font-size: 20px;
+}
+
+.dialog content {
+    width: 600px;
+    height: 100%;
+}
+
+.dialog footer {
+    width: 600px;
+    height: 24px;
+    background-color: rgba(45,0,0,0.5);
+
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/* special styles */
+
+#techs_dialog {
+    display: none; /* initially hidden */
+    background-color: rgba(255,0,0,0.5);  /* red */
+}
+
+#civics_dialog {
+    display: none; /* initially hidden */
+    background-color: rgba(0,0,255,0.5);  /* blue */
+}

@@ -457,6 +457,14 @@ body {
     float: right;
 }
 
+#uistate-game #turnLbl {
+    top: 4px;
+    position: absolute;
+    width: 200px;
+    right: 30px;
+    text-align: right;
+}
+
 /** header bar ******************/
 
 #uistate-game #header-bar-left {
@@ -626,6 +634,19 @@ body {
     top: -20px;
     left: -20px;
     font-size: 14px;
+}
+
+#uistate-game #left_footer_container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#uistate-game #unit_container {
+    width: 164px;
+    height: 168px;
+    background-image: url("../img/ui/unit-canvas@3x.png");
+    background-size: cover;
 }
 
 #uistate-game #right_footer_container {

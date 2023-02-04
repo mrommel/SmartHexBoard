@@ -386,10 +386,14 @@ window.quitOptions = function quitOptions() {
 
 window.openTechDialog = function openTechDialog() {
     console.log('openTechDialog');
+    $('#dialogs').show();
+    $('#techs_dialog').show();
 }
 
 window.openCivicDialog = function openCivicDialog() {
     console.log('openCivicDialog');
+    $('#dialogs').show();
+    $('#civics_dialog').show();
 }
 
 window.openGovernmentDialog = function openGovernmentDialog() {

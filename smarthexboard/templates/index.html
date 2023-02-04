@@ -32,6 +32,7 @@
 
     <!--custom css-->
     <link rel="stylesheet" href="{% static 'smarthexboard/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/dialogs.css' %}">
 </head>
 <body onresize="resizeCanvas(event)">
 
@@ -127,7 +128,7 @@
                 </div>
                 <!--spacer-->
                 <div id="top-bar-right">
-
+                    <div id="turnLbl">4.000 BC, Turn 0</div>
                     <div id="btnMenu">
                         <a href="#" onclick="openGameMenu(); return false;">
                             <img src="{% static 'smarthexboard/img/ui/menu@3x.png' %}" class="menu-icon" />
@@ -171,12 +172,17 @@
             <div id="tech_progress">
                 <img src="{% static 'smarthexboard/img/science_progress/science_progress_0.png' %}" id="tech_progress_value" />
                 <img src="{% static 'smarthexboard/img/techs/tech-default@3x.png' %}" id="tech_progress_icon" />
-                <span id="tech_progress_title">Title</span>
+                <span id="tech_progress_title">Tech Title</span>
             </div>
             <div id="civic_progress">
                 <img src="{% static 'smarthexboard/img/culture_progress/culture_progress_0.png' %}" id="civic_progress_value" />
                 <img src="{% static 'smarthexboard/img/civics/civic-default@3x.png' %}" id="civic_progress_icon" />
-                <span id="civic_progress_title">Title</span>
+                <span id="civic_progress_title">Civic Title</span>
+            </div>
+
+            <div id="dialogs">
+                {% include 'dialogs/techs.html' %}
+                {% include 'dialogs/civics.html' %}
             </div>
 
             <div id="notifications_container">
@@ -184,7 +190,9 @@
             </div>
 
             <div id="left_footer_container">
+                <div id="unit_container">
 
+                </div>
             </div>
 
             <div id="right_footer_container">
@@ -240,6 +248,7 @@
     <script src="{% static 'smarthexboard/js/dom.js' %}"></script>
     <script type="module" src="{% static 'smarthexboard/js/renderer.js' %}"></script>
     <script src="{% static 'smarthexboard/js/ui.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/dialogs.js' %}"></script>
 
     <script type="module" src="{% static 'smarthexboard/js/scripts.js' %}"></script>
 </body>
