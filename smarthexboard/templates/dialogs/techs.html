@@ -1,3 +1,4 @@
+{% load static %}
 <dialog id="techs_dialog" class="dialog">
     <header>
         <title>Technology Tree</title>
@@ -6,12 +7,47 @@
     <content>
 
         <div id="tech_wrapper">
-            <div id="tech_pottery" class="tech">Pottery</div>
-            <div id="tech_mining" class="tech">Mining</div>
-            <div id="tech_archery" class="tech">Archery</div>
-            <div id="tech_1" class="tech">Four</div>
-            <div id="tech_2" class="tech">Five</div>
-            <div id="tech_3" class="tech">Six</div>
+            <div id="tech_content">
+                <div id="tech_pottery" class="tech">
+                    <img class="tech_icon" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                    <div class="tech_title">Pottery</div>
+                    <div class="tech_turn">4 Turns</div>
+                    <div class="tech_achievements">
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                    </div>
+                    <div class="tech_eureka">To Boost: Build x something</div>
+                </div>
+
+                <div id="tech_mining" class="tech">
+                    <img class="tech_icon" src="{% static 'smarthexboard/img/techs/tech-mining@3x.png' %}" />
+                    <div class="tech_title">Mining</div>
+                    <div class="tech_turn">4&nbsp;Turns</div>
+                    <div class="tech_achievements">
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                    </div>
+                    <div class="tech_eureka">To Boost: Build x something</div>
+                </div>
+
+                <div id="tech_archery" class="tech">
+                    <img class="tech_icon" src="{% static 'smarthexboard/img/techs/tech-archery@3x.png' %}" />
+                    <div class="tech_title">Archery</div>
+                    <div class="tech_turn">4 Turns</div>
+                    <div class="tech_achievements">
+                        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}" />
+                    </div>
+                    <div class="tech_eureka">To Boost: Build x something</div>
+                </div>
+
+                <div id="tech_1" class="tech">One</div>
+                <div id="tech_2" class="tech">Two</div>
+                <div id="tech_3" class="tech">Three</div>
+                <div id="tech_4" class="tech">Four</div>
+                <div id="tech_5" class="tech">Five</div>
+                <div id="tech_6" class="tech">Six</div>
+            </div>
         </div>
     </content>
     <!--<footer>

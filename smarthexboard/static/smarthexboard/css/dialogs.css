@@ -74,17 +74,83 @@
 }
 
 #tech_wrapper {
+    padding-top: 60px;
+    padding-left: 10px;
+    overflow-x: scroll;
+    width: 580px;
+}
+
+#tech_content {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
-    gap: 10px;
-    grid-auto-rows: minmax(50px, auto);
-    padding-top: 80px;
+    grid-template-columns: repeat(12, 120px);
+    column-gap: 30px;
+    row-gap: 4px;
+    grid-auto-rows: minmax(40px, auto);
 }
 
 .tech {
-    font-size: 12px;
-    background-image: url('../img/ui/techInfo-disabled@3x.png');
-    background-size: 100% 100%;
+    border: 20px solid;
+    /*border-image: url('../img/ui/techs/techInfo-disabled@3x.png') 30 fill;
+    // display: flex;*/
+    width: 150px;
+    height: 40px;
+
+    border-image-source: url("../img/ui/techs/techInfo-disabled@3x.png");
+    border-image-slice: 40;
+    border-image-repeat: round;
+    border-image-width: 20px;
+
+    position: relative;
+}
+
+.tech_icon {
+    width: 30px;
+    height: 30px;
+
+    position: relative;
+    top: -20px;
+    left: -20px;
+}
+
+.tech_title {
+    font-size: 8px;
+
+    position: absolute;
+    top: -19px;
+    left: 14px;
+}
+
+.tech_turn {
+    font-size: 6px;
+    text-align: right;
+    width: 40px;
+
+    position: absolute;
+    top: -18px;
+    left: 80px;
+}
+
+.tech_achievements {
+    width: 80px;
+    height: 10px;
+    display: inline-flex;
+
+    position: absolute;
+    top: -4px;
+    left: 14px;
+}
+
+.tech_achievement {
+    width: 10px;
+    height: 10px;
+}
+
+.tech_eureka {
+    font-size: 6px;
+
+    position: absolute;
+    top: 10px;
+    left: 14px;
 }
 
 #tech_pottery {
@@ -93,13 +159,13 @@
 }
 
 #tech_mining {
-    grid-column: 1;
-    grid-row: 2;
+    grid-column: 2;
+    grid-row: 4;
 }
 
 #tech_archery {
     grid-column: 1;
-    grid-row: 4;
+    grid-row: 8;
 }
 
 /* special civic styles */

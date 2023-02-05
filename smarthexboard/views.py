@@ -66,3 +66,11 @@ def tests(request):
 		'navi_home': 'active',
 	}
 	return HttpResponse(template.render(context, request))
+
+
+def styleguide(request):
+	template = loader.get_template('styleguide/index.html')
+	context = {
+		'abc': 'def',
+	}
+	return HttpResponse(template.render(context, request))
