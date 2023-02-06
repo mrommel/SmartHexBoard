@@ -24,7 +24,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-
+    padding-bottom: 0.5em;
 }
 
 .display-4 {
@@ -144,4 +144,60 @@ h1, h2, h3, h4, h5, h6 {
 }
 .blog-footer p:last-child {
   margin-bottom: 0;
+}
+
+.container-inner {
+    width: 100%;
+}
+
+/*
+ * atos
+ */
+media (min-width: 1200px)
+.col-xl-2 {
+    max-width: 16.66667%;
+    flex: 0 0 16.66667%;
+}
+@media (min-width: 992px)
+.col-lg-4 {
+    max-width: 33.33333%;
+    flex: 0 0 33.33333%;
+}
+.col-6 {
+    max-width: 50%;
+    flex: 0 0 50%;
+}
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto, .col-xxl, .col-xxl-1, .col-xxl-10, .col-xxl-11, .col-xxl-12, .col-xxl-2, .col-xxl-3, .col-xxl-4, .col-xxl-5, .col-xxl-6, .col-xxl-7, .col-xxl-8, .col-xxl-9, .col-xxl-auto, .col-xxxl, .col-xxxl-1, .col-xxxl-10, .col-xxxl-11, .col-xxxl-12, .col-xxxl-2, .col-xxxl-3, .col-xxxl-4, .col-xxxl-5, .col-xxxl-6, .col-xxxl-7, .col-xxxl-8, .col-xxxl-9, .col-xxxl-auto {
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.p-b-60 {
+    padding-bottom: 60px;
+}
+.p-t-60 {
+    padding-top: 60px;
+}
+.text-center {
+    text-align: center!important;
+}
+.bg-black-translucent {
+    background-color: rgba(0,0,0,.15);
+}
+.badge {
+    font-weight: 400;
+    vertical-align: middle;
+}
+.badge {
+    font-size: 80%;
+    font-weight: 700;
+    line-height: 1;
+    display: inline-block;
+    padding: 0.4rem 0.5rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    border-radius: 0.25rem;
 }
