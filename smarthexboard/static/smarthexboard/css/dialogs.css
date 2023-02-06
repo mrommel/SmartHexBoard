@@ -104,10 +104,20 @@
 
 .tech-active {
     border-image-source: url("../img/ui/techs/techInfo-active@3x.png");
+    color: white;
 }
 
 .tech-disabled {
     border-image-source: url("../img/ui/techs/techInfo-disabled@3x.png");
+}
+
+.tech-researching {
+    border-image-source: url("../img/ui/techs/techInfo-researching@3x.png");
+    color: white;
+}
+
+.tech-researched {
+    border-image-source: url("../img/ui/techs/techInfo-researched@3x.png");
 }
 
 .tech_icon {
