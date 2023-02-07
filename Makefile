@@ -31,6 +31,11 @@ clean:
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete
 
+makemigrations: venv
+	./$(VENV)/bin/python3 manage.py makemigrations
+	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0002  # change this
+	./$(VENV)/bin/python3 manage.py migrate
+
 migrate: venv
 	./$(VENV)/bin/python3 manage.py migrate
 

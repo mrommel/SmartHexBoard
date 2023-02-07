@@ -1,0 +1,23 @@
+@startuml
+
+header
+BDC
+endheader
+footer
+<img:includes/footer.png>
+endfooter
+title Release Management: Update Requests
+
+skinparam Shadowing false
+autonumber
+
+"BikeService" --> "Release Mgmt Backend": new bikeId registered (newBikeId)
+"Release Mgmt Backend" -> "DynamoDB": get all items with newBikeId
+"DynamoDB" -> "Release Mgmt Backend": return all items with newBikeId
+
+loop process all items (Release Mgmt Backend)
+    "Release Mgmt Backend" -> "Release Mgmt Backend": remove BikeId and Serials from data
+    "Release Mgmt Backend" -> "DynamoDB": update data
+end
+
+@enduml

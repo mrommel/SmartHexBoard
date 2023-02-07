@@ -1,10 +1,14 @@
 """ unittest module """
 import unittest
+import uuid
+
+import pytest
 
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboard.map.map import Map, Tile
 from smarthexboard.map.types import MapSize, MapType, MovementType, TerrainType, FeatureType
+from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel
 from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
 
@@ -369,6 +373,26 @@ class TestPathfinding(unittest.TestCase):
 		self.assertEqual(len(path), 5)
 		for i, n in enumerate(target_path):
 			self.assertEqual(n, path[i])
+
+
+class TestGame(unittest.TestCase):
+	@pytest.mark.django_db
+	def test_game_creation(self):
+		"""Test game"""
+		map = MapModel(uuid=uuid.uuid4(), content='')
+		map.save()
+		game = GameModel(uuid=uuid.uuid4(), map=map, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+		game.save()
+
+		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
+		player1.save()
+		player2 = Player(leader=LeaderType.TRAJAN, game=game)
+		player2.save()
+
+		players = game.players()
+		self.assertEqual(len(players), 2)
+		self.assertEqual(players[0], player1)
+		self.assertEqual(players[1], player2)
 
 
 if __name__ == '__main__':

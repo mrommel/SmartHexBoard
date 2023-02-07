@@ -7,9 +7,14 @@ from django.template import loader
 import uuid
 from django_q.tasks import async_task
 
-from smarthexboard.models import MapGeneration, MapGenerationState
+from smarthexboard.models import MapGeneration, MapGenerationState, GameModel
 from smarthexboard.utils import is_valid_uuid
 
+# ####################################
+#
+#         pages
+#
+# ####################################
 
 def index(request):
 	template = loader.get_template('index.html')
@@ -18,6 +23,29 @@ def index(request):
 	}
 	return HttpResponse(template.render(context, request))
 
+
+def tests(request):
+	template = loader.get_template('tests.html')
+	context = {
+		'abc': 'def',
+		'navi_home': 'active',
+	}
+	return HttpResponse(template.render(context, request))
+
+
+def styleguide(request):
+	template = loader.get_template('styleguide/index.html')
+	context = {
+		'abc': 'def',
+	}
+	return HttpResponse(template.render(context, request))
+
+
+# ####################################
+#
+#     API methods
+#
+# ####################################
 
 def generate_map(request):
 	map_uuid = uuid.uuid4()
@@ -55,22 +83,22 @@ def generated_map(request, map_uuid):
 		json_payload = {'uuid': map_uuid, 'status': f'Map with {map_uuid} is not ready yet: {current_state}'}
 		return JsonResponse(json_payload, status=400)
 
+	# convert json string to dict
 	json_payload = json.loads(map_generation.map)
 	return JsonResponse(json_payload, status=200)
 
 
-def tests(request):
-	template = loader.get_template('tests.html')
-	context = {
-		'abc': 'def',
-		'navi_home': 'active',
-	}
-	return HttpResponse(template.render(context, request))
+def create_game(request, map_uuid, player, difficulty):
+	# create map object
+	# copy map data into game
+	# remove map generation
+	# create game object
+	#game = GameModel()
+	#game.save()
 
+	# serialize game
+	json_payload = {
+		#'uuid': game.uuid,
 
-def styleguide(request):
-	template = loader.get_template('styleguide/index.html')
-	context = {
-		'abc': 'def',
 	}
-	return HttpResponse(template.render(context, request))
+	return JsonResponse(json_payload, status=201)
