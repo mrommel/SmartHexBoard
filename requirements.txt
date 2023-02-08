@@ -4,6 +4,7 @@ sqlparse==0.4.3
 django-q==1.3.9
 redis==3.5.3  # version required by django-q
 djangorestframework==3.14.0
+slippers
 
 pylint==2.16.1
 pytest-django==4.5.2

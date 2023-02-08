@@ -1,0 +1,243 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-08 12:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: setup/settings.py:133
+msgid "German"
+msgstr "Deutsch"
+
+#: setup/settings.py:134
+msgid "English"
+msgstr "Englisch"
+
+#: smarthexboard/game/types.py:7 smarthexboard/game/types.py:45
+msgid "none"
+msgstr "kein"
+
+#: smarthexboard/game/types.py:10
+msgid "TXT_KEY_TECH_MINING_NAME"
+msgstr "Bergbau"
+
+#: smarthexboard/game/types.py:11
+#: smarthexboard/templates/styleguide/index.html:159
+msgid "TXT_KEY_TECH_POTTERY_NAME"
+msgstr "Töpfern"
+
+#: smarthexboard/game/types.py:12
+msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_NAME"
+msgstr "Tierhaltung"
+
+#: smarthexboard/game/types.py:13
+msgid "TXT_KEY_TECH_SAILING_NAME"
+msgstr "Segeln"
+
+#: smarthexboard/game/types.py:14
+msgid "TXT_KEY_TECH_ASTROLOGY_NAME"
+msgstr "Astrologie"
+
+#: smarthexboard/game/types.py:15
+msgid "TXT_KEY_TECH_IRRIGATION_NAME"
+msgstr "Bewässerung"
+
+#: smarthexboard/game/types.py:16
+msgid "TXT_KEY_TECH_WRITING_NAME"
+msgstr "Schrift"
+
+#: smarthexboard/game/types.py:17
+msgid "TXT_KEY_TECH_MASONRY_NAME"
+msgstr "Mauerei"
+
+#: smarthexboard/game/types.py:18
+msgid "TXT_KEY_TECH_ARCHERY_NAME"
+msgstr "Bogenschießen"
+
+#: smarthexboard/game/types.py:19
+msgid "TXT_KEY_TECH_BRONZE_WORKING_NAME"
+msgstr "Bronzeverarbeitung"
+
+#: smarthexboard/game/types.py:20
+msgid "TXT_KEY_TECH_WHEEL_NAME"
+msgstr "Rad"
+
+#: smarthexboard/game/types.py:23
+msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_NAME"
+msgstr ""
+
+#: smarthexboard/game/types.py:24
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_NAME"
+msgstr "Reiten"
+
+#: smarthexboard/game/types.py:25
+msgid "TXT_KEY_TECH_CURRENCY_NAME"
+msgstr ""
+
+#: smarthexboard/game/types.py:26
+msgid "TXT_KEY_TECH_CONSTRUCTION_NAME"
+msgstr ""
+
+#: smarthexboard/game/types.py:27
+msgid "TXT_KEY_TECH_IRON_WORKING_NAME"
+msgstr "Eisenverarbeitung"
+
+#: smarthexboard/game/types.py:28
+msgid "TXT_KEY_TECH_SHIP_BUILDING_NAME"
+msgstr "Schiffbau"
+
+#: smarthexboard/game/types.py:29
+msgid "TXT_KEY_TECH_MATHEMATICS_NAME"
+msgstr "Mathematik"
+
+#: smarthexboard/game/types.py:30
+msgid "TXT_KEY_TECH_ENGINEERING_NAME"
+msgstr "Ingenieurwissenschaften"
+
+#: smarthexboard/game/types.py:37
+msgid "TXT_KEY_TECH_INDUSTRIALIZATION_NAME"
+msgstr "Industralisierung"
+
+#: smarthexboard/game/types.py:40
+msgid "TXT_KEY_TECH_REFINING_NAME"
+msgstr ""
+
+#: smarthexboard/models.py:11
+msgid "Open"
+msgstr "Wartend"
+
+#: smarthexboard/models.py:12
+msgid "Running"
+msgstr "In Arbeit"
+
+#: smarthexboard/models.py:13
+msgid "Ready"
+msgstr "Fertig"
+
+#: smarthexboard/models.py:39
+msgid "Settler"
+msgstr "Siedler"
+
+#: smarthexboard/models.py:40
+msgid "Chieftain"
+msgstr "Häuptling"
+
+#: smarthexboard/models.py:41
+msgid "Warlord"
+msgstr "Kriegsherr"
+
+#: smarthexboard/models.py:42
+msgid "Prince"
+msgstr "Prinz"
+
+#: smarthexboard/models.py:43
+msgid "King"
+msgstr "König"
+
+#: smarthexboard/models.py:44
+msgid "Emperor"
+msgstr "Kaiser"
+
+#: smarthexboard/models.py:45
+msgid "Immortal"
+msgstr "Unsterblich"
+
+#: smarthexboard/models.py:46
+msgid "Deity"
+msgstr "Göttlich"
+
+#: smarthexboard/models.py:84
+msgid "Alexander"
+msgstr "Alexander"
+
+#: smarthexboard/models.py:85
+msgid "Trajan"
+msgstr "Trajan"
+
+#: smarthexboard/models.py:86
+msgid "Victoria"
+msgstr "Victoria"
+
+#: smarthexboard/models.py:87
+msgid "Montezuma"
+msgstr "Montezuma"
+
+#: smarthexboard/models.py:88
+msgid "Cyrus"
+msgstr "Cyrus"
+
+#: smarthexboard/models.py:89
+msgid "Napoleon"
+msgstr "Napoleon"
+
+#: smarthexboard/models.py:90
+msgid "Cleopatra"
+msgstr "Cleopatra"
+
+#: smarthexboard/models.py:91
+msgid "Barbarossa"
+msgstr "Barbarossa"
+
+#: smarthexboard/models.py:92
+msgid "Peter the Great"
+msgstr "Peter der Große"
+
+#: smarthexboard/templates/styleguide/index.html:9
+#: smarthexboard/templates/styleguide/index.html:38
+msgid "Styleguide"
+msgstr "Styleguide"
+
+#: smarthexboard/templates/styleguide/index.html:44
+msgid "Admin"
+msgstr "Admin"
+
+#: smarthexboard/templates/styleguide/index.html:51
+msgid "SmartHexBoard"
+msgstr "SmartHexBoard"
+
+#: smarthexboard/templates/styleguide/index.html:52
+msgid "Basic UI definitions"
+msgstr "UI Grundlagen"
+
+#: smarthexboard/templates/styleguide/index.html:65
+#: smarthexboard/templates/styleguide/index.html:82
+#: smarthexboard/templates/styleguide/index.html:123
+msgid "Basic"
+msgstr "Grundlagen"
+
+#: smarthexboard/templates/styleguide/index.html:67
+msgid "LOGO_TITLE"
+msgstr "Logo"
+
+#: smarthexboard/templates/styleguide/index.html:69
+msgid "LOGO_DESC"
+msgstr "Das Logo repräsentiert ein Hexagon mit dem Namen des Programms: 'HexBoard'."
+
+#: smarthexboard/templates/styleguide/index.html:148
+msgid "Complex"
+msgstr "Komplex"
+
+#: smarthexboard/templates/styleguide/index.html:150
+msgid "Components"
+msgstr "Komponenten"
+
+#: smarthexboard/templates/styleguide/index.html:160
+#, python-format
+msgid "%(turns)s KEY_TXT_TECH_TURNS"
+msgstr "%(turns)s Runden"
+
+#~ msgid "Hello World"
+#~ msgstr "Hallo Welt"

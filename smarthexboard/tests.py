@@ -4,11 +4,12 @@ import uuid
 
 import pytest
 
+from smarthexboard.game.types import TechType
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboard.map.map import Map, Tile
 from smarthexboard.map.types import MapSize, MapType, MovementType, TerrainType, FeatureType
-from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel
+from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel, PlayerTech
 from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
 
@@ -393,6 +394,25 @@ class TestGame(unittest.TestCase):
 		self.assertEqual(len(players), 2)
 		self.assertEqual(players[0], player1)
 		self.assertEqual(players[1], player2)
+
+	@pytest.mark.django_db
+	def test_game_tech(self):
+		map = MapModel(uuid=uuid.uuid4(), content='')
+		map.save()
+		game = GameModel(uuid=uuid.uuid4(), map=map, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+		game.save()
+
+		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
+		player1.save()
+
+		player1Tech1 = PlayerTech(player=player1, tech_identifier='pottery', progress=25, eureka=False)
+		player1Tech1.save()
+
+		player1Tech2 = PlayerTech(player=player1, tech_identifier='irrigation', progress=20, eureka=False)
+		player1Tech2.save()
+
+		canResearchIrrigation = player1.canResearch(TechType.irrigation)
+		self.assertEqual(canResearchIrrigation, True)
 
 
 if __name__ == '__main__':

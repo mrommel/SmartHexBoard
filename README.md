@@ -45,6 +45,30 @@ python3 manage.py makemigrations
 python3 manage.py sqlmigrate smarthexboard 000? <= change this
 python3 manage.py migrate
 ```
+or
+```
+make makemigrations
+```
+
+## Translations
+
+### installation
+
+```
+brew install gettext
+brew link gettext --force
+```
+
+### do the translations
+
+```
+python3 ../manage.py makemessages -l de -e html,txt,py -e xml
+```
+translate with poedit
+
+```
+python3 ../manage.py compilemessages
+```
 
 ## Links
 
@@ -60,4 +84,6 @@ python3 manage.py migrate
 * https://www.behance.net/gallery/57207157/League-of-Legends-In-Game-UI-Style-Guide-2016
 * https://github.com/josephg/noisejs
 * https://fontmeme.com/dawngate-font/
+* https://transfonter.org/
 * https://www.valentinog.com/blog/django-q/
+* https://mitchel.me/slippers/docs/template-tags-filters/

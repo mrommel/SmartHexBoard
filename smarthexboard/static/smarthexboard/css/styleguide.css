@@ -75,14 +75,14 @@ h1, h2, h3, h4, h5, h6 {
   flex: 0 0 auto;
 }
 
-.h-250 { height: 250px; }
+.h-250 { min-height: 250px; }
 @media (min-width: 768px) {
-  .h-md-250 { height: 250px; }
+  .h-md-250 { min-height: 250px; }
 }
 
-.h-500 { height: 500px; }
+.h-500 { min-height: 500px; }
 @media (min-width: 768px) {
-  .h-md-500 { height: 500px; }
+  .h-md-500 { min-height: 500px; }
 }
 
 .border-top { border-top: 1px solid #e5e5e5; }
@@ -148,6 +148,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .container-inner {
     width: 100%;
+}
+
+.tile-image {
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*

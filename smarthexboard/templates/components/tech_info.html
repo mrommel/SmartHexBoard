@@ -1,0 +1,12 @@
+{% load static %}
+<div id="{{ tech_id }}" class="tech {{ tech_status }}">
+    <img class="tech_icon" src="{{ tech_image }}"/>
+    <div class="tech_title">{{ tech_title }}</div>
+    <div class="tech_turn">{{ tech_turn }}</div>
+    <div class="tech_achievements">
+        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}"/>
+        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}"/>
+        <img class="tech_achievement" src="{% static 'smarthexboard/img/techs/tech-pottery@3x.png' %}"/>
+    </div>
+    <div class="tech_eureka">{{ tech_eureka }}</div>
+</div>

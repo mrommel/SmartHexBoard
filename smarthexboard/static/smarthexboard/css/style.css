@@ -21,10 +21,23 @@ html {
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Cinzel';
+    src: url('../font/Cinzel-Regular.eot');
+    src: url('../font/Cinzel-Regular.eot?#iefix') format('embedded-opentype'),
+        url('../font/Cinzel-Regular.woff2') format('woff2'),
+        url('../font/Cinzel-Regular.woff') format('woff'),
+        url('../font/Cinzel-Regular.ttf') format('truetype'),
+        url('../font/Cinzel-Regular.svg#Cinzel-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
     height: 100%;
     overflow: auto;
-    font-family: 'Cinzel Decorative';
+    font-family: 'Cinzel';
     font-weight: normal;
     font-style: normal;
 }
@@ -39,6 +52,12 @@ body {
     background-color: #080808;
     color: #fff;
 }
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel Decorative';
+}
+
+/* special rules */
 
 #game {
     position: fixed;

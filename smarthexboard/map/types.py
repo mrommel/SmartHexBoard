@@ -45,7 +45,7 @@ class Yields:
         self.faith = faith
 
 
-class TerrainType(Enum):
+class TerrainType(ExtendedEnum):
     desert = 'desert'
     grass = 'grass'
     ocean = 'ocean'
@@ -99,6 +99,30 @@ class TerrainType(Enum):
                 return 1.0
 
             return MovementType.max
+
+    def textures(self):
+        if self == TerrainType.desert:
+            return ['terrain_desert@3x.png']
+
+        if self == TerrainType.grass:
+            return ['terrain_grass@3x.png']
+
+        if self == TerrainType.ocean:
+            return ['terrain_ocean@3x.png']
+
+        if self == TerrainType.plains:
+            return ['terrain_plains@3x.png']
+
+        if self == TerrainType.shore:
+            return ['terrain_shore@3x.png']
+
+        if self == TerrainType.snow:
+            return ['terrain_snow@3x.png']
+
+        if self == TerrainType.tundra:
+            return ['terrain_tundra@3x.png', 'terrain_tundra2@3x.png', 'terrain_tundra3@3x.png']
+
+        return []
 
 
 class FeatureData:

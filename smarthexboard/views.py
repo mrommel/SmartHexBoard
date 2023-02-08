@@ -7,6 +7,7 @@ from django.template import loader
 import uuid
 from django_q.tasks import async_task
 
+from smarthexboard.map.types import TerrainType
 from smarthexboard.models import MapGeneration, MapGenerationState, GameModel
 from smarthexboard.utils import is_valid_uuid
 
@@ -34,9 +35,17 @@ def tests(request):
 
 
 def styleguide(request):
+	tiles = dict()
+
+	for terrain in TerrainType.list():
+		if terrain == TerrainType.land or terrain == TerrainType.sea:
+			continue
+
+		tiles[terrain.value] = terrain.textures()[0]
+
 	template = loader.get_template('styleguide/index.html')
 	context = {
-		'abc': 'def',
+		'tiles': tiles,
 	}
 	return HttpResponse(template.render(context, request))
 
@@ -93,12 +102,13 @@ def create_game(request, map_uuid, player, difficulty):
 	# copy map data into game
 	# remove map generation
 	# create game object
-	#game = GameModel()
-	#game.save()
+	# game = GameModel()
+	# game.save()
+
+
 
 	# serialize game
 	json_payload = {
 		#'uuid': game.uuid,
-
 	}
 	return JsonResponse(json_payload, status=201)

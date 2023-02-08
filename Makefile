@@ -33,12 +33,17 @@ clean:
 
 makemigrations: venv
 	./$(VENV)/bin/python3 manage.py makemigrations
-	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0002  # change this
+	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0003  # change this
 	./$(VENV)/bin/python3 manage.py migrate
 
 migrate: venv
 	./$(VENV)/bin/python3 manage.py migrate
 
+preparetranslations: venv
+	./$(VENV)/bin/python3 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*
+
+compiletranslations: venv
+	./$(VENV)/bin/python3 manage.py compilemessages --ignore=venv/*
 
 createsuperuser: venv
 	./$(VENV)/bin/python3 manage.py createsuperuser
