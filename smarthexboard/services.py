@@ -1,11 +1,10 @@
 import json
 
 from smarthexboard.map.generation import MapOptions, MapGenerator
-from smarthexboard.map.types import MapSize, MapType
 from smarthexboard.models import MapGeneration, MapGenerationState
 
 
-def generate_map(uuid):
+def generate_map(uuid, map_size, map_type):
 	def callbackFunc(state):
 		print(f'Progress: {state.value} - {state.message} - {uuid}')
 		# write state to db
@@ -15,10 +14,10 @@ def generate_map(uuid):
 		print(f'saved state: MapGenerationState.RUNNING')
 
 	print(f'start creating map: {uuid}')
-	map_generation_obj = MapGeneration(uuid=uuid, map='', state=MapGenerationState.OPEN)
+	map_generation_obj = MapGeneration(uuid=uuid, map='', size=map_size, state=MapGenerationState.OPEN)
 	map_generation_obj.save()
 
-	options = MapOptions(map_size=MapSize.duel, map_type=MapType.continents)
+	options = MapOptions(map_size=map_size, map_type=map_type)
 	generator = MapGenerator(options)
 
 	grid = generator.generate(callbackFunc)

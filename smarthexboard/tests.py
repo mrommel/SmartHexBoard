@@ -8,8 +8,8 @@ from smarthexboard.game.types import TechType
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboard.map.map import Map, Tile
-from smarthexboard.map.types import MapSize, MapType, MovementType, TerrainType, FeatureType
-from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel, PlayerTech
+from smarthexboard.map.types import MovementType, TerrainType, FeatureType
+from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel, PlayerTech, MapSize, MapType
 from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
 
@@ -344,7 +344,7 @@ class TestMapGenerator(unittest.TestCase):
 			print(f'Progress: {state.value} - {state.message} ')
 			self.last_state_value = state.value
 
-		options = MapOptions(map_size=MapSize.duel, map_type=MapType.continents)
+		options = MapOptions(map_size=MapSize.DUEL, map_type=MapType.CONTINENTS)
 		generator = MapGenerator(options)
 
 		grid = generator.generate(_callback)
@@ -380,9 +380,9 @@ class TestGame(unittest.TestCase):
 	@pytest.mark.django_db
 	def test_game_creation(self):
 		"""Test game"""
-		map = MapModel(uuid=uuid.uuid4(), content='')
-		map.save()
-		game = GameModel(uuid=uuid.uuid4(), map=map, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+		map_model = MapModel(uuid=uuid.uuid4(), content='')
+		map_model.save()
+		game = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
 		game.save()
 
 		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
@@ -397,12 +397,12 @@ class TestGame(unittest.TestCase):
 
 	@pytest.mark.django_db
 	def test_game_tech(self):
-		map = MapModel(uuid=uuid.uuid4(), content='')
-		map.save()
-		game = GameModel(uuid=uuid.uuid4(), map=map, name='Test game', turn=0, handicap=HandicapType.SETTLER)
-		game.save()
+		map_model = MapModel(uuid=uuid.uuid4(), content='')
+		map_model.save()
+		game_model = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+		game_model.save()
 
-		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
+		player1 = Player(leader=LeaderType.ALEXANDER, game=game_model)
 		player1.save()
 
 		player1Tech1 = PlayerTech(player=player1, tech_identifier='pottery', progress=25, eureka=False)
@@ -410,6 +410,9 @@ class TestGame(unittest.TestCase):
 
 		player1Tech2 = PlayerTech(player=player1, tech_identifier='irrigation', progress=20, eureka=False)
 		player1Tech2.save()
+
+		canResearchPottery = player1.canResearch(TechType.pottery)
+		self.assertEqual(canResearchPottery, False)
 
 		canResearchIrrigation = player1.canResearch(TechType.irrigation)
 		self.assertEqual(canResearchIrrigation, True)

@@ -4,8 +4,9 @@ import sys
 
 from smarthexboard.map.base import Array2D, HexPoint, HexDirection
 from smarthexboard.map.map import Map
-from smarthexboard.map.types import ClimateZone, MapType, MapSize, TerrainType, FeatureType, MapAge, MovementType, \
+from smarthexboard.map.types import ClimateZone, TerrainType, FeatureType, MapAge, MovementType, \
     ResourceType, ResourceUsage
+from smarthexboard.models import MapSize, MapType
 from smarthexboard.path_finding.finder import MoveTypeIgnoreUnitsPathfinderDataSource, MoveTypeIgnoreUnitsOptions, \
     AStarPathfinder
 from smarthexboard.perlin_noise.perlin_noise import PerlinNoise
@@ -107,13 +108,13 @@ class MapOptions:
 
     def waterPercentage(self):
         """ abc """
-        if self.map_type == MapType.continents:
+        if self.map_type == MapType.CONTINENTS:
             return 0.52  # low
-        elif self.map_type == MapType.earth:
+        elif self.map_type == MapType.EARTH:
             return 0.65
-        elif self.map_type == MapType.pangaea:
+        elif self.map_type == MapType.PANGAEA:
             return 0.65
-        elif self.map_type == MapType.archipelago:
+        elif self.map_type == MapType.ARCHIPELAGO:
             return 0.65
         #
         #         case .custom:
@@ -236,11 +237,11 @@ class MapGenerator:
         return grid
 
     def _generateHeightMap(self):
-        if self.options.map_type == MapType.continents:
+        if self.options.map_type == MapType.CONTINENTS:
             return HeightMap(self.width, self.height, 4)
-        elif self.options.map_type == MapType.pangaea:
+        elif self.options.map_type == MapType.PANGAEA:
             return HeightMap(self.width, self.height, 2)
-        elif self.options.map_type == MapType.archipelago:
+        elif self.options.map_type == MapType.ARCHIPELAGO:
             return HeightMap(self.width, self.height, 8)
         else:
             return HeightMap(self.width, self.height, 4)  # fallback
@@ -691,7 +692,7 @@ class MapGenerator:
         # https://github.com/Gedemon/Civ5-YnAEMP/blob/db7cd1bc6a0684411aba700838184bcc6272b166/Override/WorldBuilderRandomItems.lua
         # get info about current resource in map
         info = self.numberOfResources(grid, resource)
-        mapFactor = grid.width * grid.height * 100 / (MapSize.standard.size().width * MapSize.standard.size().height)
+        mapFactor = grid.width * grid.height * 100 / (MapSize.STANDARD.size().width * MapSize.STANDARD.size().height)
         absolute_amount = max(1, resource.baseAmount() * mapFactor / 100)
 
         # skip random altering for tests

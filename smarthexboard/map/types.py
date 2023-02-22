@@ -4,31 +4,6 @@ from smarthexboard.game.types import TechType
 from smarthexboard.map.base import Size, ExtendedEnum
 
 
-class MapType(Enum):
-    empty = 'empty'
-    earth = 'earth'
-    pangaea = 'pangaea'
-    continents = 'continents'
-    archipelago = 'archipelago'
-
-
-class MapSize(Enum):
-    duel = 'duel'
-    tiny = 'tiny'
-    small = 'small'
-    standard = 'standard'
-
-    def size(self) -> Size:
-        if self == MapSize.duel:
-            return Size(32, 22)
-        elif self == MapSize.tiny:
-            return Size(42, 32)
-        elif self == MapSize.small:
-            return Size(52, 42)
-        else:  # standard
-            return Size(62, 52)
-
-
 class MapAge(Enum):
     young = 'young'
     normal = 'normal'
