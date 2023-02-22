@@ -332,7 +332,7 @@ function checkMapGeneration() {
             console.log('refresh map generation status: ' + response.status);
 
             // $('#refresh_status').text(response.status);
-            if (response.status == 'Ready') {
+            if (response.status == 'Ready' || response.status == 'Fertig') {
                 abortTimer();
                 loadMap(response.uuid);
             }
