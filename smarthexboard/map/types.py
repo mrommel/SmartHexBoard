@@ -107,7 +107,7 @@ class FeatureData:
         self.is_wonder = is_wonder
 
 
-class FeatureType(Enum):
+class FeatureType(ExtendedEnum):
     none = 'none'
     atoll = 'atoll'
     fallout = 'fallout'
@@ -338,6 +338,59 @@ class FeatureType(Enum):
 
     def isNaturalWonder(self):
         return self.data().is_wonder
+
+    def textures(self):
+        if self == FeatureType.none:
+            return ['feature_none@3x.png']
+
+        if self == FeatureType.atoll:
+            return ['feature_atoll@3x.png']
+
+        if self == FeatureType.fallout:
+            return ['feature_fallout@3x.png']
+
+        if self == FeatureType.floodplains:
+            return ['feature_floodplains@3x.png']
+
+        if self == FeatureType.forest:
+            return ['feature_forest1@3x.png', 'feature_forest2@3x.png']
+
+        if self == FeatureType.ice:
+            return ['feature_ice1@3x.png', 'feature_ice2@3x.png', 'feature_ice3@3x.png', 'feature_ice4@3x.png', 'feature_ice5@3x.png', 'feature_ice6@3x.png']
+
+        if self == FeatureType.marsh:
+            return ['feature_marsh1@3x.png', 'feature_marsh2@3x.png']
+
+        if self == FeatureType.mountains:
+            return ['feature_mountains1@3x.png', 'feature_mountains2@3x.png', 'feature_mountains3@3x.png']
+
+        if self == FeatureType.oasis:
+            return ['feature_oasis@3x.png']
+
+        if self == FeatureType.pine:
+            return ['feature_pine1@3x.png', 'feature_pine2@3x.png']
+
+        if self == FeatureType.rainforest:
+            return ['feature_rainforest1@3x.png', 'feature_rainforest2@3x.png', 'feature_rainforest3@3x.png', 'feature_rainforest4@3x.png', 'feature_rainforest5@3x.png', 'feature_rainforest6@3x.png', 'feature_rainforest7@3x.png', 'feature_rainforest8@3x.png', 'feature_rainforest9@3x.png']
+
+        if self == FeatureType.reef:
+            return ['feature_reef1@3x.png', 'feature_reef2@3x.png', 'feature_reef3@3x.png']
+
+        if self == FeatureType.lake:
+            return []
+
+        if self == FeatureType.volcano:
+            return []
+
+        # natural wonders
+
+        if self == FeatureType.mountEverest:
+            return []
+
+        if self == FeatureType.mountKilimanjaro:
+            return []
+
+        return []
 
 
 class ResourceUsage(ExtendedEnum):

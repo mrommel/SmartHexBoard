@@ -8,7 +8,7 @@ from django.template import loader
 import uuid
 from django_q.tasks import async_task
 
-from smarthexboard.map.types import TerrainType
+from smarthexboard.map.types import TerrainType, FeatureType
 from smarthexboard.models import MapGeneration, MapGenerationState, GameModel, MapModel, Player, LeaderType, \
 	HandicapType, MapSize, MapType
 from smarthexboard.utils import is_valid_uuid
@@ -38,17 +38,28 @@ def tests(request):
 
 
 def styleguide(request):
-	tiles = dict()
+	terrains = dict()
+	features = dict()
 
 	for terrain in TerrainType.list():
 		if terrain == TerrainType.land or terrain == TerrainType.sea:
 			continue
 
-		tiles[terrain.value] = terrain.textures()[0]
+		terrains[terrain.value] = terrain.textures()[0]
+
+	for feature in FeatureType.list():
+		if feature == FeatureType.none:
+			continue
+
+		feature_textures = feature.textures()
+
+		if len(feature_textures) > 0:
+			features[feature.value] = feature_textures[0]
 
 	template = loader.get_template('styleguide/index.html')
 	context = {
-		'tiles': tiles,
+		'terrains': terrains,
+		'features': features,
 	}
 	return HttpResponse(template.render(context, request))
 
@@ -61,15 +72,25 @@ def styleguide(request):
 
 def generate_map(request, map_size: str, map_type: str):
 	try:
-		size_value = MapSize.from_str(map_size)
+		size_value = MapSize.from_str(map_size.upper())
 	except ValueError as e:
-		json_payload = {'map_size': map_size, 'status': f'Invalid request: not a valid map size: {e}'}
+		json_payload = {
+			'error': 'invalid arg',
+			'field': 'map_size',
+			'value': map_size,
+			'message': f'Invalid request: not a valid map size: {e}'
+		}
 		return JsonResponse(json_payload, status=400)
 
 	try:
-		type_value = MapType.from_str(map_type)
+		type_value = MapType.from_str(map_type.upper())
 	except ValueError as e:
-		json_payload = {'map_type': map_type, 'status': f'Invalid request: not a valid map size: {e}'}
+		json_payload = {
+			'error': 'invalid arg',
+			'field': 'map_type',
+			'value': map_type,
+			'message': f'Invalid request: not a valid map type: {e}'
+		}
 		return JsonResponse(json_payload, status=400)
 
 	map_uuid = uuid.uuid4()
@@ -80,10 +101,15 @@ def generate_map(request, map_size: str, map_type: str):
 
 def generate_status(request, map_uuid):
 	if not is_valid_uuid(map_uuid):
-		json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
+		json_payload = {
+			'error': 'invalid arg',
+			'field': 'map_uuid',
+			'value': map_uuid,
+			'message': 'Invalid request: not a valid uuid format'
+		}
 		return JsonResponse(json_payload, status=400)
 
-	map_generation = MapGeneration.objects.get(uuid=map_uuid)
+	map_generation = MapGeneration.objects.filter(uuid=map_uuid).first()
 	if map_generation is None:
 		json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generation with uuid: {map_uuid}'}
 		return JsonResponse(json_payload, status=404)
@@ -127,13 +153,13 @@ def create_game(request, map_uuid, leader, handicap):
 		return JsonResponse(json_payload, status=400)
 
 	try:
-		leader_type = LeaderType.from_str(leader)
+		leader_type = LeaderType.from_str(leader.upper())
 	except ValueError as e:
 		json_payload = {'leader': leader, 'status': f'Invalid request: not a valid leader name: {e}'}
 		return JsonResponse(json_payload, status=400)
 
 	try:
-		handicap_type = HandicapType.from_str(handicap)
+		handicap_type = HandicapType.from_str(handicap.upper())
 	except ValueError as e:
 		json_payload = {'handicap': handicap, 'status': f'Invalid request: not a valid handicap name: {e}'}
 		return JsonResponse(json_payload, status=400)
@@ -157,20 +183,21 @@ def create_game(request, map_uuid, leader, handicap):
 	map_generation.delete()
 
 	# create game with map
-	game = GameModel(uuid=uuid.uuid4(), map=map, name='Test game', turn=0, handicap=handicap_type)
+	game = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=handicap_type)
 	game.save()
 
 	# create players
-	num_players = map_generation.size.numOfPlayers()
-	leaders = LeaderType.values.filter(lambda x: x != leader)
+	map_size = MapSize(map_generation.size)
+	num_players = map_size.numOfPlayers()
+	leaders = list(filter(lambda x: x != leader_type, LeaderType.values))
 	random.shuffle(leaders)
 
-	human_player = Player(leader=leader, human=True, game=game)
+	human_player = Player(leader=leader_type, human=True, game=game)
 	human_player.save()
 
 	for _ in range(num_players - 1):
 		first_leader = leaders.pop(0)
-		player = Player(leader=first_leader, game=game)
+		player = Player(leader=first_leader, human=False, game=game)
 		player.save()
 
 	# serialize game

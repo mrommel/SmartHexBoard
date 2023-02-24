@@ -1,4 +1,4 @@
-<!doctype html>{% load static %}{% load i18n %}
+<!doctype html>{% load static %}{% load i18n %}{% load define_action %}
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -154,11 +154,14 @@
 
                             <div class="col-3 col-lg-3 col-xl-3">
                                 {% #card heading="Tech Info (active)" %}
-                                    <div id="tech_content7">
+                                    <div>
                                         {% static 'smarthexboard/img/techs/tech-pottery@3x.png' as tech_image %}
                                         {% translate "TXT_KEY_TECH_POTTERY_NAME" as tech_title %}
                                         {% blocktrans with turns=1 asvar tech_turn %}{{ turns }} KEY_TXT_TECH_TURNS{% endblocktrans %}
-                                        {% tech_info tech_id="tech_pottery" tech_status="tech-active" tech_image=tech_image tech_title=tech_title tech_turn=tech_turn %}
+                                        {% translate "TXT_KEY_TO_BOOST" as boost_text %}
+                                        {% translate "TXT_KEY_TECH_POTTERY_EUREKA" as tech_eureka %}
+                                        {% define ""|add:boost_text|add:" "|add:tech_eureka as eureka_text %}
+                                        {% tech_info tech_id="tech_pottery" tech_status="tech-active" tech_image=tech_image tech_title=tech_title tech_turn=tech_turn tech_eureka=eureka_text %}
                                     </div>
                                 {% /card %}
                             </div>
@@ -273,11 +276,29 @@
                             <a class="text-dark" href="#">Tiles</a>
                         </h3>
 
+                        <h4 class="mb-0">
+                            <a class="text-dark" href="#">Terrain</a>
+                        </h4>
+
                         <div class="row">
-                            {% for key, value in tiles.items %}
+                            {% for key, value in terrains.items %}
                             <div class="col-3 col-lg-3 col-xl-3">
                                 {% #card heading=key %}
                                     <img src="/static/smarthexboard/img/terrains/{{ value }}" class="tile-image" />
+                                {% /card %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <h4 class="mb-0">
+                            <a class="text-dark" href="#">Features</a>
+                        </h4>
+
+                        <div class="row">
+                            {% for key, value in features.items %}
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                {% #card heading=key %}
+                                    <img src="/static/smarthexboard/img/features/{{ value }}" class="tile-image" />
                                 {% /card %}
                             </div>
                             {% endfor %}

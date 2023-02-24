@@ -302,7 +302,7 @@ function startMapGeneration() {
 
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/generate_map",
+        url: "/smarthexboard/generate_map/DUEL/CONTINENTS/",
         /*contentType: "application/json",
         data: JSON.stringify(formData), <= map type, size, etc
         dataType: "json",*/
