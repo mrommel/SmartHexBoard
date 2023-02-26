@@ -394,8 +394,8 @@ ResourceType.fromString = function(resource_name) {
             return ResourceTypes.copper.clone();
         case 'stone':
             return ResourceTypes.stone.clone();
-        case 'bananas':
-            return ResourceTypes.bananas.clone();
+        case 'banana':
+            return ResourceTypes.banana.clone();
         case 'cattle':
             return ResourceTypes.cattle.clone();
         case 'fish':
@@ -440,7 +440,7 @@ const ResourceTypes = {
     sheep: new ResourceType("sheep", "resource_sheep@3x.png"),
     copper: new ResourceType("copper", "resource_copper@3x.png"),
     stone: new ResourceType("stone", "resource_stone@3x.png"),
-    bananas: new ResourceType("bananas", "resource_bananas@3x.png"),
+    banana: new ResourceType("banana", "resource_banana@3x.png"),
     cattle: new ResourceType("cattle", "resource_cattle@3x.png"),
     fish: new ResourceType("fish", "resource_fish@3x.png"),
 

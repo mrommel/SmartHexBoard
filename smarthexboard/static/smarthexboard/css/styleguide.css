@@ -221,3 +221,17 @@ media (min-width: 1200px)
     white-space: nowrap;
     border-radius: 0.25rem;
 }
+
+/* tiles */
+
+.resource-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.image {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+}

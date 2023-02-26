@@ -1,14 +1,12 @@
 import json
 import random
-
-from django.core.exceptions import BadRequest
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.template import loader
 import uuid
+
+from django.http import HttpResponse, JsonResponse
+from django.template import loader
 from django_q.tasks import async_task
 
-from smarthexboard.map.types import TerrainType, FeatureType
+from smarthexboard.map.types import TerrainType, FeatureType, ResourceType
 from smarthexboard.models import MapGeneration, MapGenerationState, GameModel, MapModel, Player, LeaderType, \
 	HandicapType, MapSize, MapType
 from smarthexboard.utils import is_valid_uuid
@@ -40,6 +38,7 @@ def tests(request):
 def styleguide(request):
 	terrains = dict()
 	features = dict()
+	resources = dict()
 
 	for terrain in TerrainType.list():
 		if terrain == TerrainType.land or terrain == TerrainType.sea:
@@ -56,10 +55,14 @@ def styleguide(request):
 		if len(feature_textures) > 0:
 			features[feature.value] = feature_textures[0]
 
+	for resource in ResourceType.list():
+		resources[resource.value] = resource.texture()
+
 	template = loader.get_template('styleguide/index.html')
 	context = {
 		'terrains': terrains,
 		'features': features,
+		'resources': resources,
 	}
 	return HttpResponse(template.render(context, request))
 

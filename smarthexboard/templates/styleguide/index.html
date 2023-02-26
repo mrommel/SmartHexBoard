@@ -298,7 +298,37 @@
                             {% for key, value in features.items %}
                             <div class="col-3 col-lg-3 col-xl-3">
                                 {% #card heading=key %}
-                                    <img src="/static/smarthexboard/img/features/{{ value }}" class="tile-image" />
+                                    <div class="resource-container tile-image">
+                                        {% if key == 'atoll' or key == 'reef' %}
+                                            <img src="/static/smarthexboard/img/terrains/terrain_ocean@3x.png" class="terrain-image image" />
+                                        {% elif key == 'oasis' %}
+                                            <img src="/static/smarthexboard/img/terrains/terrain_desert@3x.png" class="terrain-image image" />
+                                        {% else %}
+                                            <img src="/static/smarthexboard/img/terrains/terrain_grass@3x.png" class="terrain-image image" />
+                                        {% endif %}
+                                        <img src="/static/smarthexboard/img/features/{{ value }}" class="resource-image image" />
+                                    </div>
+                                {% /card %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <h4 class="mb-0">
+                            <a class="text-dark" href="#">Resources</a>
+                        </h4>
+
+                        <div class="row">
+                            {% for key, value in resources.items %}
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                {% #card heading=key %}
+                                    <div class="resource-container tile-image">
+                                        {% if key == 'fish' or key == 'whales' or key == 'shipwreck' %}
+                                            <img src="/static/smarthexboard/img/terrains/terrain_ocean@3x.png" class="terrain-image image" />
+                                        {% else %}
+                                            <img src="/static/smarthexboard/img/terrains/terrain_grass@3x.png" class="terrain-image image" />
+                                        {% endif %}
+                                        <img src="/static/smarthexboard/img/resources/{{ value }}" class="resource-image image" />
+                                    </div>
                                 {% /card %}
                             </div>
                             {% endfor %}

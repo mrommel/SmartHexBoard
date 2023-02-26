@@ -831,6 +831,61 @@ class ResourceType(ExtendedEnum):
         """
         return self._data().reveal_civic
 
+    def texture(self) -> str:
+        # default
+        if self == ResourceType.none:
+            return 'resource_none@3x.png'
+
+        # bonus
+        if self == ResourceType.wheat:
+            return 'resource_wheat@3x.png'
+        if self == ResourceType.rice:
+            return 'resource_rice@3x.png'
+        if self == ResourceType.deer:
+            return 'resource_deer@3x.png'
+        if self == ResourceType.sheep:
+            return 'resource_sheep@3x.png'
+        if self == ResourceType.copper:
+            return 'resource_copper@3x.png'
+        if self == ResourceType.stone:
+            return 'resource_stone@3x.png'
+        if self == ResourceType.banana:
+            return 'resource_banana@3x.png'
+        if self == ResourceType.cattle:
+            return 'resource_cattle@3x.png'
+        if self == ResourceType.fish:
+            return 'resource_fish@3x.png'
+
+        # luxury
+        if self == ResourceType.citrus:
+            return 'resource_citrus@3x.png'
+        if self == ResourceType.whales:
+            return 'resource_whales@3x.png'
+
+        # strategic
+        if self == ResourceType.horses:
+            return 'resource_horses@3x.png'
+        if self == ResourceType.iron:
+            return 'resource_iron@3x.png'
+        if self == ResourceType.coal:
+            return 'resource_coal@3x.png'
+        if self == ResourceType.oil:
+            return 'resource_oil@3x.png'
+        if self == ResourceType.aluminum:
+            return 'resource_aluminium@3x.png'
+        if self == ResourceType.uranium:
+            return 'resource_uranium@3x.png'
+        if self == ResourceType.niter:
+            return 'resource_niter@3x.png'
+
+        # artifacts
+        if self == ResourceType.antiquitySite:
+            return 'resource_antiquitySite@3x.png'
+        if self == ResourceType.shipwreck:
+            return 'resource_shipwreck@3x.png'
+
+        raise ValueError(f'cannot get texture for {self}')
+
     def __str__(self):
         return self.value
 
