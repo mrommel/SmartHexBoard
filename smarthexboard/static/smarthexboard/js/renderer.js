@@ -11,6 +11,7 @@ import { HexPoint, HexDirections, HexDirection } from './base/point.js';
 import { TerrainTypes, BeachTypes, SnowTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { TechTypes } from './game/types.js';
 import { Map } from './map/map.js';
+import { Assets } from './assets.js';
 
 function Renderer() {
 
@@ -39,12 +40,8 @@ function Renderer() {
 	this.resourcesCanvas = null;
 	this.resourcesCtx = null;
 
-	// image cache dicts
-	this.imgTerrains = {};
-	this.imgResources = {};
-	this.imgFeatures = {};
-	this.imgTechs = {};
-	this.texturesLoaded = false;
+	// image cache
+	this.assets = new Assets();
 
     // Check if the canvases already exists in the current document to prevent
     // overlaying multiple rendering instances
@@ -83,6 +80,22 @@ function Renderer() {
     document.getElementById('game').style.height = window.innerHeight + "px";
     document.getElementById('game').tabIndex = 1; // For focusing the game area
     document.getElementById('game').focus();
+}
+
+Renderer.prototype.cacheImages = function(callbackFunction) {
+
+    var _this = this;
+    this.assets.cacheTileImages(function() {
+        _this.assets.cacheGameImages(function() {
+            callbackFunction();
+            console.log('tile and game assets cached');
+        });
+    });
+}
+
+Renderer.prototype.texturesLoaded = function() {
+
+    return this.assets.tileTexturesLoaded && this.assets.gameTexturesLoaded;
 }
 
 Renderer.prototype.coastTextureNameAt = function(hexPoint) {
@@ -145,7 +158,7 @@ Renderer.prototype.terrainImageAt = function(hexPoint) {
         textureName = textureNames[index];
     }
 
-    return this.imgTerrains[textureName];
+    return this.assets.terrainTexture(textureName);
 }
 
 Renderer.prototype.snowImageAt = function(hexPoint) {
@@ -178,7 +191,7 @@ Renderer.prototype.snowImageAt = function(hexPoint) {
         return null;
     }
 
-    return this.imgTerrains[textureName];
+    return this.assets.terrainTexture(textureName);
 }
 
 Renderer.prototype.render = function(orow, ocol, range) {
@@ -240,14 +253,14 @@ Renderer.prototype.render = function(orow, ocol, range) {
                 // console.log('feature=' + feature + ', at=' + hex);
                 var index = Math.abs(hex.x + hex.y) % feature.textures.length;
                 var textureName = feature.textures[index];
-                var img = this.imgFeatures[textureName];
+                var img = this.assets.featureTexture(textureName);
                 this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
 
             var resource = this.map.resourceAt(hex);
             if (resource.name != ResourceTypes.none.name) {
                 // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
-                var img = this.imgResources[resource.texture];
+                var img = this.assets.resourceTexture(resource.texture);
                 this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
         }
@@ -256,6 +269,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
 
 // Returns min and max row,col for a range around a cell(row,col)
 Renderer.prototype.getZoneRangeLimits =	function(row, col, range) {
+
     var z = { srow: 0, scol: 0, erow: this.map.rows, ecol: this.map.cols };
 
     if (row === null || col === null)
@@ -284,6 +298,7 @@ Renderer.prototype.getZoneRangeLimits =	function(row, col, range) {
 // Returns the top corner position of a hex in screen coordinates relative to canvas
 // if absolute is set canvas offsets are added to positions
 Renderer.prototype.cellToScreen = function(row, col, absolute) {
+
     var x0, y0;
 
     if (col & 1) { // odd column
@@ -305,6 +320,7 @@ Renderer.prototype.cellToScreen = function(row, col, absolute) {
 
 // Converts from screen x,y to row,col in map array
 Renderer.prototype.screenToCell = function(x, y) {
+
     var vrow; // virtual graphical rows
     var trow, tcol; // true map rows/cols
 
@@ -318,189 +334,6 @@ Renderer.prototype.screenToCell = function(x, y) {
     if (trow > this.map.rows - 1) trow = this.map.rows - 1;
     if (tcol > this.map.cols - 1) tcol = this.map.cols - 1;
     return new Cell(trow, tcol);
-}
-
-// Caches images, func a function to call upon cache completion
-Renderer.prototype.cacheTerrainImages = function(callbackFunction) {
-	var imgList = [];
-	Object.values(TerrainTypes).forEach(terrainType => {
-	    terrainType.textures.forEach(terrainTexture => {
-	        imgList.push(terrainTexture);
-	    });
-	    terrainType.hillsTextures.forEach(terrainTexture => {
-	        imgList.push(terrainTexture);
-	    });
-	});
-	Object.values(SnowTypes).forEach(snowType => {
-	    imgList.push(snowType.textures[0]);
-	});
-	Object.values(BeachTypes).forEach(beachType => {
-	    imgList.push(beachType.textures[0]);
-	});
-	Object.values(FeatureTypes).forEach(featureType => {
-	    featureType.textures.forEach(featureTexture => {
-	        imgList.push(featureTexture);
-	    });
-	});
-	Object.values(ResourceTypes).forEach(resourceType => {
-	    imgList.push(resourceType.texture);
-	});
-
-    var loaded = 0;
-    var toLoad = Object.keys(imgList).length;
-
-    console.log('start caching ' + toLoad + ' images');
-
-    for (var i in imgList) {
-        var imgName = imgList[i];
-
-        if (imgName.startsWith('terrain_')) {
-            if (typeof this.imgTerrains[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgTerrains[imgName] = new Image();
-            this.imgTerrains[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgTerrains[imgName].src = '/static/smarthexboard/img/terrains/' + imgName;
-
-        } else if (imgName.startsWith('beach-')) {
-            if (typeof this.imgTerrains[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgTerrains[imgName] = new Image();
-            this.imgTerrains[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgTerrains[imgName].src = '/static/smarthexboard/img/beaches/' + imgName;
-
-        } else if (imgName.startsWith('snow-')) {
-            if (typeof this.imgTerrains[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgTerrains[imgName] = new Image();
-            this.imgTerrains[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgTerrains[imgName].src = '/static/smarthexboard/img/snow/' + imgName;
-
-        } else if (imgName.startsWith('feature_')) {
-            if (typeof this.imgFeatures[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgFeatures[imgName] = new Image();
-            this.imgFeatures[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgFeatures[imgName].src = '/static/smarthexboard/img/features/' + imgName;
-
-        } else if (imgName.startsWith('resource_')) {
-            if (typeof this.imgResources[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgResources[imgName] = new Image();
-            this.imgResources[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' terrain assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgResources[imgName].src = '/static/smarthexboard/img/resources/' + imgName;
-        } else {
-            throw new Error('image type not handled: ' + imgName);
-        }
-    }
-}
-
-// Cleans up unused unit images
-Renderer.prototype.cleanupTerrainImagesCache = function(imgList) {
-    for (var i in imgTerrains) {
-        if (typeof imgList[imgUnits[i]] !== "undefined") {
-            // console.log("Removing unused entry %s", imgUnits[i].src);
-            imgTerrains[i] = null;
-            delete(imgTerrains[i]);
-        }
-    }
-}
-
-// Caches images, func a function to call upon cache completion
-Renderer.prototype.cacheGameImages = function(callbackFunction) {
-	var imgList = [];
-
-	Object.values(TechTypes).forEach(techType => {
-	    imgList.push(techType.texture);
-	});
-
-	var loaded = 0;
-    var toLoad = Object.keys(imgList).length;
-
-    console.log('start caching ' + toLoad + ' game images');
-
-    for (var i in imgList) {
-        var imgName = imgList[i];
-
-        if (imgName.startsWith('tech-')) {
-            if (typeof this.imgTechs[imgName] !== "undefined") {
-                loaded++;
-                continue;
-            }
-
-            this.imgTechs[imgName] = new Image();
-            this.imgTechs[imgName].onload = function() {
-                // console.log('Cached ' + this.src);
-                loaded++;
-                if (loaded == toLoad) {
-                    // console.log('Loaded ' + loaded + ' game assets');
-                    if (callbackFunction) {
-                        callbackFunction();
-                    }
-                }
-            }
-            this.imgTechs[imgName].src = '/static/smarthexboard/img/techs/' + imgName;
-        }
-    }
 }
 
 export { Renderer };

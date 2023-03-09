@@ -448,7 +448,7 @@ class ResourceType(ExtendedEnum):
     iron = 'iron'  # https://civilization.fandom.com/wiki/Iron_(Civ6)
     coal = 'coal'  # https://civilization.fandom.com/wiki/Coal_(Civ6)
     oil = 'oil'  # https://civilization.fandom.com/wiki/Oil_(Civ6)
-    aluminum = 'aluminium'  # https://civilization.fandom.com/wiki/Aluminum_(Civ6)
+    aluminum = 'aluminum'  # https://civilization.fandom.com/wiki/Aluminum_(Civ6)
     uranium = 'uranium'  # https://civilization.fandom.com/wiki/Uranium_(Civ6)
     niter = 'niter'  # https://civilization.fandom.com/wiki/Niter_(Civ6)
 
@@ -872,7 +872,7 @@ class ResourceType(ExtendedEnum):
         if self == ResourceType.oil:
             return 'resource_oil@3x.png'
         if self == ResourceType.aluminum:
-            return 'resource_aluminium@3x.png'
+            return 'resource_aluminum@3x.png'
         if self == ResourceType.uranium:
             return 'resource_uranium@3x.png'
         if self == ResourceType.niter:

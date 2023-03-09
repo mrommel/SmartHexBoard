@@ -41,19 +41,19 @@ window.resizeCanvas = function resizeCanvas() {
 
 function drawMap() {
 
-    if (renderer.texturesLoaded) {
+    if (renderer.texturesLoaded()) {
         setupCanvas();
 
         // Full page rendering
         renderer.render();
     } else {
-        throw new Error('no textures loaded');
+        console.log('textures not initialzed yet');
     }
 }
 
 function setupCanvas(canvasSize) {
 
-    if (!renderer.texturesLoaded) {
+    if (!renderer.texturesLoaded()) {
         return;
     }
 
@@ -262,11 +262,8 @@ function initUI() {
     // current state is splash
 
     // start caching images
-    renderer.cacheTerrainImages(function() {
-        renderer.cacheGameImages(function() {
-            renderer.texturesLoaded = true;
-            changeUIState(UIState.menu);
-        });
+    renderer.cacheImages(function() {
+        changeUIState(UIState.menu);
     });
 }
 

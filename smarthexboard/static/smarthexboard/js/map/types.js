@@ -453,7 +453,7 @@ const ResourceTypes = {
     iron: new ResourceType("iron", "resource_iron@3x.png"),
     coal: new ResourceType("coal", "resource_coal@3x.png"),
     oil: new ResourceType("oil", "resource_oil@3x.png"),
-	aluminium: new ResourceType("aluminium", "resource_aluminium@3x.png"),
+	aluminum: new ResourceType("aluminum", "resource_aluminum@3x.png"),
 	uranium: new ResourceType("uranium", "resource_uranium@3x.png"),
 	niter: new ResourceType("niter", "resource_niter@3x.png"),
 
