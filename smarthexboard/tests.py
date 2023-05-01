@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from smarthexboard.game.types import TechType
+from smarthexboard.game.types import TechType, CivicType
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboard.map.map import Map, Tile
@@ -374,6 +374,16 @@ class TestPathfinding(unittest.TestCase):
 		self.assertEqual(len(path), 5)
 		for i, n in enumerate(target_path):
 			self.assertEqual(n, path[i])
+
+
+class TestAssets(unittest.TestCase):
+	def test_techs_data(self):
+		for tech in list(TechType):
+			_ = tech.name()
+
+	def test_civics_data(self):
+		for civic in list(CivicType):
+			_ = civic.name()
 
 
 class TestGame(unittest.TestCase):
