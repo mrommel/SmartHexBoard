@@ -1,6 +1,7 @@
 from enum import Enum
 
-from smarthexboard.game.types import TechType
+from smarthexboard.game.base import Yields
+from smarthexboard.game.techs import TechType
 from smarthexboard.map.base import Size, ExtendedEnum
 
 
@@ -8,16 +9,6 @@ class MapAge(Enum):
     young = 'young'
     normal = 'normal'
     old = 'old'
-
-
-class Yields:
-    def __init__(self, food, production, gold, science=0, culture=0, faith=0):
-        self.food = food
-        self.production = production
-        self.gold = gold
-        self.science = science
-        self.culture = culture
-        self.faith = faith
 
 
 class TerrainType(ExtendedEnum):

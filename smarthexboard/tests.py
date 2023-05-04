@@ -4,7 +4,10 @@ import uuid
 
 import pytest
 
-from smarthexboard.game.types import TechType, CivicType
+from smarthexboard.game.achievements import CivicAchievements
+from smarthexboard.game.buildings import BuildingType
+from smarthexboard.game.civics import CivicType
+from smarthexboard.game.techs import TechType
 from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboard.map.map import Map, Tile
@@ -384,6 +387,43 @@ class TestAssets(unittest.TestCase):
 	def test_civics_data(self):
 		for civic in list(CivicType):
 			_ = civic.name()
+
+	def test_civics_envoys(self):
+		# https://civilization.fandom.com/wiki/Envoy_(Civ6)
+		# The following civics grant free Envoy Envoys upon discovery: Mysticism, Military Training, Theology,
+		# Naval Tradition, Mercenaries, Colonialism, Opera and Ballet, Natural History, Scorched Earth, Conservation,
+		# Capitalism, Nuclear Program, and Cultural Heritage (and, in Gathering Storm, Near Future Governance and
+		# Global Warming Mitigation). The civics between Mercenaries and Conservation grant +2, while Conservation and
+		# all others afterward grant +3.
+		civics_with_envoys = [
+			CivicType.mysticism, CivicType.militaryTradition, CivicType.theology, CivicType.navalTradition,
+			CivicType.mercenaries, CivicType.colonialism, CivicType.operaAndBallet, CivicType.naturalHistory,
+			CivicType.scorchedEarth, CivicType.conservation, CivicType.capitalism, CivicType.nuclearProgram,
+			CivicType.culturalHeritage, CivicType.nearFutureGovernance, CivicType.globalWarmingMitigation
+		]
+
+		for civic_with_envoys in civics_with_envoys:
+			self.assertGreater(civic_with_envoys.envoys(), 0, f'envoys of {civic_with_envoys} should be greater than zero')
+
+	def test_civics_governors(self):
+		# Civic Tree - There are a total of 13 civics that will grant 1 Governor Title. They are State Workforce,
+		# Early Empire, Defensive Tactics, Recorded History, Medieval Faires, Guilds, Civil Engineering, Nationalism,
+		# Mass Media, Mobilization, Globalization, Social Media, and Near Future Governance. Advancing through the
+		# civic tree is the most basic and most common way of acquiring Governor Titles.
+		civics_with_governors = [
+			CivicType.stateWorkforce, CivicType.earlyEmpire, CivicType.defensiveTactics, CivicType.recordedHistory,
+			CivicType.medievalFaires, CivicType.guilds, CivicType.civilEngineering, CivicType.nationalism,
+			CivicType.massMedia, CivicType.mobilization, CivicType.globalization, CivicType.socialMedia,
+			CivicType.nearFutureGovernance
+		]
+
+		for civic_with_governors in civics_with_governors:
+			self.assertTrue(civic_with_governors.governorTitle(), f'envoys of {civic_with_governors} should be True')
+
+	def test_civic_achievements(self):
+		achievements = CivicAchievements(CivicType.gamesAndRecreation)
+
+		self.assertIn(BuildingType.arena, achievements.buildingTypes)
 
 
 class TestGame(unittest.TestCase):

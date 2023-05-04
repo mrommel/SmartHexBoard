@@ -6,7 +6,8 @@ from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.utils.translation import gettext_lazy as _
 
-from smarthexboard.game.types import TechType
+from smarthexboard.game.civilizations import CivilizationType
+from smarthexboard.game.techs import TechType
 from smarthexboard.map.base import Size
 
 
@@ -206,18 +207,6 @@ class GameModel(models.Model):
 
 	def players(self):
 		return Player.objects.filter(game=self)
-
-
-class CivilizationType(Enum):
-	greek = 'greek'
-	roman = 'roman'
-	english = 'english'
-	aztecs = 'aztecs'
-	persian = 'persian'
-	french = 'french'
-	egyptian = 'egyptian'
-	german = 'german'
-	russian = 'russian'
 
 
 class LeaderType(models.TextChoices):
