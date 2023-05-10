@@ -1319,4 +1319,4 @@ class TechType(ExtendedEnum):
 		raise AttributeError(f'cant get data for tech {self}')
 
 	def __str__(self):
-		return self.value
+		return self.name()

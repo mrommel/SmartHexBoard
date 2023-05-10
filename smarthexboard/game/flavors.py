@@ -30,6 +30,7 @@ class FlavorType(ExtendedEnum):
 	greatPeople = 'greatPeople'
 	religion = 'religion'
 	tourism = 'tourism'
+	recon = 'recon'
 
 
 class Flavor:

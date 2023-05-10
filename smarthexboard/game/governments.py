@@ -16,10 +16,10 @@ class GovernmentType(ExtendedEnum):
 	chiefdom = 'chiefdom'
 
 	def name(self) -> str:
-		return ''
+		return self._data().name
 
 	def requiredCivic(self) -> Optional[CivicType]:
-		return None
+		return self._data().requiredCivic
 
 	def _data(self) -> GovernmentTypeData:
 		if self == GovernmentType.none:
