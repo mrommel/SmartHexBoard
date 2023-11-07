@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django_q.tasks import async_task
 
+from setup.settings import DEBUG
 from smarthexboard.map.types import TerrainType, FeatureType, ResourceType
 from smarthexboard.models import MapGeneration, MapGenerationState, GameModel, MapModel, Player, LeaderType, \
 	HandicapType, MapSize, MapType
@@ -22,6 +23,7 @@ def index(request):
 	template = loader.get_template('index.html')
 	context = {
 		'navi_home': 'active',
+		'debug': DEBUG
 	}
 	return HttpResponse(template.render(context, request))
 

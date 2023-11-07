@@ -41,7 +41,6 @@
         <div id="tooltip">Tile</div>
     </div>
 
-
     <!--ui element container-->
     <div id="ui" class="blurred">
         <!--ui state: splash-->
@@ -67,8 +66,8 @@
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
                     <ul class="menu">
-                        <li><a href="#" onclick="play(); return false;">Play</a></h3></li>
-                        <li><a href="#" onclick="options(); return false;">Options</a></h3></li>
+                        <li><a href="#" onclick="play(); return false;">Play</a></li>
+                        <li><a href="#" onclick="options(); return false;">Options</a></li>
                     </ul>
                 </div>
             </div>
@@ -81,10 +80,13 @@
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
                     <ul class="menu">
-                        <li><a href="#" onclick="return false;">Option 1</a></h3></li>
-                        <li><a href="#" onclick="return false;">Option 2</a></h3></li>
+                        <li><a href="#" onclick="return false;">Music</a></li>
+                        <li><a href="#" onclick="return false;">Graphics</a></li>
+                        {% if debug %}
+                        <li><a href="http://127.0.0.1:8081/admin/" target="_blank">Admin</a></li>
+                        {% endif %}
                         <li class="noBullet">&nbsp;</li>
-                        <li><a href="#" onclick="quitOptions(); return false;">Back to Menu</a></h3></li>
+                        <li><a href="#" onclick="quitOptions(); return false;">Back to Menu</a></li>
                     </ul>
                 </div>
             </div>

@@ -34,7 +34,7 @@ make run
 ```
 # source venv/bin/activate
 # python3 manage.py qcluster
-make run
+make run-qcluster
 ```
 
 ## Migrations
