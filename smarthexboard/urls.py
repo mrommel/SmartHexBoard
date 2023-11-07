@@ -16,6 +16,8 @@ urlpatterns = [
 
     # game api
     path('create_game/<str:map_uuid>/<str:leader>/<str:handicap>/', views.create_game, name='create_game'),
+    path('game_turn/<str:game_uuid>/', views.game_turn, name='game_turn'),
 
+    # debug
     path('styleguide', views.styleguide, name='styleguide'),
 ]

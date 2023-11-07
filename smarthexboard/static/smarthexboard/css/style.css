@@ -666,6 +666,18 @@ h1, h2, h3, h4, h5, h6 {
     height: 168px;
     background-image: url("../img/ui/unit-canvas@3x.png");
     background-size: cover;
+    float: inline-start;
+    pointer-events: all;
+}
+
+#uistate-game #game_button {
+    width: 124px;
+    height: 124px;
+    background-image: url("../img/ui/buttons/button_generic@3x.png");
+    background-size: cover;
+    margin-left: 10px;
+    margin-top: 33px;
+    display: block;
 }
 
 #uistate-game #right_footer_container {

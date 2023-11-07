@@ -293,6 +293,8 @@ function handleError(xhr, textStatus, exception) {
 
 var check_timer;
 var map_uuid;
+var game_uuid;
+
 function startMapGeneration() {
     // reset map_uuid
     map_uuid = '';
@@ -300,9 +302,6 @@ function startMapGeneration() {
     $.ajax({
         type:"GET",
         url: "/smarthexboard/generate_map/DUEL/CONTINENTS/",
-        /*contentType: "application/json",
-        data: JSON.stringify(formData), <= map type, size, etc
-        dataType: "json",*/
         success: function(response) {
             map_uuid = response.uuid;
             console.log('started generating map ' + map_uuid);
@@ -340,7 +339,7 @@ function checkMapGeneration() {
     });
 }
 
-function loadMap(map_loadMap) {
+function loadMap(map_uuid) {
 
     $.ajax({
         type:"GET",
@@ -351,14 +350,34 @@ function loadMap(map_loadMap) {
 
             var mapObj = new Map();
             mapObj.fromJson(json_obj);
-            console.log('map: ' + map_uuid + ' loaded');
+            console.log('map: ' + map_uuid + ' deserialized');
             renderer.map = mapObj;
+
+            // create game and store game_uuid
+            createGame(map_uuid);
 
             var canvasSize = mapObj.canvasSize();
             // create canvas with this size
             setupCanvas(canvasSize);
 
             changeUIState(UIState.game);
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
+function createGame(map_uuid) {
+
+    $.ajax({
+        type:"GET",
+        dataType: "json",
+        url: "/smarthexboard/create_game/" + map_uuid + "/Trajan/Settler/",
+        success: function(json_obj) {
+            console.log('created game: ' + map_uuid);
+            console.log(json_obj.game_uuid);
+            game_uuid = json_obj.game_uuid;
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
@@ -411,6 +430,22 @@ window.openGovernorsDialog = function openGovernorsDialog() {
 
 window.openMomentsDialog = function openMomentsDialog() {
     console.log('openMomentsDialog');
+}
+
+window.turnButtonClicked = function turnButtonClicked() {
+    console.log('turnButtonClicked');
+
+    $.ajax({
+        type:"GET",
+        dataType: "json",
+        url: "/smarthexboard/game_turn/" + game_uuid + "/",
+        success: function(json_obj) {
+            console.log('game turned: ' + game_uuid);
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
 }
 
 window.openGameMenu = function openGameMenu() {

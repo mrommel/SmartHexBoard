@@ -210,3 +210,11 @@ def create_game(request, map_uuid, leader, handicap):
 		'game_uuid': game.uuid,
 	}
 	return JsonResponse(json_payload, status=201)
+
+
+def game_turn(request, game_uuid):
+	json_payload = {
+		'game_uuid': game_uuid,
+	}
+
+	return JsonResponse(json_payload, status=200)
