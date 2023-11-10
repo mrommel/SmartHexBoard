@@ -4,7 +4,7 @@ from time import sleep
 
 import pytest
 
-from smarthexboard.models import MapGenerationState, MapGeneration, MapSize, MapType
+from smarthexboard.models import MapGenerationState, MapGenerationData, MapSizeModel, MapTypeModel
 from smarthexboard.services import generate_map
 from smarthexboard.utils import is_valid_uuid
 from django.test import Client
@@ -111,11 +111,11 @@ class TestGenerationRequest(unittest.TestCase):
 		self.assertEqual(is_valid_uuid(map_uuid), True)
 
 		# fake the async generation - not working with the test currently
-		generate_map(map_uuid, MapSize.DUEL, MapType.CONTINENTS)
+		generate_map(map_uuid, MapSizeModel.DUEL, MapTypeModel.CONTINENTS)
 		sleep(1)
 
 		# check that there is an entry in the database
-		map_generation = MapGeneration.objects.filter(uuid=map_uuid).first()
+		map_generation = MapGenerationData.objects.filter(uuid=map_uuid).first()
 		if map_generation is None:
 			self.fail()
 

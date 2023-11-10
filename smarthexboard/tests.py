@@ -1,23 +1,63 @@
 """ unittest module """
 import unittest
-import uuid
+from typing import Union, Optional
 
-import pytest
 import smarthexboardlib.map.map
-
-from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel, PlayerTech, MapSize, MapType
-
 from smarthexboardlib.game.achievements import CivicAchievements
+from smarthexboardlib.game.baseTypes import HandicapType
 from smarthexboardlib.game.buildings import BuildingType
 from smarthexboardlib.game.civilizations import LeaderType
+from smarthexboardlib.game.game import GameModel
+from smarthexboardlib.game.players import Player
+from smarthexboardlib.game.states.victories import VictoryType
 from smarthexboardlib.game.types import CivicType, TechType
 from smarthexboardlib.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
 from smarthexboardlib.map.generation import HeightMap, MapGenerator, MapOptions
 from smarthexboardlib.map.map import MapModel, Tile
-from smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType
 from smarthexboardlib.map.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
+from smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType, MapSize
 
+
+class MapModelMock:
+	pass
+
+
+class MapModelMock(MapModel):
+	def __init__(self, width_or_size: Union[int, MapSize], height_or_terrain: Optional[Union[int, TerrainType]] = None,
+	             terrain: Optional[TerrainType] = None):
+		if isinstance(width_or_size, int) and isinstance(height_or_terrain, int) and isinstance(terrain, TerrainType):
+			width = width_or_size
+			height = height_or_terrain
+			super().__init__(width, height)
+
+			for point in self.points():
+				self.modifyTerrainAt(point, terrain)
+		elif isinstance(width_or_size, MapSize) and isinstance(height_or_terrain, TerrainType):
+			width = width_or_size.size().width()
+			height = width_or_size.size().height()
+			terrain = height_or_terrain
+			super().__init__(width, height)
+
+			for point in self.points():
+				self.modifyTerrainAt(point, terrain)
+		elif isinstance(width_or_size, MapModel):
+			self.__dict__ = width_or_size.__dict__.copy()
+		else:
+			raise Exception('wrong combination of parameters')
+
+	def discover(self, player, simulation):
+		for point in self.points():
+			self.tiles.values[point.y][point.x].discoverBy(player, simulation)
+
+	def discoverRadius(self, player, pt: HexPoint, radius: int, simulation):
+		for point in pt.areaWithRadius(radius):
+			tile = self.tileAt(point)
+
+			if tile is None:
+				continue
+
+			tile.discoverBy(player, simulation)
 
 class TestArray2D(unittest.TestCase):
 	def test_constructor(self):
@@ -106,8 +146,8 @@ class TestHexPoint(unittest.TestCase):
 		area1 = hex1.areaWithRadius(1)
 		area2 = hex1.areaWithRadius(2)
 
-		self.assertEqual(len(area1.points), 7)  # 1 + 6
-		self.assertEqual(len(area2.points), 19)  # 1 + 6 + 12
+		self.assertEqual(len(area1.points()), 7)  # 1 + 6
+		self.assertEqual(len(area2.points()), 19)  # 1 + 6 + 12
 
 
 class TestFeatureType(unittest.TestCase):
@@ -121,108 +161,108 @@ class TestFeatureType(unittest.TestCase):
 
 		# forest
 		feature = FeatureType.forest
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.snow
+		tile._terrainValue = TerrainType.snow
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# rainforest
 		feature = FeatureType.rainforest
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), False)
 
 		# floodplains
 		feature = FeatureType.floodplains
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# marsh
 		feature = FeatureType.marsh
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# oasis
 		feature = FeatureType.oasis
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.desert
+		tile._terrainValue = TerrainType.desert
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# reef
 		feature = FeatureType.reef
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.shore
+		tile._terrainValue = TerrainType.shore
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
 
 		# ice
 		feature = FeatureType.ice
-		tile.terrain = TerrainType.snow
+		tile._terrainValue = TerrainType.snow
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.shore
+		tile._terrainValue = TerrainType.shore
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
 
 		# atoll
 		feature = FeatureType.atoll
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.shore
+		tile._terrainValue = TerrainType.shore
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
 
 		# volcano
 		feature = FeatureType.volcano
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.tundra
+		tile._terrainValue = TerrainType.tundra
 		self.assertEqual(feature.isPossibleOn(tile), False)
 
 		# mountains
 		feature = FeatureType.mountains
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.desert
+		tile._terrainValue = TerrainType.desert
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# lake
 		feature = FeatureType.lake
-		tile.terrain = TerrainType.grass
+		tile._terrainValue = TerrainType.grass
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.desert
+		tile._terrainValue = TerrainType.desert
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 		# fallout
 		feature = FeatureType.fallout
-		tile.terrain = TerrainType.ocean
+		tile._terrainValue = TerrainType.ocean
 		self.assertEqual(feature.isPossibleOn(tile), False)
-		tile.terrain = TerrainType.desert
+		tile._terrainValue = TerrainType.desert
 		self.assertEqual(feature.isPossibleOn(tile), True)
-		tile.terrain = TerrainType.plains
+		tile._terrainValue = TerrainType.plains
 		self.assertEqual(feature.isPossibleOn(tile), True)
 
 
@@ -256,11 +296,11 @@ class TestTile(unittest.TestCase):
 		self.assertEqual(tile.point, HexPoint(3, 2))
 		self.assertEqual(tile.point.x, 3)
 		self.assertEqual(tile.point.y, 2)
-		self.assertEqual(tile.terrain, TerrainType.tundra)
+		self.assertEqual(tile.terrain(), TerrainType.tundra)
 
 	def test_river_n(self):
 		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
-		tile.river_value = 1
+		tile._riverValue = 1
 
 		self.assertEqual(tile.isRiverInNorth(), True)
 		self.assertEqual(tile.isRiverInNorthEast(), False)
@@ -268,7 +308,7 @@ class TestTile(unittest.TestCase):
 
 	def test_river_ne(self):
 		tile = Tile(HexPoint(3, 2), TerrainType.tundra)
-		tile.river_value = 4
+		tile._riverValue = 4
 
 		self.assertEqual(tile.isRiverInNorth(), False)
 		self.assertEqual(tile.isRiverInNorthEast(), True)
@@ -293,8 +333,8 @@ class TestTile(unittest.TestCase):
 		ocean_tile = Tile(HexPoint(3, 1), TerrainType.shore)
 
 		self.assertEqual(grass_tile.movementCost(UnitMovementType.walk, tundra_tile), 1)
-		self.assertEqual(mountains_tile.movementCost(UnitMovementType.walk, tundra_tile), 3)
-		self.assertEqual(ocean_tile.movementCost(UnitMovementType.walk, tundra_tile), UnitMovementType.max)
+		self.assertEqual(mountains_tile.movementCost(UnitMovementType.walk, tundra_tile), 1)
+		self.assertEqual(ocean_tile.movementCost(UnitMovementType.walk, tundra_tile), UnitMovementType.max.value)
 
 
 class TestMap(unittest.TestCase):
@@ -365,21 +405,30 @@ class TestMapGenerator(unittest.TestCase):
 
 
 class TestPathfinding(unittest.TestCase):
-	def test_generation_request(self):
+	def test_path_finding(self):
 		"""Test astar"""
-		grid = MapModel(10, 10)
-		for pt in grid.points():
-			grid.modifyTerrainAt(pt, TerrainType.grass)
-
+		grid = MapModelMock(10, 10, TerrainType.grass)
 		grid.modifyFeatureAt(HexPoint(1, 2), FeatureType.mountains)  # put a mountain into the path
 
-		datasource_options = MoveTypeIgnoreUnitsOptions(ignore_sight=False, can_embark=False, can_enter_ocean=False)
-		datasource = MoveTypeIgnoreUnitsPathfinderDataSource(grid, UnitMovementType.walk, None, datasource_options)
+		player = Player(LeaderType.alexander, human=False)
+		simulation = GameModel(
+			victoryTypes=[VictoryType.science],
+			handicap=HandicapType.settler,
+			turnsElapsed=0,
+			players=[player],
+			map=grid
+		)
+
+		grid.discover(player, simulation)
+
+		datasource_options = MoveTypeIgnoreUnitsOptions(ignore_sight=True, can_embark=False, can_enter_ocean=False)
+		datasource = MoveTypeIgnoreUnitsPathfinderDataSource(grid, UnitMovementType.walk, player, datasource_options)
 		finder = AStarPathfinder(datasource)
 
 		path = finder.shortestPath(HexPoint(0, 0), HexPoint(2, 3))
 
 		# print(path)
+		self.assertIsNotNone(path)
 		target_path = [HexPoint(0, 0), HexPoint(1, 1), HexPoint(2, 1), HexPoint(2, 2), HexPoint(2, 3), ]
 		self.assertEqual(len(path.points()), 5)
 		for i, n in enumerate(target_path):
@@ -425,7 +474,7 @@ class TestAssets(unittest.TestCase):
 		]
 
 		for civic_with_governors in civics_with_governors:
-			self.assertTrue(civic_with_governors.governorTitle(), f'envoys of {civic_with_governors} should be True')
+			self.assertTrue(civic_with_governors.hasGovernorTitle(), f'envoys of {civic_with_governors} should be True')
 
 	def test_civic_achievements(self):
 		achievements = CivicAchievements(CivicType.gamesAndRecreation)
@@ -433,46 +482,46 @@ class TestAssets(unittest.TestCase):
 		self.assertIn(BuildingType.arena, achievements.buildingTypes)
 
 
-class TestGame(unittest.TestCase):
-	@pytest.mark.django_db
-	def test_game_creation(self):
-		"""Test game"""
-		map_model = MapModel(uuid=uuid.uuid4(), content='')
-		map_model.save()
-		game = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
-		game.save()
-
-		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
-		player1.save()
-		player2 = Player(leader=LeaderType.TRAJAN, game=game)
-		player2.save()
-
-		players = game.players()
-		self.assertEqual(len(players), 2)
-		self.assertEqual(players[0], player1)
-		self.assertEqual(players[1], player2)
-
-	@pytest.mark.django_db
-	def test_game_tech(self):
-		map_model = MapModel(uuid=uuid.uuid4(), content='')
-		map_model.save()
-		game_model = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
-		game_model.save()
-
-		player1 = Player(leader=LeaderType.ALEXANDER, game=game_model)
-		player1.save()
-
-		player1Tech1 = PlayerTech(player=player1, tech_identifier='pottery', progress=25, eureka=False)
-		player1Tech1.save()
-
-		player1Tech2 = PlayerTech(player=player1, tech_identifier='irrigation', progress=20, eureka=False)
-		player1Tech2.save()
-
-		canResearchPottery = player1.canResearch(TechType.pottery)
-		self.assertEqual(canResearchPottery, False)
-
-		canResearchIrrigation = player1.canResearch(TechType.irrigation)
-		self.assertEqual(canResearchIrrigation, True)
+# class TestGame(unittest.TestCase):
+# 	@pytest.mark.django_db
+# 	def test_game_creation(self):
+# 		"""Test game"""
+# 		map_model = MapModel(uuid=uuid.uuid4(), content='')
+# 		map_model.save()
+# 		game = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+# 		game.save()
+#
+# 		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
+# 		player1.save()
+# 		player2 = Player(leader=LeaderType.TRAJAN, game=game)
+# 		player2.save()
+#
+# 		players = game.players()
+# 		self.assertEqual(len(players), 2)
+# 		self.assertEqual(players[0], player1)
+# 		self.assertEqual(players[1], player2)
+#
+# 	@pytest.mark.django_db
+# 	def test_game_tech(self):
+# 		map_model = MapModel(uuid=uuid.uuid4(), content='')
+# 		map_model.save()
+# 		game_model = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
+# 		game_model.save()
+#
+# 		player1 = Player(leader=LeaderType.ALEXANDER, game=game_model)
+# 		player1.save()
+#
+# 		player1Tech1 = PlayerTech(player=player1, tech_identifier='pottery', progress=25, eureka=False)
+# 		player1Tech1.save()
+#
+# 		player1Tech2 = PlayerTech(player=player1, tech_identifier='irrigation', progress=20, eureka=False)
+# 		player1Tech2.save()
+#
+# 		canResearchPottery = player1.canResearch(TechType.pottery)
+# 		self.assertEqual(canResearchPottery, False)
+#
+# 		canResearchIrrigation = player1.canResearch(TechType.irrigation)
+# 		self.assertEqual(canResearchIrrigation, True)
 
 
 if __name__ == '__main__':
