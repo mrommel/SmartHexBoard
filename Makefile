@@ -6,7 +6,8 @@ all: venv
 
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
-	./$(VENV)/bin/pip install -r requirements.txt
+	./$(VENV)/bin/pip3 install -r requirements.txt
+	#./$(VENV)/bin/pip install --force-reinstall -r requirements.txt --only-binary=:all:
 
 # venv is a shortcut target
 venv: $(VENV)/bin/activate

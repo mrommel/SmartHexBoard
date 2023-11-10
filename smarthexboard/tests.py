@@ -3,17 +3,19 @@ import unittest
 import uuid
 
 import pytest
+import smarthexboardlib.map.map
 
-from smarthexboard.game.achievements import CivicAchievements
-from smarthexboard.game.buildings import BuildingType
-from smarthexboard.game.civics import CivicType
-from smarthexboard.game.techs import TechType
-from smarthexboard.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
-from smarthexboard.map.generation import HeightMap, MapGenerator, MapOptions
-from smarthexboard.map.map import Map, Tile
-from smarthexboard.map.types import MovementType, TerrainType, FeatureType
 from smarthexboard.models import HandicapType, LeaderType, Player, GameModel, MapModel, PlayerTech, MapSize, MapType
-from smarthexboard.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
+
+from smarthexboardlib.game.achievements import CivicAchievements
+from smarthexboardlib.game.buildings import BuildingType
+from smarthexboardlib.game.civilizations import LeaderType
+from smarthexboardlib.game.types import CivicType, TechType
+from smarthexboardlib.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
+from smarthexboardlib.map.generation import HeightMap, MapGenerator, MapOptions
+from smarthexboardlib.map.map import MapModel, Tile
+from smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType
+from smarthexboardlib.map.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
 
 
@@ -101,8 +103,8 @@ class TestHexPoint(unittest.TestCase):
 		"""Test the HexPoint areaWith"""
 		hex1 = HexPoint(3, 2)
 
-		area1 = hex1.areaWith(1)
-		area2 = hex1.areaWith(2)
+		area1 = hex1.areaWithRadius(1)
+		area2 = hex1.areaWithRadius(2)
 
 		self.assertEqual(len(area1.points), 7)  # 1 + 6
 		self.assertEqual(len(area2.points), 19)  # 1 + 6 + 12
@@ -290,28 +292,28 @@ class TestTile(unittest.TestCase):
 		mountains_tile.feature = FeatureType.mountains
 		ocean_tile = Tile(HexPoint(3, 1), TerrainType.shore)
 
-		self.assertEqual(grass_tile.movementCost(MovementType.walk, tundra_tile), 1)
-		self.assertEqual(mountains_tile.movementCost(MovementType.walk, tundra_tile), 3)
-		self.assertEqual(ocean_tile.movementCost(MovementType.walk, tundra_tile), MovementType.max)
+		self.assertEqual(grass_tile.movementCost(UnitMovementType.walk, tundra_tile), 1)
+		self.assertEqual(mountains_tile.movementCost(UnitMovementType.walk, tundra_tile), 3)
+		self.assertEqual(ocean_tile.movementCost(UnitMovementType.walk, tundra_tile), UnitMovementType.max)
 
 
 class TestMap(unittest.TestCase):
 	def test_constructor(self):
 		"""Test that the map constructor versions work"""
-		map1 = Map(3, 4)
+		map1 = MapModel(3, 4)
 		self.assertEqual(map1.width, 3)
 		self.assertEqual(map1.height, 4)
 
-		map2 = Map(Size(5, 2))
+		map2 = MapModel(Size(5, 2))
 		self.assertEqual(map2.width, 5)
 		self.assertEqual(map2.height, 2)
 
 		with self.assertRaises(AttributeError):
-			_ = Map(5.2, 1)
+			_ = MapModel(5.2, 1)
 
 	def test_valid(self):
 		"""Test that a point is on the map (or not)"""
-		map1 = Map(3, 4)
+		map1 = MapModel(3, 4)
 
 		self.assertEqual(map1.valid(2, 3), True)
 		self.assertEqual(map1.valid(HexPoint(2, 3)), True)
@@ -327,7 +329,7 @@ class TestMap(unittest.TestCase):
 			HexPoint(1, 0),
 			HexPoint(1, 1),
 		]
-		map1 = Map(2, 2)
+		map1 = MapModel(2, 2)
 		map_points = map1.points()
 
 		self.assertEqual(len(map_points), 4)
@@ -347,7 +349,12 @@ class TestMapGenerator(unittest.TestCase):
 			print(f'Progress: {state.value} - {state.message} ')
 			self.last_state_value = state.value
 
-		options = MapOptions(map_size=MapSize.DUEL, map_type=MapType.CONTINENTS)
+		# map db values to
+		mapSize: smarthexboardlib.map.types.MapSize = smarthexboardlib.map.types.MapSize.duel
+		mapType: smarthexboardlib.map.types.MapType = smarthexboardlib.map.types.MapType.continents
+		leader: smarthexboardlib.game.civilizations.LeaderType = smarthexboardlib.game.civilizations.LeaderType.alexander
+
+		options = MapOptions(mapSize=mapSize, mapType=mapType, leader=leader)
 		generator = MapGenerator(options)
 
 		grid = generator.generate(_callback)
@@ -360,23 +367,23 @@ class TestMapGenerator(unittest.TestCase):
 class TestPathfinding(unittest.TestCase):
 	def test_generation_request(self):
 		"""Test astar"""
-		grid = Map(10, 10)
+		grid = MapModel(10, 10)
 		for pt in grid.points():
 			grid.modifyTerrainAt(pt, TerrainType.grass)
 
 		grid.modifyFeatureAt(HexPoint(1, 2), FeatureType.mountains)  # put a mountain into the path
 
 		datasource_options = MoveTypeIgnoreUnitsOptions(ignore_sight=False, can_embark=False, can_enter_ocean=False)
-		datasource = MoveTypeIgnoreUnitsPathfinderDataSource(grid, MovementType.walk, datasource_options)
+		datasource = MoveTypeIgnoreUnitsPathfinderDataSource(grid, UnitMovementType.walk, None, datasource_options)
 		finder = AStarPathfinder(datasource)
 
 		path = finder.shortestPath(HexPoint(0, 0), HexPoint(2, 3))
 
 		# print(path)
 		target_path = [HexPoint(0, 0), HexPoint(1, 1), HexPoint(2, 1), HexPoint(2, 2), HexPoint(2, 3), ]
-		self.assertEqual(len(path), 5)
+		self.assertEqual(len(path.points()), 5)
 		for i, n in enumerate(target_path):
-			self.assertEqual(n, path[i])
+			self.assertEqual(n, path.points()[i])
 
 
 class TestAssets(unittest.TestCase):

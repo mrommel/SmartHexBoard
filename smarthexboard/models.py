@@ -1,14 +1,11 @@
 """django models module"""
 import uuid
-from enum import Enum
 
 from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.utils.translation import gettext_lazy as _
-
-from smarthexboard.game.civilizations import CivilizationType
-from smarthexboard.game.techs import TechType
-from smarthexboard.map.base import Size
+from smarthexboardlib.game.civilizations import CivilizationType
+from smarthexboardlib.map.base import Size
 
 
 class MapGenerationState(models.TextChoices):
@@ -24,7 +21,7 @@ class MapSizeData:
 		self.num_players = num_players
 
 
-class MapSize(models.TextChoices):
+class MapSizeModel(models.TextChoices):
 	DUEL = 'DU', _('TXT_KEY_MAP_SIZE_DUEL_NAME')
 	TINY = 'TI', _('TXT_KEY_MAP_SIZE_TINY_NAME')
 	SMALL = 'SM', _('TXT_KEY_MAP_SIZE_SMALL_NAME')
@@ -40,25 +37,25 @@ class MapSize(models.TextChoices):
 		return self._data().num_players
 
 	def _data(self):
-		if self == MapSize.DUEL:
+		if self == MapSizeModel.DUEL:
 			return MapSizeData(
 				name='TXT_KEY_MAP_SIZE_DUEL_NAME',
 				size=Size(32, 22),
 				num_players=2
 			)
-		elif self == MapSize.TINY:
+		elif self == MapSizeModel.TINY:
 			return MapSizeData(
 				name='TXT_KEY_MAP_SIZE_TINY_NAME',
 				size=Size(42, 32),
 				num_players=3
 			)
-		elif self == MapSize.SMALL:
+		elif self == MapSizeModel.SMALL:
 			return MapSizeData(
 				name='TXT_KEY_MAP_SIZE_SMALL_NAME',
 				size=Size(52, 42),
 				num_players=4
 			)
-		elif self == MapSize.STANDARD:
+		elif self == MapSizeModel.STANDARD:
 			return MapSizeData(
 				name='TXT_KEY_MAP_SIZE_STANDARD_NAME',
 				size=Size(62, 52),
@@ -76,7 +73,7 @@ class MapSize(models.TextChoices):
 			raise ValueError(f"'{cls.__name__}' enum not found for '{label}'")
 
 
-class MapType(models.TextChoices):
+class MapTypeModel(models.TextChoices):
 	EMPTY = 'EM', _('TXT_KEY_MAP_TYPE_EMPTY_NAME')
 	EARTH = 'EA', _('TXT_KEY_MAP_TYPE_EARTH_NAME')
 	PANGAEA = 'PA', _('TXT_KEY_MAP_TYPE_PANGAEA_NAME')
@@ -92,12 +89,12 @@ class MapType(models.TextChoices):
 			raise ValueError(f"'{cls.__name__}' enum not found for '{label}'")
 
 
-class MapGeneration(models.Model):
+class MapGenerationData(models.Model):
 	uuid = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
 	size = models.CharField(
 		max_length=2,
-		choices=MapSize.choices,
-		default=MapSize.DUEL,
+		choices=MapSizeModel.choices,
+		default=MapSizeModel.DUEL,
 	)
 	map = models.CharField(max_length=500000)
 	state = models.CharField(
@@ -113,13 +110,13 @@ class MapGeneration(models.Model):
 				name="valid_state"
 			),
 			CheckConstraint(
-				check=Q(size__in=MapSize.values),
+				check=Q(size__in=MapSizeModel.values),
 				name="valid_size"
 			),
 		]
 
 
-class MapModel(models.Model):
+class MapDataModel(models.Model):
 	uuid = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
 	content = models.CharField(max_length=500000)
 
@@ -129,7 +126,7 @@ class HandicapData:
 		self.name = name
 
 
-class HandicapType(models.TextChoices):
+class HandicapTypeModel(models.TextChoices):
 	SETTLER = 'SE', _('Settler')
 	CHIEFTAIN = 'CH', _('Chieftain')
 	WARLORD = 'WA', _('Warlord')
@@ -151,35 +148,35 @@ class HandicapType(models.TextChoices):
 	#	return self._data().name
 
 	def _data(self):
-		if self == HandicapType.SETTLER:
+		if self == HandicapTypeModel.SETTLER:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_SETTLER'
 			)
-		elif self == HandicapType.CHIEFTAIN:
+		elif self == HandicapTypeModel.CHIEFTAIN:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_CHIEFTAIN'
 			)
-		elif self == HandicapType.WARLORD:
+		elif self == HandicapTypeModel.WARLORD:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_WARLORD'
 			)
-		elif self == HandicapType.PRINCE:
+		elif self == HandicapTypeModel.PRINCE:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_PRINCE'
 			)
-		elif self == HandicapType.KING:
+		elif self == HandicapTypeModel.KING:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_KING'
 			)
-		elif self == HandicapType.EMPEROR:
+		elif self == HandicapTypeModel.EMPEROR:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_EMPEROR'
 			)
-		elif self == HandicapType.IMMORTAL:
+		elif self == HandicapTypeModel.IMMORTAL:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_IMMORTAL'
 			)
-		elif self == HandicapType.DEITY:
+		elif self == HandicapTypeModel.DEITY:
 			return HandicapData(
 				'TXT_KEY_HANDICAP_DEITY'
 			)
@@ -187,29 +184,29 @@ class HandicapType(models.TextChoices):
 		raise AttributeError(f'cant get data for handicap {self}')
 
 
-class GameModel(models.Model):
+class GameDataModel(models.Model):
 	uuid = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
-	map = models.ForeignKey(MapModel, on_delete=models.CASCADE, blank=True, default=None)
+	map = models.ForeignKey(MapDataModel, on_delete=models.CASCADE, blank=True, default=None)
 	name = models.CharField(max_length=100)
 	turn = models.IntegerField(default=0)  # game start at turn 0
 	handicap = models.CharField(
 		max_length=2,
-		choices=HandicapType.choices,
-		default=HandicapType.SETTLER,
+		choices=HandicapTypeModel.choices,
+		default=HandicapTypeModel.SETTLER,
 	)
 
 	class Meta:
 		constraints = [
 			CheckConstraint(
-				check=Q(handicap__in=HandicapType.values),
+				check=Q(handicap__in=HandicapTypeModel.values),
 				name="valid_handicap"),
 		]
 
 	def players(self):
-		return Player.objects.filter(game=self)
+		return PlayerModel.objects.filter(game=self)
 
 
-class LeaderType(models.TextChoices):
+class LeaderTypeModel(models.TextChoices):
 	ALEXANDER = 'AL', _('Alexander')
 	TRAJAN = 'TR', _('Trajan')
 	VICTORIA = 'VI', _('Victoria')
@@ -229,8 +226,8 @@ class LeaderType(models.TextChoices):
 			raise ValueError(f"'{cls.__name__}' enum not found for '{label}'")
 
 	def civilization(self) -> CivilizationType:
-		if self == LeaderType.ALEXANDER:
-			return CivilizationType.greek
+		if self == LeaderTypeModel.ALEXANDER:
+			return CivilizationType.greece
 
 		raise AttributeError(f'civilization for leader type {self} not found')
 
@@ -238,71 +235,21 @@ class LeaderType(models.TextChoices):
 		return f'{self.label}'
 
 
-class Player(models.Model):
+class PlayerModel(models.Model):
 	leader = models.CharField(
 		max_length=2,
-		choices=LeaderType.choices,
-		default=LeaderType.ALEXANDER,
+		choices=LeaderTypeModel.choices,
+		default=LeaderTypeModel.ALEXANDER,
 	)
 	human = models.BooleanField(default=False)
-	game = models.ForeignKey(GameModel, on_delete=models.CASCADE, blank=True, default=None)
+	game = models.ForeignKey(GameDataModel, on_delete=models.CASCADE, blank=True, default=None)
 
 	class Meta:
 		constraints = [
 			CheckConstraint(
-				check=Q(leader__in=LeaderType.values),
+				check=Q(leader__in=LeaderTypeModel.values),
 				name="valid_leader"),
 		]
 
-	def playerTechs(self):
-		return PlayerTech.objects.filter(player=self)
-
-	def canResearch(self, tech: TechType):
-		playerTechs = self.playerTechs()
-
-		# if tech is already researched, it cannot be researched again
-		player_techs = PlayerTech.objects.filter(tech_identifier=tech.value)
-		if len(player_techs) == 1:
-			if player_techs[0].progress >= tech.cost():
-				return False
-
-		# if there are no requirements - this can be researched
-		if not tech.required():
-			return True
-
-		for required_tech in tech.required():
-			required_tech_valid = False
-			for player_tech in playerTechs:
-				if player_tech.tech_identifier == required_tech.value:
-					if player_tech.progress >= required_tech.cost():
-						required_tech_valid = True
-
-			if not required_tech_valid:
-				return False
-
-		return True
-
-	def updateTechProgress(self, tech: TechType, progress: int):
-		player_tech = PlayerTech.objects.filter(tech_identifier=tech.value)
-		player_tech.progress = progress
-
 	def __str__(self):
 		return f'{self.leader.name}'
-
-
-class PlayerTech(models.Model):
-	player = models.ForeignKey(Player, on_delete=models.CASCADE, blank=True, default=None)
-	tech_identifier = models.CharField(
-		max_length=20,
-		choices=map(lambda tech: (tech.value, tech.name()), TechType.list()),
-		default=('none', 'TXT_KEY_TECH_NONE'),
-	)
-	progress = models.IntegerField(default=0)
-	eureka = models.BooleanField(default=False)
-
-	class Meta:
-		constraints = [
-			CheckConstraint(
-				check=Q(tech_identifier__in=map(lambda tech: tech.value, TechType.list())),
-				name="valid_tech_identifier"),
-		]
