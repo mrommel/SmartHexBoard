@@ -22,6 +22,14 @@ jQuery(function ($) {
 
     $(document).ready(function () {
         initUI();
+
+        // add a popup to warn the user to leave the page
+        window.addEventListener('beforeunload', (event) => {
+          // Cancel the event as stated by the standard.
+          event.preventDefault();
+          // Chrome requires returnValue to be set.
+          event.returnValue = '';
+        });
     });
 }); // JQuery end
 
@@ -325,7 +333,8 @@ function checkMapGeneration() {
         type:"GET",
         url: "/smarthexboard/generate_status/" + map_uuid + "/",
         success: function(response) {
-            console.log('refresh map generation status: ' + response.status);
+            console.log('refresh map generation status: ' + response.status + ', progress: ' + response.progress);
+            // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
             if (response.status == 'Ready' || response.status == 'Fertig') {

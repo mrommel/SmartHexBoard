@@ -400,12 +400,42 @@ ResourceType.fromString = function(resource_name) {
             return ResourceTypes.cattle.clone();
         case 'fish':
             return ResourceTypes.fish.clone();
+        case 'silk':
+            return ResourceTypes.silk.clone();
+        case 'dyes':
+            return ResourceTypes.dyes.clone();
+        case 'ivory':
+            return ResourceTypes.ivory.clone();
 
             // luxury
         case 'citrus':
             return ResourceTypes.citrus.clone();
         case 'whales':
             return ResourceTypes.whales.clone();
+        case 'furs':
+            return ResourceTypes.furs.clone();
+        case 'silver':
+            return ResourceTypes.silver.clone();
+        case 'wine':
+            return ResourceTypes.wine.clone();
+        case 'cocoa':
+            return ResourceTypes.cocoa.clone();
+        case 'pearls':
+            return ResourceTypes.pearls.clone();
+        case 'marble':
+            return ResourceTypes.marble.clone();
+        case 'spices':
+            return ResourceTypes.spices.clone();
+        case 'cotton':
+            return ResourceTypes.cotton.clone();
+        case 'crab':
+            return ResourceTypes.crab.clone();
+        case 'salt':
+            return ResourceTypes.salt.clone();
+        case 'tea':
+            return ResourceTypes.tea.clone();
+        case 'incense':
+            return ResourceTypes.incense.clone();
 
             // strategic
         case 'horses':
@@ -447,6 +477,21 @@ const ResourceTypes = {
     // luxury
     citrus: new ResourceType("citrus", "resource_citrus@3x.png"),
     whales: new ResourceType("whales", "resource_whales@3x.png"),
+    furs: new ResourceType("furs", "resource_furs@3x.png"),
+    silver: new ResourceType("silver", "resource_silver@3x.png"),
+    wine: new ResourceType("wine", "resource_wine@3x.png"),
+    cocoa: new ResourceType("cocoa", "resource_cocoa@3x.png"),
+    pearls: new ResourceType("pearls", "resource_pearls@3x.png"),
+    marble: new ResourceType("marble", "resource_marble@3x.png"),
+    spices: new ResourceType("spices", "resource_spices@3x.png"),
+    cotton: new ResourceType("cotton", "resource_cotton@3x.png"),
+    crab: new ResourceType("crab", "resource_crab@3x.png"),
+    salt: new ResourceType("salt", "resource_salt@3x.png"),
+    silk: new ResourceType("silk", "resource_silk@3x.png"),
+    dyes: new ResourceType("dyes", "resource_dyes@3x.png"),
+    ivory: new ResourceType("ivory", "resource_ivory@3x.png"),
+    tea: new ResourceType("tea", "resource_tea@3x.png"),
+    incense: new ResourceType("incense", "resource_incense@3x.png"),
 
     // strategic
     horses: new ResourceType("horses", "resource_horses@3x.png"),

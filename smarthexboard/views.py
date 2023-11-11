@@ -119,7 +119,11 @@ def generate_status(request, map_uuid):
 		json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generation with uuid: {map_uuid}'}
 		return JsonResponse(json_payload, status=404)
 
-	json_payload = {'uuid': map_uuid, 'status': MapGenerationState(map_generation.state).label}
+	json_payload = {
+		'uuid': map_uuid,
+		'status': MapGenerationState(map_generation.state).label,
+		'progress': map_generation.progress
+	}
 	return JsonResponse(json_payload, status=200)
 
 

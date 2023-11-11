@@ -34,7 +34,7 @@ clean:
 
 makemigrations: venv
 	./$(VENV)/bin/python3 manage.py makemigrations
-	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0005  # change this
+	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0008  # change this
 	./$(VENV)/bin/python3 manage.py migrate
 
 migrate: venv

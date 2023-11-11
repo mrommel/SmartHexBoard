@@ -102,6 +102,7 @@ class MapGenerationData(models.Model):
 		choices=MapGenerationState.choices,
 		default=MapGenerationState.OPEN,
 	)
+	progress = models.FloatField(default=0.0)
 
 	class Meta:
 		constraints = [

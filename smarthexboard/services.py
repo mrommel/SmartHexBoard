@@ -13,6 +13,7 @@ def generate_map(uuid, map_size, map_type):
 		# write state to db
 		map_generation_callback_obj = MapGenerationData.objects.filter(uuid=uuid).first()
 		map_generation_callback_obj.state = MapGenerationState.RUNNING
+		map_generation_callback_obj.progress = state.value
 		map_generation_callback_obj.save()
 		print(f'saved state: MapGenerationState.RUNNING')
 
@@ -31,6 +32,7 @@ def generate_map(uuid, map_size, map_type):
 	map_generation_final_obj = MapGenerationData.objects.filter(uuid=uuid).first()
 	map_generation_final_obj.map = str(json.dumps(grid.to_dict()))
 	map_generation_final_obj.state = MapGenerationState.READY
+	map_generation_final_obj.progress = 1.0
 	map_generation_final_obj.save()
 
 	print(f'map created: {uuid} - can be retrieved')
