@@ -194,7 +194,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-menu .container {
     padding: 20px;
     width: 640px;
-    height: 256px;
+    height: 512px;
     display: flex;
 
     position: absolute;
@@ -259,6 +259,114 @@ h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
+/** menu ************************/
+
+#uistate-create-game {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+
+    pointer-events: all;
+}
+
+#uistate-create-game .container {
+    padding: 20px;
+    width: 640px;
+    height: 512px;
+    display: flex;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+#uistate-create-game .logo {
+    width: 256px;
+    height: 256px;
+
+    margin: 20px 30px 0 0;
+    width: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+#uistate-create-game .container_text {
+    flex: 1 1 auto;
+}
+
+#uistate-create-game h1 {
+    clear: left;
+    padding-top: 30px;
+}
+
+#uistate-create-game ul.menu {
+    clear: left;
+    align-items: center;
+    margin: 10px 0;
+
+    line-height: 30px;
+
+    list-style: none;
+    padding-inline-start: 10px;
+}
+
+#uistate-create-game ul.menu li {
+    display: flex;
+    align-self: flex-start;
+}
+
+#uistate-create-game ul.menu li:before {
+    display: block;
+    flex-shrink: 0;
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+
+    vertical-align: middle;
+
+    background: url('../img/ui/checkbox-selected.png') no-repeat left center;
+    background-size: contain;
+
+    content: '';
+}
+
+#uistate-create-game ul.menu li.noBullet {
+    display: block;
+}
+
+#uistate-create-game ul.menu li.noBullet:before {
+    display: none;
+}
+
+#uistate-create-game ul.menu li.noBullet h6 {
+    margin-block-start: 0.8em;
+    margin-block-end: 0.2em;
+}
+
+#uistate-create-game a {
+    text-decoration: none;
+    color: white;
+}
+
+#uistate-create-game .bootstrap-select .dropdown-menu li a span.text {
+    color: black;
+}
+
+#uistate-create-game .bootstrap-select .dropdown-menu li:before {
+    display: none;
+}
+
+#uistate-create-game ul.menu li.spacer {
+    margin-block-start: 0.8em;
+}
+
 /** options ***********/
 
 #uistate-options {
@@ -277,7 +385,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-options .container {
     padding: 20px;
     width: 640px;
-    height: 256px;
+    height: 512px;
     display: flex;
 
     position: absolute;
@@ -364,7 +472,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-generate .container {
     padding: 20px;
     width: 640px;
-    height: 256px;
+    height: 512px;
     display: flex;
 
     position: absolute;

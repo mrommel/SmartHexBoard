@@ -202,22 +202,22 @@ function changeUIState(newState) {
             console.log('uistate > menu');
             $('#uistate-splash').hide();
             $('#uistate-menu').show();
-            $('#uistate-options').hide();
+            $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
             break;
 
-        case UIState.options:
-            console.log('uistate > options');
+        case UIState.createGame:
+            console.log('uistate > createGame');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
-            $('#uistate-options').show();
+            $('#uistate-create-game').show();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
-
-            $('#ui').addClass('blurred');
+            $('#uistate-options').hide();
             break;
 
         case UIState.generate:
@@ -225,10 +225,11 @@ function changeUIState(newState) {
             console.log('uistate > generate');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
-            $('#uistate-options').hide();
+            $('#uistate-create-game').hide();
             $('#uistate-generate').show();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
 
             startMapGeneration();
             break;
@@ -238,10 +239,11 @@ function changeUIState(newState) {
             console.log('uistate > game');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
-            $('#uistate-options').hide();
+            $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').show();
             $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
 
             // Full page rendering
             renderer.render();
@@ -254,10 +256,24 @@ function changeUIState(newState) {
             console.log('uistate > game-menu');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
-            $('#uistate-options').hide();
+            $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').show();
             $('#uistate-game-menu').show();
+            $('#uistate-options').hide();
+            break;
+
+        case UIState.options:
+            console.log('uistate > options');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-create-game').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
+
+            $('#ui').addClass('blurred');
             break;
 
         default:
@@ -363,7 +379,7 @@ function loadMap(map_uuid) {
             renderer.map = mapObj;
 
             // create game and store game_uuid
-            createGame(map_uuid);
+            // createGame(map_uuid);
 
             var canvasSize = mapObj.canvasSize();
             // create canvas with this size
@@ -377,9 +393,17 @@ function loadMap(map_uuid) {
     });
 }
 
-function createGame(map_uuid) {
+window.startGame = function startGame() {
+    var leaderSelect = $('#leaderSelect').find(":selected").val();
+    console.log('leader: ' + leaderSelect);
+    var difficultySelect = $('#difficultySelect').find(":selected").val();
+    console.log('handicap: ' + difficultySelect);
+    var mapTypeSelect = $('#mapTypeSelect').find(":selected").val();
+    console.log('mapType: ' + mapTypeSelect);
+    var mapSizeSelect = $('#mapSizeSelect').find(":selected").val();
+    console.log('mapSize: ' + mapSizeSelect);
 
-    $.ajax({
+    /*$.ajax({
         type:"GET",
         dataType: "json",
         url: "/smarthexboard/create_game/" + map_uuid + "/Trajan/Settler/",
@@ -391,22 +415,17 @@ function createGame(map_uuid) {
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
         }
-    });
+    });*/
+}
+
+window.createGame = function createGame() {
+    console.log('createGame');
+    changeUIState(UIState.createGame);
 }
 
 window.play = function play() {
     console.log('play');
     changeUIState(UIState.generate);
-}
-
-window.options = function options() {
-    console.log('options');
-    changeUIState(UIState.options);
-}
-
-window.quitOptions = function quitOptions() {
-    console.log('quitOptions');
-    changeUIState(UIState.menu);
 }
 
 window.openTechDialog = function openTechDialog() {
@@ -469,5 +488,15 @@ window.closeMenu = function closeMenu() {
 
 window.exitGame = function exitGame() {
     console.log('exitGame');
+    changeUIState(UIState.menu);
+}
+
+window.options = function options() {
+    console.log('options');
+    changeUIState(UIState.options);
+}
+
+window.quitOptions = function quitOptions() {
+    console.log('quitOptions');
     changeUIState(UIState.menu);
 }

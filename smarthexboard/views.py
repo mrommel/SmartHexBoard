@@ -5,11 +5,13 @@ import uuid
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django_q.tasks import async_task
-from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType
+from smarthexboardlib.game.baseTypes import HandicapType
+from smarthexboardlib.game.civilizations import LeaderType
+from smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
+from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
 
 from setup.settings import DEBUG
-from smarthexboard.models import MapGenerationData, MapGenerationState, GameDataModel, MapDataModel, PlayerModel, LeaderTypeModel, \
-	HandicapTypeModel, MapSizeModel, MapTypeModel
+from smarthexboard.models import MapGenerationData, MapGenerationState, GameDataModel, MapDataModel, MapSizeModel, MapTypeModel
 from smarthexboard.utils import is_valid_uuid
 
 
@@ -20,10 +22,43 @@ from smarthexboard.utils import is_valid_uuid
 # ####################################
 
 def index(request):
+	leader_selection = []
+	for leader in list(LeaderType):
+		if leader == LeaderType.none:
+			continue
+
+		if leader == LeaderType.barbar:
+			continue
+
+		if leader == LeaderType.freeCities:
+			continue
+
+		if leader == LeaderType.cityState:
+			continue
+
+		leader_selection.append((leader.value, leader.title()))
+
+	difficulty_selection = []
+	for handicap in list(HandicapType):
+		difficulty_selection.append((str(handicap), handicap.title()))
+
+	map_type_selection = []
+	for mapType in list(MapType):
+		map_type_selection.append((mapType.value, mapType.name()))
+
+	map_size_selection = []
+	for mapSize in list(MapSize):
+		map_size_selection.append((mapSize.value, mapSize.name()))
+
 	template = loader.get_template('index.html')
 	context = {
 		'navi_home': 'active',
-		'debug': DEBUG
+		'debug': DEBUG,
+		# create game data
+		'leader_selection': leader_selection,
+		'difficulty_selection': difficulty_selection,
+		'map_type_selection': map_type_selection,
+		'map_size_selection': map_size_selection,
 	}
 	return HttpResponse(template.render(context, request))
 
@@ -147,31 +182,23 @@ def generated_map(request, map_uuid):
 	return JsonResponse(json_payload, status=200)
 
 
-def tech_tree(request, game_uuid, player_id):
-	json_payload = {
-		# 'uuid': game.uuid,
-	}
-
-	return JsonResponse(json_payload, status=200)
-
-
 def create_game(request, map_uuid, leader, handicap):
 	# verify parameters
 	if not is_valid_uuid(map_uuid):
 		json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
 		return JsonResponse(json_payload, status=400)
 
-	try:
-		leader_type = LeaderTypeModel.from_str(leader.upper())
-	except ValueError as e:
-		json_payload = {'leader': leader, 'status': f'Invalid request: not a valid leader name: {e}'}
-		return JsonResponse(json_payload, status=400)
-
-	try:
-		handicap_type = HandicapTypeModel.from_str(handicap.upper())
-	except ValueError as e:
-		json_payload = {'handicap': handicap, 'status': f'Invalid request: not a valid handicap name: {e}'}
-		return JsonResponse(json_payload, status=400)
+	# try:
+	# 	leader_type = LeaderTypeModel.from_str(leader.upper())
+	# except ValueError as e:
+	# 	json_payload = {'leader': leader, 'status': f'Invalid request: not a valid leader name: {e}'}
+	# 	return JsonResponse(json_payload, status=400)
+	#
+	# try:
+	# 	handicap_type = HandicapTypeModel.from_str(handicap.upper())
+	# except ValueError as e:
+	# 	json_payload = {'handicap': handicap, 'status': f'Invalid request: not a valid handicap name: {e}'}
+	# 	return JsonResponse(json_payload, status=400)
 
 	# get map generation object
 	map_generation = MapGenerationData.objects.get(uuid=map_uuid)
@@ -191,23 +218,18 @@ def create_game(request, map_uuid, leader, handicap):
 	# remove map generation object
 	map_generation.delete()
 
+	gameGenerator = GameGenerator()
+	simulation = gameGenerator.generate(map_generation.map, HandicapType.settler)
+
+	# add UI
+	simulation.userInterface = UserInterfaceImpl()
+
 	# create game with map
-	game = GameDataModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=handicap_type)
+	simulation_content = str(json.dumps(simulation))
+	game = GameDataModel(uuid=uuid.uuid4(), content=simulation_content)
 	game.save()
 
-	# create players
-	map_size = MapSizeModel(map_generation.size)
-	num_players = map_size.numOfPlayers()
-	leaders = list(filter(lambda x: x != leader_type, LeaderTypeModel.values))
-	random.shuffle(leaders)
-
-	human_player = PlayerModel(leader=leader_type, human=True, game=game)
-	human_player.save()
-
-	for _ in range(num_players - 1):
-		first_leader = leaders.pop(0)
-		player = PlayerModel(leader=first_leader, human=False, game=game)
-		player.save()
+	# creat
 
 	# serialize game
 	json_payload = {
