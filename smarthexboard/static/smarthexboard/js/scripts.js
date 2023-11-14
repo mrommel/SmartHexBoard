@@ -214,6 +214,7 @@ function changeUIState(newState) {
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
             $('#uistate-create-game').show();
+            hideStartGameWarning();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
@@ -393,29 +394,72 @@ function loadMap(map_uuid) {
     });
 }
 
+function showStartGameWarning(text) {
+    $('#createGameWarning').text(text);
+    $('#createGameWarning').show();
+}
+
+function hideStartGameWarning() {
+    $('#createGameWarning').hide();
+}
+
 window.startGame = function startGame() {
     var leaderSelect = $('#leaderSelect').find(":selected").val();
-    console.log('leader: ' + leaderSelect);
+    // console.log('leader: ' + leaderSelect);
     var difficultySelect = $('#difficultySelect').find(":selected").val();
-    console.log('handicap: ' + difficultySelect);
+    // console.log('handicap: ' + difficultySelect);
     var mapTypeSelect = $('#mapTypeSelect').find(":selected").val();
-    console.log('mapType: ' + mapTypeSelect);
+    // console.log('mapType: ' + mapTypeSelect);
     var mapSizeSelect = $('#mapSizeSelect').find(":selected").val();
-    console.log('mapSize: ' + mapSizeSelect);
+    // console.log('mapSize: ' + mapSizeSelect);
+    var csrf_token = $('#csrf_token').text()
 
-    /*$.ajax({
-        type:"GET",
+    if (leaderSelect == '') {
+        showStartGameWarning('Please select a Leader');
+        return;
+    }
+
+    if (difficultySelect == '') {
+        showStartGameWarning('Please select a Handicap');
+        return;
+    }
+
+    if (mapTypeSelect == '') {
+        showStartGameWarning('Please select a Map Type');
+        return;
+    }
+
+    if (mapSizeSelect == '') {
+        showStartGameWarning('Please select a Map Size');
+        return;
+    }
+
+    hideStartGameWarning();
+
+    var formData = new FormData();
+    formData.append('leader', leaderSelect);
+    formData.append('handicap', difficultySelect);
+    formData.append('mapType', mapTypeSelect);
+    formData.append('mapSize', mapSizeSelect);
+
+    $.ajax({
+        type: "POST",
         dataType: "json",
-        url: "/smarthexboard/create_game/" + map_uuid + "/Trajan/Settler/",
+        url: "/smarthexboard/create_game",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        data: formData,
+        processData: false,
+        contentType: false,
         success: function(json_obj) {
-            console.log('created game: ' + map_uuid);
-            console.log(json_obj.game_uuid);
-            game_uuid = json_obj.game_uuid;
+            console.log('created game: ' + JSON.stringify(json_obj));
+            // console.log(json_obj.game_uuid);
+            // game_uuid = json_obj.game_uuid;
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
         }
-    });*/
+    });
 }
 
 window.createGame = function createGame() {

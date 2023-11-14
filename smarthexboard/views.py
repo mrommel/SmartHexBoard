@@ -11,6 +11,7 @@ from smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
 from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
 
 from setup.settings import DEBUG
+from smarthexboard.forms import CreateGameForm
 from smarthexboard.models import MapGenerationData, MapGenerationState, GameDataModel, MapDataModel, MapSizeModel, MapTypeModel
 from smarthexboard.utils import is_valid_uuid
 
@@ -36,7 +37,7 @@ def index(request):
 		if leader == LeaderType.cityState:
 			continue
 
-		leader_selection.append((leader.value, leader.title()))
+		leader_selection.append((leader.value, f'{leader.title()} ({leader.civilization().name()})'))
 
 	difficulty_selection = []
 	for handicap in list(HandicapType):
@@ -182,11 +183,36 @@ def generated_map(request, map_uuid):
 	return JsonResponse(json_payload, status=200)
 
 
-def create_game(request, map_uuid, leader, handicap):
-	# verify parameters
-	if not is_valid_uuid(map_uuid):
-		json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
+def create_game(request):
+	# If this is a POST request then process the Form data
+	if request.method == 'POST':
+
+		# Create a form instance and populate it with data from the request (binding):
+		form = CreateGameForm(request.POST)
+
+		# Check if the form is valid:
+		if form.is_valid():
+			leader = LeaderType.fromName(form.cleaned_data["leader"])
+			handicap = HandicapType.fromName(form.cleaned_data["handicap"])
+			mapSize = MapSize.fromName(form.cleaned_data["mapSize"])
+			mapType = MapType.fromName(form.cleaned_data["mapType"])
+			# print(f'leader={leader}, handicap={handicap}, mapSize={mapSize}, mapType={mapType}')
+
+			json_payload = {'status': 'Success'}
+			return JsonResponse(json_payload, status=200)
+		else:
+			print(form.errors)
+			json_payload = {'status': 'Form not valid'}
+			return JsonResponse(json_payload, status=400)
+	else:
+		json_payload = {'status': f'Invalid method {request.method}'}
 		return JsonResponse(json_payload, status=400)
+
+
+	# verify parameters
+	# if not is_valid_uuid(map_uuid):
+	# 	json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
+	# 	return JsonResponse(json_payload, status=400)
 
 	# try:
 	# 	leader_type = LeaderTypeModel.from_str(leader.upper())
@@ -201,41 +227,41 @@ def create_game(request, map_uuid, leader, handicap):
 	# 	return JsonResponse(json_payload, status=400)
 
 	# get map generation object
-	map_generation = MapGenerationData.objects.get(uuid=map_uuid)
-	if map_generation is None:
-		json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generated with uuid: {map_uuid}'}
-		return JsonResponse(json_payload, status=404)
-
-	current_state = MapGenerationState(map_generation.state)
-	if current_state != MapGenerationState.READY:
-		json_payload = {'uuid': map_uuid, 'status': f'Map with {map_uuid} is not ready yet: {current_state}'}
-		return JsonResponse(json_payload, status=400)
-
-	# create map object
-	map_model = MapDataModel(uuid=map_uuid, content=map_generation.map)
-	map_model.save()
+	# map_generation = MapGenerationData.objects.get(uuid=map_uuid)
+	# if map_generation is None:
+	# 	json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generated with uuid: {map_uuid}'}
+	# 	return JsonResponse(json_payload, status=404)
+	#
+	# current_state = MapGenerationState(map_generation.state)
+	# if current_state != MapGenerationState.READY:
+	# 	json_payload = {'uuid': map_uuid, 'status': f'Map with {map_uuid} is not ready yet: {current_state}'}
+	# 	return JsonResponse(json_payload, status=400)
+	#
+	# # create map object
+	# map_model = MapDataModel(uuid=map_uuid, content=map_generation.map)
+	# map_model.save()
 
 	# remove map generation object
-	map_generation.delete()
-
-	gameGenerator = GameGenerator()
-	simulation = gameGenerator.generate(map_generation.map, HandicapType.settler)
-
-	# add UI
-	simulation.userInterface = UserInterfaceImpl()
-
-	# create game with map
-	simulation_content = str(json.dumps(simulation))
-	game = GameDataModel(uuid=uuid.uuid4(), content=simulation_content)
-	game.save()
+	# map_generation.delete()
+	#
+	# gameGenerator = GameGenerator()
+	# simulation = gameGenerator.generate(map_generation.map, HandicapType.settler)
+	#
+	# # add UI
+	# simulation.userInterface = UserInterfaceImpl()
+	#
+	# # create game with map
+	# simulation_content = str(json.dumps(simulation))
+	# game = GameDataModel(uuid=uuid.uuid4(), content=simulation_content)
+	# game.save()
 
 	# creat
 
 	# serialize game
-	json_payload = {
-		'game_uuid': game.uuid,
-	}
-	return JsonResponse(json_payload, status=201)
+	# json_payload = {
+	# 	'game_uuid': game.uuid,
+	# }
+	# return JsonResponse(json_payload, status=201)
 
 
 def game_turn(request, game_uuid):
