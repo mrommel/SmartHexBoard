@@ -134,7 +134,7 @@ def create_game(request):
 			return JsonResponse(json_payload, status=201)
 		else:
 			# print(form.errors)
-			json_payload = {'status': 'Form not valid'}
+			json_payload = {'status': 'Form not valid', 'errors': form.errors}
 			return JsonResponse(json_payload, status=400)
 	else:
 		json_payload = {'status': f'Invalid method {request.method}'}
