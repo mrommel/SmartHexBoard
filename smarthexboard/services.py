@@ -1,38 +1,43 @@
 import json
 
+from smarthexboardlib.game.baseTypes import HandicapType
 from smarthexboardlib.game.civilizations import LeaderType
+from smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
 from smarthexboardlib.map.generation import MapOptions, MapGenerator
 from smarthexboardlib.map.types import MapSize, MapType
 
-from smarthexboard.models import MapGenerationData, MapGenerationState
+from smarthexboard.models import GameGenerationData, GameGenerationState
 
 
-def generate_map(uuid, map_size, map_type):
+def generate_game(uuid, leader: LeaderType, handicap: HandicapType, mapSize: MapSize, mapType: MapType):
 	def callbackFunc(state):
 		print(f'Progress: {state.value} - {state.message} - {uuid}')
 		# write state to db
-		map_generation_callback_obj = MapGenerationData.objects.filter(uuid=uuid).first()
-		map_generation_callback_obj.state = MapGenerationState.RUNNING
+		map_generation_callback_obj = GameGenerationData.objects.filter(uuid=uuid).first()
+		map_generation_callback_obj.state = GameGenerationState.RUNNING
 		map_generation_callback_obj.progress = state.value
 		map_generation_callback_obj.save()
 		print(f'saved state: MapGenerationState.RUNNING')
 
 	print(f'start creating map: {uuid}')
-	map_generation_obj = MapGenerationData(uuid=uuid, map='', size=map_size, state=MapGenerationState.OPEN)
-	map_generation_obj.save()
+	game_generation_obj = GameGenerationData(uuid=uuid, game='', state=GameGenerationState.OPEN, progress=0.0)
+	game_generation_obj.save()
 
-	mapSize: MapSize = MapSize.fromName(map_size)
-	mapType: MapType = MapType.fromName(map_type)
-
-	options = MapOptions(mapSize=mapSize, mapType=mapType, leader=LeaderType.alexander)
+	options = MapOptions(mapSize=mapSize, mapType=mapType, leader=leader)
 	generator = MapGenerator(options)
 
-	grid = generator.generate(callbackFunc)
+	mapModel = generator.generate(callbackFunc)
 
-	map_generation_final_obj = MapGenerationData.objects.filter(uuid=uuid).first()
-	map_generation_final_obj.map = str(json.dumps(grid.to_dict()))
-	map_generation_final_obj.state = MapGenerationState.READY
-	map_generation_final_obj.progress = 1.0
-	map_generation_final_obj.save()
+	gameGenerator = GameGenerator()
+	gameModel = gameGenerator.generate(mapModel, handicap)
 
-	print(f'map created: {uuid} - can be retrieved')
+	# add UI
+	gameModel.userInterface = UserInterfaceImpl()
+
+	game_generation_final_obj = GameGenerationState.objects.filter(uuid=uuid).first()
+	game_generation_final_obj.game = str(json.dumps(gameModel))
+	game_generation_final_obj.state = GameGenerationState.READY
+	game_generation_final_obj.progress = 1.0
+	game_generation_final_obj.save()
+
+	print(f'game created: {uuid} - can be retrieved')

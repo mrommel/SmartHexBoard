@@ -12,7 +12,7 @@ from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, M
 
 from setup.settings import DEBUG
 from smarthexboard.forms import CreateGameForm
-from smarthexboard.models import MapGenerationData, MapGenerationState, GameDataModel, MapDataModel, MapSizeModel, MapTypeModel
+from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.utils import is_valid_uuid
 
 
@@ -111,77 +111,6 @@ def styleguide(request):
 #
 # ####################################
 
-def generate_map(request, map_size: str, map_type: str):
-	try:
-		size_value = MapSizeModel.from_str(map_size.upper())
-	except ValueError as e:
-		json_payload = {
-			'error': 'invalid arg',
-			'field': 'map_size',
-			'value': map_size,
-			'message': f'Invalid request: not a valid map size: {e}'
-		}
-		return JsonResponse(json_payload, status=400)
-
-	try:
-		type_value = MapTypeModel.from_str(map_type.upper())
-	except ValueError as e:
-		json_payload = {
-			'error': 'invalid arg',
-			'field': 'map_type',
-			'value': map_type,
-			'message': f'Invalid request: not a valid map type: {e}'
-		}
-		return JsonResponse(json_payload, status=400)
-
-	map_uuid = uuid.uuid4()
-	async_task("smarthexboard.services.generate_map", map_uuid, size_value, type_value)
-	json_payload = {'uuid': map_uuid}
-	return JsonResponse(json_payload, status=201)
-
-
-def generate_status(request, map_uuid):
-	if not is_valid_uuid(map_uuid):
-		json_payload = {
-			'error': 'invalid arg',
-			'field': 'map_uuid',
-			'value': map_uuid,
-			'message': 'Invalid request: not a valid uuid format'
-		}
-		return JsonResponse(json_payload, status=400)
-
-	map_generation = MapGenerationData.objects.filter(uuid=map_uuid).first()
-	if map_generation is None:
-		json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generation with uuid: {map_uuid}'}
-		return JsonResponse(json_payload, status=404)
-
-	json_payload = {
-		'uuid': map_uuid,
-		'status': MapGenerationState(map_generation.state).label,
-		'progress': map_generation.progress
-	}
-	return JsonResponse(json_payload, status=200)
-
-
-def generated_map(request, map_uuid):
-	if not is_valid_uuid(map_uuid):
-		json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
-		return JsonResponse(json_payload, status=400)
-
-	map_generation = MapGenerationData.objects.filter(uuid=map_uuid).first()
-	if map_generation is None:
-		json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generated with uuid: {map_uuid}'}
-		return JsonResponse(json_payload, status=404)
-
-	current_state = MapGenerationState(map_generation.state)
-	if current_state != MapGenerationState.READY:
-		json_payload = {'uuid': map_uuid, 'status': f'Map with {map_uuid} is not ready yet: {current_state}'}
-		return JsonResponse(json_payload, status=400)
-
-	# convert json string to dict
-	json_payload = json.loads(map_generation.map)
-	return JsonResponse(json_payload, status=200)
-
 
 def create_game(request):
 	# If this is a POST request then process the Form data
@@ -192,21 +121,67 @@ def create_game(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
+			game_uuid = uuid.uuid4()
 			leader = LeaderType.fromName(form.cleaned_data["leader"])
 			handicap = HandicapType.fromName(form.cleaned_data["handicap"])
 			mapSize = MapSize.fromName(form.cleaned_data["mapSize"])
 			mapType = MapType.fromName(form.cleaned_data["mapType"])
-			# print(f'leader={leader}, handicap={handicap}, mapSize={mapSize}, mapType={mapType}')
+
+			print(f'generate_game({game_uuid}, {leader}, {handicap}, {mapSize}, {mapType})')
+			async_task("smarthexboard.services.generate_game", game_uuid, leader, handicap, mapSize, mapType)
 
 			json_payload = {'status': 'Success'}
-			return JsonResponse(json_payload, status=200)
+			return JsonResponse(json_payload, status=201)
 		else:
-			print(form.errors)
+			# print(form.errors)
 			json_payload = {'status': 'Form not valid'}
 			return JsonResponse(json_payload, status=400)
 	else:
 		json_payload = {'status': f'Invalid method {request.method}'}
 		return JsonResponse(json_payload, status=400)
+
+
+def generate_status(request, game_uuid):
+	if not is_valid_uuid(game_uuid):
+		json_payload = {
+			'error': 'invalid arg',
+			'field': 'game_uuid',
+			'value': game_uuid,
+			'message': 'Invalid request: not a valid uuid format'
+		}
+		return JsonResponse(json_payload, status=400)
+
+	game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
+	if game_generation is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generation with uuid: {game_uuid}'}
+		return JsonResponse(json_payload, status=404)
+
+	json_payload = {
+		'uuid': game_uuid,
+		'status': GameGenerationState(game_generation.state).label,
+		'progress': game_generation.progress
+	}
+	return JsonResponse(json_payload, status=200)
+
+
+def generated_map(request, game_uuid):
+	if not is_valid_uuid(game_uuid):
+		json_payload = {'uuid': game_uuid, 'status': 'Invalid request: not a valid uuid format'}
+		return JsonResponse(json_payload, status=400)
+
+	game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
+	if game_generation is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generated with uuid: {game_uuid}'}
+		return JsonResponse(json_payload, status=404)
+
+	current_state = GameGenerationState(game_generation.state)
+	if current_state != GameGenerationState.READY:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
+		return JsonResponse(json_payload, status=400)
+
+	# convert json string to dict
+	json_payload = json.loads(game_generation.map)
+	return JsonResponse(json_payload, status=200)
 
 
 	# verify parameters

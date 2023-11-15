@@ -1,7 +1,7 @@
 """admin module description"""
 from django.contrib import admin
 
-from smarthexboard.models import MapGenerationData
+from smarthexboard.models import GameGenerationData
 
 # Register your models here.
-admin.site.register(MapGenerationData)
+admin.site.register(GameGenerationData)
