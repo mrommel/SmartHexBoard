@@ -130,7 +130,7 @@ def create_game(request):
 			print(f'generate_game({game_uuid}, {leader}, {handicap}, {mapSize}, {mapType})')
 			async_task("smarthexboard.services.generate_game", game_uuid, leader, handicap, mapSize, mapType)
 
-			json_payload = {'status': 'Success'}
+			json_payload = {'status': 'Created', 'game_uuid': game_uuid}
 			return JsonResponse(json_payload, status=201)
 		else:
 			# print(form.errors)
@@ -218,12 +218,6 @@ def generated_map(request, game_uuid):
 
 	# remove map generation object
 	# map_generation.delete()
-	#
-	# gameGenerator = GameGenerator()
-	# simulation = gameGenerator.generate(map_generation.map, HandicapType.settler)
-	#
-	# # add UI
-	# simulation.userInterface = UserInterfaceImpl()
 	#
 	# # create game with map
 	# simulation_content = str(json.dumps(simulation))

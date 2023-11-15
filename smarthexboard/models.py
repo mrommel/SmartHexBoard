@@ -14,21 +14,6 @@ class GameGenerationState(models.TextChoices):
 	READY = 'RE', _('Ready')
 
 
-class MapSizeModel(models.TextChoices):
-	DUEL = 'DU', _('TXT_KEY_MAP_SIZE_DUEL_NAME')
-	TINY = 'TI', _('TXT_KEY_MAP_SIZE_TINY_NAME')
-	SMALL = 'SM', _('TXT_KEY_MAP_SIZE_SMALL_NAME')
-	STANDARD = 'ST', _('TXT_KEY_MAP_SIZE_STANDARD_NAME')
-
-
-class MapTypeModel(models.TextChoices):
-	EMPTY = 'EM', _('TXT_KEY_MAP_TYPE_EMPTY_NAME')
-	EARTH = 'EA', _('TXT_KEY_MAP_TYPE_EARTH_NAME')
-	PANGAEA = 'PA', _('TXT_KEY_MAP_TYPE_PANGAEA_NAME')
-	CONTINENTS = 'CO', _('TXT_KEY_MAP_TYPE_CONTINENTS_NAME')
-	ARCHIPELAGO = 'AR', _('TXT_KEY_MAP_TYPE_ARCHIPELAGO_NAME')
-
-
 class GameGenerationData(models.Model):
 	uuid = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
 	game = models.CharField(max_length=500000)
@@ -38,6 +23,9 @@ class GameGenerationData(models.Model):
 		default=GameGenerationState.OPEN,
 	)
 	progress = models.FloatField(default=0.0)
+
+	def __str__(self):
+		return f'{self.uuid}, {self.state}, {self.progress}'
 
 	class Meta:
 		constraints = [
