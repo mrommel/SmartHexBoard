@@ -7,12 +7,15 @@ from django.template import loader
 from django_q.tasks import async_task
 from smarthexboardlib.game.baseTypes import HandicapType
 from smarthexboardlib.game.civilizations import LeaderType
+from smarthexboardlib.game.game import GameModel
 from smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
 from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
+from smarthexboardlib.serialisation.game import GameModelSchema
 
 from setup.settings import DEBUG
 from smarthexboard.forms import CreateGameForm
 from smarthexboard.models import GameGenerationData, GameGenerationState
+from smarthexboard.repositories import GameDataRepository
 from smarthexboard.utils import is_valid_uuid
 
 
@@ -122,10 +125,30 @@ def create_game(request):
 		# Check if the form is valid:
 		if form.is_valid():
 			game_uuid = uuid.uuid4()
-			leader = LeaderType.fromName(form.cleaned_data["leader"])
-			handicap = HandicapType.fromName(form.cleaned_data["handicap"])
-			mapSize = MapSize.fromName(form.cleaned_data["mapSize"])
-			mapType = MapType.fromName(form.cleaned_data["mapType"])
+
+			try:
+				leader = LeaderType.fromName(form.cleaned_data["leader"])
+			except Exception as err:
+				json_payload = {'status': 'Form not valid', 'errors': {'leader': [str(err)]}}
+				return JsonResponse(json_payload, status=400)
+
+			try:
+				handicap = HandicapType.fromName(form.cleaned_data["handicap"])
+			except Exception as err:
+				json_payload = {'status': 'Form not valid', 'errors': {'handicap': [str(err)]}}
+				return JsonResponse(json_payload, status=400)
+
+			try:
+				mapSize = MapSize.fromName(form.cleaned_data["mapSize"])
+			except Exception as err:
+				json_payload = {'status': 'Form not valid', 'errors': {'mapSize': [str(err)]}}
+				return JsonResponse(json_payload, status=400)
+
+			try:
+				mapType = MapType.fromName(form.cleaned_data["mapType"])
+			except Exception as err:
+				json_payload = {'status': 'Form not valid', 'errors': {'mapType': [str(err)]}}
+				return JsonResponse(json_payload, status=400)
 
 			print(f'generate_game({game_uuid}, {leader}, {handicap}, {mapSize}, {mapType})')
 			async_task("smarthexboard.services.generate_game", game_uuid, leader, handicap, mapSize, mapType)
@@ -164,7 +187,7 @@ def generate_status(request, game_uuid):
 	return JsonResponse(json_payload, status=200)
 
 
-def generated_map(request, game_uuid):
+def game_map(request, game_uuid):
 	if not is_valid_uuid(game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': 'Invalid request: not a valid uuid format'}
 		return JsonResponse(json_payload, status=400)
@@ -179,63 +202,58 @@ def generated_map(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
 		return JsonResponse(json_payload, status=400)
 
+	game_str = game_generation.game
+	obj_dict = GameModelSchema().loads(game_str)
+	obj = GameModel(obj_dict)
+	GameDataRepository.store(game_uuid, obj)
+
+	map_dict = obj._map.to_dict()
+
 	# convert json string to dict
-	json_payload = json.loads(game_generation.map)
+	json_payload = json.loads(map_dict)
 	return JsonResponse(json_payload, status=200)
 
 
-	# verify parameters
-	# if not is_valid_uuid(map_uuid):
-	# 	json_payload = {'uuid': map_uuid, 'status': 'Invalid request: not a valid uuid format'}
-	# 	return JsonResponse(json_payload, status=400)
+def start_game_turn(request, game_uuid):
+	game = GameDataRepository.fetch(game_uuid)
 
-	# try:
-	# 	leader_type = LeaderTypeModel.from_str(leader.upper())
-	# except ValueError as e:
-	# 	json_payload = {'leader': leader, 'status': f'Invalid request: not a valid leader name: {e}'}
-	# 	return JsonResponse(json_payload, status=400)
-	#
-	# try:
-	# 	handicap_type = HandicapTypeModel.from_str(handicap.upper())
-	# except ValueError as e:
-	# 	json_payload = {'handicap': handicap, 'status': f'Invalid request: not a valid handicap name: {e}'}
-	# 	return JsonResponse(json_payload, status=400)
+	if game is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
+		return JsonResponse(json_payload, status=400)
 
-	# get map generation object
-	# map_generation = MapGenerationData.objects.get(uuid=map_uuid)
-	# if map_generation is None:
-	# 	json_payload = {'uuid': map_uuid, 'status': f'Cannot find map generated with uuid: {map_uuid}'}
-	# 	return JsonResponse(json_payload, status=404)
-	#
-	# current_state = MapGenerationState(map_generation.state)
-	# if current_state != MapGenerationState.READY:
-	# 	json_payload = {'uuid': map_uuid, 'status': f'Map with {map_uuid} is not ready yet: {current_state}'}
-	# 	return JsonResponse(json_payload, status=400)
-	#
-	# # create map object
-	# map_model = MapDataModel(uuid=map_uuid, content=map_generation.map)
-	# map_model.save()
+	humanPlayer = game.humanPlayer()
 
-	# remove map generation object
-	# map_generation.delete()
-	#
-	# # create game with map
-	# simulation_content = str(json.dumps(simulation))
-	# game = GameDataModel(uuid=uuid.uuid4(), content=simulation_content)
-	# game.save()
+	if humanPlayer.hasProcessedAutoMoves() and humanPlayer.turnFinished():
+		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
+		return JsonResponse(json_payload, status=400)
 
-	# creat
+	if humanPlayer.isTurnActive():
+		humanPlayer.setProcessedAutoMovesTo(True)
+		humanPlayer.setEndTurnTo(True, game)
+		humanPlayer.finishTurn()
+	else:
+		raise Exception('unknown')
 
-	# serialize game
-	# json_payload = {
-	# 	'game_uuid': game.uuid,
-	# }
-	# return JsonResponse(json_payload, status=201)
-
-
-def game_turn(request, game_uuid):
 	json_payload = {
 		'game_uuid': game_uuid,
+		'current_turn': game.currentTurn
+		# notifications to human?
 	}
+	return JsonResponse(json_payload, status=200)
 
+
+def game_turn_status(request, game_uuid):
+	game = GameDataRepository.fetch(game_uuid)
+
+	if game is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
+		return JsonResponse(json_payload, status=400)
+
+	print(f'game_turn_status: ')
+
+	json_payload = {
+		'game_uuid': game_uuid,
+		'current_turn': game.currentTurn
+		# notifications to human?
+	}
 	return JsonResponse(json_payload, status=200)

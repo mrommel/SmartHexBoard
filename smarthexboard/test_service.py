@@ -1,11 +1,12 @@
 import json
 import unittest
 from time import sleep
+from urllib.parse import urlencode
 
 import pytest
 
-from smarthexboard.models import MapGenerationState, MapGenerationData, MapSizeModel, MapTypeModel
-from smarthexboard.services import generate_map
+from smarthexboard.models import GameGenerationState, GameGenerationData
+from smarthexboard.services import generate_game
 from smarthexboard.utils import is_valid_uuid
 from django.test import Client
 
@@ -13,20 +14,36 @@ from django.test import Client
 class TestGenerationRequest(unittest.TestCase):
 
 	@pytest.mark.django_db
-	def test_invalid_map_size_generate_map_request(self):
+	def test_completely_invalid_generate_game_request(self):
 		"""Test that the map generation request (async) fails when map size is wrong"""
 		client = Client()
 
-		response = client.post('/smarthexboard/generate_map/WRONG/CONTINENTS/')
-		# print(response.content)
+		data = urlencode({"something": "something"})
+		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		print(response.content)
 		json_object = json.loads(response.content)
-		error = json_object['error']
-		field = json_object['field']
-		value = json_object['value']
+		status = json_object['status']
+		errors = json_object['errors']
+
 		self.assertEqual(response.status_code, 400)
-		self.assertEqual(error, 'invalid arg')
-		self.assertEqual(field, 'map_size')
-		self.assertEqual(value, 'WRONG')
+		self.assertEqual(status, 'Form not valid')
+		self.assertEqual(errors, {'handicap': ['This field is required.'], 'leader': ['This field is required.'], 'mapSize': ['This field is required.'], 'mapType': ['This field is required.']})
+
+	@pytest.mark.django_db
+	def test_invalid_leader_generate_game_request(self):
+		"""Test that the map generation request (async) fails when map size is wrong"""
+		client = Client()
+
+		data = urlencode({"leader": "random", 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
+		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		print(response.content)
+		json_object = json.loads(response.content)
+		status = json_object['status']
+		errors = json_object['errors']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Form not valid')
+		self.assertEqual(errors, {'leader': ['No matching case for leaderName: "random"']})
 
 	@pytest.mark.django_db
 	def test_valid_map_size_generate_map_request(self):

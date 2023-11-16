@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.core.cache import cache
 from smarthexboardlib.game.game import GameModel
 from smarthexboardlib.serialisation.game import GameModelSchema
@@ -16,23 +18,27 @@ class GameDataRepository:
 		return f"game_{game_uuid}"
 
 	@staticmethod
-	def _fetchFromCache(cls, game_uuid):
+	def _fetchFromCache(game_uuid) -> Optional[GameModel]:
 		return cache.get(GameDataRepository._cacheKey(game_uuid))
 
 	@staticmethod
-	def _storeToCache(cls, game_uuid, gameModel):
+	def _storeToCache(game_uuid, gameModel):
 		cache.set(GameDataRepository._cacheKey(game_uuid), gameModel, GameDataRepository.cache_timeout)
 
 	# database methods
 
 	@staticmethod
-	def _fetchFromDatabase(cls, game_uuid) -> GameModel:
-		db_content = GameDataModel.objects.get(uuid=game_uuid).content
+	def _fetchFromDatabase(game_uuid) -> Optional[GameModel]:
+		game_data = GameDataModel.objects.get(uuid=game_uuid)
+		if game_data is None:
+			return None
+
+		db_content = game_data.content
 		obj_dict = GameModelSchema().loads(db_content)
 		return GameModel(obj_dict)
 
 	@staticmethod
-	def _storeToDatabase(cls, game_uuid, gameModel):
+	def _storeToDatabase(game_uuid, gameModel):
 		obj = GameDataModel.objects.get(uuid=game_uuid)
 		json_str = GameModelSchema().dumps(gameModel)
 
@@ -42,3 +48,26 @@ class GameDataRepository:
 		else:
 			obj.content = json_str
 			obj.save()
+
+	# public methods
+
+	@staticmethod
+	def fetch(game_uuid) -> Optional[GameModel]:
+		obj = GameDataRepository._fetchFromCache(game_uuid)
+
+		if obj is None:
+			obj: Optional[GameModel] = GameDataRepository._fetchFromDatabase(game_uuid)
+
+			if obj is None:
+				return None
+
+			GameDataRepository._storeToCache(game_uuid, obj)
+		else:
+			cache.touch(game_uuid, GameDataRepository.cache_timeout)
+
+		return obj
+
+	@staticmethod
+	def store(game_uuid, obj: GameModel):
+		GameDataRepository._storeToDatabase(game_uuid, obj)
+		GameDataRepository._storeToCache(game_uuid, obj)
