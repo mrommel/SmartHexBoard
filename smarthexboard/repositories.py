@@ -39,7 +39,11 @@ class GameDataRepository:
 
 	@staticmethod
 	def _storeToDatabase(game_uuid, gameModel):
-		obj = GameDataModel.objects.get(uuid=game_uuid)
+		try:
+			obj = GameDataModel.objects.get(uuid=game_uuid)
+		except GameDataModel.DoesNotExist:
+			obj = None
+
 		json_str = GameModelSchema().dumps(gameModel)
 
 		if obj is None:

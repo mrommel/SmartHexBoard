@@ -126,29 +126,10 @@ def create_game(request):
 		if form.is_valid():
 			game_uuid = uuid.uuid4()
 
-			try:
-				leader = LeaderType.fromName(form.cleaned_data["leader"])
-			except Exception as err:
-				json_payload = {'status': 'Form not valid', 'errors': {'leader': [str(err)]}}
-				return JsonResponse(json_payload, status=400)
-
-			try:
-				handicap = HandicapType.fromName(form.cleaned_data["handicap"])
-			except Exception as err:
-				json_payload = {'status': 'Form not valid', 'errors': {'handicap': [str(err)]}}
-				return JsonResponse(json_payload, status=400)
-
-			try:
-				mapSize = MapSize.fromName(form.cleaned_data["mapSize"])
-			except Exception as err:
-				json_payload = {'status': 'Form not valid', 'errors': {'mapSize': [str(err)]}}
-				return JsonResponse(json_payload, status=400)
-
-			try:
-				mapType = MapType.fromName(form.cleaned_data["mapType"])
-			except Exception as err:
-				json_payload = {'status': 'Form not valid', 'errors': {'mapType': [str(err)]}}
-				return JsonResponse(json_payload, status=400)
+			leader: LeaderType = form.leaderValue()
+			handicap: HandicapType = form.handicapValue()
+			mapSize: MapSize = form.mapSizeValue()
+			mapType: MapType = form.mapTypeValue()
 
 			print(f'generate_game({game_uuid}, {leader}, {handicap}, {mapSize}, {mapType})')
 			async_task("smarthexboard.services.generate_game", game_uuid, leader, handicap, mapSize, mapType)
@@ -202,7 +183,7 @@ def game_map(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
 		return JsonResponse(json_payload, status=400)
 
-	game_str = game_generation.game
+	game_str: str = game_generation.game
 	obj_dict = GameModelSchema().loads(game_str)
 	obj = GameModel(obj_dict)
 	GameDataRepository.store(game_uuid, obj)
@@ -210,7 +191,7 @@ def game_map(request, game_uuid):
 	map_dict = obj._map.to_dict()
 
 	# convert json string to dict
-	json_payload = json.loads(map_dict)
+	json_payload = map_dict
 	return JsonResponse(json_payload, status=200)
 
 
