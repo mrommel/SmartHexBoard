@@ -5,12 +5,12 @@ import uuid
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django_q.tasks import async_task
-from smarthexboardlib.game.baseTypes import HandicapType
-from smarthexboardlib.game.civilizations import LeaderType
-from smarthexboardlib.game.game import GameModel
-from smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
-from smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
-from smarthexboardlib.serialisation.game import GameModelSchema
+from .smarthexboardlib.game.baseTypes import HandicapType
+from .smarthexboardlib.game.civilizations import LeaderType
+from .smarthexboardlib.game.game import GameModel
+from .smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
+from .smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
+from .smarthexboardlib.serialisation.game import GameModelSchema
 
 from setup.settings import DEBUG
 from smarthexboard.forms import CreateGameForm
@@ -115,7 +115,7 @@ def styleguide(request):
 # ####################################
 
 
-def create_game(request):
+def game_create(request):
 	# If this is a POST request then process the Form data
 	if request.method == 'POST':
 
@@ -145,7 +145,7 @@ def create_game(request):
 		return JsonResponse(json_payload, status=400)
 
 
-def generate_status(request, game_uuid):
+def game_create_status(request, game_uuid):
 	if not is_valid_uuid(game_uuid):
 		json_payload = {
 			'error': 'invalid arg',
@@ -195,12 +195,41 @@ def game_map(request, game_uuid):
 	return JsonResponse(json_payload, status=200)
 
 
-def start_game_turn(request, game_uuid):
+def game_status(request, game_uuid):
 	game = GameDataRepository.fetch(game_uuid)
 
 	if game is None:
 		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
 		return JsonResponse(json_payload, status=400)
+
+	game.userInterface = UserInterfaceImpl()
+
+	humanPlayer = game.humanPlayer()
+
+	if humanPlayer.hasProcessedAutoMoves() and humanPlayer.turnFinished():
+		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
+		return JsonResponse(json_payload, status=400)
+
+	game.update()
+
+	json_payload = {
+		'game_uuid': game_uuid,
+		'current_turn': game.currentTurn,
+		'current_player': game.activePlayer().leader.name if game.activePlayer() is not None else '',
+		'human_active': humanPlayer.turnActive
+		# notifications to human?
+	}
+	return JsonResponse(json_payload, status=200)
+
+
+def game_turn(request, game_uuid):
+	game = GameDataRepository.fetch(game_uuid)
+
+	if game is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
+		return JsonResponse(json_payload, status=400)
+
+	game.userInterface = UserInterfaceImpl()
 
 	humanPlayer = game.humanPlayer()
 

@@ -4,9 +4,11 @@ from time import sleep
 from urllib.parse import urlencode
 
 import pytest
-from smarthexboardlib.game.baseTypes import HandicapType
-from smarthexboardlib.game.civilizations import LeaderType
-from smarthexboardlib.map.types import MapSize, MapType
+from parameterized import parameterized
+
+from .smarthexboardlib.game.baseTypes import HandicapType
+from .smarthexboardlib.game.civilizations import LeaderType
+from .smarthexboardlib.map.types import MapSize, MapType
 
 from smarthexboard.models import GameGenerationState, GameGenerationData
 from smarthexboard.services import generate_game
@@ -22,7 +24,7 @@ class TestGenerationRequest(unittest.TestCase):
 		client = Client()
 
 		data = urlencode({"something": "something"})
-		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
 		print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
@@ -38,7 +40,7 @@ class TestGenerationRequest(unittest.TestCase):
 		client = Client()
 
 		data = urlencode({"leader": "random", 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
-		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
@@ -54,7 +56,7 @@ class TestGenerationRequest(unittest.TestCase):
 		client = Client()
 
 		data = urlencode({'leader': 'trajan', 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'random'})
-		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
@@ -65,12 +67,17 @@ class TestGenerationRequest(unittest.TestCase):
 		self.assertEqual(errors, {'mapType': ["Cannot map mapType from 'random' to MapType"]})
 
 	@pytest.mark.django_db
-	def test_valid_generate_game_request(self):
+	@parameterized.expand([
+		["alexander", "settler", "small", "continents"],
+		["qin", "prince", "tiny", "earth"],
+		["trajan", "king", "duel", "continents"],
+	])
+	def test_valid_generate_game_request(self, leader, handicap, mapSize, mapType):
 		"""Test that the game generation request (async) is successful with correct values"""
 		client = Client()
 
-		data = urlencode({'leader': 'alexander', 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
-		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		data = urlencode({'leader': leader, 'handicap': handicap, 'mapSize': mapSize, 'mapType': mapType})
+		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		game_uuid = json_object['game_uuid']
@@ -82,7 +89,7 @@ class TestGenerationRequest(unittest.TestCase):
 		"""Test that the map generation request status returns error for invalid """
 		client = Client()
 
-		response = client.get(f'/smarthexboard/generate_status/123-324/')
+		response = client.get(f'/smarthexboard/game/123-324/create/status')
 		# print(response.content)
 		self.assertEqual(response.status_code, 400)
 
@@ -101,11 +108,11 @@ class TestGenerationRequest(unittest.TestCase):
 
 		# 1 - start map creation
 		data = urlencode({'leader': 'alexander', 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
-		response = client.post('/smarthexboard/create_game', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		game_uuid = json_object['game_uuid']
-		print(game_uuid)
+		# print(game_uuid)
 		self.assertEqual(response.status_code, 201)
 		self.assertEqual(is_valid_uuid(game_uuid), True)
 
@@ -122,7 +129,7 @@ class TestGenerationRequest(unittest.TestCase):
 		testing_count = 0
 		testing_status = GameGenerationState.RUNNING
 		while testing_status != GameGenerationState.READY and not testing_count > 10:
-			response = client.get(f'/smarthexboard/generate_status/{game_uuid}/')
+			response = client.get(f'/smarthexboard/game/{game_uuid}/create/status')
 			self.assertEqual(response.status_code, 200)
 
 			json_object = json.loads(response.content)
@@ -132,16 +139,35 @@ class TestGenerationRequest(unittest.TestCase):
 
 			generation_status = json_object['status'].upper()
 			testing_status = GameGenerationState(generation_status[0:2]).value
-			print(f'Got status {testing_status} in iteration: {testing_count}')
+			# print(f'Got status {testing_status} in iteration: {testing_count}')
 			testing_count += 1
 			sleep(1)
 
 		self.assertEqual(testing_status, GameGenerationState.READY)
 		self.assertEqual(testing_count < 10, True)
 
-		# get map
-		response = client.get(f'/smarthexboard/game_map/{game_uuid}/')
+		# 3 - get map
+		response = client.get(f'/smarthexboard/game/{game_uuid}/map')
 		self.assertEqual(response.status_code, 200)
+
+		# 4 - game status
+		human_active: bool = False
+		iteration: int = 0
+		while not human_active and iteration < 50:
+			response = client.get(f'/smarthexboard/game/{game_uuid}/status')
+			self.assertEqual(response.status_code, 200)
+			json_object = json.loads(response.content)
+			game_uuid_status = json_object['game_uuid']
+			current_turn_status = json_object['current_turn']
+			human_active = json_object['human_active']
+			print(json_object['current_player'])
+			self.assertEqual(game_uuid, game_uuid_status)
+			self.assertEqual(current_turn_status, 1)
+			iteration += 1
+			sleep(1)
+
+		self.assertEqual(human_active, True)
+		self.assertLess(iteration, 50)
 
 
 if __name__ == '__main__':

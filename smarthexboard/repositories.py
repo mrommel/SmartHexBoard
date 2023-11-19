@@ -1,8 +1,8 @@
 from typing import Optional
 
 from django.core.cache import cache
-from smarthexboardlib.game.game import GameModel
-from smarthexboardlib.serialisation.game import GameModelSchema
+from .smarthexboardlib.game.game import GameModel
+from .smarthexboardlib.serialisation.game import GameModelSchema
 
 from smarthexboard.models import GameDataModel
 

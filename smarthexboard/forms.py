@@ -1,8 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from smarthexboardlib.game.baseTypes import HandicapType
-from smarthexboardlib.game.civilizations import LeaderType
-from smarthexboardlib.map.types import MapType, MapSize
+from .smarthexboardlib.game.baseTypes import HandicapType
+from .smarthexboardlib.game.civilizations import LeaderType
+from .smarthexboardlib.map.types import MapType, MapSize
 
 
 class CreateGameForm(forms.Form):

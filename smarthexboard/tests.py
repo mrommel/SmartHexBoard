@@ -3,20 +3,20 @@ import unittest
 from typing import Union, Optional
 
 import smarthexboardlib.map.map
-from smarthexboardlib.game.achievements import CivicAchievements
-from smarthexboardlib.game.baseTypes import HandicapType
-from smarthexboardlib.game.buildings import BuildingType
-from smarthexboardlib.game.civilizations import LeaderType
-from smarthexboardlib.game.game import GameModel
-from smarthexboardlib.game.players import Player
-from smarthexboardlib.game.states.victories import VictoryType
-from smarthexboardlib.game.types import CivicType, TechType
-from smarthexboardlib.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
-from smarthexboardlib.map.generation import HeightMap, MapGenerator, MapOptions
-from smarthexboardlib.map.map import MapModel, Tile
-from smarthexboardlib.map.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
+from .smarthexboardlib.game.achievements import CivicAchievements
+from .smarthexboardlib.game.baseTypes import HandicapType
+from .smarthexboardlib.game.buildings import BuildingType
+from .smarthexboardlib.game.civilizations import LeaderType
+from .smarthexboardlib.game.game import GameModel
+from .smarthexboardlib.game.players import Player
+from .smarthexboardlib.game.states.victories import VictoryType
+from .smarthexboardlib.game.types import CivicType, TechType
+from .smarthexboardlib.map.base import Size, Array2D, HexCube, HexPoint, HexDirection
+from .smarthexboardlib.map.generation import HeightMap, MapGenerator, MapOptions
+from .smarthexboardlib.map.map import MapModel, Tile
+from .smarthexboardlib.map.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
-from smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType, MapSize
+from .smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType, MapSize
 
 
 class MapModelMock:

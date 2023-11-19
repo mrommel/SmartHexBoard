@@ -4,8 +4,8 @@ import uuid
 from django.db import models
 from django.db.models import CheckConstraint, Q
 from django.utils.translation import gettext_lazy as _
-from smarthexboardlib.game.civilizations import CivilizationType
-from smarthexboardlib.map.base import Size
+from .smarthexboardlib.game.civilizations import CivilizationType
+from .smarthexboardlib.map.base import Size
 
 
 class GameGenerationState(models.TextChoices):
