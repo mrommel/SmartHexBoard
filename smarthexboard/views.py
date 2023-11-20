@@ -212,10 +212,19 @@ def game_status(request, game_uuid):
 
 	game.update()
 
+	currentPlayerName = ''
+	if game.activePlayer() is not None:
+		if game.activePlayer().isCityState():
+			currentPlayerName = f'CityState: {game.activePlayer().cityState.title()}'
+		else:
+			currentPlayerName = game.activePlayer().leader.name
+
+	GameDataRepository.store(game_uuid, game)
+
 	json_payload = {
 		'game_uuid': game_uuid,
 		'current_turn': game.currentTurn,
-		'current_player': game.activePlayer().leader.name if game.activePlayer() is not None else '',
+		'current_player': currentPlayerName,
 		'human_active': humanPlayer.turnActive
 		# notifications to human?
 	}

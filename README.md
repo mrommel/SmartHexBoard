@@ -87,3 +87,4 @@ python3 ../manage.py compilemessages
 * https://transfonter.org/
 * https://www.valentinog.com/blog/django-q/
 * https://mitchel.me/slippers/docs/template-tags-filters/
+* https://codepen.io/dehnavi/pen/MebRbj (nine patch + css)

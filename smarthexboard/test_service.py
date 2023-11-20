@@ -160,7 +160,8 @@ class TestGenerationRequest(unittest.TestCase):
 			game_uuid_status = json_object['game_uuid']
 			current_turn_status = json_object['current_turn']
 			human_active = json_object['human_active']
-			print(json_object['current_player'])
+			current_player = json_object['current_player']
+			print(current_player)
 			self.assertEqual(game_uuid, game_uuid_status)
 			self.assertEqual(current_turn_status, 1)
 			iteration += 1
