@@ -1451,7 +1451,6 @@ class MapModel:
 				# self._workingCity = None  # fixme
 				# self._area = None  # fixme
 
-
 	def updateStatistics(self):
 		# reset
 		self._numberOfLandPlotsValue = 0

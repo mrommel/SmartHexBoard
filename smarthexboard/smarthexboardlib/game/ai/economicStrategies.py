@@ -588,7 +588,7 @@ class IslandStartStrategy(EconomicStrategy):
 						if simulation.isCoastalAt(loopPoint):
 							iCoastalTiles += 1
 
-						if loopTile.isDiscovered(player):
+						if loopTile.isDiscoveredBy(player):
 							iRevealedCoastalTiles += 1
 
 				# AI_STRATEGY_ISLAND_START_COAST_REVEAL_PERCENT => 80

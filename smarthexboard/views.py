@@ -210,15 +210,15 @@ def game_update(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
 		return JsonResponse(json_payload, status=400)
 
-	json_str = GameModelSchema().dumps(game)
-	with open("before.json", "w") as text_file:
-		text_file.write(json_str)
+	# json_str = GameModelSchema().dumps(game)
+	# with open("before.json", "w") as text_file:
+	# 	text_file.write(json_str)
 
 	game.update()
 
-	json_str = GameModelSchema().dumps(game)
-	with open("after.json", "w") as text_file:
-		text_file.write(json_str)
+	# json_str = GameModelSchema().dumps(game)
+	# with open("after.json", "w") as text_file:
+	# 	text_file.write(json_str)
 
 	currentPlayerName = ''
 	if game.activePlayer() is not None:

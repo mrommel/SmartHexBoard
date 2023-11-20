@@ -2439,7 +2439,8 @@ class Player:
 	def doTurn(self, simulation):
 		if self.startingPoint() is None:
 			firstUnit = firstOrNone(simulation.unitsOf(self))
-			self.updateStartingPoint(firstUnit)
+			if firstUnit is not None:
+				self.updateStartingPoint(firstUnit.location)
 
 		self.dangerPlotsAI.updateDanger(False, False, simulation)
 		self.doEurekas(simulation)
@@ -2486,6 +2487,9 @@ class Player:
 		return self._startingPositionValue
 
 	def updateStartingPoint(self, value: Optional[HexPoint]):
+		if value is not None and not isinstance(value, HexPoint):
+			raise Exception(f'value must be None or HexPoint but is {type(HexPoint)}')
+
 		self._startingPositionValue = value
 
 	def doTurnPostDiplomacy(self, simulation):
