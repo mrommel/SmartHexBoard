@@ -60,18 +60,18 @@ class CreateGameForm(forms.Form):
 
     def handicapValue(self):
         try:
-            HandicapType.fromName(self.data['handicap'])
+            return HandicapType.fromName(self.data['handicap'])
         except:
             raise Exception(f"Cannot map handicap from '{self.data['handicap']}' to HandicapType")
 
     def mapSizeValue(self):
         try:
-            MapSize.fromName(self.data['mapSize'])
+            return MapSize.fromName(self.data['mapSize'])
         except:
             raise Exception(f"Cannot map mapSize from '{self.data['mapSize']}' to MapSize")
 
     def mapTypeValue(self):
         try:
-            MapType.fromName(self.data['mapType'])
+            return MapType.fromName(self.data['mapType'])
         except:
             raise Exception(f"Cannot map mapType from '{self.data['mapType']}' to MapType")

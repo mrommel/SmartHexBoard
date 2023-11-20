@@ -407,7 +407,6 @@ class GameModel:
 		for player in self.players:
 			if player.isAlive():
 				player.startTurn(self)
-
 				break
 
 		# self.doUnitedNationsCountdown();

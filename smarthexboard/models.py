@@ -9,9 +9,9 @@ from .smarthexboardlib.map.base import Size
 
 
 class GameGenerationState(models.TextChoices):
-	OPEN = 'OP', _('Open')
-	RUNNING = 'RU', _('Running')
-	READY = 'RE', _('Ready')
+	OPEN = 'OP', 'Open'
+	RUNNING = 'RU', 'Running'
+	READY = 'RE', 'Ready'
 
 
 class GameGenerationData(models.Model):

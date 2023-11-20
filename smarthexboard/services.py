@@ -1,13 +1,10 @@
-import json
-
+from smarthexboard.models import GameGenerationData, GameGenerationState
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.civilizations import LeaderType
 from .smarthexboardlib.game.generation import GameGenerator, UserInterfaceImpl
 from .smarthexboardlib.map.generation import MapOptions, MapGenerator
 from .smarthexboardlib.map.types import MapSize, MapType
 from .smarthexboardlib.serialisation.game import GameModelSchema
-
-from smarthexboard.models import GameGenerationData, GameGenerationState
 
 
 def generate_game(uuid, leader: LeaderType, handicap: HandicapType, mapSize: MapSize, mapType: MapType):

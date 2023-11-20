@@ -272,6 +272,19 @@ function changeUIState(newState) {
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
+            $('#uistate-options').show();
+
+            $('#ui').addClass('blurred');
+            break;
+
+        case UIState.tutorials:
+            console.log('uistate > tutorials');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-create-game').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
 
             $('#ui').addClass('blurred');
@@ -316,8 +329,8 @@ function handleError(xhr, textStatus, exception) {
     }
 }
 
-var check_timer;
-var map_uuid;
+var generation_check_timer;
+var update_check_timer;
 var game_uuid;
 
 function startMapGeneration() {
@@ -332,7 +345,7 @@ function startMapGeneration() {
             console.log('started generating map ' + map_uuid);
 
             /* start checking status */
-            check_timer = setInterval(checkMapGeneration, 1000);
+            generation_check_timer = setInterval(checkGameGeneration, 1000);
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
@@ -340,23 +353,27 @@ function startMapGeneration() {
     });
 }
 
-// to be called when you want to stop the timer
-function abortTimer() {
-    clearInterval(check_timer);
+// to be called when you want to stop a timer
+function abortGenerationTimer() {
+    clearInterval(generation_check_timer);
 }
 
-function checkMapGeneration() {
+function abortUpdateTimer() {
+    clearInterval(update_check_timer);
+}
+
+function checkGameGeneration() {
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/generate_status/" + map_uuid + "/",
+        url: "/smarthexboard/game/" + game_uuid + "/create/status?timestamp=" + Date.now(),
         success: function(response) {
-            console.log('refresh map generation status: ' + response.status + ', progress: ' + response.progress);
+            console.log('refresh game generation status: ' + response.status + ', progress: ' + response.progress);
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
-            if (response.status == 'Ready' || response.status == 'Fertig') {
-                abortTimer();
-                loadMap(response.uuid);
+            if (response.status == 'Ready') {
+                abortGenerationTimer();
+                loadMap(game_uuid);
             }
         },
         error: function(xhr, textStatus, exception) {
@@ -365,28 +382,48 @@ function checkMapGeneration() {
     });
 }
 
-function loadMap(map_uuid) {
+function checkGameUpdate() {
+    $.ajax({
+        type:"GET",
+        url: "/smarthexboard/game/" + game_uuid + "/update?timestamp=" + Date.now(),
+        success: function(response) {
+            console.log('refresh game update: ' + response.status + ', progress: ' + response.progress);
+            console.log('update game: ' + JSON.stringify(response));
+            // fixme: propagate progress to ui
+
+            // $('#refresh_status').text(response.status);
+            if (response.status == 'Ready') {
+
+            }
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
+function loadMap(game_uuid) {
 
     $.ajax({
         type:"GET",
         dataType: "json",
-        url: "/smarthexboard/generated_map/" + map_uuid + "/",
+        url: "/smarthexboard/game/" + game_uuid + "/map",
         success: function(json_obj) {
-            console.log('load map: ' + map_uuid);
+            console.log('loaded map of game: ' + game_uuid);
 
             var mapObj = new Map();
             mapObj.fromJson(json_obj);
-            console.log('map: ' + map_uuid + ' deserialized');
+            console.log('map: ' + game_uuid + ' deserialized');
             renderer.map = mapObj;
-
-            // create game and store game_uuid
-            // createGame(map_uuid);
 
             var canvasSize = mapObj.canvasSize();
             // create canvas with this size
             setupCanvas(canvasSize);
 
             changeUIState(UIState.game);
+
+            /* start update status */
+            update_check_timer = setInterval(checkGameUpdate, 1000);
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
@@ -445,16 +482,19 @@ window.startGame = function startGame() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/smarthexboard/create_game",
+        url: "/smarthexboard/game/create",
         headers: {'X-CSRFToken': csrf_token},
         mode: 'same-origin',
         data: formData,
         processData: false,
         contentType: false,
         success: function(json_obj) {
-            console.log('created game: ' + JSON.stringify(json_obj));
-            // console.log(json_obj.game_uuid);
-            // game_uuid = json_obj.game_uuid;
+            // console.log('created game: ' + JSON.stringify(json_obj));
+            console.log('created game: ' + json_obj.game_uuid);
+            game_uuid = json_obj.game_uuid;
+
+            /* start checking status */
+            generation_check_timer = setInterval(checkGameGeneration, 1000);
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
@@ -510,7 +550,7 @@ window.turnButtonClicked = function turnButtonClicked() {
     $.ajax({
         type:"GET",
         dataType: "json",
-        url: "/smarthexboard/game_turn/" + game_uuid + "/",
+        url: "/smarthexboard/game/" + game_uuid + "/turn",
         success: function(json_obj) {
             console.log('game turned: ' + game_uuid);
         },
@@ -543,4 +583,9 @@ window.options = function options() {
 window.quitOptions = function quitOptions() {
     console.log('quitOptions');
     changeUIState(UIState.menu);
+}
+
+window.tutorials = function tutorials() {
+    console.log('tutorials');
+    changeUIState(UIState.tutorials);
 }
