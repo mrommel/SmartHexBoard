@@ -223,7 +223,7 @@ class UnitSchema(Schema):
 	processedInTurn = fields.Bool(attribute='_processedInTurnValue')
 	capturedAsIs = fields.Bool(attribute='_capturedAsIs')
 
-	missions = fields.Nested(MissionSchema, attribute='_missions')
+	missions = fields.Nested(MissionSchema, attribute='_missions', many=True)
 	missionTimer = fields.Int(attribute='_missionTimerValue')
 	buildType = EnumField(BuildType, attribute='_buildTypeValue', allow_none=True)
 	buildCharges = fields.Int(attribute='_buildChargesValue')

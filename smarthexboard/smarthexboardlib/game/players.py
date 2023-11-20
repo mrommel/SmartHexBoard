@@ -2424,14 +2424,15 @@ class Player:
 		self.wonderProductionAI = WonderProductionAI(player=self)
 
 	def __repr__(self):
+		meta_str = f'{"active" if self.turnActive else "inactive"}, {"alive" if self.isAliveVal else "dead"}'
 		if self.isBarbarian():
-			return f'Player({self.leader}, {self.leader.civilization()}, Barbarian)'
+			return f'Player({self.leader}, {self.leader.civilization()}, Barbarian, {meta_str})'
 		elif self.human:
-			return f'Player({self.leader}, {self.leader.civilization()}, Human)'
+			return f'Player({self.leader}, {self.leader.civilization()}, Human, {meta_str})'
 		elif self.isCityState():
-			return f'Player(CityState, {self.cityState}, CityState)'
+			return f'Player(CityState, {self.cityState}, CityState, {meta_str})'
 		else:
-			return f'Player({self.leader}, {self.leader.civilization()}, AI)'
+			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
 	def __hash__(self):
 		return hash((self.leader, self.cityState))

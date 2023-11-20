@@ -29,8 +29,8 @@ class Tile:
 
 
 class WeightedBuildList(WeightedBaseList):
-	def __init__(self):
-		super().__init__()
+	def __init__(self, initialDict: Optional[dict] = None):
+		super().__init__(initialDict)
 		for build in list(BuildType):
 			self.setWeight(0.0, build)
 
@@ -138,7 +138,7 @@ class Tile:
 			self._wonderValue = point_or_dict.get('_wonderValue', WonderType.none)
 			self._owner = None  # fixme
 			self._workingCity = None  # fixme
-			self._buildProgressList = point_or_dict.get('_buildProgressList', WeightedBuildList())
+			self._buildProgressList = WeightedBuildList(point_or_dict.get('_buildProgressList', {}))
 			self._area = None  # fixme
 		else:
 			raise Exception('unsupported combination')

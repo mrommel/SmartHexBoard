@@ -1,6 +1,6 @@
 import json
 import unittest
-from time import sleep
+from time import sleep, time
 from urllib.parse import urlencode
 
 import pytest
@@ -152,37 +152,28 @@ class TestGenerationRequest(unittest.TestCase):
 		response = client.get(f'/smarthexboard/game/{game_uuid}/map')
 		self.assertEqual(response.status_code, 200)
 
-		game = GameDataRepository.fetch(game_uuid)
-		json_dict = GameModelSchema().dump(game)
-		json_str = json.dumps(json_dict, indent=2)
-		with open("before.json", "w") as text_file:
-			text_file.write(json_str)
-
 		# 4 - game status
 		human_active: bool = False
 		iteration: int = 0
-		while not human_active and iteration < 10:
-			response = client.get(f'/smarthexboard/game/{game_uuid}/update')
+		while not human_active and iteration < 20:
+			ts = time()
+			response = client.get(f'/smarthexboard/game/{game_uuid}/update?timestamp={int(ts * 1000)}')
 			self.assertEqual(response.status_code, 200)
 			json_object = json.loads(response.content)
 			game_uuid_status = json_object['game_uuid']
 			current_turn_status = json_object['current_turn']
 			human_active = json_object['human_active']
 			current_player = json_object['current_player']
-			print(current_player)
+			# print(current_player)
 			self.assertEqual(game_uuid, game_uuid_status)
 			self.assertEqual(current_turn_status, 1)
 			iteration += 1
-			sleep(1)
-
-		game = GameDataRepository.fetch(game_uuid)
-		json_dict = GameModelSchema().dump(game)
-		json_str = json.dumps(json_dict, indent=2)
-		with open("after.json", "w") as text_file:
-			text_file.write(json_str)
+			sleep(1.0)
 
 		self.assertEqual(human_active, True)
-		self.assertLess(iteration, 50)
+		self.assertLess(iteration, 20)
+
+		print(f'--- {iteration} ---')
 
 
 if __name__ == '__main__':

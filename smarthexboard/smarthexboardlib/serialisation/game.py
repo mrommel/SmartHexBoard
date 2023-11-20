@@ -98,7 +98,7 @@ class PlayerSchema(Schema):
 	citiesLost = fields.Int(attribute="_citiesLostValue")
 	numberOfPlotsBought = fields.Int(attribute="_numberOfPlotsBoughtValue")
 	settledContinents = fields.List(EnumField(ContinentType), attribute="_settledContinents")
-	builtCityNames = fields.List(fields.Nested(fields.Str()))
+	builtCityNames = fields.List(fields.Str())
 	originalCapitalLocation = fields.Nested(PointSchema, attribute="originalCapitalLocationValue")
 	startingPosition = fields.Nested(PointSchema, attribute="_startingPositionValue", allow_none=True)
 	lostCapitalValue = fields.Bool()
