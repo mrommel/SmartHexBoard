@@ -154,7 +154,7 @@ class TestGenerationRequest(unittest.TestCase):
 		human_active: bool = False
 		iteration: int = 0
 		while not human_active and iteration < 50:
-			response = client.get(f'/smarthexboard/game/{game_uuid}/status')
+			response = client.get(f'/smarthexboard/game/{game_uuid}/update')
 			self.assertEqual(response.status_code, 200)
 			json_object = json.loads(response.content)
 			game_uuid_status = json_object['game_uuid']

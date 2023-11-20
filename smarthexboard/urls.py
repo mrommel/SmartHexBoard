@@ -18,7 +18,7 @@ urlpatterns = [
     path('game/create', views.game_create, name='game_create'),
     path('game/<str:game_uuid>/create/status', views.game_create_status, name='game_create_status'),
     path('game/<str:game_uuid>/map', views.game_map, name='game_map'),
-    path('game/<str:game_uuid>/status', views.game_status, name='game_status'),
+    path('game/<str:game_uuid>/update', views.game_update, name='game_update'),
     path('game/<str:game_uuid>/turn', views.game_turn, name='game_turn'),
 
     # debug

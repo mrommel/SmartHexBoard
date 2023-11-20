@@ -45,7 +45,7 @@ class DistrictType(ExtendedEnum):
 	spaceport = 'spaceport'
 	waterPark = 'waterPark'
 
-	def name(self) -> str:
+	def title(self) -> str:  # cannot use 'name'
 		return self._data().name
 
 	def requiredCivic(self) -> Optional[CivicType]:

@@ -62,7 +62,42 @@ class BuildType(ExtendedEnum):
 	plantation = 'plantation'
 	pasture = 'pasture'
 
-	def name(self) -> str:
+	@staticmethod
+	def fromName(buildName: str) -> BuildType:
+		if buildName == 'BuildType.none' or buildName == 'none':
+			return BuildType.none
+		elif buildName == 'BuildType.removeRainforest' or buildName == 'removeRainforest':
+			return BuildType.removeRainforest
+		elif buildName == 'BuildType.removeMarsh' or buildName == 'removeMarsh':
+			return BuildType.removeMarsh
+		elif buildName == 'BuildType.removeForest' or buildName == 'removeForest':
+			return BuildType.removeForest
+		elif buildName == 'BuildType.repair' or buildName == 'repair':
+			return BuildType.repair
+		elif buildName == 'BuildType.mine' or buildName == 'mine':
+			return BuildType.mine
+		elif buildName == 'BuildType.ancientRoad' or buildName == 'ancientRoad':
+			return BuildType.ancientRoad
+		elif buildName == 'BuildType.classicalRoad' or buildName == 'classicalRoad':
+			return BuildType.classicalRoad
+		elif buildName == 'BuildType.removeRoad' or buildName == 'removeRoad':
+			return BuildType.removeRoad
+		elif buildName == 'BuildType.fishingBoats' or buildName == 'fishingBoats':
+			return BuildType.fishingBoats
+		elif buildName == 'BuildType.camp' or buildName == 'camp':
+			return BuildType.camp
+		elif buildName == 'BuildType.farm' or buildName == 'farm':
+			return BuildType.farm
+		elif buildName == 'BuildType.quarry' or buildName == 'quarry':
+			return BuildType.quarry
+		elif buildName == 'BuildType.plantation' or buildName == 'plantation':
+			return BuildType.plantation
+		elif buildName == 'BuildType.pasture' or buildName == 'pasture':
+			return BuildType.pasture
+		else:
+			raise Exception(f'Cannot parse BuildType from "{buildName}"')
+
+	def title(self) -> str:  # cannot be 'name'
 		return self._data().name
 
 	def requiredTech(self) -> Optional[TechType]:

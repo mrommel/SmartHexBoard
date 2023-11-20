@@ -2,7 +2,9 @@
 import unittest
 from typing import Union, Optional
 
-import smarthexboardlib.map.map
+import smarthexboard
+from smarthexboard.smarthexboardlib.game.generation import GameGenerator
+from smarthexboard.smarthexboardlib.serialisation.game import GameModelSchema
 from .smarthexboardlib.game.achievements import CivicAchievements
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.buildings import BuildingType
@@ -16,7 +18,7 @@ from .smarthexboardlib.map.generation import HeightMap, MapGenerator, MapOptions
 from .smarthexboardlib.map.map import MapModel, Tile
 from .smarthexboardlib.map.path_finding.finder import AStarPathfinder, MoveTypeIgnoreUnitsPathfinderDataSource, \
 	MoveTypeIgnoreUnitsOptions
-from .smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType, MapSize
+from .smarthexboardlib.map.types import UnitMovementType, TerrainType, FeatureType, MapSize, MapType
 
 
 class MapModelMock:
@@ -390,9 +392,9 @@ class TestMapGenerator(unittest.TestCase):
 			self.last_state_value = state.value
 
 		# map db values to
-		mapSize: smarthexboardlib.map.types.MapSize = smarthexboardlib.map.types.MapSize.duel
-		mapType: smarthexboardlib.map.types.MapType = smarthexboardlib.map.types.MapType.continents
-		leader: smarthexboardlib.game.civilizations.LeaderType = smarthexboardlib.game.civilizations.LeaderType.alexander
+		mapSize: MapSize = MapSize.duel
+		mapType: MapType = MapType.continents
+		leader: LeaderType = LeaderType.alexander
 
 		options = MapOptions(mapSize=mapSize, mapType=mapType, leader=leader)
 		generator = MapGenerator(options)
@@ -482,46 +484,25 @@ class TestAssets(unittest.TestCase):
 		self.assertIn(BuildingType.arena, achievements.buildingTypes)
 
 
-# class TestGame(unittest.TestCase):
-# 	@pytest.mark.django_db
-# 	def test_game_creation(self):
-# 		"""Test game"""
-# 		map_model = MapModel(uuid=uuid.uuid4(), content='')
-# 		map_model.save()
-# 		game = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
-# 		game.save()
-#
-# 		player1 = Player(leader=LeaderType.ALEXANDER, game=game)
-# 		player1.save()
-# 		player2 = Player(leader=LeaderType.TRAJAN, game=game)
-# 		player2.save()
-#
-# 		players = game.players()
-# 		self.assertEqual(len(players), 2)
-# 		self.assertEqual(players[0], player1)
-# 		self.assertEqual(players[1], player2)
-#
-# 	@pytest.mark.django_db
-# 	def test_game_tech(self):
-# 		map_model = MapModel(uuid=uuid.uuid4(), content='')
-# 		map_model.save()
-# 		game_model = GameModel(uuid=uuid.uuid4(), map=map_model, name='Test game', turn=0, handicap=HandicapType.SETTLER)
-# 		game_model.save()
-#
-# 		player1 = Player(leader=LeaderType.ALEXANDER, game=game_model)
-# 		player1.save()
-#
-# 		player1Tech1 = PlayerTech(player=player1, tech_identifier='pottery', progress=25, eureka=False)
-# 		player1Tech1.save()
-#
-# 		player1Tech2 = PlayerTech(player=player1, tech_identifier='irrigation', progress=20, eureka=False)
-# 		player1Tech2.save()
-#
-# 		canResearchPottery = player1.canResearch(TechType.pottery)
-# 		self.assertEqual(canResearchPottery, False)
-#
-# 		canResearchIrrigation = player1.canResearch(TechType.irrigation)
-# 		self.assertEqual(canResearchIrrigation, True)
+class TestSerialization(unittest.TestCase):
+	def test_serialize_game(self):
+		def callbackFunc(state):
+			print(f'Progress: {state.value} - {state.message}')
+
+		options = MapOptions(mapSize=MapSize.duel, mapType=MapType.continents, leader=LeaderType.alexander)
+		generator = MapGenerator(options)
+
+		mapModel = generator.generate(callbackFunc)
+
+		gameGenerator = GameGenerator()
+		gameModel = gameGenerator.generate(mapModel, HandicapType.settler)
+
+		json_dict = GameModelSchema().dump(gameModel)
+		self.assertEqual(json_dict['currentTurn'], 0)
+		map_json_dict = json_dict['mapModel']
+		self.assertEqual(map_json_dict['width'], 32)
+		self.assertEqual(map_json_dict['height'], 22)
+		self.assertGreater(len(map_json_dict['units']), 0)
 
 
 if __name__ == '__main__':

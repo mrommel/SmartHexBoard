@@ -131,15 +131,15 @@ class Tile:
 			self._improvementPillagedValue: bool = point_or_dict.get('_improvementPillagedValue', False)
 			self.continentIdentifier = point_or_dict.get('continentIdentifier', None)
 			self.oceanIdentifier = point_or_dict.get('oceanIdentifier', None)
-			self.discovered = dict()
-			self.visible = dict()
-			self._cityValue = None
-			self._districtValue = DistrictType.none
-			self._wonderValue = WonderType.none
-			self._owner = None
-			self._workingCity = None
-			self._buildProgressList = WeightedBuildList()
-			self._area = None
+			self.discovered = point_or_dict.get('discovered', dict())
+			self.visible = point_or_dict.get('visible', dict())
+			self._cityValue = None  # fixme
+			self._districtValue = point_or_dict.get('_districtValue', DistrictType.none)
+			self._wonderValue = point_or_dict.get('_wonderValue', WonderType.none)
+			self._owner = None  # fixme
+			self._workingCity = None  # fixme
+			self._buildProgressList = point_or_dict.get('_buildProgressList', WeightedBuildList())
+			self._area = None  # fixme
 		else:
 			raise Exception('unsupported combination')
 
@@ -1328,8 +1328,8 @@ class MapModel:
 				for x in range(self.width):
 					self.tiles.values[y][x] = Tile(tiles_dict[y][x])
 
-			self._cities = []
-			self._units = []
+			self._cities = [City(city_dict) for city_dict in dict_obj.get('_cities', [])]
+			self._units = [Unit(unit_dict) for unit_dict in dict_obj.get('_units', [])]
 
 			startLocations_list = dict_obj.get('startLocations', [])
 			self.startLocations = []
@@ -1434,6 +1434,23 @@ class MapModel:
 		self.continents = []
 		self.oceans = []
 		self.areas = []
+
+	def postProcess(self, simulation):
+		for unit in self._units:
+			# unit.player and original player from hash
+			unit.player = simulation.playerForHash(unit.player)
+			unit._originalOwner = simulation.playerForHash(unit.originalPlayer())
+
+		for y in range(self.tiles.height):
+			for x in range(self.tiles.width):
+				tile = self.tiles.values[y][x]
+				# map.tiles owner from hash
+				# self._cityValue = None  # fixme
+				if tile._owner is not None:
+					tile._owner = simulation.playerForHash(tile._owner)
+				# self._workingCity = None  # fixme
+				# self._area = None  # fixme
+
 
 	def updateStatistics(self):
 		# reset

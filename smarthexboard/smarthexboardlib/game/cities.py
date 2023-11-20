@@ -1661,73 +1661,144 @@ class City:
 	attackRange = 2
 	workRadius = 3
 
-	def __init__(self, name: str, location: HexPoint, isCapital: bool, player):
-		self._name = name
-		self.location = location
-		self._capitalValue = isCapital
-		self.everCapitalValue = isCapital
-		self._populationValue: float = 0.0
-		self.gameTurnFoundedValue = -1
+	def __init__(self, name: Union[str, dict], location: HexPoint, isCapital: bool, player):
+		if isinstance(name, str):
+			self._name: str = name
+			self.location: HexPoint = location
+			self._capitalValue: bool = isCapital
+			self.everCapitalValue: bool = isCapital
+			self._populationValue: float = 0.0
+			self.gameTurnFoundedValue: int = -1
 
-		self._foodBasketValue = 1.0
-		self._lastTurnFoodEarnedValue = 0.0
-		self._lastTurnFoodHarvestedValue = 0.0
-		self._lastTurnGarrisonAssigned = 0
+			self._foodBasketValue: float = 1.0
+			self._lastTurnFoodEarnedValue: float = 0.0
+			self._lastTurnFoodHarvestedValue: float = 0.0
+			self._lastTurnGarrisonAssigned: int = 0
 
-		self.player = player
-		self.originalLeaderValue = player.leader
-		self.originalCityStateValue = player.cityState
-		self.previousLeaderValue = None
-		self.previousCityStateValue = None
+			self.player = player
+			self.originalLeaderValue: LeaderType = player.leader
+			self.originalCityStateValue: CityStateType = player.cityState
+			self.previousLeaderValue: Optional[LeaderType] = None
+			self.previousCityStateValue: Optional[CityStateType] = None
 
-		self._isFeatureSurroundedValue = False
-		self._cheapestPlotInfluenceValue = 0
-		self._cultureLevelValue = 0
-		self._cultureStoredValue = 0
-		self._loyaltyValue: float = 100.0
+			self._isFeatureSurroundedValue: bool = False
+			self._cheapestPlotInfluenceValue: int = 0
+			self._cultureLevelValue: int = 0
+			self._cultureStoredValue: int = 0
+			self._loyaltyValue: float = 100.0
 
-		self.threatVal = 0
-		self._garrisonedUnitValue = None
-		self._combatUnitValue = None
-		self._numberOfAttacksMade = 0
-		self._strengthVal = 0
+			self.threatVal: int = 0
+			self._garrisonedUnitValue = None
+			self._combatUnitValue = None
+			self._numberOfAttacksMade: int = 0
+			self._strengthVal: int = 0
 
-		self.healthPointsValue = 200
-		self._threatValue = 0
-		self.amenitiesForWarWearinessValue = 0
+			self.healthPointsValue: int = 200
+			self._threatValue: int = 0
+			self.amenitiesForWarWearinessValue: int = 0
 
-		self._luxuries = []
+			self._luxuries: [ResourceType] = []
 
-		self.baseYieldRateFromSpecialists = YieldList()
-		self.extraSpecialistYield = YieldList()
-		self.numPlotsAcquiredList = LeaderWeightList()
+			self.baseYieldRateFromSpecialists: YieldList = YieldList()
+			self.extraSpecialistYield: YieldList = YieldList()
+			self.numPlotsAcquiredList: LeaderWeightList = LeaderWeightList()
 
-		self._featureProductionValue = 0.0
-		self._productionLastTurnValue = 1.0
-		self._buildQueue = BuildQueue()
-		self._productionAutomatedValue: bool = False
-		self._routeToCapitalConnectedLastTurn: bool = False
-		self._routeToCapitalConnectedThisTurn: bool = False
-		self._governorValue: Optional[GovernorType] = None
-		self._aiNumPlotsAcquiredByOtherPlayers = WeightedBaseList()
+			self._featureProductionValue: float = 0.0
+			self._productionLastTurnValue: float = 1.0
+			self._buildQueue: BuildQueue = BuildQueue()
+			self._productionAutomatedValue: bool = False
+			self._routeToCapitalConnectedLastTurn: bool = False
+			self._routeToCapitalConnectedThisTurn: bool = False
+			self._governorValue: Optional[GovernorType] = None
+			self._aiNumPlotsAcquiredByOtherPlayers = WeightedBaseList()
 
-		# ai
-		self.cityStrategyAI = CityStrategyAI(self)
+			# ai
+			self.cityStrategyAI = CityStrategyAI(self)
 
-		# init later via 'initialize' method
-		self.districts = None
-		self.buildings = None
-		self.wonders = None
-		self.projects = None
+			# init later via 'initialize' method
+			self.districts = None
+			self.buildings = None
+			self.wonders = None
+			self.projects = None
 
-		self.cityStrategy = None
-		self.cityCitizens = None
-		self.greatWorks = None
-		self.cityReligion = None
-		self.cityTradingPosts = None
-		self.cityTourism = None
+			self.cityStrategy = None
+			self.cityCitizens = None
+			self.greatWorks = None
+			self.cityReligion = None
+			self.cityTradingPosts = None
+			self.cityTourism = None
 
-		self._scratchInt: int = -1
+			self._scratchInt: int = -1
+		elif isinstance(name, dict):
+			city_dict: dict = name
+			self._name: str = city_dict['name']
+			self.location: HexPoint = city_dict['location']
+			self._capitalValue: bool = city_dict['isCapital']
+			self.everCapitalValue: bool = city_dict['isCapital']
+			self._populationValue: float = 0.0
+			self.gameTurnFoundedValue: int = -1
+
+			self._foodBasketValue: float = 1.0
+			self._lastTurnFoodEarnedValue: float = 0.0
+			self._lastTurnFoodHarvestedValue: float = 0.0
+			self._lastTurnGarrisonAssigned: int = 0
+
+			self.player = player
+			self.originalLeaderValue: LeaderType = player.leader
+			self.originalCityStateValue: CityStateType = player.cityState
+			self.previousLeaderValue: Optional[LeaderType] = None
+			self.previousCityStateValue: Optional[CityStateType] = None
+
+			self._isFeatureSurroundedValue: bool = False
+			self._cheapestPlotInfluenceValue: int = 0
+			self._cultureLevelValue: int = 0
+			self._cultureStoredValue: int = 0
+			self._loyaltyValue: float = 100.0
+
+			self.threatVal: int = 0
+			self._garrisonedUnitValue = None
+			self._combatUnitValue = None
+			self._numberOfAttacksMade: int = 0
+			self._strengthVal: int = 0
+
+			self.healthPointsValue: int = 200
+			self._threatValue: int = 0
+			self.amenitiesForWarWearinessValue: int = 0
+
+			self._luxuries: [ResourceType] = []
+
+			self.baseYieldRateFromSpecialists: YieldList = YieldList()
+			self.extraSpecialistYield: YieldList = YieldList()
+			self.numPlotsAcquiredList: LeaderWeightList = LeaderWeightList()
+
+			self._featureProductionValue: float = 0.0
+			self._productionLastTurnValue: float = 1.0
+			self._buildQueue: BuildQueue = BuildQueue()
+			self._productionAutomatedValue: bool = False
+			self._routeToCapitalConnectedLastTurn: bool = False
+			self._routeToCapitalConnectedThisTurn: bool = False
+			self._governorValue: Optional[GovernorType] = None
+			self._aiNumPlotsAcquiredByOtherPlayers = WeightedBaseList()
+
+			# ai
+			self.cityStrategyAI = CityStrategyAI(self)
+
+			# init later via 'initialize' method
+			self.districts = None
+			self.buildings = None
+			self.wonders = None
+			self.projects = None
+
+			self.cityStrategy = None
+			self.cityCitizens = None
+			self.greatWorks = None
+			self.cityReligion = None
+			self.cityTradingPosts = None
+			self.cityTourism = None
+
+			self._scratchInt: int = -1
+		else:
+			raise Exception(f'Unsupported combination of params')
 
 	def __str__(self):
 		return f'City "{self._name}" at {self.location}'

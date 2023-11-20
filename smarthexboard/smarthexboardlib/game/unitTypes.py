@@ -475,7 +475,7 @@ class UnitType(ExtendedEnum):
 	def greatPersons(cls) -> [UnitType]:
 		return [UnitType.general, UnitType.admiral, UnitType.missionary, UnitType.apostle, UnitType.inquisitor, UnitType.prophet]
 
-	def name(self):
+	def title(self) -> str:  # cannot use 'name'
 		return self._data().name
 
 	def baseType(self) -> Optional[UnitType]:
@@ -1930,7 +1930,7 @@ class UnitMissionType(Enum):
 
 	group = 'group'
 
-	def name(self) -> str:
+	def title(self) -> str:  # cannot be 'name'
 		return self._data().name
 
 	def needsTarget(self) -> bool:

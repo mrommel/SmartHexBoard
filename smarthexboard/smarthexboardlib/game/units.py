@@ -1,7 +1,7 @@
 import logging
 import random
 import sys
-from typing import Optional
+from typing import Optional, Union
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, WeightedBaseList
 from smarthexboard.smarthexboardlib.game.ai.tactics import TacticalMoveType
@@ -51,9 +51,9 @@ class UnitTradeRouteState(ExtendedEnum):
 class UnitTradeRouteData:
 	def __init__(self, tradeRoute, turn: int):
 		self.tradeRoute = tradeRoute
-		self.direction = UnitTradeRouteDirection.start
-		self.establishedInTurn = turn
-		self.state = UnitTradeRouteState.active
+		self.direction: UnitTradeRouteDirection = UnitTradeRouteDirection.start
+		self.establishedInTurn: int = turn
+		self.state: UnitTradeRouteState = UnitTradeRouteState.active
 
 	def nextPathFor(self, unit, simulation) -> Optional[HexPath]:
 		current: HexPoint = unit.location
@@ -165,52 +165,103 @@ class Unit:
 	"""
 	maxHealth = 100.0
 
-	def __init__(self, location: HexPoint, unitType: UnitType, player):
-		self._name: str = unitType.name()
-		self.location: HexPoint = location
-		self._originLocation: HexPoint = location
-		self._originalOwner = player
-		self._facingDirection: HexDirection = HexDirection.south
-		self.unitType: UnitType = unitType
-		self.greatPerson: Optional[GreatPerson] = None
-		self.player = player
-		self._taskValue: UnitTaskType = unitType.defaultTask()
+	def __init__(self, location: Union[HexPoint, dict], unitType: Optional[UnitType]=None, player=None):
+		if isinstance(location, HexPoint):
+			self._name: str = unitType.title()
+			self.location: HexPoint = location
+			self._originLocation: HexPoint = location
+			self._originalOwner = player
+			self._facingDirection: HexDirection = HexDirection.south
+			self.unitType: UnitType = unitType
+			self.greatPerson: Optional[GreatPerson] = None
+			self.player = player
+			self._taskValue: UnitTaskType = unitType.defaultTask()
 
-		self._movesValue: int = unitType.moves()
-		self._canMoveImpassableCount: int = 0
-		self._healthPointsValue: float = Unit.maxHealth
-		self.deathDelay: bool = False
-		self._activityTypeValue = UnitActivityType.none
-		self._automationType = UnitAutomationType.none
-		self._processedInTurnValue = False
-		self._capturedAsIs = False
+			self._movesValue: int = unitType.moves()
+			self._canMoveImpassableCount: int = 0
+			self._healthPointsValue: float = Unit.maxHealth
+			self.deathDelay: bool = False
+			self._activityTypeValue = UnitActivityType.none
+			self._automationType = UnitAutomationType.none
+			self._processedInTurnValue: bool = False
+			self._capturedAsIs: bool = False
 
-		self._missions = []
-		self._missionTimerValue = 0
-		self._buildTypeValue = None
-		self._buildChargesValue = unitType.buildCharges()
+			self._missions: [UnitMission] = []
+			self._missionTimerValue: int = 0
+			self._buildTypeValue: Optional[BuildType] = None
+			self._buildChargesValue = unitType.buildCharges()
 
-		self._fortifyTurnsValue = 0
-		self._fortifiedThisTurnValue = False
-		self._fortifyValue = 0
-		self._isEmbarkedValue = False
+			self._fortifyTurnsValue: int = 0
+			self._fortifiedThisTurnValue: bool = False
+			self._fortifyValue: int = 0
+			self._isEmbarkedValue: bool = False
 
-		self._experienceValue = 0.0
-		self._experienceModifierValue = 0.0
-		self._promotions = UnitPromotions(self)
-		self._tacticalMoveValue = TacticalMoveType.none
-		self._tacticalTargetValue: Optional[HexPoint] = None
+			self._experienceValue: float = 0.0
+			self._experienceModifierValue: float = 0.0
+			self._promotions = UnitPromotions(self)
+			self._tacticalMoveValue: TacticalMoveType = TacticalMoveType.none
+			self._tacticalTargetValue: Optional[HexPoint] = None
 
-		self._garrisonedValue: bool = False
-		self._tradeRouteDataValue: Optional[UnitTradeRouteData] = None
+			self._garrisonedValue: bool = False
+			self._tradeRouteDataValue: Optional[UnitTradeRouteData] = None
 
-		self._numberOfAttacksMade: int = 0
-		self._army = None
-		self._deployFromOperationTurnValue: int = 0
+			self._numberOfAttacksMade: int = 0
+			self._army = None
+			self._deployFromOperationTurnValue: int = 0
 
-		self._noDefensiveBonusCount: int = 0
+			self._noDefensiveBonusCount: int = 0
 
-		self.unitMoved = None
+			self.unitMoved = None
+		elif isinstance(location, dict):
+			unit_dict: dict = location
+			self._name: str = unit_dict['_name']
+			self.location: HexPoint = HexPoint(unit_dict['location'])
+			self._originLocation: HexPoint = HexPoint(unit_dict['_originLocation'])
+			self._originalOwner = unit_dict['originalPlayer']  # hash - must be updated in post-processing
+			self._facingDirection: HexDirection = unit_dict['_facingDirection']
+			self.unitType: UnitType = unit_dict['unitType']
+			self.greatPerson: Optional[GreatPerson] = unit_dict['greatPerson']
+			self.player = unit_dict['player']  # hash - must be updated in post-processing
+			self._taskValue: UnitTaskType = unit_dict['_taskValue']
+
+			self._movesValue: int = unit_dict['_movesValue']
+			self._canMoveImpassableCount: int = unit_dict['_canMoveImpassableCount']
+			self._healthPointsValue: float = unit_dict['_healthPointsValue']
+			self.deathDelay: bool = unit_dict['deathDelay']
+			self._activityTypeValue = unit_dict['_activityTypeValue']
+			self._automationType = unit_dict['_automationType']
+			self._processedInTurnValue: bool = unit_dict['_processedInTurnValue']
+			self._capturedAsIs: bool = unit_dict['_capturedAsIs']
+
+			self._missions: [UnitMission] = unit_dict['_missions']
+			self._missionTimerValue: int = unit_dict['_missionTimerValue']
+			self._buildTypeValue: Optional[BuildType] = unit_dict['_buildTypeValue']
+			self._buildChargesValue = unit_dict['_buildChargesValue']
+
+			self._fortifyTurnsValue: int = unit_dict['_fortifyTurnsValue']
+			self._fortifiedThisTurnValue: bool = unit_dict['_fortifiedThisTurnValue']
+			self._fortifyValue: int = unit_dict['_fortifyValue']
+			self._isEmbarkedValue: bool = unit_dict['_isEmbarkedValue']
+
+			self._experienceValue: float = unit_dict['_experienceValue']
+			self._experienceModifierValue: float = unit_dict['_experienceModifierValue']
+			self._promotions = UnitPromotions(self)  # fixme
+			self._tacticalMoveValue: TacticalMoveType = unit_dict['_tacticalMoveValue']
+			self._tacticalTargetValue: Optional[HexPoint] = unit_dict['_tacticalTargetValue']
+
+			self._garrisonedValue: bool = unit_dict['_garrisonedValue']
+			self._tradeRouteDataValue: Optional[UnitTradeRouteData] = unit_dict['_tradeRouteDataValue']
+
+			self._numberOfAttacksMade: int = unit_dict['_numberOfAttacksMade']
+			# self._army = unit_dict['player'] - must be updated in post-processing
+			self._army = None
+			self._deployFromOperationTurnValue: int = unit_dict['_deployFromOperationTurnValue']
+
+			self._noDefensiveBonusCount: int = unit_dict['_noDefensiveBonusCount']
+
+			self.unitMoved = None
+		else:
+			raise Exception('Unsupported combination of parameters')
 
 	def __repr__(self):
 		return f'Unit({self.location}, {self.unitType}, {self.player.name()}, {self.experienceLevel()} exp)'

@@ -22,7 +22,7 @@ from smarthexboard.smarthexboardlib.game.types import CivicType, TechType
 from smarthexboard.smarthexboardlib.game.wonders import WonderType
 from smarthexboard.smarthexboardlib.map.areas import ContinentType
 from smarthexboard.smarthexboardlib.map.types import FeatureType, ResourceType
-from smarthexboard.smarthexboardlib.serialisation.base import PointSchema, HexAreaSchema
+from smarthexboard.smarthexboardlib.serialisation.base import PointSchema, HexAreaSchema, WeightedListField
 from smarthexboard.smarthexboardlib.serialisation.map import MapModelSchema
 
 
@@ -50,27 +50,6 @@ class PlayerGovernmentSchema(Schema):
 
 	class Meta:
 		model = PlayerGovernment
-
-
-class WeightedListField(fields.Field):
-	def __init__(self, key_type, *args, **kwargs):
-		fields.Field.__init__(self, *args, **kwargs)
-		self.key_type = key_type
-
-	def _serialize(self, value, attr, obj, **kwargs):
-		ret = {}
-		for key, val in value.items():
-			k = str(key)
-			ret[k] = val
-		return ret
-
-	def _deserialize(self, value, attr, data, **kwargs):
-		ret = {}
-		for key, val in value.items():
-			k = self.key_type.fromName(key)
-			ret[k] = val
-		return ret
-
 
 
 class PlayerSchema(Schema):

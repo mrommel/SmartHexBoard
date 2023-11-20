@@ -169,6 +169,10 @@ class GameModel:
 			self.victoryTypes: [VictoryType] = victoryTypes['victoryTypes']
 			self.handicap: HandicapType = victoryTypes['handicap']
 			self._map: MapModel = MapModel(victoryTypes['_map'])
+
+			# post-process
+			self._map.postProcess(self)
+
 			self.userInterface = None
 			self._gameStateValue: GameState = victoryTypes['_gameStateValue']
 			self._tacticalAnalysisMap = TacticalAnalysisMap(Size(self._map.width, self._map.height))

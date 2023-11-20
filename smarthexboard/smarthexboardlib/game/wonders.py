@@ -215,7 +215,7 @@ class WonderType(ExtendedEnum):
 
 		raise Exception(f'No matching case for wonderName: "{wonderName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:  # cannot use 'name'
 		return self._data().name
 
 	def requiredCivic(self) -> Optional[CivicType]:
