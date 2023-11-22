@@ -217,11 +217,13 @@ class Unit:
 			self._name: str = unit_dict['_name']
 			self.location: HexPoint = HexPoint(unit_dict['location'])
 			self._originLocation: HexPoint = HexPoint(unit_dict['_originLocation'])
-			self._originalOwner = unit_dict['originalPlayer']  # hash - must be updated in post-processing
+			self._originalOwner = None  # updated in post-processing from originalOwnerHash
+			self.originalOwnerHash = unit_dict['originalPlayer']  # hash - must be used in post-processing
 			self._facingDirection: HexDirection = unit_dict['_facingDirection']
 			self.unitType: UnitType = unit_dict['unitType']
 			self.greatPerson: Optional[GreatPerson] = unit_dict['greatPerson']
-			self.player = unit_dict['player']  # hash - must be updated in post-processing
+			self.player = None  # updated in post-processing from playerHash
+			self.playerHash = unit_dict['player']  # hash - must be used in post-processing
 			self._taskValue: UnitTaskType = unit_dict['_taskValue']
 
 			self._movesValue: int = unit_dict['_movesValue']

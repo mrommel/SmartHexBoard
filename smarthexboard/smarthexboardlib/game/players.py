@@ -64,6 +64,7 @@ from smarthexboard.smarthexboardlib.map.path_finding.path import HexPath
 from smarthexboard.smarthexboardlib.map.types import Tutorials, Yields, TerrainType, FeatureType, UnitMovementType, RouteType, UnitDomainType, MapSize, \
 	ResourceType, YieldType, YieldList, ResourceUsage
 from smarthexboard.smarthexboardlib.utils.base import firstOrNone, lastOrNone, dictToArray
+from smarthexboard.smarthexboardlib.utils.hash import stable_hash
 from smarthexboard.smarthexboardlib.utils.plugin import Tests
 
 
@@ -2435,7 +2436,42 @@ class Player:
 			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
 	def __hash__(self):
-		return hash((self.leader, self.cityState))
+		if not isinstance(self.leader, LeaderType):
+			raise Exception(f'leader is of type {type(self.leader)}')
+
+		if self.cityState is not None and not isinstance(self.cityState, CityStateType):
+			raise Exception(f'cityState is of type {type(self.cityState)}')
+
+		return stable_hash(f"{self.leader.name}_{self.cityState.name if self.cityState is not None else 'none'}")
+
+	def __eq__(self, other):
+		if isinstance(other, Player):
+			if self.leader == LeaderType.cityState and other.leader == LeaderType.cityState:
+				return self.cityState == other.cityState
+
+			return self.leader == other.leader
+
+		raise Exception(f'Wrong type to compare: {type(other)}')
+
+	def __str__(self):
+		meta_str = f'{"active" if self.turnActive else "inactive"}, {"alive" if self.isAliveVal else "dead"}'
+		if self.isBarbarian():
+			if self.cityState is not None:
+				raise Exception(f'cityState must be None but is {self.cityState}')
+
+			return f'Player({self.leader}, {self.leader.civilization()}, Barbarian, {meta_str})'
+		elif self.human:
+			if self.cityState is not None:
+				raise Exception(f'cityState must be None but is {self.cityState}')
+
+			return f'Player({self.leader}, {self.leader.civilization()}, Human, {meta_str})'
+		elif self.isCityState():
+			return f'Player(CityState, {self.cityState}, CityState, {meta_str})'
+		else:
+			if self.cityState is not None:
+				raise Exception(f'cityState must be None but is {self.cityState}')
+
+			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
 	def doTurn(self, simulation):
 		if self.startingPoint() is None:
@@ -2660,18 +2696,6 @@ class Player:
 
 	def isTurnActive(self) -> bool:
 		return self.turnActive
-
-	def __eq__(self, other):
-		if isinstance(other, Player):
-			if self.leader == LeaderType.cityState and other.leader == LeaderType.cityState:
-				return self.cityState == other.cityState
-
-			return self.leader == other.leader
-
-		raise Exception(f'Wrong type to compare: {type(other)}')
-
-	def __str__(self):
-		return f'Player {self.leader}'
 
 	def isActive(self) -> bool:
 		return self.turnActive

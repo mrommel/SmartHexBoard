@@ -1437,8 +1437,8 @@ class MapModel:
 
 	def postProcess(self, simulation):
 		for unit in self._units:
-			unit.player = simulation.playerForHash(unit.player)
-			unit._originalOwner = simulation.playerForHash(unit.originalPlayer())
+			unit.player = simulation.playerForHash(unit.playerHash)
+			unit._originalOwner = simulation.playerForHash(unit.originalOwnerHash)
 
 		for y in range(self.tiles.height):
 			for x in range(self.tiles.width):

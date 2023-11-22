@@ -207,11 +207,11 @@ class UnitSchema(Schema):
 	name = fields.Str(attribute='_name')
 	location = fields.Nested(PointSchema)
 	originLocation = fields.Nested(PointSchema, attribute='_originLocation')
-	originalPlayer = fields.Method("originalPlayer_identifier", deserialize="load_originalPlayer")
+	originalPlayer = fields.Method(serialize="serialize_originalPlayer", deserialize="deserialize_originalPlayer")
 	facingDirection = EnumField(HexDirection, attribute='_facingDirection')
 	unitType = EnumField(UnitType)
 	greatPerson = EnumField(GreatPerson, allow_none=True)
-	player = fields.Method("player_identifier", deserialize="load_player")
+	player = fields.Method(serialize="serialize_player", deserialize="deserialize_player")
 	taskValue = EnumField(UnitTaskType, attribute='_taskValue')
 
 	moves = fields.Int(attribute='_movesValue')
@@ -250,16 +250,16 @@ class UnitSchema(Schema):
 
 	# self.unitMoved = None
 
-	def player_identifier(self, obj):
+	def serialize_player(self, obj):
 		return None if obj.player is None else hash(obj.player)
 
-	def originalPlayer_identifier(self, obj):
-		return None if obj.originalPlayer() is None else hash(obj.originalPlayer())
-
-	def load_player(self, value):
+	def deserialize_player(self, value):
 		return value
 
-	def load_originalPlayer(self, value):
+	def serialize_originalPlayer(self, obj):
+		return None if obj.originalPlayer() is None else hash(obj.originalPlayer())
+
+	def deserialize_originalPlayer(self, value):
 		return value
 
 	class Meta:

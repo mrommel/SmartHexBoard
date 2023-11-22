@@ -38,4 +38,4 @@ class GameGenerationData(models.Model):
 
 class GameDataModel(models.Model):
 	uuid = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
-	content = models.CharField(max_length=500000, default='')
+	content = models.CharField(max_length=5*1024*1024, default='')  # 5MB

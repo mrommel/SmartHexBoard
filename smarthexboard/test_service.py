@@ -130,8 +130,9 @@ class TestGenerationRequest(unittest.TestCase):
 		# 2 - check status
 		testing_count = 0
 		testing_status = GameGenerationState.RUNNING
-		while testing_status != GameGenerationState.READY and not testing_count > 10:
-			response = client.get(f'/smarthexboard/game/{game_uuid}/create/status')
+		while testing_status != GameGenerationState.READY and testing_count < 10:
+			ts = time()
+			response = client.get(f'/smarthexboard/game/{game_uuid}/create/status?timestamp={int(ts * 1000)}')
 			self.assertEqual(response.status_code, 200)
 
 			json_object = json.loads(response.content)
@@ -163,7 +164,7 @@ class TestGenerationRequest(unittest.TestCase):
 			game_uuid_status = json_object['game_uuid']
 			current_turn_status = json_object['current_turn']
 			human_active = json_object['human_active']
-			current_player = json_object['current_player']
+			# current_player = json_object['current_player']
 			# print(current_player)
 			self.assertEqual(game_uuid, game_uuid_status)
 			self.assertEqual(current_turn_status, 1)
@@ -173,7 +174,7 @@ class TestGenerationRequest(unittest.TestCase):
 		self.assertEqual(human_active, True)
 		self.assertLess(iteration, 20)
 
-		print(f'--- {iteration} ---')
+		print(f'--- {iteration} turns ---')
 
 
 if __name__ == '__main__':

@@ -547,6 +547,8 @@ window.openMomentsDialog = function openMomentsDialog() {
 window.turnButtonClicked = function turnButtonClicked() {
     console.log('turnButtonClicked');
 
+    abortUpdateTimer();
+
     $.ajax({
         type:"GET",
         dataType: "json",
@@ -572,6 +574,7 @@ window.closeMenu = function closeMenu() {
 
 window.exitGame = function exitGame() {
     console.log('exitGame');
+    abortUpdateTimer();
     changeUIState(UIState.menu);
 }
 

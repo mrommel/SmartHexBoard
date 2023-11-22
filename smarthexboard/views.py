@@ -1,5 +1,6 @@
 import uuid
 
+from django.core.cache import cache
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django_q.tasks import async_task
@@ -196,9 +197,14 @@ def game_map(request, game_uuid):
 
 def game_update(request, game_uuid):
 	game = GameDataRepository.fetch(game_uuid)
+	cache_key = f'game_updating_{game_uuid}'
 
 	if game is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
+		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} not found in db or cache.'}
+		return JsonResponse(json_payload, status=400)
+
+	if cache.get(cache_key) is not None:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} currently updating.'}
 		return JsonResponse(json_payload, status=400)
 
 	game.userInterface = UserInterfaceImpl()
@@ -209,7 +215,15 @@ def game_update(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
 		return JsonResponse(json_payload, status=400)
 
+	# debug
+	for unit in game._map._units:
+		print(f'* unit {unit.unitType} => {unit.player}')
+
+	cache.set(cache_key, True)
+	print(f'start updating {game_uuid}')
 	game.update()
+	cache.delete(cache_key)
+	print(f'stop updating {game_uuid}')
 
 	currentPlayerName = ''
 	if game.activePlayer() is not None:

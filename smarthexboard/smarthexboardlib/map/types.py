@@ -197,7 +197,7 @@ class YieldType(ExtendedEnum):
 	culture = 'culture'
 	faith = 'faith'
 
-	def name(self) -> str:
+	def title(self) -> str:  # cannot use 'name'
 		return self._data().name
 
 	def hillsChange(self) -> int:

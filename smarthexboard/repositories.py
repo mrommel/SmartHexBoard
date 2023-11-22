@@ -10,6 +10,7 @@ from smarthexboard.models import GameDataModel
 class GameDataRepository:
 	# https://docs.djangoproject.com/en/4.2/topics/cache/
 	cache_timeout = 600  # in seconds = 5 minutes
+	size_limit = 5 * 1024 * 1024
 
 	# cache methods
 
@@ -45,6 +46,9 @@ class GameDataRepository:
 			obj = None
 
 		json_str = GameModelSchema().dumps(gameModel)
+
+		if len(json_str) > GameDataRepository.size_limit:
+			raise Exception(f'Cannot store game - game data is more than 500.000 bytes: {len(json_str)}')
 
 		if obj is None:
 			new_obj = GameDataModel(uuid=game_uuid, content=json_str)
