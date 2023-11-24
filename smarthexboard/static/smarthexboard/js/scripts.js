@@ -202,7 +202,21 @@ function changeUIState(newState) {
             console.log('uistate > menu');
             $('#uistate-splash').hide();
             $('#uistate-menu').show();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
+            break;
+
+        case UIState.playGame:
+            console.log('uistate > playGame');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-play-game').show();
+            $('#uistate-create-game').hide();
+            hideStartGameWarning();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
@@ -213,6 +227,7 @@ function changeUIState(newState) {
             console.log('uistate > createGame');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').show();
             hideStartGameWarning();
             $('#uistate-generate').hide();
@@ -226,6 +241,7 @@ function changeUIState(newState) {
             console.log('uistate > generate');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
             $('#uistate-generate').show();
             $('#uistate-game').hide();
@@ -240,6 +256,7 @@ function changeUIState(newState) {
             console.log('uistate > game');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').show();
@@ -250,6 +267,7 @@ function changeUIState(newState) {
             renderer.render();
 
             $('#ui').removeClass('blurred');
+            hideTurnBanner();
             break;
 
         case UIState.gameMenu:
@@ -257,6 +275,7 @@ function changeUIState(newState) {
             console.log('uistate > game-menu');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').show();
@@ -268,6 +287,7 @@ function changeUIState(newState) {
             console.log('uistate > options');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
@@ -281,6 +301,7 @@ function changeUIState(newState) {
             console.log('uistate > tutorials');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
             $('#uistate-create-game').hide();
             $('#uistate-generate').hide();
             $('#uistate-game').hide();
@@ -392,8 +413,9 @@ function checkGameUpdate() {
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
-            if (response.status == 'Ready') {
-
+            if (response.human_active == true) {
+                hideTurnBanner();
+                abortUpdateTimer();
             }
         },
         error: function(xhr, textStatus, exception) {
@@ -424,11 +446,22 @@ function loadMap(game_uuid) {
 
             /* start update status */
             update_check_timer = setInterval(checkGameUpdate, 1000);
+            showTurnBanner();
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
         }
     });
+}
+
+function showTurnBanner() {
+    $('#turnBanner').show();
+    console.log('showTurnBanner');
+}
+
+function hideTurnBanner() {
+    $('#turnBanner').hide();
+    console.log('hideTurnBanner');
 }
 
 function showStartGameWarning(text) {
@@ -500,6 +533,11 @@ window.startGame = function startGame() {
             handleError(xhr, textStatus, exception);
         }
     });
+}
+
+window.playGame = function playGame() {
+    console.log('playGame');
+    changeUIState(UIState.playGame);
 }
 
 window.createGame = function createGame() {

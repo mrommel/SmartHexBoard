@@ -49,7 +49,8 @@ UIBuilder.prototype.message = function(title, message) {
 class UIState {
     static splash = new UIState('Splash');
     static menu = new UIState('Menu');
-    static createGame = new UIState('CreateGame')
+    static playGame = new UIState('PlayGame');
+    static createGame = new UIState('CreateGame');
     static generate = new UIState('Generate');
     static game = new UIState('Game');
     static gameMenu = new UIState('GameMenu');

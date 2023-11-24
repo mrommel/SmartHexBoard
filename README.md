@@ -70,6 +70,11 @@ translate with poedit
 python3 ../manage.py compilemessages
 ```
 
+## Todo
+
+* globe spinning
+* style turn banner
+
 ## Links
 
 * https://realpython.com/django-setup/

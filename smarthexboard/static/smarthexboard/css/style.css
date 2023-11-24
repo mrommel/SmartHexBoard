@@ -181,6 +181,30 @@ h1, h2, h3, h4, h5, h6 {
     height: 256px;
 }
 
+/** general *********************/
+
+.button {
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+
+    width: 220px;
+    height: 38px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+
+    text-align: center;
+}
+
+.button.blue {
+    background-image: url("../img/ui/button_blue.png");
+}
+
+.button.red {
+    background-image: url("../img/ui/button_red.png");
+}
+
 /** menu ************************/
 
 #uistate-menu {
@@ -264,7 +288,115 @@ h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
-/** menu ************************/
+/** play game ************************/
+
+#uistate-play-game {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/background.png");
+    background-repeat: no-repeat;
+
+    pointer-events: all;
+}
+
+#uistate-play-game .container {
+    padding: 20px;
+    width: 640px;
+    height: 512px;
+    display: flex;
+
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}
+
+#uistate-play-game .logo {
+    width: 256px;
+    height: 256px;
+
+    margin: 20px 30px 0 0;
+    width: 200px;
+    -o-object-fit: contain;
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+#uistate-play-game .container_text {
+    flex: 1 1 auto;
+}
+
+#uistate-play-game h1 {
+    clear: left;
+    padding-top: 30px;
+}
+
+#uistate-play-game ul.menu {
+    clear: left;
+    align-items: center;
+    margin: 10px 0;
+
+    line-height: 30px;
+
+    list-style: none;
+    padding-inline-start: 10px;
+}
+
+#uistate-play-game ul.menu li {
+    display: flex;
+    align-self: flex-start;
+}
+
+#uistate-play-game ul.menu li:before {
+    display: block;
+    flex-shrink: 0;
+    width: 33px;
+    height: 33px;
+    margin-right: 10px;
+
+    vertical-align: middle;
+
+    background: url('../img/ui/checkbox-selected.png') no-repeat left center;
+    background-size: contain;
+
+    content: '';
+}
+
+#uistate-play-game ul.menu li.noBullet {
+    display: block;
+}
+
+#uistate-play-game ul.menu li.noBullet:before {
+    display: none;
+}
+
+#uistate-play-game ul.menu li.noBullet h6 {
+    margin-block-start: 0.8em;
+    margin-block-end: 0.2em;
+}
+
+#uistate-play-game a {
+    text-decoration: none;
+    color: white;
+}
+
+#uistate-play-game .bootstrap-select .dropdown-menu li a span.text {
+    color: black;
+}
+
+#uistate-play-game .bootstrap-select .dropdown-menu li:before {
+    display: none;
+}
+
+#uistate-play-game ul.menu li.spacer {
+    margin-block-start: 0.8em;
+}
+
+/** create game ************************/
 
 #uistate-create-game {
     display: none;
@@ -709,6 +841,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 64px;
     background-image: url("../img/ui/science-progress@3x.png");
     background-size: 100% 100%;
+    margin-top: -5px;
 }
 
 #uistate-game #tech_progress_value {
@@ -723,7 +856,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #tech_progress_icon {
     width: 26px;
     height: 26px;
-    top: 0px;
+    top: 5px;
     left: -32px;
     position: relative;
     z-index: 21;
@@ -731,7 +864,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #uistate-game #tech_progress_title {
     position: relative;
-    top: -20px;
+    top: -10px;
     left: -20px;
     font-size: 14px;
 }
@@ -755,7 +888,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #civic_progress_icon {
     width: 26px;
     height: 26px;
-    top: 0px;
+    top: 5px;
     left: -32px;
     position: relative;
     z-index: 21;
@@ -763,7 +896,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #uistate-game #civic_progress_title {
     position: relative;
-    top: -20px;
+    top: -10px;
     left: -20px;
     font-size: 14px;
 }
@@ -885,6 +1018,12 @@ h1, h2, h3, h4, h5, h6 {
 
 #tooltip {
     z-index: 200;
+    position: absolute;
+    display: none;
+}
+
+#turnBanner {
+    z-index: 201;
     position: absolute;
     display: none;
 }

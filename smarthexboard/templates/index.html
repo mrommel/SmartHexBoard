@@ -43,6 +43,7 @@
     <!--full screen canvas container-->
     <div id="game">
         <div id="tooltip">Tile</div>
+        <div id="turnBanner">Turn</div>
     </div>
 
     <div id="csrf_token" class="hidden">{{ csrf_token }}</div>
@@ -72,10 +73,26 @@
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
                     <ul class="menu">
-                        <li><a href="#" onclick="createGame(); return false;">Create Game</a></li>
+                        <li><a href="#" onclick="playGame(); return false;">Play Game</a></li>
                         <li><a href="#" onclick="tutorials(); return false;">Tutorial</a></li>
                         <li><a href="#" onclick="options(); return false;">Game Options</a></li>
                         <li><a href="#" onclick="credits(); return false;">Credits</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--ui state: play game-->
+        <div id="uistate-play-game">
+            <div class="container">
+                <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
+                <div class="container_text">
+                    <h1>SmartHexBoard</h1>
+                    <ul class="menu">
+                        <li><a href="#" onclick="quickGame(); return false;">Quick Start</a></li>
+                        <li><a href="#" onclick="createGame(); return false;">Create Game</a></li>
+                        <li><a href="#" onclick="loadGame(); return false;">Load Game</a></li>
+                        <li><a href="#" onclick="quitOptions(); return false;">Back to Menu</a></li>
                     </ul>
                 </div>
             </div>
@@ -126,8 +143,11 @@
                             </div>
                         </li>
                         <!-- advanced -->
-                        <li class="spacer">
+                        <li class="spacer noBullet button blue">
                             <a href="#" onclick="startGame(); return false;">Start Game</a>
+                        </li>
+                        <li class="spacer noBullet button red">
+                            <a href="#" onclick="playGame(); return false;">Back</a>
                         </li>
                     </ul>
                 </div>

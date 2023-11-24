@@ -215,10 +215,6 @@ def game_update(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
 		return JsonResponse(json_payload, status=400)
 
-	# debug
-	for unit in game._map._units:
-		print(f'* unit {unit.unitType} => {unit.player}')
-
 	cache.set(cache_key, True)
 	print(f'start updating {game_uuid}')
 	game.update()
