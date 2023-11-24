@@ -540,6 +540,38 @@ window.playGame = function playGame() {
     changeUIState(UIState.playGame);
 }
 
+window.quickGame = function quickGame() {
+    var csrf_token = $('#csrf_token').text()
+
+    var formData = new FormData();
+    formData.append('leader', 'alexander');
+    formData.append('handicap', 'settler');
+    formData.append('mapType', 'continents');
+    formData.append('mapSize', 'duel');
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/smarthexboard/game/create",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(json_obj) {
+            // console.log('created game: ' + JSON.stringify(json_obj));
+            console.log('created game: ' + json_obj.game_uuid);
+            game_uuid = json_obj.game_uuid;
+
+            /* start checking status */
+            generation_check_timer = setInterval(checkGameGeneration, 1000);
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
 window.createGame = function createGame() {
     console.log('createGame');
     changeUIState(UIState.createGame);
