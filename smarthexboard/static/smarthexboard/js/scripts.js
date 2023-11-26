@@ -408,7 +408,6 @@ function checkGameUpdate() {
         type:"GET",
         url: "/smarthexboard/game/" + game_uuid + "/update?timestamp=" + Date.now(),
         success: function(response) {
-            console.log('refresh game update: ' + response.status + ', progress: ' + response.progress);
             console.log('update game: ' + JSON.stringify(response));
             // fixme: propagate progress to ui
 
@@ -456,11 +455,13 @@ function loadMap(game_uuid) {
 
 function showTurnBanner() {
     $('#turnBanner').show();
+    $('#game_button').backgroundImage="url(../img/globe/globe.gif)";
     console.log('showTurnBanner');
 }
 
 function hideTurnBanner() {
     $('#turnBanner').hide();
+    $('#game_button').backgroundImage="url(../img/ui/buttons/button_generic@3x.png)";
     console.log('hideTurnBanner');
 }
 
