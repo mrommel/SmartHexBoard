@@ -1,3 +1,4 @@
 components:
   card: "components/card.html"
   tech_info: "components/tech_info.html"
+  button: "components/button.html"

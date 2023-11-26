@@ -1,0 +1,14 @@
+{# variable: identifier - identifier of the button #}
+{# variable: color - red, blue #}
+{# variable: text - text of the button #}
+{# variable: callback - javascript function to call when button is clicked #}
+
+{% if color == 'red' or color == 'blue' %}
+    <div id="{{ identifier }}" class="button {{ color }}">
+        <a href="#" onclick="{{ callback }}; return false;">{{ text }}</a>
+    </div>
+{% else %}
+    <div class="button blue">
+        <a href="#" onclick="return false;">Unsupported color</a>
+    </div>
+{% endif %}

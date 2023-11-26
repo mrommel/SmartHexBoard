@@ -455,13 +455,13 @@ function loadMap(game_uuid) {
 
 function showTurnBanner() {
     $('#turnBanner').show();
-    $('#game_button').backgroundImage="url(../img/globe/globe.gif)";
+    $('#game_button').css('background-image', 'url("/static/smarthexboard/img/globe/globe.gif")');
     console.log('showTurnBanner');
 }
 
 function hideTurnBanner() {
     $('#turnBanner').hide();
-    $('#game_button').backgroundImage="url(../img/ui/buttons/button_generic@3x.png)";
+    $('#game_button').css('background-image', 'url("/static/smarthexboard/img/ui/buttons/button_generic@3x.png")');
     console.log('hideTurnBanner');
 }
 

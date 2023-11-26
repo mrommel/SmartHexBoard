@@ -919,7 +919,7 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #game_button {
     width: 124px;
     height: 124px;
-    background-image: url("../img/ui/buttons/button_generic@3x.png");
+    background-image: url("../img/globe/globe.gif");
     background-size: cover;
     margin-left: 10px;
     margin-top: 33px;

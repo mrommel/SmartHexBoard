@@ -142,11 +142,11 @@
                             </div>
                         </li>
                         <!-- advanced -->
-                        <li class="spacer noBullet button blue">
-                            <a href="#" onclick="startGame(); return false;">Start Game</a>
+                        <li class="spacer noBullet">
+                            {% button identifier='btnPlay' color='blue' text='Start Game' callback='startGame()' %}
                         </li>
-                        <li class="spacer noBullet button red">
-                            <a href="#" onclick="playGame(); return false;">Back</a>
+                        <li class="spacer noBullet">
+                            {% button identifier='btnBackToPlay' color='red' text='Back' callback='playGame()' %}
                         </li>
                     </ul>
                 </div>

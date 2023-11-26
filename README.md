@@ -72,8 +72,10 @@ python3 ../manage.py compilemessages
 
 ## Todo
 
-* globe spinning
+* show progress indicator, when game is created
 * style turn banner
+* return only the tiles visible to the human player
+* return and show units and cities
 
 ## Links
 
