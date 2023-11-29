@@ -235,3 +235,11 @@ media (min-width: 1200px)
     width: 100px;
     height: 100px;
 }
+
+/* components */
+
+.button a {
+    text-decoration: none;
+    color: white;
+    line-height: 30px;
+}

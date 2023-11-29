@@ -72,10 +72,13 @@ python3 ../manage.py compilemessages
 
 ## Todo
 
+* show leader image / text when creating a game
 * show progress indicator, when game is created
 * style turn banner
 * return only the tiles visible to the human player
 * return and show units and cities
+* save and load games (extra table)
+* resume last game / delete not saved games
 
 ## Links
 
@@ -95,3 +98,4 @@ python3 ../manage.py compilemessages
 * https://www.valentinog.com/blog/django-q/
 * https://mitchel.me/slippers/docs/template-tags-filters/
 * https://codepen.io/dehnavi/pen/MebRbj (nine patch + css)
+* https://www.crazyegg.com/blog/loading-spinners-css3-animation/
