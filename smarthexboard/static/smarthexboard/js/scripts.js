@@ -22,14 +22,6 @@ jQuery(function ($) {
 
     $(document).ready(function () {
         initUI();
-
-        // add a popup to warn the user to leave the page
-        window.addEventListener('beforeunload', (event) => {
-          // Cancel the event as stated by the standard.
-          event.preventDefault();
-          // Chrome requires returnValue to be set.
-          event.returnValue = '';
-        });
     });
 }); // JQuery end
 
@@ -40,6 +32,13 @@ var offset = { x: 0, y: 0 };
 var renderer = new Renderer(null);
 var uiRenderer = new UIBuilder();
 var uiState = UIState.Splash;
+
+function preventExitOnReload(event) {
+    // Cancel the event as stated by the standard.
+    event.preventDefault();
+    // Chrome requires returnValue to be set.
+    event.returnValue = '';
+}
 
 window.resizeCanvas = function resizeCanvas() {
     if (uiState == UIState.game) {
@@ -208,6 +207,9 @@ function changeUIState(newState) {
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
+
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
+
             break;
 
         case UIState.playGame:
@@ -221,6 +223,9 @@ function changeUIState(newState) {
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
+
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
+
             break;
 
         case UIState.createGame:
@@ -234,10 +239,13 @@ function changeUIState(newState) {
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
+
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
+
             break;
 
         case UIState.generate:
-            // user selected 'play', we can generate a map now
+            // user selected 'create', we want to show a spinner now
             console.log('uistate > generate');
             $('#uistate-splash').hide();
             $('#uistate-menu').hide();
@@ -248,7 +256,8 @@ function changeUIState(newState) {
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
 
-            startMapGeneration();
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
+
             break;
 
         case UIState.game:
@@ -262,6 +271,9 @@ function changeUIState(newState) {
             $('#uistate-game').show();
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
+
+            // add a popup to warn the user to leave the page
+            window.addEventListener('beforeunload', preventExitOnReload);
 
             // Full page rendering
             renderer.render();
@@ -294,6 +306,8 @@ function changeUIState(newState) {
             $('#uistate-game-menu').hide();
             $('#uistate-options').show();
 
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
+
             $('#ui').addClass('blurred');
             break;
 
@@ -307,6 +321,8 @@ function changeUIState(newState) {
             $('#uistate-game').hide();
             $('#uistate-game-menu').hide();
             $('#uistate-options').hide();
+
+            window.removeEventListener('beforeunload', preventExitOnReload, false);
 
             $('#ui').addClass('blurred');
             break;
@@ -353,26 +369,6 @@ function handleError(xhr, textStatus, exception) {
 var generation_check_timer;
 var update_check_timer;
 var game_uuid;
-
-function startMapGeneration() {
-    // reset map_uuid
-    map_uuid = '';
-
-    $.ajax({
-        type:"GET",
-        url: "/smarthexboard/generate_map/DUEL/CONTINENTS/",
-        success: function(response) {
-            map_uuid = response.uuid;
-            console.log('started generating map ' + map_uuid);
-
-            /* start checking status */
-            generation_check_timer = setInterval(checkGameGeneration, 1000);
-        },
-        error: function(xhr, textStatus, exception) {
-            handleError(xhr, textStatus, exception);
-        }
-    });
-}
 
 // to be called when you want to stop a timer
 function abortGenerationTimer() {
@@ -527,6 +523,8 @@ window.startGame = function startGame() {
             console.log('created game: ' + json_obj.game_uuid);
             game_uuid = json_obj.game_uuid;
 
+            changeUIState(UIState.generate);
+
             /* start checking status */
             generation_check_timer = setInterval(checkGameGeneration, 1000);
         },
@@ -563,6 +561,8 @@ window.quickGame = function quickGame() {
             // console.log('created game: ' + JSON.stringify(json_obj));
             console.log('created game: ' + json_obj.game_uuid);
             game_uuid = json_obj.game_uuid;
+
+            changeUIState(UIState.generate);
 
             /* start checking status */
             generation_check_timer = setInterval(checkGameGeneration, 1000);

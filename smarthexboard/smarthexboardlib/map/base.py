@@ -547,9 +547,9 @@ class Array2D:
 
 	def to_dict(self):
 		"""
-        converts the Array2D into a dict for serialization
-        @return: dict of Array2D
-        """
+		converts the Array2D into a dict for serialization
+		@return: dict of Array2D
+		"""
 		values_dict = {}
 
 		for j in range(self.height):

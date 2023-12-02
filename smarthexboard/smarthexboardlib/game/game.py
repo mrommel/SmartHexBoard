@@ -1351,9 +1351,11 @@ class GameModel:
 
 		return None
 
-	def playerForHash(self, hashValue) -> Optional[Player]:
+	def playerForHash(self, hashValue: Union[int, str]) -> Optional[Player]:
+		hashValueInt = hashValue if isinstance(hashValue, int) else int(hashValue)
+
 		for player in self.players:
-			if hash(player) == hashValue:
+			if hash(player) == hashValueInt:
 				return player
 
 		return None
@@ -1856,3 +1858,13 @@ class GameModel:
 
 	def populateDigSiteOn(self, plot, era, artifact):
 		raise Exception('not implemented: populateDigSiteOn')
+
+	def numberOfDiscoveredTilesOf(self, player) -> int:
+		numTiles: int = 0
+
+		for point in self.points():
+			tile = self.tileAt(point)
+			if tile.isDiscoveredBy(player):
+				numTiles += 1
+
+		return numTiles

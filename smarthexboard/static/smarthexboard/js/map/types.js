@@ -84,6 +84,9 @@ TerrainType.fromString = function(terrain_name) {
             return TerrainTypes.snow.clone();
         case 'tundra':
             return TerrainTypes.tundra.clone();
+
+        case 'undiscovered':
+            return TerrainTypes.undiscovered.clone();
     }
 }
 
@@ -95,6 +98,7 @@ const TerrainTypes = {
 	shore: new TerrainType("shore", ["terrain_shore@3x.png"], []),
 	snow: new TerrainType("snow", ["terrain_snow@3x.png"], ["terrain_snow_hills@3x.png", "terrain_snow_hills2@3x.png", "terrain_snow_hills3@3x.png"]),
 	tundra: new TerrainType("tundra", ["terrain_tundra@3x.png", "terrain_tundra2@3x.png", "terrain_tundra3@3x.png"], ["terrain_tundra_hills@3x.png"]),
+	undiscovered: new TerrainType("undiscovered", ["terrain_undiscovered@3x.png"], []),
 }
 
 // map generation types

@@ -65,6 +65,13 @@ Map.prototype.fromJson = function(json_dict) {
     }
 
     this.units = []
+    const units_json = json_dict['units'];
+    for (var i = 0; i < units_json.length; i++) {
+        const unit_json = units_json[i];
+        console.log(' * ' + unit_json['name'] + ' (' + unit_json['x'] + ', ' + unit_json['y'] + ') ' + unit_json['player']);
+    }
+    // console.log(JSON.stringify(units_json, null, 2));
+
     this.cities = []
 }
 

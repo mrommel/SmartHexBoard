@@ -358,6 +358,7 @@ class TerrainType(ExtendedEnum):
 
 	land = 'land'
 	sea = 'sea'
+	undiscovered = 'undiscovered'
 
 	@staticmethod
 	def fromName(terrainName: str) -> TerrainType:
@@ -375,6 +376,8 @@ class TerrainType(ExtendedEnum):
 			return TerrainType.snow
 		elif terrainName == 'TerrainType.tundra' or terrainName == 'tundra':
 			return TerrainType.tundra
+		elif terrainName == 'TerrainType.undiscovered' or terrainName == 'undiscovered':
+			return TerrainType.undiscovered
 
 		raise Exception(f'No matching case for terrainName: "{terrainName}"')
 

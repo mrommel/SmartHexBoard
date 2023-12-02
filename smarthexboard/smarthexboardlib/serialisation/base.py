@@ -27,6 +27,11 @@ class WeightedListField(fields.Field):
 	def _deserialize(self, value, attr, data, **kwargs):
 		ret = {}
 		for key, val in value.items():
-			k = self.key_type.fromName(key)
-			ret[k] = val
+			try:
+				k = self.key_type.fromName(key)
+				ret[k] = val
+			except Exception as e:
+				print(f'error when deserializing WeightedListField - cannot get name of key={key}')
+				raise e
+
 		return ret

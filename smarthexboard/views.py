@@ -188,7 +188,7 @@ def game_map(request, game_uuid):
 	obj = GameModel(obj_dict)
 	GameDataRepository.store(game_uuid, obj)
 
-	map_dict = obj._map.to_dict()
+	map_dict = obj._map.to_dict(human=obj.humanPlayer())
 
 	# convert json string to dict
 	json_payload = map_dict

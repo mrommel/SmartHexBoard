@@ -274,6 +274,17 @@ class Unit:
 
 		return False
 
+	def to_dict(self):
+		return {
+			'name': self._name,
+			'x': self.location.x,
+			'y': self.location.y,
+			'unitType': self.unitType.value,
+			'greatPerson': self.greatPerson.value if self.greatPerson is not None else None,
+			'player': hash(self.player)
+			# @fixme
+		}
+
 	def name(self) -> str:
 		return self._name
 

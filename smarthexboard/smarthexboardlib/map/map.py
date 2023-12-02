@@ -336,6 +336,7 @@ class Tile:
 			'feature': self._featureValue.value,
 			'resource': self._resourceValue.value,
 			'resource_quantity': self._resourceQuantity
+			# @fixme
 		}
 
 	def isNeighborTo(self, candidate: HexPoint) -> bool:
@@ -1793,11 +1794,38 @@ class MapModel:
 
 		return bestMapSize
 
-	def to_dict(self):
+	def to_dict(self, human=None):
+		values_dict = {}
+
+		for y in range(self.height):
+			row_array = []
+
+			for x in range(self.width):
+				tile: Tile = self.tiles.values[y][x]
+				if tile.isDiscoveredBy(human):
+					row_array.append(tile.to_dict())
+				else:
+					emptyTile = Tile(HexPoint(x, y), TerrainType.undiscovered)
+					row_array.append(emptyTile.to_dict())
+
+			values_dict[y] = row_array
+
+		tiles_dict = {
+			'width': self.width,
+			'height': self.height,
+			'values': values_dict
+		}
+
+		units_arr = []
+		for unit in self._units:
+			units_arr.append(unit.to_dict())
+
 		return {
 			'width': self.width,
 			'height': self.height,
-			'tiles': self.tiles.to_dict()
+			'tiles': tiles_dict,  # self.tiles.to_dict()
+			'units': units_arr,
+			'cities': []
 		}
 
 	def isCoastalAt(self, point: HexPoint):

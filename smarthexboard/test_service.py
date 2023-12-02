@@ -176,6 +176,14 @@ class TestGenerationRequest(unittest.TestCase):
 
 		print(f'--- {iteration} turns ---')
 
+		game = GameDataRepository.fetch(game_uuid)
+		self.assertIsNotNone(game)
+		humanPlayer = game.humanPlayer()
+		self.assertIsNotNone(humanPlayer)
+		humanTiles: int = game.numberOfDiscoveredTilesOf(humanPlayer)
+		self.assertLess(humanTiles, MapSize.tiny.numberOfTiles())
+		self.assertGreater(humanTiles, 0)
+
 
 if __name__ == '__main__':
 	unittest.main()
