@@ -153,7 +153,12 @@ class TestGenerationRequest(unittest.TestCase):
 		response = client.get(f'/smarthexboard/game/{game_uuid}/map')
 		self.assertEqual(response.status_code, 200)
 
-		# 4 - game status
+		# 4 - info
+		response = client.get(f'/smarthexboard/game/{game_uuid}/game_info')
+		print(response.content)
+		self.assertEqual(response.status_code, 200)
+
+		# 5 - game status
 		human_active: bool = False
 		iteration: int = 0
 		while not human_active and iteration < 20:

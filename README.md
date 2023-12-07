@@ -72,15 +72,17 @@ python3 ../manage.py compilemessages
 
 ## Todo
 
+* load game information (human, other players, if met)
 * show leader image / text when creating a game
-* style turn banner
-* return and show units and cities
+* return and show units and cities (1/4)
 * save and load games (extra table?)
 * resume last game / delete not saved games
-* reset create game dropdowns?
+* MINOR: reset create game dropdowns?
+* return hidden land / -> sea to allow ocean rendering
 
 ## Done
 
+* style turn banner
 * return only the tiles visible to the human player
 * show progress indicator, when game is created (use uistate-generate)
 

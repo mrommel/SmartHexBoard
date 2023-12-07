@@ -173,25 +173,56 @@ def game_map(request, game_uuid):
 		json_payload = {'uuid': game_uuid, 'status': 'Invalid request: not a valid uuid format'}
 		return JsonResponse(json_payload, status=400)
 
-	game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
-	if game_generation is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generated with uuid: {game_uuid}'}
-		return JsonResponse(json_payload, status=404)
+	if not GameDataRepository.inCacheOrDB(game_uuid):
+		game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
+		if game_generation is None:
+			json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generated with uuid: {game_uuid}'}
+			return JsonResponse(json_payload, status=404)
 
-	current_state = GameGenerationState(game_generation.state)
-	if current_state != GameGenerationState.READY:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
-		return JsonResponse(json_payload, status=400)
+		current_state = GameGenerationState(game_generation.state)
+		if current_state != GameGenerationState.READY:
+			json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
+			return JsonResponse(json_payload, status=400)
 
-	game_str: str = game_generation.game
-	obj_dict = GameModelSchema().loads(game_str)
-	obj = GameModel(obj_dict)
-	GameDataRepository.store(game_uuid, obj)
+		game_str: str = game_generation.game
+		obj_dict = GameModelSchema().loads(game_str)
+		obj = GameModel(obj_dict)
+		GameDataRepository.store(game_uuid, obj)
+
+		GameGenerationData.objects.filter(uuid=game_uuid).delete()
+	else:
+		obj = GameDataRepository.fetch(game_uuid)
 
 	map_dict = obj._map.to_dict(human=obj.humanPlayer())
 
 	# convert json string to dict
 	json_payload = map_dict
+	return JsonResponse(json_payload, status=200)
+
+
+def game_info(request, game_uuid):
+	game = GameDataRepository.fetch(game_uuid)
+
+	if game is None:
+		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} not found in db or cache.'}
+		return JsonResponse(json_payload, status=400)
+
+	humanPlayer = game.humanPlayer()
+	human_dict = humanPlayer.to_dict()
+	otherPlayers = []
+
+	for loopPlayer in game.players:
+		if humanPlayer == loopPlayer:
+			continue
+
+		if not loopPlayer.isAlive():
+			continue
+
+		if loopPlayer.diplomacyAI.hasMetWith(humanPlayer):
+			otherPlayers.append(loopPlayer.to_dict())
+
+	# convert json string to dict
+	json_payload = {'human': human_dict, 'others': otherPlayers}
 	return JsonResponse(json_payload, status=200)
 
 
@@ -216,10 +247,10 @@ def game_update(request, game_uuid):
 		return JsonResponse(json_payload, status=400)
 
 	cache.set(cache_key, True)
-	print(f'start updating {game_uuid}')
+	# print(f'start updating {game_uuid}')
 	game.update()
 	cache.delete(cache_key)
-	print(f'stop updating {game_uuid}')
+	# print(f'stop updating {game_uuid}')
 
 	currentPlayerName = ''
 	if game.activePlayer() is not None:

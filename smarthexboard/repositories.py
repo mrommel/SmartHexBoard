@@ -57,7 +57,23 @@ class GameDataRepository:
 			obj.content = json_str
 			obj.save()
 
+	@staticmethod
+	def _inDB(game_uuid) -> bool:
+		try:
+			GameDataModel.objects.get(uuid=game_uuid)
+			return True
+		except GameDataModel.DoesNotExist:
+			return False
+
+	@staticmethod
+	def _inCache(game_uuid) -> bool:
+		return cache.get(GameDataRepository._cacheKey(game_uuid), None) is not None
+
 	# public methods
+
+	@staticmethod
+	def inCacheOrDB(game_uuid) -> bool:
+		return GameDataRepository._inDB(game_uuid) or GameDataRepository._inCache(game_uuid)
 
 	@staticmethod
 	def fetch(game_uuid) -> Optional[GameModel]:

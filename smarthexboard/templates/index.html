@@ -179,7 +179,10 @@
                 <img src="{% static 'smarthexboard/img/ui/logo.png' %}" class="logo" />
                 <div class="container_text">
                     <h1>SmartHexBoard</h1>
-                    <h3>Generating Map ...</h3>
+                    <div>
+                        {% spinner identifier='spnGenerate' %}
+                        <p>Generating Map ...</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,7 +292,9 @@
             </div>
 
             <div id="turnBanner">
-                {% spinner identifier='spnTurn' %}
+                <p>Game is turning</p>
+                <!--{% spinner identifier='spnTurn' %}
+                <p>Game is turning</p>-->
             </div>
         </div>
 

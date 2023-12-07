@@ -2473,6 +2473,17 @@ class Player:
 
 			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
+	def to_dict(self) -> dict:
+		return {
+			'hash': hash(self),
+			'alive': self.isAliveVal,
+			'name': self.name(),
+			'leader': self.leader.value,
+			'civilization': self.leader.civilization().value,
+			'cityState': self.cityState.value if self.cityState is not None else None,
+			# science, culture, gold, faith, -- but only if human
+		}
+
 	def doTurn(self, simulation):
 		if self.startingPoint() is None:
 			firstUnit = firstOrNone(simulation.unitsOf(self))
