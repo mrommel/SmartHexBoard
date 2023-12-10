@@ -208,7 +208,7 @@ def game_info(request, game_uuid):
 		return JsonResponse(json_payload, status=400)
 
 	humanPlayer = game.humanPlayer()
-	human_dict = humanPlayer.to_dict()
+	human_dict = humanPlayer.to_dict(game)
 	otherPlayers = []
 
 	for loopPlayer in game.players:
@@ -222,7 +222,12 @@ def game_info(request, game_uuid):
 			otherPlayers.append(loopPlayer.to_dict())
 
 	# convert json string to dict
-	json_payload = {'human': human_dict, 'others': otherPlayers}
+	json_payload = {
+		'turn': game.currentTurn,
+		'turnYear': game.turnYear(),
+		'human': human_dict,
+		'others': otherPlayers
+	}
 	return JsonResponse(json_payload, status=200)
 
 

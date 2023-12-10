@@ -251,6 +251,38 @@ class GameModel:
 
 			self.changeTurnSliceBy(1)
 
+	def turnYear(self) -> str:
+		return GameModel.yearTextOf(self.currentTurn)
+
+	@staticmethod
+	def yearTextOf(turn: int) -> str:
+		"""https://gaming.stackexchange.com/questions/51233/what-is-the-turn-length-in-civilization"""
+		if turn <= 250:
+			# 4000 BC - 1000 AD: 20 years per turn (total of 250 turns)
+			year = -4000 + (turn * 20)
+			if year < 0:
+				return f"{-year} BC"
+			elif year == 0:
+				return "0 BC"
+			else:
+				return f"{year} AD"
+		elif turn <= 300:
+			# 1000 AD - 1500 AD: 10 years per turn (total of 50 turns)
+			year = 1000 + (turn - 250) * 10
+			return f"{year} AD"
+		elif turn <= 350:
+			# 1500 AD - 1750 AD: 5 years per turn (total of 50 turns)
+			year = 1500 + (turn - 300) * 5
+			return f"{year} AD"
+		elif turn <= 400:
+			# 1750 AD - 1850 AD: 2 years per turn (total of 50 turns)
+			year = 1750 + (turn - 350) * 2
+			return f"{year} AD"
+		else:
+			# 1850 AD - End of game: 1 year per turn (total of 170 to 250 turns)
+			year = 1850 + (turn - 400) * 1
+			return f"{year} AD"
+
 	def capitalOf(self, player: Player) -> City:
 		return self._map.capitalOf(player)
 

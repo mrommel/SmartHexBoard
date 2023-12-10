@@ -2473,7 +2473,7 @@ class Player:
 
 			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
-	def to_dict(self) -> dict:
+	def to_dict(self, simulation=None) -> dict:
 		return {
 			'hash': hash(self),
 			'alive': self.isAliveVal,
@@ -2481,7 +2481,16 @@ class Player:
 			'leader': self.leader.value,
 			'civilization': self.leader.civilization().value,
 			'cityState': self.cityState.value if self.cityState is not None else None,
-			# science, culture, gold, faith, -- but only if human
+			# only if human
+			'science': self.science(simulation) if self.human else None,
+			'currentTech': self.techs.currentTech() if self.human else None,
+			'culture': self.culture(simulation, False) if self.human else None,
+			'currentCivic': self.civics.currentCivic() if self.human else None,
+			'gold': self.treasury.value() if self.human else None,
+			'income': self.treasury.calculateGrossGold(simulation) if self.human else None,
+			'faith': self.faith(False, simulation) if self.human else None,
+			'tourism': self.tourism.currentTourism(simulation) if self.human else None,
+			'notifications': self.notifications.notifications if self.human else [],
 		}
 
 	def doTurn(self, simulation):

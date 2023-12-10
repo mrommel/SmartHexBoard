@@ -787,8 +787,14 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #top-bar-left .yield-value {
     height: 22px;
     font-size: 16px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+#uistate-game #top-bar-left .delta-value {
+    height: 22px;
+    font-size: 14px;
     padding-right: 8px;
-    padding-top: 4px;
     padding-left: 4px;
 }
 

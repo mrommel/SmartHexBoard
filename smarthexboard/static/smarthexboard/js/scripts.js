@@ -404,14 +404,60 @@ function checkGameUpdate() {
         type:"GET",
         url: "/smarthexboard/game/" + game_uuid + "/update?timestamp=" + Date.now(),
         success: function(response) {
-            console.log('update game: ' + JSON.stringify(response));
+            // console.log('update game: ' + JSON.stringify(response));
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
             if (response.human_active == true) {
-                hideTurnBanner();
-                abortUpdateTimer();
+                fetchGameInfo();
             }
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
+function formatDecimal(value) {
+    if (value < 0) {
+        return '' + (Math.round(value * 100) / 100).toFixed(1)
+    } else {
+        return '+' + (Math.round(value * 100) / 100).toFixed(1)
+    }
+}
+
+function fetchGameInfo() {
+    $.ajax({
+        type:"GET",
+        url: "/smarthexboard/game/" + game_uuid + "/game_info",
+        success: function(response) {
+            console.log('update game info: ' + JSON.stringify(response));
+
+            // update game ui
+            $('#turnLbl').text(response.turnYear + ', Turn ' + response.turn);
+
+            // update human player information
+            $('#scienceYieldValue').text(formatDecimal(response.human.science));
+			if (response.human.currentTech != null) {
+			    $('#tech_progress_title').text(response.human.currentTech);
+			} else {
+			    $('#tech_progress_title').text('-');
+			}
+			$('#cultureYieldValue').text(formatDecimal(response.human.culture));
+			if (response.human.currentCivic != null) {
+			    $('#civic_progress_title').text(response.human.currentCivic);
+			} else {
+			    $('#civic_progress_title').text('-');
+			}
+			$('#goldYieldValue').text(response.human.gold.toString());
+			$('#goldIncomeValue').text(formatDecimal(response.human.income));
+			$('#faithYieldValue').text(response.human.faith.toString());
+			$('#faithIncomeValue').text(formatDecimal(0));
+			$('#tourismYieldValue').text(formatDecimal(response.human.tourism));
+			// 'notifications': self.notifications.notifications if self.human else [],
+
+            hideTurnBanner();
+            abortUpdateTimer();
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
@@ -433,9 +479,8 @@ function loadMap(game_uuid) {
             console.log('map: ' + game_uuid + ' deserialized');
             renderer.map = mapObj;
 
-            var canvasSize = mapObj.canvasSize();
             // create canvas with this size
-            setupCanvas(canvasSize);
+            setupCanvas(mapObj.canvasSize());
 
             changeUIState(UIState.game);
 
@@ -472,13 +517,9 @@ function hideStartGameWarning() {
 
 window.startGame = function startGame() {
     var leaderSelect = $('#leaderSelect').find(":selected").val();
-    // console.log('leader: ' + leaderSelect);
     var difficultySelect = $('#difficultySelect').find(":selected").val();
-    // console.log('handicap: ' + difficultySelect);
     var mapTypeSelect = $('#mapTypeSelect').find(":selected").val();
-    // console.log('mapType: ' + mapTypeSelect);
     var mapSizeSelect = $('#mapSizeSelect').find(":selected").val();
-    // console.log('mapSize: ' + mapSizeSelect);
     var csrf_token = $('#csrf_token').text()
 
     if (leaderSelect == '') {
