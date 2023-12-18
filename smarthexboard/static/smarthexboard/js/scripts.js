@@ -28,6 +28,7 @@ jQuery(function ($) {
 var mouse = { x: 0, y: 0 };
 var mouseIsDown = false;
 var offset = { x: 0, y: 0 };
+var cursor = new HexPoint(0, 0);
 
 var renderer = new Renderer(null);
 var uiRenderer = new UIBuilder();
@@ -85,6 +86,10 @@ function setupCanvas(canvasSize) {
     unitsCanvas.width = canvasSize.width;
     unitsCanvas.height = canvasSize.height;
 
+    var cursorCanvas = document.getElementById('cursor');
+    cursorCanvas.width = canvasSize.width;
+    cursorCanvas.height = canvasSize.height;
+
     document.getElementById('game').style.width = window.innerWidth + "px";
     document.getElementById('game').style.height = window.innerHeight + "px";
 
@@ -113,9 +118,29 @@ function handleMouseDown(event) {
     mouse.Y = event.pageY;
     mouseIsDown = true;
 
-    var vp = document.getElementById('terrains');
-    offset.x = vp.offsetLeft - event.clientX;
-    offset.y = vp.offsetTop - event.clientY;
+    var viewport = document.getElementById('game');
+    var canvas = document.getElementById('terrains');
+    offset.x = canvas.offsetLeft - event.clientX;
+    offset.y = canvas.offsetTop - event.clientY;
+
+    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
+	var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
+
+    var canvasSize = renderer.map.canvasSize();
+    var canvasOffset = renderer.map.canvasOffset();
+
+    mx = mx - canvasOffset.x;
+    my = my - canvasOffset.y;
+    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
+
+    var point_on_canvas = new CGPoint(mx, my);
+    var screen_position = new CGPoint(mx, my);
+    var new_cursor = new HexPoint(screen_position);
+    if (new_cursor.x != cursor.x || new_cursor.y != cursor.y) {
+        cursor = new_cursor;
+        renderer.renderCursor(cursor);
+        console.log('cursor set to: ' + cursor);
+    }
 }
 
 function handleMouseMove(event) {
@@ -134,11 +159,11 @@ function handleMouseMove(event) {
     var canvasOffset = renderer.map.canvasOffset();
 
     // screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
-            // console.log('screen=' + screen);
+    // console.log('screen=' + screen);
     // screen.x + canvasOffset.x, screen.y + canvasOffset.y
     mx = mx - canvasOffset.x;
     my = my - canvasOffset.y;
-    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y;
+    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
 
     var point_on_canvas = new CGPoint(mx, my);
     // var screen_position = new CGPoint(event.clientX - canvas.offsetLeft, (event.clientY - canvas.offsetTop));
@@ -192,6 +217,10 @@ function handleMouseMove(event) {
         var unitsCanvas = document.getElementById('units');
         unitsCanvas.style.left = (event.clientX + offset.x) + 'px';
         unitsCanvas.style.top  = (event.clientY + offset.y) + 'px';
+
+        var cursorCanvas = document.getElementById('cursor');
+        cursorCanvas.style.left = (event.clientX + offset.x) + 'px';
+        cursorCanvas.style.top  = (event.clientY + offset.y) + 'px';
         // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
     }
 }

@@ -73,14 +73,22 @@ function Renderer() {
     this.unitsCtx = this.terrainsCanvas.getContext('2d');
     console.log('units canvas created');
 
+    if ((this.cursorCanvas = document.getElementById('cursor')) === null) {
+        this.cursorCanvas = addTag('game', 'canvas');
+    }
+    this.cursorCanvas.id = "cursor";
+    this.cursorCtx = this.cursorCanvas.getContext('2d');
+    console.log('cursor canvas created');
+
     // canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
     if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
 
     // Center the canvases
     this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.unitsCanvas.style.cssText = 'z-index: 3; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.resourcesCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.featuresCanvas.style.cssText = 'z-index: 3; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.unitsCanvas.style.cssText = 'z-index: 4; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.cursorCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 
     // Set the width/height of the container div to browser window width/height
     // This improves the performance. User will scroll the div instead of window
@@ -279,11 +287,33 @@ Renderer.prototype.render = function(orow, ocol, range) {
             var units = this.map.unitsAt(hex);
             units.forEach((unit) => {
                 var img = this.assets.unitTexture(unit.unitType.texture);
-                console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
+                // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
                 this.unitsCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             });
         }
     }
+}
+
+Renderer.prototype.renderCursor = function(hex) {
+
+    var canvasSize = this.map.canvasSize();
+    var canvasOffset = this.map.canvasOffset();
+
+    var cursorCanvas = document.getElementById('cursor');
+    var cursorCtx = cursorCanvas.getContext('2d');
+    cursorCtx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+
+    // draw cursor
+    var screen = hex.toScreen();
+    screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
+    var cursorImage = new Image();
+    cursorImage.onload = function() {
+        var cursorCanvas = document.getElementById('cursor');
+        var cursorCtx = cursorCanvas.getContext('2d');
+        cursorCtx.drawImage(cursorImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
+        console.log('renderCursor at: ' + (screen.x + canvasOffset.x) + ', ' + (screen.y + canvasOffset.y));
+    }
+    cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
 }
 
 // Returns min and max row,col for a range around a cell(row,col)
