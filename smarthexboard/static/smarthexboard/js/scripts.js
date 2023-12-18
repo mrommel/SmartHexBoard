@@ -54,7 +54,7 @@ function drawMap() {
         // Full page rendering
         renderer.render();
     } else {
-        console.log('textures not initialzed yet');
+        console.log('textures not initialized yet');
     }
 }
 
@@ -80,6 +80,10 @@ function setupCanvas(canvasSize) {
     var featuresCanvas = document.getElementById('features');
     featuresCanvas.width = canvasSize.width;
     featuresCanvas.height = canvasSize.height;
+
+    var unitsCanvas = document.getElementById('units');
+    unitsCanvas.width = canvasSize.width;
+    unitsCanvas.height = canvasSize.height;
 
     document.getElementById('game').style.width = window.innerWidth + "px";
     document.getElementById('game').style.height = window.innerHeight + "px";
@@ -145,18 +149,24 @@ function handleMouseMove(event) {
     var hillsText = ' (no hills)';
     var climateZoneText = '<invalid>';
     var resourceText = '<invalid>';
+    var unitsText = '[]';
+
     if (renderer.map.valid(map_position)) {
         terrainText = renderer.map.terrainAt(map_position);
         if (renderer.map.isHillsAt(map_position)) {
             hillsText = ' (has hills)';
+        } else {
+            hillsText = '';
         }
         climateZoneText = renderer.map.climateZoneAt(map_position);
         resourceText = renderer.map.resourceAt(map_position);
+        unitsText = 'Units: ' + renderer.map.unitsAt(map_position);
     } else {
         terrainText = '';
         hillsText = '';
         climateZoneText = '';
         resourceText = '';
+        unitsText = 'Units: []';
     }
 
     var tooltipSpan = document.getElementById('tooltip');
@@ -164,21 +174,24 @@ function handleMouseMove(event) {
     tooltipSpan.style.top = (y + 20) + 'px';
     tooltipSpan.style.left = (x + 0) + 'px';
     tooltipSpan.style.display = 'block';
-    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText; // + '<br />' + point_on_canvas;
+    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText + '<br />' + unitsText;
 
     if (mouseIsDown) {
-        var terrains = document.getElementById('terrains');
-        terrains.style.left = (event.clientX + offset.x) + 'px';
-        terrains.style.top  = (event.clientY + offset.y) + 'px';
+        var terrainsCanvas = document.getElementById('terrains');
+        terrainsCanvas.style.left = (event.clientX + offset.x) + 'px';
+        terrainsCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var features = document.getElementById('features');
-        features.style.left = (event.clientX + offset.x) + 'px';
-        features.style.top  = (event.clientY + offset.y) + 'px';
+        var featuresCanvas = document.getElementById('features');
+        featuresCanvas.style.left = (event.clientX + offset.x) + 'px';
+        featuresCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var resources = document.getElementById('resources');
-        resources.style.left = (event.clientX + offset.x) + 'px';
-        resources.style.top  = (event.clientY + offset.y) + 'px';
+        var resourcesCanvas = document.getElementById('resources');
+        resourcesCanvas.style.left = (event.clientX + offset.x) + 'px';
+        resourcesCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
+        var unitsCanvas = document.getElementById('units');
+        unitsCanvas.style.left = (event.clientX + offset.x) + 'px';
+        unitsCanvas.style.top  = (event.clientY + offset.y) + 'px';
         // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
     }
 }
@@ -429,7 +442,7 @@ function formatDecimal(value) {
 function fetchGameInfo() {
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/game/" + game_uuid + "/game_info",
+        url: "/smarthexboard/game/" + game_uuid + "/info",
         success: function(response) {
             console.log('update game info: ' + JSON.stringify(response));
 

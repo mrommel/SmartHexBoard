@@ -122,7 +122,7 @@ Q_CLUSTER = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
-        "LOCATION": "/var/tmp/django_smarthexboard_cache",
+        "LOCATION": f"{BASE_DIR}/django_smarthexboard_cache",
     }
 }
 

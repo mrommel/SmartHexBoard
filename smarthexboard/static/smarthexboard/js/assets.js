@@ -7,6 +7,7 @@
  */
 
 import { TerrainTypes, BeachTypes, SnowTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+import { UnitTypes } from './map/unit.js';
 import { TechTypes } from './game/types.js';
 
 function Assets() {
@@ -18,6 +19,7 @@ function Assets() {
 
 	// game image cache dicts
 	this.imgTechs = {};
+	this.imgUnits = {};
 
 	this.tileTexturesLoaded = false;
 	this.gameTexturesLoaded = false;
@@ -180,8 +182,11 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
 Assets.prototype.cacheGameImages = function(callbackFunction) {
 	var imgList = [];
 
-	Object.values(TechTypes).forEach(techType => {
+    Object.values(TechTypes).forEach(techType => {
 	    imgList.push(techType.texture);
+	});
+	Object.values(UnitTypes).forEach(unitType => {
+	    imgList.push(unitType.texture);
 	});
 
 	var loaded = 0;
@@ -215,6 +220,27 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
                 console.log('Failed to load ' + this.src + ' tech asset');
             }
             this.imgTechs[imgName].src = '/static/smarthexboard/img/techs/' + imgName;
+        } else if (imgName.startsWith('unit-')) {
+            if (typeof this.imgUnits[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgUnits[imgName] = new Image();
+            this.imgUnits[imgName].onload = function() {
+                loaded++;
+                if ((loaded + failed) == toLoad) {
+                    if (callbackFunction) {
+                        _this.gameTexturesLoaded = true;
+                        callbackFunction();
+                    }
+                }
+            }
+            this.imgUnits[imgName].onerror = function() {
+                failed++;
+                console.log('Failed to load ' + this.src + ' unit asset');
+            }
+            this.imgUnits[imgName].src = '/static/smarthexboard/img/units/' + imgName;
         } else {
             failed++;
             console.log('image type not handled: ' + imgName);
@@ -290,6 +316,21 @@ Assets.prototype.resourceTexture = function(textureName) {
     }
 
     return this.imgResources[textureName];
+}
+
+Assets.prototype.unitTexture = function(textureName) {
+
+    if (!this.gameTexturesLoaded) {
+        console.log('Try to get unit texture: ' + textureName + ' but cache is not initialized.');
+        return new Image();
+    }
+
+    if (!this.imgUnits.hasOwnProperty(textureName)) {
+        console.log('Try to get unit texture: ' + textureName + ' but is not in cache.');
+        return new Image();
+    }
+
+    return this.imgUnits[textureName];
 }
 
 export { Assets };

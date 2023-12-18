@@ -10,6 +10,7 @@ import { HexPoint } from '../base/point.js';
 import { CGSize, CGPoint } from '../base/prototypes.js';
 import { TerrainType, TerrainTypes, FeatureType, ResourceType } from './types.js';
 import { Tile } from './tile.js';
+import { Unit } from './unit.js';
 
 // Map Constructor
 
@@ -68,7 +69,10 @@ Map.prototype.fromJson = function(json_dict) {
     const units_json = json_dict['units'];
     for (var i = 0; i < units_json.length; i++) {
         const unit_json = units_json[i];
-        console.log(' * ' + unit_json['name'] + ' (' + unit_json['x'] + ', ' + unit_json['y'] + ') ' + unit_json['player']);
+        // console.log(' * ' + unit_json['name'] + ' (' + unit_json['x'] + ', ' + unit_json['y'] + ') ' + unit_json['player']);
+        var unitObj = new Unit();
+        unitObj.fromJson(unit_json);
+        this.units.push(unitObj);
     }
     // console.log(JSON.stringify(units_json, null, 2));
 
@@ -315,6 +319,19 @@ Map.prototype.modifyClimateZoneAt = function(climateZone, hexPoint) {
     }
 
     this.tiles[hexPoint.x][hexPoint.y].climateZone = climateZone;
+}
+
+Map.prototype.unitsAt = function(hexPoint) {
+    // check point is on map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    const unitList = this.units.filter (function (elem) {
+	    return elem.location.x === hexPoint.x && elem.location.y === hexPoint.y;
+    });
+
+    return unitList;
 }
 
 Map.prototype.toString = function() {

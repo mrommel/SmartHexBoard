@@ -1818,7 +1818,9 @@ class MapModel:
 
 		units_arr = []
 		for unit in self._units:
-			units_arr.append(unit.to_dict())
+			tile: Tile = self.tiles.values[unit.location.y][unit.location.x]
+			if tile.isDiscoveredBy(human):
+				units_arr.append(unit.to_dict())
 
 		return {
 			'width': self.width,

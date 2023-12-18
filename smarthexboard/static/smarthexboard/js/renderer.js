@@ -50,7 +50,7 @@ function Renderer() {
     }
     this.terrainsCanvas.id = "terrains";
     this.terrainsCtx = this.terrainsCanvas.getContext('2d');
-    console.log('terrain canvas created');
+    console.log('terrains canvas created');
 
     if ((this.featuresCanvas = document.getElementById('features')) === null) {
         this.featuresCanvas = addTag('game', 'canvas');
@@ -64,7 +64,14 @@ function Renderer() {
     }
     this.resourcesCanvas.id = "resources";
     this.resourcesCtx = this.resourcesCanvas.getContext('2d');
-    console.log('resource canvas created');
+    console.log('resources canvas created');
+
+    if ((this.unitsCanvas = document.getElementById('units')) === null) {
+        this.unitsCanvas = addTag('game', 'canvas');
+    }
+    this.unitsCanvas.id = "units";
+    this.unitsCtx = this.terrainsCanvas.getContext('2d');
+    console.log('units canvas created');
 
     // canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
     if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
@@ -73,6 +80,7 @@ function Renderer() {
     this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
     this.resourcesCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
     this.featuresCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
+    this.unitsCanvas.style.cssText = 'z-index: 3; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 
     // Set the width/height of the container div to browser window width/height
     // This improves the performance. User will scroll the div instead of window
@@ -218,6 +226,10 @@ Renderer.prototype.render = function(orow, ocol, range) {
     this.resourcesCtx = this.resourcesCanvas.getContext('2d');
     this.resourcesCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
+    this.unitsCanvas = document.getElementById('units');
+    this.unitsCtx = this.unitsCanvas.getContext('2d');
+    this.unitsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+
     // debug - fill complete canvas
     var canvasSize = this.map.canvasSize();
     var canvasOffset = this.map.canvasOffset();
@@ -263,6 +275,13 @@ Renderer.prototype.render = function(orow, ocol, range) {
                 var img = this.assets.resourceTexture(resource.texture);
                 this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
             }
+
+            var units = this.map.unitsAt(hex);
+            units.forEach((unit) => {
+                var img = this.assets.unitTexture(unit.unitType.texture);
+                console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
+                this.unitsCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
+            });
         }
     }
 }

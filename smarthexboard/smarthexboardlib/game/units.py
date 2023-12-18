@@ -281,7 +281,9 @@ class Unit:
 			'y': self.location.y,
 			'unitType': self.unitType.value,
 			'greatPerson': self.greatPerson.value if self.greatPerson is not None else None,
-			'player': hash(self.player)
+			'player': hash(self.player),
+			'health': self.healthPoints(),
+			'moves': self.moves()
 			# @fixme
 		}
 
