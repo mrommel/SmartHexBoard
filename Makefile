@@ -26,6 +26,7 @@ run-qcluster: venv
 	./$(VENV)/bin/python3 manage.py qcluster
 
 run: venv
+	rm -rf django_smarthexboard_cache
 	./$(VENV)/bin/python3 manage.py runserver 8081
 
 clean:

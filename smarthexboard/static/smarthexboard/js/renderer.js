@@ -310,8 +310,8 @@ Renderer.prototype.renderCursor = function(hex) {
     cursorImage.onload = function() {
         var cursorCanvas = document.getElementById('cursor');
         var cursorCtx = cursorCanvas.getContext('2d');
-        cursorCtx.drawImage(cursorImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-        console.log('renderCursor at: ' + (screen.x + canvasOffset.x) + ', ' + (screen.y + canvasOffset.y));
+        cursorCtx.drawImage(cursorImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24, 72, 48);
+        // console.log('renderCursor at: ' + (screen.x + canvasOffset.x) + ', ' + (screen.y + canvasOffset.y));
     }
     cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
 }

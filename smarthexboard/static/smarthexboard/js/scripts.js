@@ -26,7 +26,8 @@ jQuery(function ($) {
 }); // JQuery end
 
 var mouse = { x: 0, y: 0 };
-var mouseIsDown = false;
+var mouseLeftIsDown = false;
+var mouseRightIsDown = false;
 var offset = { x: 0, y: 0 };
 var cursor = new HexPoint(0, 0);
 
@@ -99,6 +100,10 @@ function setupCanvas(canvasSize) {
     vp.addEventListener("mousemove", handleMouseMove, true);
     vp.addEventListener("mouseup", handleMouseUp, true);
     vp.addEventListener("mouseleave", handleMouseLeave, true);
+
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    }, true);
 }
 
 /*function getMouseInfo(canvas, e) {
@@ -114,10 +119,8 @@ function setupCanvas(canvasSize) {
 }*/
 
 function handleMouseDown(event) {
-    mouse.x = event.pageX;
-    mouse.Y = event.pageY;
-    mouseIsDown = true;
-
+    var leftButtonDown = (event.which == 1);
+    var rightButtonDown = (event.which == 3);
     var viewport = document.getElementById('game');
     var canvas = document.getElementById('terrains');
     offset.x = canvas.offsetLeft - event.clientX;
@@ -136,10 +139,19 @@ function handleMouseDown(event) {
     var point_on_canvas = new CGPoint(mx, my);
     var screen_position = new CGPoint(mx, my);
     var new_cursor = new HexPoint(screen_position);
-    if (new_cursor.x != cursor.x || new_cursor.y != cursor.y) {
+    if (rightButtonDown && (new_cursor.x != cursor.x || new_cursor.y != cursor.y)) {
+        event.preventDefault();
         cursor = new_cursor;
         renderer.renderCursor(cursor);
-        console.log('cursor set to: ' + cursor);
+
+        mouse.x = event.pageX;
+        mouse.y = event.pageY;
+        rightButtonDown = true;
+    }
+
+    if (leftButtonDown) {
+        mouseLeftIsDown = true;
+        // console.log('cursor set to: ' + cursor);
     }
 }
 
@@ -147,7 +159,7 @@ function handleMouseMove(event) {
     event.preventDefault();
 	mouse.x = event.pageX;
     mouse.Y = event.pageY;
-    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseIsDown=' + mouseIsDown);
+    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseLeftIsDown=' + mouseLeftIsDown);
 
     var viewport = document.getElementById('game');
     var canvas = document.getElementById('terrains');
@@ -201,7 +213,7 @@ function handleMouseMove(event) {
     tooltipSpan.style.display = 'block';
     tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText + '<br />' + unitsText;
 
-    if (mouseIsDown) {
+    if (mouseLeftIsDown) {
         var terrainsCanvas = document.getElementById('terrains');
         terrainsCanvas.style.left = (event.clientX + offset.x) + 'px';
         terrainsCanvas.style.top  = (event.clientY + offset.y) + 'px';
@@ -226,11 +238,13 @@ function handleMouseMove(event) {
 }
 
 function handleMouseUp(event) {
-    mouseIsDown = false;
+    mouseLeftIsDown = false;
+    mouseRightIsDown = false;
 }
 
 function handleMouseLeave(event) {
-    mouseIsDown = false;
+    mouseLeftIsDown = false;
+    mouseRightIsDown = false;
 }
 
 function changeUIState(newState) {
