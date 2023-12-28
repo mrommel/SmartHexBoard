@@ -13,6 +13,327 @@ import { TechTypes } from './game/types.js';
 import { Map } from './map/map.js';
 import { Assets } from './assets.js';
 
+// image cache
+var assets = new Assets();
+
+// parent canvas renderer class
+class CanvasRenderer {
+    constructor(name) {
+        this.name = name;
+    }
+
+    setup() {
+        console.log('CanvasRenderer.setup() - should not happen');
+    }
+
+    clearRect(x, y, width, height) {
+        console.log('CanvasRenderer.clearRect(...) - should not happen');
+    }
+}
+
+// inheriting parent class
+class TerrainCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('TerrainCanvasRenderer.constructor()');
+
+        this.terrainsCanvas = null;
+	    this.terrainsCtx = null;
+    }
+
+    setup(map) {
+        console.log('TerrainCanvasRenderer.setup()');
+
+        this.map = map;
+
+        // Check if the canvases already exists in the current document to prevent
+        // overlaying multiple rendering instances
+        if ((this.terrainsCanvas = document.getElementById('terrains')) === null) {
+            this.terrainsCanvas = addTag('game', 'canvas');
+        }
+        this.terrainsCanvas.id = "terrains";
+        this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: 0px; top: 0px;';
+
+        this.terrainsCtx = this.terrainsCanvas.getContext('2d');
+        console.log('TerrainCanvasRenderer canvas created');
+    }
+
+    clearRect(x, y, width, height) {
+        this.terrainsCtx.clearRect(x, y, width, height);
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        // this.terrainsCtx.beginPath();
+        // this.terrainsCtx.rect(0, 0, canvasSize.width, canvasSize.height);
+        // this.terrainsCtx.rect(x, y, 72, 72);
+        // this.terrainsCtx.fillStyle = "black";
+        // this.terrainsCtx.fill();
+
+        var terrainImage = this.terrainImageAt(hexPoint);
+        this.terrainsCtx.drawImage(terrainImage, x, y, 72, 72);
+
+        var snowImage = this.snowImageAt(hexPoint);
+        if (snowImage != null) {
+            this.terrainsCtx.drawImage(snowImage, x, y, 72, 72);
+        }
+        // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
+    }
+
+    coastTextureNameAt(hexPoint) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        const terrain = this.map.terrainAt(hexPoint);
+
+        if (!terrain.isWater()) {
+            return null;
+        }
+
+        var textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
+        var _this = this; // context this is not visible on forEach loop
+        // console.log(Object.values(HexDirections));
+        Object.values(HexDirections).forEach(function(direction) {
+            const neighborPoint = hexPoint.neighborIn(direction, 1);
+
+            if (!_this.map.valid(neighborPoint)) {
+                return;
+            }
+
+            var neighborTerrain = _this.map.terrainAt(neighborPoint);
+            if (!neighborTerrain.isWater()) {
+                textureName = textureName + "-" + direction.short();
+            }
+        });
+
+        // console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
+
+        if (textureName == "beach") {
+            return null;
+        }
+
+        return textureName + '@3x.png';
+    }
+
+    terrainImageAt(hexPoint) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        //
+        var textureName = "";
+        const coastTexture = this.coastTextureNameAt(hexPoint);
+        if (coastTexture != null) {
+            textureName = coastTexture;
+        } else {
+            var terrain = this.map.terrainAt(hexPoint);
+            var textureNames = [];
+
+            if (this.map.isHillsAt(hexPoint)) {
+                textureNames = terrain.hillsTextures;
+            } else {
+                textureNames = terrain.textures;
+            }
+
+            var index = Math.abs(hexPoint.x + hexPoint.y) % textureNames.length;
+            textureName = textureNames[index];
+        }
+
+        return assets.terrainTexture(textureName);
+    }
+
+    snowImageAt(hexPoint) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        var textureName = "snow"; // "snow-n-ne-se-s-sw-nw"
+
+        const terrain = this.map.terrainAt(hexPoint);
+        if (terrain.isWater()) {
+            textureName = "snow-to-water";
+        }
+
+        var _this = this; // context this is not visible on forEach loop
+        Object.values(HexDirections).forEach(function(direction) {
+            const neighborPoint = hexPoint.neighborIn(direction, 1);
+
+            if (!_this.map.valid(neighborPoint)) {
+                return;
+            }
+
+            const neighborTerrain = _this.map.terrainAt(neighborPoint);
+            if (neighborTerrain == TerrainTypes.snow) {
+                textureName = textureName + ("-" + direction.short());
+            }
+        });
+
+        if (textureName == "snow" || textureName == "snow-to-water") {
+            return null;
+        }
+
+        return assets.terrainTexture(textureName);
+    }
+}
+
+class FeatureCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('FeatureCanvasRenderer.constructor()');
+
+        this.featuresCanvas = null;
+	    this.featuresCtx = null;
+    }
+
+    setup(map) {
+        console.log('FeatureCanvasRenderer.setup()');
+
+        this.map = map;
+
+        // Check if the canvases already exists in the current document to prevent
+        // overlaying multiple rendering instances
+        if ((this.featuresCanvas = document.getElementById('features')) === null) {
+            this.featuresCanvas = addTag('game', 'canvas');
+        }
+        this.featuresCanvas.id = "features";
+        this.featuresCanvas.style.cssText = 'z-index: 3; position: absolute; left: 0px; top: 0px;';
+
+        this.featuresCtx = this.featuresCanvas.getContext('2d');
+        console.log('FeatureCanvasRenderer canvas created');
+    }
+
+    clearRect(x, y, width, height) {
+        this.featuresCtx.clearRect(x, y, width, height);
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        var feature = this.map.featureAt(hexPoint);
+        if (feature.name != FeatureTypes.none.name) {
+            // console.log('feature=' + feature + ', at=' + hex);
+            var index = Math.abs(hexPoint.x + hexPoint.y) % feature.textures.length;
+            var textureName = feature.textures[index];
+            var img = assets.featureTexture(textureName);
+            this.featuresCtx.drawImage(img, x, y, 72, 72);
+        }
+    }
+}
+
+class ResourceCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('ResourceCanvasRenderer.constructor()');
+
+        this.resourcesCanvas = null;
+	    this.resourcesCtx = null;
+    }
+
+    setup(map) {
+        console.log('ResourceCanvasRenderer.setup()');
+
+        this.map = map;
+
+        if ((this.resourcesCanvas = document.getElementById('resources')) === null) {
+            this.resourcesCanvas = addTag('game', 'canvas');
+        }
+        this.resourcesCanvas.id = "resources";
+        this.resourcesCanvas.style.cssText = 'z-index: 2; position: absolute; left: 0px; top: 0px;';
+
+        this.resourcesCtx = this.resourcesCanvas.getContext('2d');
+        console.log('resources canvas created');
+    }
+
+    clearRect(x, y, width, height) {
+        this.resourcesCtx.clearRect(x, y, width, height);
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        var resource = this.map.resourceAt(hexPoint);
+        if (resource.name != ResourceTypes.none.name) {
+            // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
+            var img = assets.resourceTexture(resource.texture);
+            this.resourcesCtx.drawImage(img, x, y, 72, 72);
+        }
+    }
+}
+
+class UnitCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('UnitCanvasRenderer.constructor()');
+
+        this.unitsCanvas = null;
+	    this.unitsCtx = null;
+    }
+
+    setup(map) {
+        console.log('UnitCanvasRenderer.setup()');
+
+        this.map = map;
+
+        if ((this.unitsCanvas = document.getElementById('units')) === null) {
+            this.unitsCanvas = addTag('game', 'canvas');
+        }
+        this.unitsCanvas.id = "units";
+        this.unitsCanvas.style.cssText = 'z-index: 4; position: absolute; left: 0px; top: 0px;';
+
+        this.unitsCtx = this.unitsCanvas.getContext('2d');
+        console.log('units canvas created');
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        var units = this.map.unitsAt(hexPoint);
+        units.forEach((unit) => {
+            var img = assets.unitTexture(unit.unitType.texture);
+            // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
+            this.unitsCtx.drawImage(img, x, y, 72, 72);
+        });
+    }
+}
+
+class CursorCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('CursorCanvasRenderer.constructor()');
+
+        this.unitsCanvas = null;
+	    this.unitsCtx = null;
+    }
+
+    setup(map) {
+        console.log('CursorCanvasRenderer.setup()');
+
+        this.map = map;
+
+        if ((this.cursorCanvas = document.getElementById('cursor')) === null) {
+            this.cursorCanvas = addTag('game', 'canvas');
+        }
+        this.cursorCanvas.id = "cursor";
+        this.cursorCanvas.style.cssText = 'z-index: 1; position: absolute; left: 0px; top: 0px;';
+
+        this.cursorCtx = this.cursorCanvas.getContext('2d');
+        console.log('cursor canvas created');
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        this.cursorCtx.drawImage(cursorImage, x, y + 24, 72, 48);
+    }
+}
+
 function Renderer() {
 
     // Hex sizes compatible with PG2 sizes
@@ -34,61 +355,15 @@ function Renderer() {
 	// add an offset for better rounding of mouse position in a column
 	this.mousePrecisionOffset = this.s/100;
 
-	// canvases and contexts
-	this.terrainsCanvas = null;
-	this.terrainsCtx = null;
-	this.resourcesCanvas = null;
-	this.resourcesCtx = null;
-
-	// image cache
-	this.assets = new Assets();
-
-    // Check if the canvases already exists in the current document to prevent
-    // overlaying multiple rendering instances
-    if ((this.terrainsCanvas = document.getElementById('terrains')) === null) {
-        this.terrainsCanvas = addTag('game', 'canvas');
-    }
-    this.terrainsCanvas.id = "terrains";
-    this.terrainsCtx = this.terrainsCanvas.getContext('2d');
-    console.log('terrains canvas created');
-
-    if ((this.featuresCanvas = document.getElementById('features')) === null) {
-        this.featuresCanvas = addTag('game', 'canvas');
-    }
-    this.featuresCanvas.id = "features";
-    this.featuresCtx = this.featuresCanvas.getContext('2d');
-    console.log('features canvas created');
-
-    if ((this.resourcesCanvas = document.getElementById('resources')) === null) {
-        this.resourcesCanvas = addTag('game', 'canvas');
-    }
-    this.resourcesCanvas.id = "resources";
-    this.resourcesCtx = this.resourcesCanvas.getContext('2d');
-    console.log('resources canvas created');
-
-    if ((this.unitsCanvas = document.getElementById('units')) === null) {
-        this.unitsCanvas = addTag('game', 'canvas');
-    }
-    this.unitsCanvas.id = "units";
-    this.unitsCtx = this.terrainsCanvas.getContext('2d');
-    console.log('units canvas created');
-
-    if ((this.cursorCanvas = document.getElementById('cursor')) === null) {
-        this.cursorCanvas = addTag('game', 'canvas');
-    }
-    this.cursorCanvas.id = "cursor";
-    this.cursorCtx = this.cursorCanvas.getContext('2d');
-    console.log('cursor canvas created');
+	// internal renderers
+	this.terrainRenderer = new TerrainCanvasRenderer();
+	this.featureRenderer = new FeatureCanvasRenderer();
+	this.resourceRenderer = new ResourceCanvasRenderer();
+	this.unitRenderer = new UnitCanvasRenderer();
+	this.cursorRenderer = new CursorCanvasRenderer();
 
     // canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;
     if (this.canvasOffsetX < 0) { this.canvasOffsetX = 0; }
-
-    // Center the canvases
-    this.terrainsCanvas.style.cssText = 'z-index: 0; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.resourcesCanvas.style.cssText = 'z-index: 2; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.featuresCanvas.style.cssText = 'z-index: 3; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.unitsCanvas.style.cssText = 'z-index: 4; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
-    this.cursorCanvas.style.cssText = 'z-index: 1; position: absolute; left: ' + this.canvasOffsetX +'px; top:' + this.canvasOffsetY + 'px;';
 
     // Set the width/height of the container div to browser window width/height
     // This improves the performance. User will scroll the div instead of window
@@ -98,11 +373,20 @@ function Renderer() {
     document.getElementById('game').focus();
 }
 
+Renderer.prototype.setup = function(map) {
+    this.map = map;  // @fixme
+
+    this.terrainRenderer.setup(map);
+    this.featureRenderer.setup(map);
+    this.resourceRenderer.setup(map);
+    this.unitRenderer.setup(map);
+    this.cursorRenderer.setup(map);
+}
+
 Renderer.prototype.cacheImages = function(callbackFunction) {
 
-    var _this = this;
-    this.assets.cacheTileImages(function() {
-        _this.assets.cacheGameImages(function() {
+    assets.cacheTileImages(function() {
+        assets.cacheGameImages(function() {
             callbackFunction();
             console.log('tile and game assets cached');
         });
@@ -111,103 +395,7 @@ Renderer.prototype.cacheImages = function(callbackFunction) {
 
 Renderer.prototype.texturesLoaded = function() {
 
-    return this.assets.tileTexturesLoaded && this.assets.gameTexturesLoaded;
-}
-
-Renderer.prototype.coastTextureNameAt = function(hexPoint) {
-    if (!(hexPoint instanceof HexPoint)) {
-        throw new Error(hexPoint + ' is not a HexPoint');
-    }
-
-    const terrain = this.map.terrainAt(hexPoint);
-
-    if (!terrain.isWater()) {
-        return null;
-    }
-
-    var textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
-    var _this = this; // context this is not visible on forEach loop
-    // console.log(Object.values(HexDirections));
-    Object.values(HexDirections).forEach(function(direction) {
-        const neighborPoint = hexPoint.neighborIn(direction, 1);
-
-        if (!_this.map.valid(neighborPoint)) {
-            return;
-        }
-
-        var neighborTerrain = _this.map.terrainAt(neighborPoint);
-        if (!neighborTerrain.isWater()) {
-            textureName = textureName + "-" + direction.short();
-        }
-    });
-
-    // console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
-
-    if (textureName == "beach") {
-        return null;
-    }
-
-    return textureName + '@3x.png';
-}
-
-Renderer.prototype.terrainImageAt = function(hexPoint) {
-    if (!(hexPoint instanceof HexPoint)) {
-        throw new Error(hexPoint + ' is not a HexPoint');
-    }
-
-    //
-    var textureName = "";
-    const coastTexture = this.coastTextureNameAt(hexPoint);
-    if (coastTexture != null) {
-        textureName = coastTexture;
-    } else {
-        var terrain = this.map.terrainAt(hexPoint);
-        var textureNames = [];
-
-        if (this.map.isHillsAt(hexPoint)) {
-            textureNames = terrain.hillsTextures;
-        } else {
-            textureNames = terrain.textures;
-        }
-
-        var index = Math.abs(hexPoint.x + hexPoint.y) % textureNames.length;
-        textureName = textureNames[index];
-    }
-
-    return this.assets.terrainTexture(textureName);
-}
-
-Renderer.prototype.snowImageAt = function(hexPoint) {
-    if (!(hexPoint instanceof HexPoint)) {
-        throw new Error(hexPoint + ' is not a HexPoint');
-    }
-
-    var textureName = "snow"; // "snow-n-ne-se-s-sw-nw"
-
-    const terrain = this.map.terrainAt(hexPoint);
-    if (terrain.isWater()) {
-        textureName = "snow-to-water";
-    }
-
-    var _this = this; // context this is not visible on forEach loop
-    Object.values(HexDirections).forEach(function(direction) {
-        const neighborPoint = hexPoint.neighborIn(direction, 1);
-
-        if (!_this.map.valid(neighborPoint)) {
-            return;
-        }
-
-        const neighborTerrain = _this.map.terrainAt(neighborPoint);
-        if (neighborTerrain == TerrainTypes.snow) {
-            textureName = textureName + ("-" + direction.short());
-        }
-    });
-
-    if (textureName == "snow" || textureName == "snow-to-water") {
-        return null;
-    }
-
-    return this.assets.terrainTexture(textureName);
+    return assets.tileTexturesLoaded && assets.gameTexturesLoaded;
 }
 
 Renderer.prototype.render = function(orow, ocol, range) {
@@ -222,29 +410,15 @@ Renderer.prototype.render = function(orow, ocol, range) {
     var spos = this.cellToScreen(clearZone.srow, clearZone.scol, false);
     var epos = this.cellToScreen(clearZone.erow, clearZone.ecol, false);
 
-    this.terrainsCanvas = document.getElementById('terrains');
-    this.terrainsCtx = this.terrainsCanvas.getContext('2d');
-    this.terrainsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
-
-    this.featuresCanvas = document.getElementById('features');
-    this.featuresCtx = this.featuresCanvas.getContext('2d');
-    this.featuresCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
-
-    this.resourcesCanvas = document.getElementById('resources');
-    this.resourcesCtx = this.resourcesCanvas.getContext('2d');
-    this.resourcesCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
-
-    this.unitsCanvas = document.getElementById('units');
-    this.unitsCtx = this.unitsCanvas.getContext('2d');
-    this.unitsCtx.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    this.terrainRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    this.featureRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    this.resourceRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    this.unitRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    // this.cursorRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
     // debug - fill complete canvas
     var canvasSize = this.map.canvasSize();
     var canvasOffset = this.map.canvasOffset();
-    this.terrainsCtx.beginPath();
-    this.terrainsCtx.rect(0, 0, canvasSize.width, canvasSize.height);
-    this.terrainsCtx.fillStyle = "black";
-    this.terrainsCtx.fill();
 
     // console.log('render x=' + renderZone.srow + ' - ' + renderZone.erow);
     for (var row = renderZone.srow; row < renderZone.erow; row++) {
@@ -259,59 +433,27 @@ Renderer.prototype.render = function(orow, ocol, range) {
             screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
             // console.log('screen=' + screen);
 
-            var terrainImage = this.terrainImageAt(hex);
-            this.terrainsCtx.drawImage(terrainImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-
-            var snowImage = this.snowImageAt(hex);
-            if (snowImage != null) {
-                this.terrainsCtx.drawImage(snowImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-            }
-            // console.log('render tile at: ' + col + ', ' + row + ' => ' + x0 + ', ' + y0);
-
-            var feature = this.map.featureAt(hex);
-            if (feature.name != FeatureTypes.none.name) {
-                // console.log('feature=' + feature + ', at=' + hex);
-                var index = Math.abs(hex.x + hex.y) % feature.textures.length;
-                var textureName = feature.textures[index];
-                var img = this.assets.featureTexture(textureName);
-                this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-            }
-
-            var resource = this.map.resourceAt(hex);
-            if (resource.name != ResourceTypes.none.name) {
-                // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
-                var img = this.assets.resourceTexture(resource.texture);
-                this.resourcesCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-            }
-
-            var units = this.map.unitsAt(hex);
-            units.forEach((unit) => {
-                var img = this.assets.unitTexture(unit.unitType.texture);
-                // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
-                this.unitsCtx.drawImage(img, screen.x + canvasOffset.x, screen.y + canvasOffset.y, 72, 72);
-            });
+            this.terrainRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
+            this.featureRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
+            this.resourceRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
+            this.unitRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
         }
     }
 }
 
-Renderer.prototype.renderCursor = function(hex) {
+Renderer.prototype.renderCursor = function(hexPoint) {
 
     var canvasSize = this.map.canvasSize();
     var canvasOffset = this.map.canvasOffset();
 
-    var cursorCanvas = document.getElementById('cursor');
-    var cursorCtx = cursorCanvas.getContext('2d');
-    cursorCtx.clearRect(0, 0, canvasSize.width, canvasSize.height);
+    this.cursorRenderer.clearRect(0, 0, canvasSize.width, canvasSize.height);
 
     // draw cursor
-    var screen = hex.toScreen();
+    var screen = hexPoint.toScreen();
     screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
     var cursorImage = new Image();
     cursorImage.onload = function() {
-        var cursorCanvas = document.getElementById('cursor');
-        var cursorCtx = cursorCanvas.getContext('2d');
-        cursorCtx.drawImage(cursorImage, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24, 72, 48);
-        // console.log('renderCursor at: ' + (screen.x + canvasOffset.x) + ', ' + (screen.y + canvasOffset.y));
+        this.cursorRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24);
     }
     cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
 }

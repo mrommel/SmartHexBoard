@@ -101,6 +101,7 @@ function setupCanvas(canvasSize) {
     vp.addEventListener("mouseup", handleMouseUp, true);
     vp.addEventListener("mouseleave", handleMouseLeave, true);
 
+    // no context menu (needed for the right click capturing)
     document.addEventListener('contextmenu', function(event) {
         event.preventDefault();
     }, true);
@@ -533,7 +534,7 @@ function loadMap(game_uuid) {
             var mapObj = new Map();
             mapObj.fromJson(json_obj);
             console.log('map: ' + game_uuid + ' deserialized');
-            renderer.map = mapObj;
+            renderer.setup(mapObj);
 
             // create canvas with this size
             setupCanvas(mapObj.canvasSize());
