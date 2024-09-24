@@ -9,11 +9,6 @@ urlpatterns = [
 
     path('tests', views.tests, name='tests'),
 
-    # map api
-    # path('generate_map/<str:map_size>/<str:map_type>/', views.generate_map, name='generate_map'),
-    # path('generate_status/<str:map_uuid>/', views.generate_status, name='generate_status'),
-    # path('generated_map/<str:map_uuid>/', views.generated_map, name='generated_map'),
-
     # game api
     path('game/create', views.game_create, name='game_create'),
     path('game/<str:game_uuid>/create/status', views.game_create_status, name='game_create_status'),

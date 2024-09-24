@@ -84,6 +84,9 @@ def styleguide(request):
 		if terrain == TerrainType.land or terrain == TerrainType.sea:
 			continue
 
+		if len(terrain.textures()) == 0:
+			raise Exception(f'Terrain {terrain} does not have any textures')
+
 		terrains[terrain.value] = terrain.textures()[0]
 
 	for feature in list(FeatureType):

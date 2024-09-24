@@ -4,18 +4,16 @@ from time import sleep, time
 from urllib.parse import urlencode
 
 import pytest
+from django.test import Client
 from parameterized import parameterized
 
+from smarthexboard.models import GameGenerationState, GameGenerationData
 from smarthexboard.repositories import GameDataRepository
-from smarthexboard.smarthexboardlib.serialisation.game import GameModelSchema
+from smarthexboard.services import generate_game
+from smarthexboard.utils import is_valid_uuid
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.civilizations import LeaderType
 from .smarthexboardlib.map.types import MapSize, MapType
-
-from smarthexboard.models import GameGenerationState, GameGenerationData
-from smarthexboard.services import generate_game
-from smarthexboard.utils import is_valid_uuid
-from django.test import Client
 
 
 class TestGenerationRequest(unittest.TestCase):
@@ -154,7 +152,7 @@ class TestGenerationRequest(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 
 		# 4 - info
-		response = client.get(f'/smarthexboard/game/{game_uuid}/game_info')
+		response = client.get(f'/smarthexboard/game/{game_uuid}/info')
 		print(response.content)
 		self.assertEqual(response.status_code, 200)
 

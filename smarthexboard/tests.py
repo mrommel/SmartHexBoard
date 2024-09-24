@@ -61,6 +61,7 @@ class MapModelMock(MapModel):
 
 			tile.discoverBy(player, simulation)
 
+
 class TestArray2D(unittest.TestCase):
 	def test_constructor(self):
 		"""Test the Array2D constructor"""

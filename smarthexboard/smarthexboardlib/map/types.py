@@ -567,6 +567,9 @@ class TerrainType(ExtendedEnum):
 		if self == TerrainType.tundra:
 			return ['terrain_tundra@3x.png', 'terrain_tundra2@3x.png', 'terrain_tundra3@3x.png']
 
+		if self == TerrainType.undiscovered:
+			return ['terrain_undiscovered@3x.png']
+
 		return []
 
 	def yields(self) -> Yields:

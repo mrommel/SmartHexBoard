@@ -158,8 +158,8 @@ def contains(filter, list) -> bool:
 		@see https://stackoverflow.com/a/598407
 		´´´
 		if contains(lambda x: x.n == 3, myList):  # True if any element has .n==3
-            # do stuff
-        ´´´
+			# do stuff
+		´´´
 	"""
 	for x in list:
 		if filter(x):

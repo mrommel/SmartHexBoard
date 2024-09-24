@@ -330,7 +330,7 @@ class CursorCanvasRenderer extends CanvasRenderer {
             throw new Error(hexPoint + ' is not a HexPoint');
         }
 
-        this.cursorCtx.drawImage(cursorImage, x, y + 24, 72, 48);
+        this.cursorCtx.drawImage(this.cursorImage, x, y + 24, 72, 48);
     }
 }
 
@@ -452,8 +452,10 @@ Renderer.prototype.renderCursor = function(hexPoint) {
     var screen = hexPoint.toScreen();
     screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
     var cursorImage = new Image();
+    var _this = this;
     cursorImage.onload = function() {
-        this.cursorRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24);
+        _this.cursorRenderer.cursorImage = this;
+        _this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24);
     }
     cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
 }

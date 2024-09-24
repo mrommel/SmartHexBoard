@@ -5,9 +5,11 @@ VENV := venv
 all: venv
 
 $(VENV)/bin/activate: requirements.txt
-	python3 -m venv $(VENV)
-	./$(VENV)/bin/pip3 install -r requirements.txt
-	#./$(VENV)/bin/pip install --force-reinstall -r requirements.txt --only-binary=:all:
+	python3.12 -m venv $(VENV)
+	./$(VENV)/bin/pip3.12 install --upgrade setuptools
+	# ./$(VENV)/bin/pip3.12 install --upgrade distribute
+	./$(VENV)/bin/pip3.12 install -r requirements.txt
+	#./$(VENV)/bin/pip3.12 install --force-reinstall -r requirements.txt --only-binary=:all:
 
 # venv is a shortcut target
 venv: $(VENV)/bin/activate
@@ -17,38 +19,39 @@ pylint: venv
 	./$(VENV)/bin/pylint smarthexboard
 
 # tests: venv
-#	./$(VENV)/bin/python3 -m unittest
+#	./$(VENV)/bin/python3.12 -m unittest
 
 tests: venv
 	./$(VENV)/bin/pytest -q smarthexboard/tests.py
+	./$(VENV)/bin/pytest -q smarthexboard/test_service.py
 
 run-qcluster: venv
-	./$(VENV)/bin/python3 manage.py qcluster
+	./$(VENV)/bin/python3.12 manage.py qcluster
 
 run: venv
 	rm -rf django_smarthexboard_cache
-	./$(VENV)/bin/python3 manage.py runserver 8081
+	./$(VENV)/bin/python3.12 manage.py runserver 8081
 
 clean:
 	rm -rf $(VENV)
 	find . -type f -name '*.pyc' -delete
 
 makemigrations: venv
-	./$(VENV)/bin/python3 manage.py makemigrations
-	./$(VENV)/bin/python3 manage.py sqlmigrate smarthexboard 0010
-	./$(VENV)/bin/python3 manage.py migrate
+	./$(VENV)/bin/python3.12 manage.py makemigrations
+	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexboard 0010
+	./$(VENV)/bin/python3.12 manage.py migrate
 
 migrate: venv
-	./$(VENV)/bin/python3 manage.py migrate
+	./$(VENV)/bin/python3.12 manage.py migrate
 
 preparetranslations: venv
-	./$(VENV)/bin/python3 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*
+	./$(VENV)/bin/python3.12 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*
 
 compiletranslations: venv
-	./$(VENV)/bin/python3 manage.py compilemessages --ignore=venv/*
+	./$(VENV)/bin/python3.12 manage.py compilemessages --ignore=venv/*
 
 createsuperuser: venv
-	./$(VENV)/bin/python3 manage.py createsuperuser
+	./$(VENV)/bin/python3.12 manage.py createsuperuser
 
 
 # make sure that all targets are used/evaluated even if a file with same name exists
