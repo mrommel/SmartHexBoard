@@ -17,6 +17,11 @@ urlpatterns = [
     path('game/<str:game_uuid>/update', views.game_update, name='game_update'),
     path('game/<str:game_uuid>/turn', views.game_turn, name='game_turn'),
 
+    # game action api
+    path('game/<str:game_uuid>/move/from/<str:old_location>/to/<str:new_location>', views.game_move_unit, name='game_move_unit'),
+    # found city at
+    # open city
+
     # debug
     path('styleguide', views.styleguide, name='styleguide'),
 ]

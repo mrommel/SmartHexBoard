@@ -118,7 +118,7 @@ Map.prototype.canvasOffset = function() {
     var max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
     var content_y = max_y - min_y;
 
-    console.log('offset x: ' + pt0.x + ', y: ' + (content_y - pt0.y));
+    // console.log('offset x: ' + pt0.x + ', y: ' + (content_y - pt0.y));
 
     return new CGPoint(pt0.x + 52, content_y - pt0.y);
 }

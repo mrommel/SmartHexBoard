@@ -456,6 +456,7 @@ Renderer.prototype.renderCursor = function(hexPoint) {
     cursorImage.onload = function() {
         _this.cursorRenderer.cursorImage = this;
         _this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24);
+        console.log('Draw cursor at ' + hexPoint);
     }
     cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
 }

@@ -102,9 +102,7 @@ function setupCanvas(canvasSize) {
     vp.addEventListener("mouseleave", handleMouseLeave, true);
 
     // no context menu (needed for the right click capturing)
-    document.addEventListener('contextmenu', function(event) {
-        event.preventDefault();
-    }, true);
+    document.addEventListener('contextmenu', handleContextMenu, true);
 }
 
 /*function getMouseInfo(canvas, e) {
@@ -119,9 +117,17 @@ function setupCanvas(canvasSize) {
 	return new MouseInfo(mx, my, right_click);
 }*/
 
+function handleContextMenu(event) {
+    console.log('handleContextMenu which=' + event.which + ', button=' + event.button);
+
+    event.preventDefault();
+    return false;
+}
+
 function handleMouseDown(event) {
+    console.log('handleMouseDown which=' + event.which + ', button=' + event.button);
     var leftButtonDown = (event.which == 1);
-    var rightButtonDown = (event.which == 3);
+    var rightButtonDown = (event.which === 3 || event.button === 2);
     var viewport = document.getElementById('game');
     var canvas = document.getElementById('terrains');
     offset.x = canvas.offsetLeft - event.clientX;
@@ -141,16 +147,19 @@ function handleMouseDown(event) {
     var screen_position = new CGPoint(mx, my);
     var new_cursor = new HexPoint(screen_position);
     if (rightButtonDown && (new_cursor.x != cursor.x || new_cursor.y != cursor.y)) {
+        console.log('right click at: ' + cursor);
         event.preventDefault();
         cursor = new_cursor;
         renderer.renderCursor(cursor);
 
         mouse.x = event.pageX;
         mouse.y = event.pageY;
-        rightButtonDown = true;
+        // rightButtonDown = true;
     }
 
     if (leftButtonDown) {
+        console.log('left click at: ' + cursor);
+
         mouseLeftIsDown = true;
         // console.log('cursor set to: ' + cursor);
     }
