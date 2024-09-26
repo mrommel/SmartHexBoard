@@ -332,6 +332,10 @@ class CursorCanvasRenderer extends CanvasRenderer {
 
         this.cursorCtx.drawImage(this.cursorImage, x, y + 24, 72, 48);
     }
+
+    clearRect(x, y, width, height) {
+        this.cursorCtx.clearRect(x, y, width, height);
+    }
 }
 
 function Renderer() {
@@ -451,14 +455,27 @@ Renderer.prototype.renderCursor = function(hexPoint) {
     // draw cursor
     var screen = hexPoint.toScreen();
     screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
-    var cursorImage = new Image();
-    var _this = this;
-    cursorImage.onload = function() {
-        _this.cursorRenderer.cursorImage = this;
-        _this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y + 24);
-        console.log('Draw cursor at ' + hexPoint);
+
+    if (this.cursorRenderer.cursorImage == null) {
+        var cursorImage = new Image();
+        var _this = this;
+        cursorImage.onload = function() {
+            _this.cursorRenderer.cursorImage = this;
+            _this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y/* + 24*/);
+        }
+        cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
+    } else {
+        this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y/* + 24*/);
     }
-    cursorImage.src = '/static/smarthexboard/img/ui/focus1@3x.png';
+
+    // console.log('Draw cursor at ' + hexPoint);
+}
+
+Renderer.prototype.clearCursor = function() {
+
+    var canvasSize = this.map.canvasSize();
+
+    this.cursorRenderer.clearRect(0, 0, canvasSize.width, canvasSize.height);
 }
 
 // Returns min and max row,col for a range around a cell(row,col)

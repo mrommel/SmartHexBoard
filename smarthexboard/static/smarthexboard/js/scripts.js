@@ -96,13 +96,12 @@ function setupCanvas(canvasSize) {
 
     // attach mouse events
     var vp = document.getElementById('game');
+
     vp.addEventListener("mousedown", handleMouseDown, true);
     vp.addEventListener("mousemove", handleMouseMove, true);
     vp.addEventListener("mouseup", handleMouseUp, true);
     vp.addEventListener("mouseleave", handleMouseLeave, true);
-
-    // no context menu (needed for the right click capturing)
-    document.addEventListener('contextmenu', handleContextMenu, true);
+    vp.addEventListener('contextmenu', handleContextMenu, true);  // needed for the right click capturing
 }
 
 /*function getMouseInfo(canvas, e) {
@@ -118,58 +117,35 @@ function setupCanvas(canvasSize) {
 }*/
 
 function handleContextMenu(event) {
-    console.log('handleContextMenu which=' + event.which + ', button=' + event.button);
-
+    // console.log('handleContextMenu which=' + event.which + ', button=' + event.button);
     event.preventDefault();
-    return false;
 }
 
 function handleMouseDown(event) {
-    console.log('handleMouseDown which=' + event.which + ', button=' + event.button);
-    var leftButtonDown = (event.which == 1);
-    var rightButtonDown = (event.which === 3 || event.button === 2);
-    var viewport = document.getElementById('game');
-    var canvas = document.getElementById('terrains');
-    offset.x = canvas.offsetLeft - event.clientX;
-    offset.y = canvas.offsetTop - event.clientY;
+    // console.log('handleMouseDown which=' + event.which + ', button=' + event.button + ', ctrlKey=' + event.ctrlKey);
+    var leftButtonDown = (event.which === 1 && !event.ctrlKey);
+    var rightButtonDown = (event.which === 1 && event.ctrlKey);
 
-    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
-	var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
-
-    var canvasSize = renderer.map.canvasSize();
-    var canvasOffset = renderer.map.canvasOffset();
-
-    mx = mx - canvasOffset.x;
-    my = my - canvasOffset.y;
-    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
-
-    var point_on_canvas = new CGPoint(mx, my);
-    var screen_position = new CGPoint(mx, my);
-    var new_cursor = new HexPoint(screen_position);
-    if (rightButtonDown && (new_cursor.x != cursor.x || new_cursor.y != cursor.y)) {
-        console.log('right click at: ' + cursor);
-        event.preventDefault();
-        cursor = new_cursor;
-        renderer.renderCursor(cursor);
-
-        mouse.x = event.pageX;
-        mouse.y = event.pageY;
-        // rightButtonDown = true;
-    }
+    var new_cursor = locationFromEvent(event);
 
     if (leftButtonDown) {
-        console.log('left click at: ' + cursor);
-
         mouseLeftIsDown = true;
-        // console.log('cursor set to: ' + cursor);
+    } else if (rightButtonDown) {
+        mouseRightIsDown = true;
+
+        // set cursor to new position
+        renderer.renderCursor(new_cursor);
+        cursor = new_cursor;
     }
+
+    return false;
 }
 
 function handleMouseMove(event) {
+    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseLeftIsDown=' + mouseLeftIsDown);
     event.preventDefault();
 	mouse.x = event.pageX;
     mouse.Y = event.pageY;
-    // console.log('mouse move: ' + mouse.x + ', ' + mouse.y + ' mouseLeftIsDown=' + mouseLeftIsDown);
 
     var viewport = document.getElementById('game');
     var canvas = document.getElementById('terrains');
@@ -180,15 +156,10 @@ function handleMouseMove(event) {
     var canvasSize = renderer.map.canvasSize();
     var canvasOffset = renderer.map.canvasOffset();
 
-    // screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
-    // console.log('screen=' + screen);
-    // screen.x + canvasOffset.x, screen.y + canvasOffset.y
     mx = mx - canvasOffset.x;
     my = my - canvasOffset.y;
     my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
 
-    var point_on_canvas = new CGPoint(mx, my);
-    // var screen_position = new CGPoint(event.clientX - canvas.offsetLeft, (event.clientY - canvas.offsetTop));
     var screen_position = new CGPoint(mx, my);
     var map_position = new HexPoint(screen_position);
 
@@ -247,7 +218,40 @@ function handleMouseMove(event) {
     }
 }
 
+function locationFromEvent(event) {
+    var viewport = document.getElementById('game');
+    var canvas = document.getElementById('terrains');
+    offset.x = canvas.offsetLeft - event.clientX;
+    offset.y = canvas.offsetTop - event.clientY;
+
+    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
+    var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
+
+    var canvasSize = renderer.map.canvasSize();
+    var canvasOffset = renderer.map.canvasOffset();
+
+    mx = mx - canvasOffset.x;
+    my = my - canvasOffset.y;
+    my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
+
+    var screen_position = new CGPoint(mx, my);
+    return new HexPoint(screen_position);
+}
+
 function handleMouseUp(event) {
+    if (mouseRightIsDown) {
+        var new_cursor = locationFromEvent(event);
+
+        if (new_cursor.x === cursor.x && new_cursor.y === cursor.y) {
+            console.log('unit action at ' + new_cursor);  // => show unit panel
+        } else {
+            console.log('move unit from ' + cursor + ' to ' + new_cursor);
+        }
+        cursor = new_cursor;
+
+        // renderer.clearCursor();
+    }
+
     mouseLeftIsDown = false;
     mouseRightIsDown = false;
 }
