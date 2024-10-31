@@ -48,10 +48,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='player',
-            constraint=models.CheckConstraint(check=models.Q(('leader__in', ['AL', 'TR', 'VI', 'MO', 'CY', 'NA', 'CL', 'BA', 'PE'])), name='valid_leader'),
+            constraint=models.CheckConstraint(condition=models.Q(('leader__in', ['AL', 'TR', 'VI', 'MO', 'CY', 'NA', 'CL', 'BA', 'PE'])), name='valid_leader'),
         ),
         migrations.AddConstraint(
             model_name='gamemodel',
-            constraint=models.CheckConstraint(check=models.Q(('handicap__in', ['SE', 'CH', 'WA', 'PR', 'KI', 'EM', 'IM', 'DE'])), name='valid_handicap'),
+            constraint=models.CheckConstraint(condition=models.Q(('handicap__in', ['SE', 'CH', 'WA', 'PR', 'KI', 'EM', 'IM', 'DE'])), name='valid_handicap'),
         ),
     ]

@@ -90,7 +90,7 @@ class TradeRoute:
 				yields.gold += 2.0
 
 			# amsterdam or antioch suzerain bonus
-			# Your Trade Routes to foreign cities earn + 1 Gold for each luxury resource.
+			# Your Trade Routes to foreign cities earn +1 Gold for each luxury resource.
 			if startPlayer.isSuzerainOf(CityStateType.amsterdam, simulation) or \
 				startPlayer.isSuzerainOf(CityStateType.antioch, simulation):
 
@@ -98,7 +98,7 @@ class TradeRoute:
 				yields.gold += 1.0 * float(amountOfLuxuryResources)
 
 			# kumasi suzerain bonus
-			# Your Trade Routes to any city - state provide + 2 Culture and +1 Gold for every
+			# Your Trade Routes to any city - state provide +2 Culture and +1 Gold for every
 			# specialty district in the origin city.
 			if startPlayer.isSuzerainOf(CityStateType.kumasi, simulation) and \
 				endCity.player.isCityState():
@@ -136,7 +136,7 @@ class TradeRoute:
 			yields.science += 2.0
 
 		if endCityGovernor is not None:
-			# Your Trade Routes ending here provide +2[Food] Food to their starting city.
+			# Your Trade Routes ending here provide +2 Food to their starting city.
 			if endCityGovernor.type == GovernorType.magnus and endCityGovernor.hasTitle(GovernorTitleType.surplusLogistics):
 				yields.food += 2.0
 

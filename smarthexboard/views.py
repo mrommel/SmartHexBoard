@@ -313,20 +313,11 @@ def game_turn(request, game_uuid: str):
 	return JsonResponse(json_payload, status=200)
 
 
-def parseLocation(location: str) -> Optional[HexPoint]:
-	location_parts = location.split(',')
-
-	if len(location_parts) == 2:
-		location: HexPoint = HexPoint(int(location_parts[0]), int(location_parts[1]))
-		return location
-
-	return None
-
-
-def game_move_unit(request, game_uuid: str, old_location: str, new_location: str):
+def game_move_unit(request, game_uuid: str, unit_type: str, old_location: str, new_location: str):
 	"""
 		@param request: incoming request
 		@param game_uuid: game identifier
+		@param unit_type: combat or civilian
 		@param old_location: string in format x,y with the source location of the unit to be moved
 		@param new_location: string in format x,y with the destination location of the unit to be moved
 		@return: JsonResponse with:
@@ -344,6 +335,7 @@ def game_move_unit(request, game_uuid: str, old_location: str, new_location: str
 
 	humanPlayer = game.humanPlayer()
 
+	unit_map_type = parseUnitMapType(unit_type)
 	old_loc = parseLocation(old_location)
 	new_loc = parseLocation(new_location)
 
@@ -357,7 +349,7 @@ def game_move_unit(request, game_uuid: str, old_location: str, new_location: str
 		json_payload = {'uuid': game_uuid, 'status': f'Could not parse location from {new_location}.'}
 		return JsonResponse(json_payload, status=400)
 
-	unit: Optional[Unit] = game.unitAt(location=old_loc, unitMapType=UnitMapType.combat)
+	unit: Optional[Unit] = game.unitAt(location=old_loc, unitMapType=unit_map_type)
 	print(f'unit: {unit}')
 
 	if unit is None:

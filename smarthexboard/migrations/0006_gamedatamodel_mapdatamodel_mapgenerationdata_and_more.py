@@ -63,11 +63,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='mapgenerationdata',
-            constraint=models.CheckConstraint(check=models.Q(('state__in', ['OP', 'RU', 'RE'])), name='valid_state'),
+            constraint=models.CheckConstraint(condition=models.Q(('state__in', ['OP', 'RU', 'RE'])), name='valid_state'),
         ),
         migrations.AddConstraint(
             model_name='mapgenerationdata',
-            constraint=models.CheckConstraint(check=models.Q(('size__in', ['DU', 'TI', 'SM', 'ST'])), name='valid_size'),
+            constraint=models.CheckConstraint(condition=models.Q(('size__in', ['DU', 'TI', 'SM', 'ST'])), name='valid_size'),
         ),
         migrations.AddField(
             model_name='gamedatamodel',
@@ -81,6 +81,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='gamedatamodel',
-            constraint=models.CheckConstraint(check=models.Q(('handicap__in', ['SE', 'CH', 'WA', 'PR', 'KI', 'EM', 'IM', 'DE'])), name='valid_handicap'),
+            constraint=models.CheckConstraint(condition=models.Q(('handicap__in', ['SE', 'CH', 'WA', 'PR', 'KI', 'EM', 'IM', 'DE'])), name='valid_handicap'),
         ),
     ]

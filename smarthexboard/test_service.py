@@ -66,7 +66,7 @@ class TestGenerationRequest(unittest.TestCase):
 		self.assertEqual(status, 'Form not valid')
 		self.assertEqual(errors, {'mapType': ["Cannot map mapType from 'random' to MapType"]})
 
-	@pytest.mark.django_db
+	@pytest.mark.django_db(transaction=True)
 	@parameterized.expand([
 		["alexander", "settler", "small", "continents"],
 		["qin", "prince", "tiny", "earth"],

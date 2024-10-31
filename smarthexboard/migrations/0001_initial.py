@@ -22,6 +22,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='mapgeneration',
-            constraint=models.CheckConstraint(check=models.Q(('state__in', ['OP', 'RU', 'RE'])), name='valid_state'),
+            constraint=models.CheckConstraint(condition=models.Q(('state__in', ['OP', 'RU', 'RE'])), name='valid_state'),
         ),
     ]

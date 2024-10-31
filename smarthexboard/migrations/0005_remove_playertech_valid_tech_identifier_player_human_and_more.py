@@ -37,6 +37,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='playertech',
-            constraint=models.CheckConstraint(check=models.Q(('tech_identifier__in', ('none', 'mining', 'pottery', 'animalHusbandry', 'sailing', 'astrology', 'irrigation', 'writing', 'masonry', 'archery', 'bronzeWorking', 'wheel', 'celestialNavigation', 'horsebackRiding', 'currency', 'construction', 'ironWorking', 'shipBuilding', 'mathematics', 'engineering', 'industrialization', 'refining'))), name='valid_tech_identifier'),
+            constraint=models.CheckConstraint(condition=models.Q(('tech_identifier__in', ('none', 'mining', 'pottery', 'animalHusbandry', 'sailing', 'astrology', 'irrigation', 'writing', 'masonry', 'archery', 'bronzeWorking', 'wheel', 'celestialNavigation', 'horsebackRiding', 'currency', 'construction', 'ironWorking', 'shipBuilding', 'mathematics', 'engineering', 'industrialization', 'refining'))), name='valid_tech_identifier'),
         ),
     ]

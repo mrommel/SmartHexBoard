@@ -30,6 +30,7 @@ run-qcluster: venv
 
 run: venv
 	rm -rf django_smarthexboard_cache
+	./$(VENV)/bin/python3.12 -m pip install --upgrade pip
 	./$(VENV)/bin/python3.12 manage.py runserver 8081
 
 clean:

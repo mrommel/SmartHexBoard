@@ -4,7 +4,9 @@ from typing import Union, Optional
 
 import smarthexboard
 from smarthexboard.smarthexboardlib.game.generation import GameGenerator
+from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType
 from smarthexboard.smarthexboardlib.serialisation.game import GameModelSchema
+from smarthexboard.utils import parseLocation, parseUnitMapType
 from .smarthexboardlib.game.achievements import CivicAchievements
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.buildings import BuildingType
@@ -409,7 +411,7 @@ class TestMapGenerator(unittest.TestCase):
 
 class TestPathfinding(unittest.TestCase):
 	def test_path_finding(self):
-		"""Test astar"""
+		"""Test the astar algorithm"""
 		grid = MapModelMock(10, 10, TerrainType.grass)
 		grid.modifyFeatureAt(HexPoint(1, 2), FeatureType.mountains)  # put a mountain into the path
 
@@ -504,6 +506,20 @@ class TestSerialization(unittest.TestCase):
 		self.assertEqual(map_json_dict['width'], 32)
 		self.assertEqual(map_json_dict['height'], 22)
 		self.assertGreater(len(map_json_dict['units']), 0)
+
+
+class TestRequestParsing(unittest.TestCase):
+	def test_parseLocation(self):
+		self.assertEqual(parseLocation('2,2'), HexPoint(2, 2))
+		self.assertEqual(parseLocation(',32'), None)
+		self.assertEqual(parseLocation(''), None)
+		self.assertEqual(parseLocation(','), None)
+		self.assertEqual(parseLocation('-32'), None)
+
+	def test_parseUnitMapType(self):
+		self.assertEqual(parseUnitMapType('combat'), UnitMapType.combat)
+		self.assertEqual(parseUnitMapType('civilian'), UnitMapType.civilian)
+		self.assertEqual(parseUnitMapType('None'), None)
 
 
 if __name__ == '__main__':

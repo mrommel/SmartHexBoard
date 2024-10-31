@@ -29,7 +29,7 @@ class GameGenerationData(models.Model):
 	class Meta:
 		constraints = [
 			CheckConstraint(
-				check=Q(state__in=GameGenerationState.values),
+				condition=Q(state__in=GameGenerationState.values),
 				name="valid_state"
 			)
 		]
