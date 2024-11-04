@@ -1,5 +1,6 @@
 import json
 import unittest
+import uuid
 from time import sleep, time
 from urllib.parse import urlencode
 
@@ -10,10 +11,17 @@ from parameterized import parameterized
 from smarthexboard.models import GameGenerationState, GameGenerationData
 from smarthexboard.repositories import GameDataRepository
 from smarthexboard.services import generate_game
+from smarthexboard.smarthexboardlib.game.game import GameModel
+from smarthexboard.smarthexboardlib.game.players import Player
+from smarthexboard.smarthexboardlib.game.states.victories import VictoryType
+from smarthexboard.smarthexboardlib.game.unitTypes import UnitType
+from smarthexboard.smarthexboardlib.game.units import Unit
+from smarthexboard.smarthexboardlib.map.base import HexPoint
+from smarthexboard.tests import MapModelMock
 from smarthexboard.utils import is_valid_uuid
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.civilizations import LeaderType
-from .smarthexboardlib.map.types import MapSize, MapType
+from .smarthexboardlib.map.types import MapSize, MapType, TerrainType, FeatureType
 
 
 class TestGenerationRequest(unittest.TestCase):
@@ -25,7 +33,8 @@ class TestGenerationRequest(unittest.TestCase):
 
 		data = urlencode({"something": "something"})
 		response = client.post('/smarthexboard/game/create', data, content_type="application/x-www-form-urlencoded")
-		print(response.content)
+		if response.status_code != 200:
+			print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
 		errors = json_object['errors']
@@ -153,7 +162,8 @@ class TestGenerationRequest(unittest.TestCase):
 
 		# 4 - info
 		response = client.get(f'/smarthexboard/game/{game_uuid}/info')
-		print(response.content)
+		if response.status_code != 200:
+			print(response.content)
 		self.assertEqual(response.status_code, 200)
 
 		# 5 - game status
@@ -186,6 +196,183 @@ class TestGenerationRequest(unittest.TestCase):
 		humanTiles: int = game.numberOfDiscoveredTilesOf(humanPlayer)
 		self.assertLess(humanTiles, MapSize.tiny.numberOfTiles())
 		self.assertGreater(humanTiles, 0)
+
+
+class TestGamePlayRequest(unittest.TestCase):
+	def setUp(self):
+		# prepare game
+		self.game_uuid = uuid.uuid4()
+		grid = MapModelMock(10, 10, TerrainType.grass)
+		grid.modifyFeatureAt(HexPoint(1, 2), FeatureType.mountains)  # put a mountain into the path
+
+		self.player = Player(LeaderType.alexander, human=False)
+		humanPlayer = Player(LeaderType.barbarossa, human=True)
+		self.simulation = GameModel(
+			victoryTypes=[VictoryType.science],
+			handicap=HandicapType.settler,
+			turnsElapsed=0,
+			players=[self.player, humanPlayer],
+			map=grid
+		)
+		grid.discover(self.player, self.simulation)
+
+		# add ai unit
+		scout = Unit(location=HexPoint(1, 1), unitType=UnitType.scout, player=self.player)
+		self.simulation.addUnit(scout)
+
+		# add human unit
+		self.warrior = Unit(location=HexPoint(2, 2), unitType=UnitType.warrior, player=humanPlayer)
+		self.simulation.addUnit(self.warrior)
+
+		GameDataRepository.store(self.game_uuid, self.simulation)
+
+	@pytest.mark.django_db
+	def test_unit_move_request_no_game(self):
+		"""Test that the unit move"""
+		client = Client()
+		another_uuid = uuid.uuid4()
+		response = client.post(f'/smarthexboard/game/{another_uuid}/move/combat/from/0,0/to/1,1')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 404)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, [f'Game with {another_uuid} not found in db or cache.'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_no_unit(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,0/to/1,1')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 404)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Could find UnitMapType.combat unit at HexPoint(0, 0).'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_invalid_unit_type(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/clown/from/0,0/to/1,1')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Could not parse unit map type from clown.'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_invalid_start_location(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,_/to/1,1')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Could not parse location from 0,_.'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_invalid_end_location(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,0/to/123')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Could not parse location from 123.'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_not_human(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/1,1/to/1,2')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Cannot move units from another player. The unit you are trying to move is from Alexander.'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_no_moves_left(self):
+		"""Test that the unit move"""
+		self.warrior.finishMoves()
+		GameDataRepository.store(self.game_uuid, self.simulation)
+
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/2,2/to/1,2')
+
+		if response.status_code != 200:
+			print(response.status_code)
+			print(response.content)
+
+		json_object = json.loads(response.content)
+		errors = json_object['errors']
+		status = json_object['status']
+
+		self.assertEqual(response.status_code, 400)
+		self.assertEqual(status, 'Cannot move unit.')
+		self.assertEqual(errors, ['Unit Unit(HexPoint(2, 2), UnitType.warrior, Barbarossa, 1 exp) could not be moved from HexPoint(2, 2) to HexPoint(1, 2).'])
+
+	@pytest.mark.django_db
+	def test_unit_move_request_success(self):
+		"""Test that the unit move"""
+		client = Client()
+		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/2,2/to/1,2')
+
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
+
+		json_object = json.loads(response.content)
+		game_uuid = json_object['game_uuid']
+
+		self.assertEqual(response.status_code, 200)
+		self.assertNotIn('errors', json_object)
+		self.assertNotIn('status', json_object)
+		self.assertEqual(game_uuid, str(self.game_uuid))
 
 
 if __name__ == '__main__':
