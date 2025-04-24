@@ -209,7 +209,26 @@ class YieldType(ExtendedEnum):
 	def mountainChange(self) -> int:
 		return self._data().mountainChange
 
-	def _data(self) -> YieldTypeData:
+	@staticmethod
+	def fromName(name: str) -> 'YieldType':
+		if name == 'none' or name == 'YieldType.none':
+			return YieldType.none
+		elif name == 'food' or name == 'YieldType.food':
+			return YieldType.food
+		elif name == 'production' or name == 'YieldType.production':
+			return YieldType.production
+		elif name == 'gold' or name == 'YieldType.gold':
+			return YieldType.gold
+		elif name == 'science' or name == 'YieldType.science':
+			return YieldType.science
+		elif name == 'culture' or name == 'YieldType.culture':
+			return YieldType.culture
+		elif name == 'faith' or name == 'YieldType.faith':
+			return YieldType.faith
+
+		raise Exception(f'Cannot get YieldType from name: "{name}"')
+
+	def _data(self) -> Optional[YieldTypeData]:
 		if self == YieldType.none:
 			return YieldTypeData(
 				name='None'
@@ -251,6 +270,8 @@ class YieldType(ExtendedEnum):
 				name='Faith'
 				# AIWeightPercent=80
 			)
+
+		return None
 
 
 class Yields:

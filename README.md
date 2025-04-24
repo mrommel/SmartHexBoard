@@ -105,3 +105,4 @@ python3 ../manage.py compilemessages
 * https://mitchel.me/slippers/docs/template-tags-filters/
 * https://codepen.io/dehnavi/pen/MebRbj (nine patch + css)
 * https://www.crazyegg.com/blog/loading-spinners-css3-animation/
+* https://www.creative-tim.com/live/material-dashboard-laravel (Assets Template)

@@ -7,7 +7,7 @@ from django.template import loader
 from django_q.tasks import async_task
 
 from setup.settings import DEBUG
-from smarthexboard.forms import CreateGameForm
+from smarthexboard.forms import CreateGameForm, UnitMoveForm
 from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.repositories import GameDataRepository
 from smarthexboard.utils import is_valid_uuid, parseUnitMapType, parseLocation
@@ -15,9 +15,7 @@ from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.civilizations import LeaderType
 from .smarthexboardlib.game.game import GameModel
 from .smarthexboardlib.game.generation import UserInterfaceImpl
-from .smarthexboardlib.game.unitTypes import UnitMapType
 from .smarthexboardlib.game.units import Unit
-from .smarthexboardlib.map.base import HexPoint
 from .smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
 from .smarthexboardlib.serialisation.game import GameModelSchema
 
@@ -305,6 +303,8 @@ def game_turn(request, game_uuid: str):
 	else:
 		raise Exception('unknown')
 
+	GameDataRepository.store(game_uuid, game)
+
 	json_payload = {
 		'game_uuid': game_uuid,
 		'current_turn': game.currentTurn
@@ -313,102 +313,126 @@ def game_turn(request, game_uuid: str):
 	return JsonResponse(json_payload, status=200)
 
 
-def game_move_unit(request, game_uuid: str, unit_type: str, old_location: str, new_location: str):
+def game_move_unit(request):
 	"""
 		@param request: incoming request
-		@param game_uuid: game identifier
-		@param unit_type: combat or civilian
-		@param old_location: string in format x,y with the source location of the unit to be moved
-		@param new_location: string in format x,y with the destination location of the unit to be moved
 		@return: JsonResponse with:
 			200: when the move was possible
 			400: when the move was impossible or the parameters were of wrong type
 			404: when the unit or the game was not found
 	"""
-	if not GameDataRepository.inCacheOrDB(game_uuid):
+	# If this is a POST request, then process the Form data
+	if request.method == 'POST':
+
+		# Create a form instance and populate it with data from the request (binding):
+		form = UnitMoveForm(request.POST)
+
+		# Check if the form is valid:
+		if form.is_valid():
+			game_uuid = form.cleaned_data['game_uuid']
+
+			if not GameDataRepository.inCacheOrDB(game_uuid):
+				json_payload = {
+					'uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Game with {game_uuid} not found in db or cache.']
+				}
+				return JsonResponse(json_payload, status=404)
+
+			game = GameDataRepository.fetch(game_uuid)
+
+			game.userInterface = UserInterfaceImpl()
+
+			humanPlayer = game.humanPlayer()
+
+			if humanPlayer is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': ['Cannot find human player in game.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			unit_type: str = form.cleaned_data['unit_type']
+			old_location: str = form.cleaned_data['old_location']
+			new_location: str =form.cleaned_data['new_location']
+
+			unit_map_type = parseUnitMapType(unit_type)
+			old_loc = parseLocation(old_location)
+			new_loc = parseLocation(new_location)
+
+			print(f'try to move {unit_map_type} unit from: {old_loc} to {new_loc}')
+
+			if unit_map_type is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Could not parse unit map type from {unit_type}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			if old_loc is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Could not parse location from {old_location}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			if new_loc is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Could not parse location from {new_location}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			unit: Optional[Unit] = game.unitAt(location=old_loc, unitMapType=unit_map_type)
+			# print(f'unit: {unit}')
+
+			if unit is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Could find {unit_map_type} unit at {old_loc}.']}
+				return JsonResponse(json_payload, status=404)
+
+			if unit.player != humanPlayer:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Cannot move units from another player. The unit you are trying to move is from {unit.player.name()}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			# move the unit
+			ret: bool = unit.doMoveOnto(new_loc, game)
+
+			if not ret:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Unit {unit} could not be moved from {old_loc} to {new_loc}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			GameDataRepository.store(game_uuid, game)
+
+			json_payload = {
+				'game_uuid': game_uuid,
+				'current_turn': game.currentTurn
+				# notifications to human?
+			}
+			return JsonResponse(json_payload, status=200)
+		else:
+			json_payload = {
+				'status': 'Form not valid',
+				'errors': form.errors
+			}
+			return JsonResponse(json_payload, status=400)
+	else:
 		json_payload = {
-			'uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Game with {game_uuid} not found in db or cache.']
-		}
-		return JsonResponse(json_payload, status=404)
-
-	game = GameDataRepository.fetch(game_uuid)
-
-	game.userInterface = UserInterfaceImpl()
-
-	humanPlayer = game.humanPlayer()
-
-	if humanPlayer is None:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': ['Cannot find human player in game.']
+			'status': 'Invalid request method',
+			'errors': [f'Method {request.method} not allowed.']
 		}
 		return JsonResponse(json_payload, status=400)
-
-	unit_map_type = parseUnitMapType(unit_type)
-	old_loc = parseLocation(old_location)
-	new_loc = parseLocation(new_location)
-
-	print(f'move {unit_map_type} unit from: {old_loc} to {new_loc}')
-
-	if unit_map_type is None:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Could not parse unit map type from {unit_type}.']
-		}
-		return JsonResponse(json_payload, status=400)
-
-	if old_loc is None:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Could not parse location from {old_location}.']
-		}
-		return JsonResponse(json_payload, status=400)
-
-	if new_loc is None:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Could not parse location from {new_location}.']
-		}
-		return JsonResponse(json_payload, status=400)
-
-	unit: Optional[Unit] = game.unitAt(location=old_loc, unitMapType=unit_map_type)
-	# print(f'unit: {unit}')
-
-	if unit is None:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Could find {unit_map_type} unit at {old_loc}.']}
-		return JsonResponse(json_payload, status=404)
-
-	if unit.player != humanPlayer:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Cannot move units from another player. The unit you are trying to move is from {unit.player.name()}.']
-		}
-		return JsonResponse(json_payload, status=400)
-
-	# move the unit
-	ret: bool = unit.doMoveOnto(new_loc, game)
-
-	if not ret:
-		json_payload = {
-			'game_uuid': game_uuid,
-			'status': 'Cannot move unit.',
-			'errors': [f'Unit {unit} could not be moved from {old_loc} to {new_loc}.']
-		}
-		return JsonResponse(json_payload, status=400)
-
-	json_payload = {
-		'game_uuid': game_uuid,
-		'current_turn': game.currentTurn
-		# notifications to human?
-	}
-	return JsonResponse(json_payload, status=200)

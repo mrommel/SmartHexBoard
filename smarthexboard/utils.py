@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 from uuid import UUID
 
@@ -43,16 +44,24 @@ def is_integer(n):
 
 
 def parseLocation(location: str) -> Optional[HexPoint]:
+	# '[HexPoint x: 14, y: 4]'
+	for coord_str in re.findall(r'x: \d+, y: \d+', location):
+		# print(f'coor: {coor}')
+		coord_str = coord_str.replace('x: ', '')
+		coord_str = coord_str.replace('y: ', '')
+
+		location = coord_str
+
 	location_parts = location.split(',')
 
 	if len(location_parts) == 2:
-		if not is_integer(location_parts[0]):
+		if not is_integer(location_parts[0].strip()):
 			return None
 
-		if not is_integer(location_parts[1]):
+		if not is_integer(location_parts[1].strip()):
 			return None
 
-		location: HexPoint = HexPoint(int(location_parts[0]), int(location_parts[1]))
+		location: HexPoint = HexPoint(int(location_parts[0].strip()), int(location_parts[1].strip()))
 		return location
 
 	return None
@@ -64,5 +73,7 @@ def parseUnitMapType(unit_type: str) -> Optional[UnitMapType]:
 
 	if unit_type == 'civilian':
 		return UnitMapType.civilian
+
+	print(f'Warning: Unknown unit type "{unit_type}"')
 
 	return None

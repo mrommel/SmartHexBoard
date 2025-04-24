@@ -6,11 +6,11 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-// can be called with a id string or a element object directly
-// return pointer to the newly created tag
+// can be called with an id string or an element object directly
+// return a pointer to the newly created tag
 function addTag(parent, tag) {
-	var e;
-	var t = document.createElement(tag);
+	let e;
+	const t = document.createElement(tag);
 
 	if (typeof(parent) === 'string') {
 	    e = document.getElementById(parent);
@@ -26,13 +26,8 @@ function addTag(parent, tag) {
 }
 
 function isVisible(tag) {
-	var v = document.getElementById(tag).style.display;
-
-	if (v != "" && v != "none") {
-		return true;
-	}
-
-	return false;
+	const v = document.getElementById(tag).style.display;
+	return v !== "" && v !== "none";
 }
 
 function makeVisible(tag) {

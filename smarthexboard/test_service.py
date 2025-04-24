@@ -231,7 +231,8 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		another_uuid = uuid.uuid4()
-		response = client.post(f'/smarthexboard/game/{another_uuid}/move/combat/from/0,0/to/1,1')
+		data = {'game_uuid': another_uuid, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '1,1'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -249,7 +250,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_no_unit(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,0/to/1,1')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '1,1'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -267,7 +269,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_invalid_unit_type(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/clown/from/0,0/to/1,1')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'clown', 'old_location': '0,0', 'new_location': '1,1'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -285,7 +288,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_invalid_start_location(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,_/to/1,1')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '0,_', 'new_location': '1,1'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -303,7 +307,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_invalid_end_location(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/0,0/to/123')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '123'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -321,7 +326,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_not_human(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/1,1/to/1,2')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '1,1', 'new_location': '1,2'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -342,11 +348,12 @@ class TestGamePlayRequest(unittest.TestCase):
 		GameDataRepository.store(self.game_uuid, self.simulation)
 
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/2,2/to/1,2')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '2,2', 'new_location': '1,2'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
-		if response.status_code != 200:
-			print(response.status_code)
-			print(response.content)
+		# if response.status_code != 200:
+		# 	print(response.status_code)
+		# 	print(response.content)
 
 		json_object = json.loads(response.content)
 		errors = json_object['errors']
@@ -360,7 +367,8 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_success(self):
 		"""Test that the unit move"""
 		client = Client()
-		response = client.post(f'/smarthexboard/game/{self.game_uuid}/move/combat/from/2,2/to/1,2')
+		data = {'game_uuid': self.game_uuid, 'unit_type': 'combat', 'old_location': '2,2', 'new_location': '1,2'}
+		response = client.post(f'/smarthexboard/game/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)

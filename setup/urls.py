@@ -23,5 +23,6 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/smarthexboard/img/icons/favicon.ico', permanent=True)),
     path('', RedirectView.as_view(url='smarthexboard/home', permanent=True), name='home'),
     path('smarthexboard/', include('smarthexboard.urls')),
+    path('smarthexassets/', include('smarthexassets.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

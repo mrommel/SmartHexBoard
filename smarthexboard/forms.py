@@ -75,3 +75,13 @@ class CreateGameForm(forms.Form):
             return MapType.fromName(self.data['mapType'])
         except:
             raise Exception(f"Cannot map mapType from '{self.data['mapType']}' to MapType")
+
+
+class UnitMoveForm(forms.Form):
+    game_uuid = forms.CharField(label="game identifier", max_length=36)  # uuid
+    unit_type = forms.CharField(label="unit type", max_length=12)
+    old_location = forms.CharField(label="old location", max_length=32)
+    new_location = forms.CharField(label="new location", max_length=32)
+
+    def clean(self):
+        pass

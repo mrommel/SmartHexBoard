@@ -14,7 +14,7 @@ import { Map } from './map/map.js';
 import { Assets } from './assets.js';
 
 // image cache
-var assets = new Assets();
+const assets = new Assets();
 
 // parent canvas renderer class
 class CanvasRenderer {
@@ -72,10 +72,10 @@ class TerrainCanvasRenderer extends CanvasRenderer {
         // this.terrainsCtx.fillStyle = "black";
         // this.terrainsCtx.fill();
 
-        var terrainImage = this.terrainImageAt(hexPoint);
+        const terrainImage = this.terrainImageAt(hexPoint);
         this.terrainsCtx.drawImage(terrainImage, x, y, 72, 72);
 
-        var snowImage = this.snowImageAt(hexPoint);
+        const snowImage = this.snowImageAt(hexPoint);
         if (snowImage != null) {
             this.terrainsCtx.drawImage(snowImage, x, y, 72, 72);
         }
@@ -93,8 +93,8 @@ class TerrainCanvasRenderer extends CanvasRenderer {
             return null;
         }
 
-        var textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
-        var _this = this; // context this is not visible on forEach loop
+        let textureName = "beach"; // "beach-n-ne-se-s-sw-nw"
+        const _this = this; // context this is not visible on forEach loop
         // console.log(Object.values(HexDirections));
         Object.values(HexDirections).forEach(function(direction) {
             const neighborPoint = hexPoint.neighborIn(direction, 1);
@@ -103,7 +103,7 @@ class TerrainCanvasRenderer extends CanvasRenderer {
                 return;
             }
 
-            var neighborTerrain = _this.map.terrainAt(neighborPoint);
+            const neighborTerrain = _this.map.terrainAt(neighborPoint);
             if (!neighborTerrain.isWater()) {
                 textureName = textureName + "-" + direction.short();
             }
@@ -111,7 +111,7 @@ class TerrainCanvasRenderer extends CanvasRenderer {
 
         // console.log('coastTextureNameAt(' + hexPoint + ') => ' + textureName);
 
-        if (textureName == "beach") {
+        if (textureName === "beach") {
             return null;
         }
 
@@ -124,13 +124,13 @@ class TerrainCanvasRenderer extends CanvasRenderer {
         }
 
         //
-        var textureName = "";
+        let textureName = "";
         const coastTexture = this.coastTextureNameAt(hexPoint);
         if (coastTexture != null) {
             textureName = coastTexture;
         } else {
-            var terrain = this.map.terrainAt(hexPoint);
-            var textureNames = [];
+            const terrain = this.map.terrainAt(hexPoint);
+            let textureNames = [];
 
             if (this.map.isHillsAt(hexPoint)) {
                 textureNames = terrain.hillsTextures;
@@ -138,7 +138,7 @@ class TerrainCanvasRenderer extends CanvasRenderer {
                 textureNames = terrain.textures;
             }
 
-            var index = Math.abs(hexPoint.x + hexPoint.y) % textureNames.length;
+            const index = Math.abs(hexPoint.x + hexPoint.y) % textureNames.length;
             textureName = textureNames[index];
         }
 
@@ -150,14 +150,14 @@ class TerrainCanvasRenderer extends CanvasRenderer {
             throw new Error(hexPoint + ' is not a HexPoint');
         }
 
-        var textureName = "snow"; // "snow-n-ne-se-s-sw-nw"
+        let textureName = "snow"; // "snow-n-ne-se-s-sw-nw"
 
         const terrain = this.map.terrainAt(hexPoint);
         if (terrain.isWater()) {
             textureName = "snow-to-water";
         }
 
-        var _this = this; // context this is not visible on forEach loop
+        const _this = this; // context this is not visible on forEach loop
         Object.values(HexDirections).forEach(function(direction) {
             const neighborPoint = hexPoint.neighborIn(direction, 1);
 
@@ -166,12 +166,12 @@ class TerrainCanvasRenderer extends CanvasRenderer {
             }
 
             const neighborTerrain = _this.map.terrainAt(neighborPoint);
-            if (neighborTerrain == TerrainTypes.snow) {
+            if (neighborTerrain === TerrainTypes.snow) {
                 textureName = textureName + ("-" + direction.short());
             }
         });
 
-        if (textureName == "snow" || textureName == "snow-to-water") {
+        if (textureName === "snow" || textureName === "snow-to-water") {
             return null;
         }
 
@@ -214,11 +214,11 @@ class FeatureCanvasRenderer extends CanvasRenderer {
         }
 
         var feature = this.map.featureAt(hexPoint);
-        if (feature.name != FeatureTypes.none.name) {
+        if (feature.name !== FeatureTypes.none.name) {
             // console.log('feature=' + feature + ', at=' + hex);
-            var index = Math.abs(hexPoint.x + hexPoint.y) % feature.textures.length;
-            var textureName = feature.textures[index];
-            var img = assets.featureTexture(textureName);
+            const index = Math.abs(hexPoint.x + hexPoint.y) % feature.textures.length;
+            const textureName = feature.textures[index];
+            const img = assets.featureTexture(textureName);
             this.featuresCtx.drawImage(img, x, y, 72, 72);
         }
     }
@@ -256,8 +256,8 @@ class ResourceCanvasRenderer extends CanvasRenderer {
             throw new Error(hexPoint + ' is not a HexPoint');
         }
 
-        var resource = this.map.resourceAt(hexPoint);
-        if (resource.name != ResourceTypes.none.name) {
+        const resource = this.map.resourceAt(hexPoint);
+        if (resource.name !== ResourceTypes.none.name) {
             // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
             var img = assets.resourceTexture(resource.texture);
             this.resourcesCtx.drawImage(img, x, y, 72, 72);
@@ -293,9 +293,9 @@ class UnitCanvasRenderer extends CanvasRenderer {
             throw new Error(hexPoint + ' is not a HexPoint');
         }
 
-        var units = this.map.unitsAt(hexPoint);
+        const units = this.map.unitsAt(hexPoint);
         units.forEach((unit) => {
-            var img = assets.unitTexture(unit.unitType.texture);
+            const img = assets.unitTexture(unit.unitType.texture);
             // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
             this.unitsCtx.drawImage(img, x, y, 72, 72);
         });
@@ -407,12 +407,12 @@ Renderer.prototype.render = function(orow, ocol, range) {
     // console.log('==> render tile at: ' + ocol + ', ' + orow);
 
     // the map (cell) coords that will be cleared by clearRect
-    var clearZone = this.getZoneRangeLimits(orow, ocol, range + 1);
+    const clearZone = this.getZoneRangeLimits(orow, ocol, range + 1);
     // the map (cell) coords that will be rendered hex by hex
-    var renderZone = this.getZoneRangeLimits(orow, ocol, range + 2);
+    const renderZone = this.getZoneRangeLimits(orow, ocol, range + 2);
 
-    var spos = this.cellToScreen(clearZone.srow, clearZone.scol, false);
-    var epos = this.cellToScreen(clearZone.erow, clearZone.ecol, false);
+    const spos = this.cellToScreen(clearZone.srow, clearZone.scol, false);
+    const epos = this.cellToScreen(clearZone.erow, clearZone.ecol, false);
 
     this.terrainRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
     this.featureRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
@@ -421,18 +421,18 @@ Renderer.prototype.render = function(orow, ocol, range) {
     // this.cursorRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
     // debug - fill complete canvas
-    var canvasSize = this.map.canvasSize();
-    var canvasOffset = this.map.canvasOffset();
+    const canvasSize = this.map.canvasSize();
+    const canvasOffset = this.map.canvasOffset();
 
     // console.log('render x=' + renderZone.srow + ' - ' + renderZone.erow);
-    for (var row = renderZone.srow; row < renderZone.erow; row++) {
+    for (let row = renderZone.srow; row < renderZone.erow; row++) {
         // we space the hexagons on each line next column being on the row below
-        for (var col = renderZone.scol; col < renderZone.ecol; col++) {
+        for (let col = renderZone.scol; col < renderZone.ecol; col++) {
 
             // hex = map.map[row][col];
-            var hex = new HexPoint(col, row);
+            const hex = new HexPoint(col, row);
             // console.log('hex=' + hex);
-            var screen = hex.toScreen();
+            const screen = hex.toScreen();
             // console.log('canvasSize.height=' + canvasSize.height + ', screen.y=' + (screen.y + canvasOffset.y));
             screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
             // console.log('screen=' + screen);
@@ -447,18 +447,18 @@ Renderer.prototype.render = function(orow, ocol, range) {
 
 Renderer.prototype.renderCursor = function(hexPoint) {
 
-    var canvasSize = this.map.canvasSize();
-    var canvasOffset = this.map.canvasOffset();
+    const canvasSize = this.map.canvasSize();
+    const canvasOffset = this.map.canvasOffset();
 
     this.cursorRenderer.clearRect(0, 0, canvasSize.width, canvasSize.height);
 
     // draw cursor
-    var screen = hexPoint.toScreen();
+    const screen = hexPoint.toScreen();
     screen.y = canvasSize.height - (screen.y + canvasOffset.y) - canvasOffset.y;
 
     if (this.cursorRenderer.cursorImage == null) {
-        var cursorImage = new Image();
-        var _this = this;
+        const cursorImage = new Image();
+        const _this = this;
         cursorImage.onload = function() {
             _this.cursorRenderer.cursorImage = this;
             _this.cursorRenderer.drawTile(hexPoint, screen.x + canvasOffset.x, screen.y + canvasOffset.y/* + 24*/);
@@ -473,15 +473,14 @@ Renderer.prototype.renderCursor = function(hexPoint) {
 
 Renderer.prototype.clearCursor = function() {
 
-    var canvasSize = this.map.canvasSize();
-
+    const canvasSize = this.map.canvasSize();
     this.cursorRenderer.clearRect(0, 0, canvasSize.width, canvasSize.height);
 }
 
 // Returns min and max row,col for a range around a cell(row,col)
 Renderer.prototype.getZoneRangeLimits =	function(row, col, range) {
 
-    var z = { srow: 0, scol: 0, erow: this.map.rows, ecol: this.map.cols };
+    const z = {srow: 0, scol: 0, erow: this.map.rows, ecol: this.map.cols};
 
     if (row === null || col === null)
         row = col = 0;
@@ -510,7 +509,7 @@ Renderer.prototype.getZoneRangeLimits =	function(row, col, range) {
 // if absolute is set canvas offsets are added to positions
 Renderer.prototype.cellToScreen = function(row, col, absolute) {
 
-    var x0, y0;
+    let x0, y0;
 
     if (col & 1) { // odd column
         y0 =  row * 2 * this.r + this.r + this.renderOffsetY;
@@ -521,7 +520,7 @@ Renderer.prototype.cellToScreen = function(row, col, absolute) {
     }
 
     if (absolute) {
-        var vp = document.getElementById('game');
+        const vp = document.getElementById('game');
         x0 += this.canvasOffsetX - vp.clientLeft - vp.offsetLeft;
         y0 += this.canvasOffsetY - vp.clientTop - vp.offsetTop;
     }
@@ -532,15 +531,15 @@ Renderer.prototype.cellToScreen = function(row, col, absolute) {
 // Converts from screen x,y to row,col in map array
 Renderer.prototype.screenToCell = function(x, y) {
 
-    var vrow; // virtual graphical rows
-    var trow, tcol; // true map rows/cols
+    let vrow; // virtual graphical rows
+    let trow, tcol; // true map rows/cols
 
     tcol = Math.round((x - this.renderOffsetX) / this.colSlice + this.mousePrecisionOffset) - 1;
     // console.log(tcol);
     // a graphical row (half hex) not the array row
     vrow = (y - this.renderOffsetY * (~tcol & 1)) / this.r; // Half hexes add r if col is odd
     // shift to correct row index
-    trow = Math.round(vrow/2 - 1 * (vrow & 1));
+    trow = Math.round(vrow/2 - (vrow & 1));
     if (trow < 0) { trow = 0; }
     if (trow > this.map.rows - 1) trow = this.map.rows - 1;
     if (tcol > this.map.cols - 1) tcol = this.map.cols - 1;

@@ -17,6 +17,7 @@ venv: $(VENV)/bin/activate
 pylint: venv
 	# --disable=C0303,R0903,R0915,C0103,E1101,E0102,R0913,W0123,R0912,R0801 simulation map population
 	./$(VENV)/bin/pylint smarthexboard
+	./$(VENV)/bin/pylint smarthexassets
 
 # tests: venv
 #	./$(VENV)/bin/python3.12 -m unittest
@@ -39,7 +40,8 @@ clean:
 
 makemigrations: venv
 	./$(VENV)/bin/python3.12 manage.py makemigrations
-	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexboard 0010
+	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexboard 0012
+	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexassets 0002
 	./$(VENV)/bin/python3.12 manage.py migrate
 
 migrate: venv
@@ -54,6 +56,10 @@ compiletranslations: venv
 createsuperuser: venv
 	./$(VENV)/bin/python3.12 manage.py createsuperuser
 
+#
+
+render_stable_diffusion: venv
+	./$(VENV)/bin/python3.12 manage.py render_stable_diffusion
 
 # make sure that all targets are used/evaluated even if a file with same name exists
 .PHONY: all venv run clean tests

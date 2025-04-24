@@ -25,15 +25,15 @@ jQuery(function ($) {
     });
 }); // JQuery end
 
-var mouse = { x: 0, y: 0 };
-var mouseLeftIsDown = false;
-var mouseRightIsDown = false;
-var offset = { x: 0, y: 0 };
-var cursor = new HexPoint(0, 0);
+const mouse = {x: 0, y: 0};
+let mouseLeftIsDown = false;
+let mouseRightIsDown = false;
+const offset = {x: 0, y: 0};
+let cursor = new HexPoint(0, 0);
 
-var renderer = new Renderer(null);
-var uiRenderer = new UIBuilder();
-var uiState = UIState.Splash;
+const renderer = new Renderer(null);
+const uiRenderer = new UIBuilder();
+let uiState = UIState.splash;
 
 function preventExitOnReload(event) {
     // Cancel the event as stated by the standard.
@@ -43,13 +43,12 @@ function preventExitOnReload(event) {
 }
 
 window.resizeCanvas = function resizeCanvas() {
-    if (uiState == UIState.game) {
+    if (uiState === UIState.game) {
         drawMap();
     }
 }
 
 function drawMap() {
-
     if (renderer.texturesLoaded()) {
         setupCanvas();
 
@@ -61,7 +60,6 @@ function drawMap() {
 }
 
 function setupCanvas(canvasSize) {
-
     if (!renderer.texturesLoaded()) {
         return;
     }
@@ -71,23 +69,23 @@ function setupCanvas(canvasSize) {
     }
 
     // get the canvas
-    var terrainsCanvas = document.getElementById('terrains');
+    const terrainsCanvas = document.getElementById('terrains');
     terrainsCanvas.width = canvasSize.width;
     terrainsCanvas.height = canvasSize.height;
 
-    var resourcesCanvas = document.getElementById('resources');
+    const resourcesCanvas = document.getElementById('resources');
     resourcesCanvas.width = canvasSize.width;
     resourcesCanvas.height = canvasSize.height;
 
-    var featuresCanvas = document.getElementById('features');
+    const featuresCanvas = document.getElementById('features');
     featuresCanvas.width = canvasSize.width;
     featuresCanvas.height = canvasSize.height;
 
-    var unitsCanvas = document.getElementById('units');
+    const unitsCanvas = document.getElementById('units');
     unitsCanvas.width = canvasSize.width;
     unitsCanvas.height = canvasSize.height;
 
-    var cursorCanvas = document.getElementById('cursor');
+    const cursorCanvas = document.getElementById('cursor');
     cursorCanvas.width = canvasSize.width;
     cursorCanvas.height = canvasSize.height;
 
@@ -95,7 +93,7 @@ function setupCanvas(canvasSize) {
     document.getElementById('game').style.height = window.innerHeight + "px";
 
     // attach mouse events
-    var vp = document.getElementById('game');
+    const vp = document.getElementById('game');
 
     vp.addEventListener("mousedown", handleMouseDown, true);
     vp.addEventListener("mousemove", handleMouseMove, true);
@@ -123,10 +121,10 @@ function handleContextMenu(event) {
 
 function handleMouseDown(event) {
     // console.log('handleMouseDown which=' + event.which + ', button=' + event.button + ', ctrlKey=' + event.ctrlKey);
-    var leftButtonDown = (event.which === 1 && !event.ctrlKey);
-    var rightButtonDown = (event.which === 1 && event.ctrlKey);
+    const leftButtonDown = (event.which === 1 && !event.ctrlKey);
+    const rightButtonDown = (event.which === 1 && event.ctrlKey);
 
-    var new_cursor = locationFromEvent(event);
+    const new_cursor = locationFromEvent(event);
 
     if (leftButtonDown) {
         mouseLeftIsDown = true;
@@ -147,27 +145,27 @@ function handleMouseMove(event) {
 	mouse.x = event.pageX;
     mouse.Y = event.pageY;
 
-    var viewport = document.getElementById('game');
-    var canvas = document.getElementById('terrains');
+    /*const viewport = document.getElementById('game');
+    const canvas = document.getElementById('terrains');
 
-    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
-	var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
+    let mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
+    let my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
 
-    var canvasSize = renderer.map.canvasSize();
-    var canvasOffset = renderer.map.canvasOffset();
+    const canvasSize = renderer.map.canvasSize();
+    const canvasOffset = renderer.map.canvasOffset();
 
     mx = mx - canvasOffset.x;
     my = my - canvasOffset.y;
     my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
 
-    var screen_position = new CGPoint(mx, my);
-    var map_position = new HexPoint(screen_position);
+    const screen_position = new CGPoint(mx, my);
+    const map_position = new HexPoint(screen_position);
 
-    var terrainText = '<invalid>';
-    var hillsText = ' (no hills)';
-    var climateZoneText = '<invalid>';
-    var resourceText = '<invalid>';
-    var unitsText = '[]';
+    let terrainText = '<invalid>';
+    let hillsText = ' (no hills)';
+    let climateZoneText = '<invalid>';
+    let resourceText = '<invalid>';
+    let unitsText = '[]';
 
     if (renderer.map.valid(map_position)) {
         terrainText = renderer.map.terrainAt(map_position);
@@ -187,31 +185,31 @@ function handleMouseMove(event) {
         unitsText = 'Units: []';
     }
 
-    var tooltipSpan = document.getElementById('tooltip');
-    var x = event.clientX, y = event.clientY;
+    const tooltipSpan = document.getElementById('tooltip');
+    const x = event.clientX, y = event.clientY;
     tooltipSpan.style.top = (y + 20) + 'px';
     tooltipSpan.style.left = (x + 0) + 'px';
     tooltipSpan.style.display = 'block';
-    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText + '<br />' + unitsText;
+    tooltipSpan.innerHTML = 'point: ' + map_position + '<br />' + terrainText + hillsText + '<br />' + resourceText + '<br />' + climateZoneText + '<br />' + unitsText;*/
 
     if (mouseLeftIsDown) {
-        var terrainsCanvas = document.getElementById('terrains');
+        const terrainsCanvas = document.getElementById('terrains');
         terrainsCanvas.style.left = (event.clientX + offset.x) + 'px';
         terrainsCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var featuresCanvas = document.getElementById('features');
+        const featuresCanvas = document.getElementById('features');
         featuresCanvas.style.left = (event.clientX + offset.x) + 'px';
         featuresCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var resourcesCanvas = document.getElementById('resources');
+        const resourcesCanvas = document.getElementById('resources');
         resourcesCanvas.style.left = (event.clientX + offset.x) + 'px';
         resourcesCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var unitsCanvas = document.getElementById('units');
+        const unitsCanvas = document.getElementById('units');
         unitsCanvas.style.left = (event.clientX + offset.x) + 'px';
         unitsCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
-        var cursorCanvas = document.getElementById('cursor');
+        const cursorCanvas = document.getElementById('cursor');
         cursorCanvas.style.left = (event.clientX + offset.x) + 'px';
         cursorCanvas.style.top  = (event.clientY + offset.y) + 'px';
         // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
@@ -219,33 +217,36 @@ function handleMouseMove(event) {
 }
 
 function locationFromEvent(event) {
-    var viewport = document.getElementById('game');
-    var canvas = document.getElementById('terrains');
+    const viewport = document.getElementById('game');
+    const canvas = document.getElementById('terrains');
     offset.x = canvas.offsetLeft - event.clientX;
     offset.y = canvas.offsetTop - event.clientY;
 
-    var mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
-    var my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
+    let mx = event.pageX - canvas.offsetLeft - viewport.clientLeft - viewport.offsetLeft + viewport.scrollLeft;
+    let my = event.pageY - canvas.offsetTop - viewport.clientTop - viewport.offsetTop + viewport.scrollTop;
 
-    var canvasSize = renderer.map.canvasSize();
-    var canvasOffset = renderer.map.canvasOffset();
+    const canvasSize = renderer.map.canvasSize();
+    const canvasOffset = renderer.map.canvasOffset();
 
     mx = mx - canvasOffset.x;
     my = my - canvasOffset.y;
     my = canvasSize.height - (my + canvasOffset.y) - canvasOffset.y + 30;
 
-    var screen_position = new CGPoint(mx, my);
+    const screen_position = new CGPoint(mx, my);
     return new HexPoint(screen_position);
 }
 
 function handleMouseUp(event) {
     if (mouseRightIsDown) {
-        var new_cursor = locationFromEvent(event);
+        const new_cursor = locationFromEvent(event);
 
         if (new_cursor.x === cursor.x && new_cursor.y === cursor.y) {
-            console.log('unit action at ' + new_cursor);  // => show unit panel
+            console.log('unit action at ' + new_cursor);
+            // @todo => show unit panel
         } else {
             console.log('move unit from ' + cursor + ' to ' + new_cursor);
+            // @todo => move unit (send to backend)
+            moveUnit(cursor, new_cursor);
         }
         cursor = new_cursor;
 
@@ -403,8 +404,7 @@ function changeUIState(newState) {
 }
 
 function initUI() {
-
-    // current state is splash
+    // the current state is splash
 
     // start caching images
     renderer.cacheImages(function() {
@@ -416,10 +416,10 @@ function handleError(xhr, textStatus, exception) {
 
     if (xhr.status === 0) {
         console.log('Not connect.\n Verify Network.');
-    } else if (xhr.status == 404) {
+    } else if (xhr.status === 404) {
         // 404 page error
         console.log('Requested page not found. [404]');
-    } else if (xhr.status == 500) {
+    } else if (xhr.status === 500) {
         // 500 Internal Server error
         console.log('Internal Server Error [500].');
     } else if (exception === 'parsererror') {
@@ -458,7 +458,7 @@ function checkGameGeneration() {
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
-            if (response.status == 'Ready') {
+            if (response.status === 'Ready') {
                 abortGenerationTimer();
                 loadMap(game_uuid);
             }
@@ -478,7 +478,7 @@ function checkGameUpdate() {
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
-            if (response.human_active == true) {
+            if (response.human_active === true) {
                 fetchGameInfo();
             }
         },
@@ -536,7 +536,6 @@ function fetchGameInfo() {
 }
 
 function loadMap(game_uuid) {
-
     $.ajax({
         type:"GET",
         dataType: "json",
@@ -564,6 +563,33 @@ function loadMap(game_uuid) {
     });
 }
 
+function moveUnit(from_point, to_point) {
+    const formData = new FormData();
+    formData.append('game_uuid', game_uuid);
+    formData.append('unit_type', 'civilian');
+    formData.append('old_location', from_point);
+    formData.append('new_location', to_point);
+
+    const csrf_token = $('#csrf_token').text();
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/smarthexboard/game/move_unit",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(json_obj) {
+            console.log('moved unit from ' + from_point + ' to ' + to_point);
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+        }
+    });
+}
+
 function showTurnBanner() {
     $('#turnBanner').show();
     $('#game_button').css('background-image', 'url("/static/smarthexboard/img/globe/globe.gif")');
@@ -577,8 +603,7 @@ function hideTurnBanner() {
 }
 
 function showStartGameWarning(text) {
-    $('#createGameWarning').text(text);
-    $('#createGameWarning').show();
+    $('#createGameWarning').text(text).show();
 }
 
 function hideStartGameWarning() {
@@ -586,35 +611,35 @@ function hideStartGameWarning() {
 }
 
 window.startGame = function startGame() {
-    var leaderSelect = $('#leaderSelect').find(":selected").val();
-    var difficultySelect = $('#difficultySelect').find(":selected").val();
-    var mapTypeSelect = $('#mapTypeSelect').find(":selected").val();
-    var mapSizeSelect = $('#mapSizeSelect').find(":selected").val();
-    var csrf_token = $('#csrf_token').text()
+    const leaderSelect = $('#leaderSelect').find(":selected").val();
+    const difficultySelect = $('#difficultySelect').find(":selected").val();
+    const mapTypeSelect = $('#mapTypeSelect').find(":selected").val();
+    const mapSizeSelect = $('#mapSizeSelect').find(":selected").val();
+    const csrf_token = $('#csrf_token').text();
 
-    if (leaderSelect == '') {
+    if (leaderSelect === '') {
         showStartGameWarning('Please select a Leader');
         return;
     }
 
-    if (difficultySelect == '') {
+    if (difficultySelect === '') {
         showStartGameWarning('Please select a Handicap');
         return;
     }
 
-    if (mapTypeSelect == '') {
+    if (mapTypeSelect === '') {
         showStartGameWarning('Please select a Map Type');
         return;
     }
 
-    if (mapSizeSelect == '') {
+    if (mapSizeSelect === '') {
         showStartGameWarning('Please select a Map Size');
         return;
     }
 
     hideStartGameWarning();
 
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('leader', leaderSelect);
     formData.append('handicap', difficultySelect);
     formData.append('mapType', mapTypeSelect);
@@ -651,9 +676,9 @@ window.playGame = function playGame() {
 }
 
 window.quickGame = function quickGame() {
-    var csrf_token = $('#csrf_token').text()
+    const csrf_token = $('#csrf_token').text();
 
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append('leader', 'alexander');
     formData.append('handicap', 'settler');
     formData.append('mapType', 'continents');

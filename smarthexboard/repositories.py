@@ -35,6 +35,9 @@ class GameDataRepository:
 			return None
 
 		db_content = game_data.content
+
+		# print(f'_fetchFromDatabase: {db_content}')
+
 		obj_dict = GameModelSchema().loads(db_content)
 		return GameModel(obj_dict)
 
@@ -46,6 +49,8 @@ class GameDataRepository:
 			obj = None
 
 		json_str = GameModelSchema().dumps(gameModel)
+
+		# print(f'_storeToDatabase: {json_str}')
 
 		if len(json_str) > GameDataRepository.size_limit:
 			raise Exception(f'Cannot store game - game data is more than 500.000 bytes: {len(json_str)}')

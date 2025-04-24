@@ -52,15 +52,15 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
 	    imgList.push(resourceType.texture);
 	});
 
-	var loaded = 0;
-	var failed = 0;
-    var toLoad = Object.keys(imgList).length;
-    var _this = this;
+    let loaded = 0;
+    let failed = 0;
+    const toLoad = Object.keys(imgList).length;
+    const _this = this;
 
     console.log('start caching ' + toLoad + ' images');
 
-    for (var i in imgList) {
-        var imgName = imgList[i];
+    for (const i in imgList) {
+        const imgName = imgList[i];
 
         if (imgName.startsWith('terrain_')) {
             if (typeof this.imgTerrains[imgName] !== "undefined") {
@@ -71,7 +71,7 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
             this.imgTerrains[imgName] = new Image();
             this.imgTerrains[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     _this.tileTexturesLoaded = true;
                     if (callbackFunction) {
                         callbackFunction();
@@ -93,7 +93,7 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
             this.imgTerrains[imgName] = new Image();
             this.imgTerrains[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     _this.tileTexturesLoaded = true;
                     if (callbackFunction) {
                         callbackFunction();
@@ -115,7 +115,7 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
             this.imgTerrains[imgName] = new Image();
             this.imgTerrains[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     _this.tileTexturesLoaded = true;
                     if (callbackFunction) {
                         callbackFunction();
@@ -137,7 +137,7 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
             this.imgFeatures[imgName] = new Image();
             this.imgFeatures[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     _this.tileTexturesLoaded = true;
                     if (callbackFunction) {
                         callbackFunction();
@@ -159,7 +159,7 @@ Assets.prototype.cacheTileImages = function(callbackFunction) {
             this.imgResources[imgName] = new Image();
             this.imgResources[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     _this.tileTexturesLoaded = true;
                     if (callbackFunction) {
                         callbackFunction();
@@ -189,15 +189,15 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
 	    imgList.push(unitType.texture);
 	});
 
-	var loaded = 0;
-	var failed = 0;
-    var toLoad = Object.keys(imgList).length;
-    var _this = this;
+    let loaded = 0;
+    let failed = 0;
+    const toLoad = Object.keys(imgList).length;
+    const _this = this;
 
     console.log('start caching ' + toLoad + ' game images');
 
-    for (var i in imgList) {
-        var imgName = imgList[i];
+    for (const i in imgList) {
+        const imgName = imgList[i];
 
         if (imgName.startsWith('tech-')) {
             if (typeof this.imgTechs[imgName] !== "undefined") {
@@ -208,7 +208,7 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
             this.imgTechs[imgName] = new Image();
             this.imgTechs[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     if (callbackFunction) {
                         _this.gameTexturesLoaded = true;
                         callbackFunction();
@@ -229,7 +229,7 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
             this.imgUnits[imgName] = new Image();
             this.imgUnits[imgName].onload = function() {
                 loaded++;
-                if ((loaded + failed) == toLoad) {
+                if ((loaded + failed) === toLoad) {
                     if (callbackFunction) {
                         _this.gameTexturesLoaded = true;
                         callbackFunction();

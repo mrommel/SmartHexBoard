@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'smarthexassets',
     'smarthexboard',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -149,10 +150,14 @@ LOCALE_PATHS = [BASE_DIR / 'smarthexboard' / 'locale', ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'smarthexboard')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'smarthexboard'),
+    os.path.join(BASE_DIR, 'smarthexassets'),
+]
 STATIC_URL = '/static/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'timeline')
-# MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
