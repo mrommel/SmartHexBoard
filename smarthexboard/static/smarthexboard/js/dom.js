@@ -31,7 +31,7 @@ function isVisible(tag) {
 }
 
 function makeVisible(tag) {
-	document.getElementById(tag).style.display = "inline";
+	document.getElementById(tag).style.display = "block";
 	document.getElementById(tag).focus();
 }
 

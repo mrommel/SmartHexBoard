@@ -213,6 +213,8 @@ function handleMouseMove(event) {
         cursorCanvas.style.left = (event.clientX + offset.x) + 'px';
         cursorCanvas.style.top  = (event.clientY + offset.y) + 'px';
         // console.log('move: x=' + vp.style.left + ' y=' + vp.style.top);
+
+        uiRenderer.hideUnitPanel();
     }
 }
 
@@ -239,14 +241,20 @@ function locationFromEvent(event) {
 function handleMouseUp(event) {
     if (mouseRightIsDown) {
         const new_cursor = locationFromEvent(event);
+        let units = renderer.map.unitsAt(new_cursor);
 
         if (new_cursor.x === cursor.x && new_cursor.y === cursor.y) {
-            console.log('unit action at ' + new_cursor);
-            // @todo => show unit panel
+            if (units.length > 0) {
+                let firstUnit = units[0];
+                console.log('unit action at ' + new_cursor + ' for ' + firstUnit);
+                let actions = firstUnit.actions();
+                showUnitPanel(event, actions);
+            }
         } else {
-            console.log('move unit from ' + cursor + ' to ' + new_cursor);
-            // @todo => move unit (send to backend)
-            moveUnit(cursor, new_cursor);
+            if (units.length > 0) {
+                console.log('move unit from ' + cursor + ' to ' + new_cursor);
+                moveUnit(cursor, new_cursor, 'civilian'); // @todo: get this from unit type
+            }
         }
         cursor = new_cursor;
 
@@ -563,10 +571,10 @@ function loadMap(game_uuid) {
     });
 }
 
-function moveUnit(from_point, to_point) {
+function moveUnit(from_point, to_point, unit_type) {
     const formData = new FormData();
     formData.append('game_uuid', game_uuid);
-    formData.append('unit_type', 'civilian');
+    formData.append('unit_type', unit_type);
     formData.append('old_location', from_point);
     formData.append('new_location', to_point);
 
@@ -583,10 +591,17 @@ function moveUnit(from_point, to_point) {
         contentType: false,
         success: function(json_obj) {
             console.log('moved unit from ' + from_point + ' to ' + to_point);
+            // @todo: move unit also in ui
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);
         }
+    });
+}
+
+function showUnitPanel(event, actions) {
+    uiRenderer.unitPanel('Unit', actions, event, function (action, action_index) {
+        console.log('unit action clicked: ' + action + ' index: ' + action_index);
     });
 }
 
@@ -714,6 +729,11 @@ window.createGame = function createGame() {
     changeUIState(UIState.createGame);
 }
 
+window.loadGame = function createGame() {
+    console.log('loadGame');
+    // changeUIState(UIState.createGame);
+}
+
 window.play = function play() {
     console.log('play');
     changeUIState(UIState.generate);
@@ -798,4 +818,14 @@ window.quitOptions = function quitOptions() {
 window.tutorials = function tutorials() {
     console.log('tutorials');
     changeUIState(UIState.tutorials);
+}
+
+window.game_options = function tutorials() {
+    console.log('options');
+    // changeUIState(UIState.options);
+}
+
+window.credits = function tutorials() {
+    console.log('credits');
+    // changeUIState(UIState.credits);
 }
