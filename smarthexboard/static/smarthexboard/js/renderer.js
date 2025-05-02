@@ -259,9 +259,51 @@ class ResourceCanvasRenderer extends CanvasRenderer {
         const resource = this.map.resourceAt(hexPoint);
         if (resource.name !== ResourceTypes.none.name) {
             // console.log('resource=' + resource + ', at=' + hex + ', tex=' + resource.texture);
-            var img = assets.resourceTexture(resource.texture);
+            const img = assets.resourceTexture(resource.texture);
             this.resourcesCtx.drawImage(img, x, y, 72, 72);
         }
+    }
+}
+
+class CityCanvasRenderer extends CanvasRenderer {
+    constructor() {
+        super('CityCanvasRenderer.constructor()');
+
+        this.citiesCanvas = null;
+	    this.citiesCtx = null;
+    }
+
+    setup(map) {
+        console.log('CityCanvasRenderer.setup()');
+
+        this.map = map;
+
+        if ((this.citiesCanvas = document.getElementById('cities')) === null) {
+            this.citiesCanvas = addTag('game', 'canvas');
+        }
+        this.citiesCanvas.id = "cities";
+        this.citiesCanvas.style.cssText = 'z-index: 4; position: absolute; left: 0px; top: 0px;';
+
+        this.citiesCtx = this.citiesCanvas.getContext('2d');
+        console.log('cities canvas created');
+    }
+
+    drawTile(hexPoint, x, y) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+
+        const city = this.map.cityAt(hexPoint);
+        if (city !== null) {
+            console.log('city found: ' + city.toString());
+            const img = assets.cityTexture(city);
+            // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
+            this.citiesCtx.drawImage(img, x, y, 72, 72);
+        }
+    }
+
+    clearRect(x, y, width, height) {
+        this.citiesCtx.clearRect(x, y, width, height);
     }
 }
 
@@ -282,7 +324,7 @@ class UnitCanvasRenderer extends CanvasRenderer {
             this.unitsCanvas = addTag('game', 'canvas');
         }
         this.unitsCanvas.id = "units";
-        this.unitsCanvas.style.cssText = 'z-index: 4; position: absolute; left: 0px; top: 0px;';
+        this.unitsCanvas.style.cssText = 'z-index: 5; position: absolute; left: 0px; top: 0px;';
 
         this.unitsCtx = this.unitsCanvas.getContext('2d');
         console.log('units canvas created');
@@ -300,14 +342,18 @@ class UnitCanvasRenderer extends CanvasRenderer {
             this.unitsCtx.drawImage(img, x, y, 72, 72);
         });
     }
+
+    clearRect(x, y, width, height) {
+        this.unitsCtx.clearRect(x, y, width, height);
+    }
 }
 
 class CursorCanvasRenderer extends CanvasRenderer {
     constructor() {
         super('CursorCanvasRenderer.constructor()');
 
-        this.unitsCanvas = null;
-	    this.unitsCtx = null;
+        this.cursorCanvas = null;
+	    this.cursorCtx = null;
     }
 
     setup(map) {
@@ -363,6 +409,7 @@ function Renderer() {
 	this.terrainRenderer = new TerrainCanvasRenderer();
 	this.featureRenderer = new FeatureCanvasRenderer();
 	this.resourceRenderer = new ResourceCanvasRenderer();
+    this.cityRenderer = new CityCanvasRenderer();
 	this.unitRenderer = new UnitCanvasRenderer();
 	this.cursorRenderer = new CursorCanvasRenderer();
 
@@ -383,6 +430,7 @@ Renderer.prototype.setup = function(map) {
     this.terrainRenderer.setup(map);
     this.featureRenderer.setup(map);
     this.resourceRenderer.setup(map);
+    this.cityRenderer.setup(map);
     this.unitRenderer.setup(map);
     this.cursorRenderer.setup(map);
 }
@@ -406,7 +454,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
 
     // console.log('==> render tile at: ' + ocol + ', ' + orow);
 
-    // the map (cell) coords that will be cleared by clearRect
+    // the map (cell) coords that clearRect will clear
     const clearZone = this.getZoneRangeLimits(orow, ocol, range + 1);
     // the map (cell) coords that will be rendered hex by hex
     const renderZone = this.getZoneRangeLimits(orow, ocol, range + 2);
@@ -417,6 +465,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
     this.terrainRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
     this.featureRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
     this.resourceRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
+    this.cityRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
     this.unitRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
     // this.cursorRenderer.clearRect(spos.x, spos.y, epos.x - spos.x, epos.y - spos.y);
 
@@ -440,6 +489,7 @@ Renderer.prototype.render = function(orow, ocol, range) {
             this.terrainRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
             this.featureRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
             this.resourceRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
+            this.cityRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
             this.unitRenderer.drawTile(hex, screen.x + canvasOffset.x, screen.y + canvasOffset.y);
         }
     }

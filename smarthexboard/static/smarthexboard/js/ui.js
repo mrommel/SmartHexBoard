@@ -10,6 +10,7 @@ function UIBuilder() {
 
     createMessageBox();
     createUnitPanel();
+    createTextInputBox();
 
     function createMessageBox() {
         const ui_message = addTag('ui', 'div');
@@ -36,8 +37,46 @@ function UIBuilder() {
     function createUnitPanel() {
         // const unit_icon = addTag('unit_panel', 'div');
         // unit_icon.id = 'action-panel';
+        $(".unit-command").each(function () {
+            this.addEventListener("click", function() {
+                console.log('clicked drag');
+            });
+            console.log('added clicked');
+        });
 
         console.log('created unit panel');
+    }
+
+    function createTextInputBox() {
+        const ui_input = addTag('ui', 'div');
+        ui_input.id = 'ui-input';
+
+        const ui_input_header = addTag(ui_input, 'div');
+        ui_input_header.id = 'ui-input-header';
+
+        const ui_input_title = addTag(ui_input_header, 'div');
+        ui_input_title.id = 'ui-input-title';
+
+        const ui_input_body = addTag(ui_input, 'div');
+        ui_input_body.id = 'ui-input-body';
+
+        const ui_input_message = addTag(ui_input_body, 'div');
+        ui_input_message.id = 'ui-input-message';
+
+        const ui_input_text = addTag(ui_input_body, 'input');
+        ui_input_text.id = 'ui-input-text';
+        ui_input_text.type = 'text';
+
+        const ui_input_footer = addTag(ui_input, 'div');
+        ui_input_footer.id = 'ui-input-footer';
+
+        const ui_input_okay_button = addTag(ui_input_footer, 'div');
+        ui_input_okay_button.id = 'ui-input-okay-uiokbut';
+
+        const ui_input_cancel_button = addTag(ui_input_footer, 'div');
+        ui_input_cancel_button.id = 'ui-input-cancel-uiokbut';
+
+        console.log('created ui input box');
     }
 }
 
@@ -56,31 +95,69 @@ UIBuilder.prototype.message = function(title, message) {
 }
 
 UIBuilder.prototype.unitPanel = function(title, actions, event, callback) {
-    /*const $actionPanelTitle = $('#action-panel-title');
-    const $actionPanelItems = $('#action-panel-items');
-    const $actionPanel = $('#action-panel');
+    console.log('unitPanel', title, actions/*, event, callback*/);
+    $('#unit_panel_title').text(title);
 
-    $actionPanelTitle.text(title);
-    $actionPanelItems.empty();
+    const $actionPanel = $('#unit_panel_actions');
+    $actionPanel.empty();
+
+    const actionImages = new Map([
+        ['ACTION_ATTACK', '/static/smarthexboard/img/ui/commands/command_button_attack@3x.png'],
+        ['ACTION_DISBAND', '/static/smarthexboard/img/ui/commands/command_button_disband@3x.png'],
+        ['ACTION_FOUND_CITY', '/static/smarthexboard/img/ui/commands/command_button_found@3x.png']
+    ]);
 
     actions.forEach((action, index) => {
-        const actionItem = `<li class="action-panel-item">${action}</li>`;
-        $actionPanelItems.append(actionItem);
+        const actionImage = actionImages.get(action) || '/static/smarthexboard/img/ui/commands/command_button_default@3x.png';
+
+        const $img = $("<img>")
+            .addClass('unit-command')
+            .attr("alt", action)
+            .attr("src", actionImage)
+            .attr("href", '#')
+            .click(() => {
+                console.log('Clicked ' + action);
+                callback(action, index);
+            });
+
+        $actionPanel.append($img);
     });
 
-    $('ul li').click(function(e) {
-        let action = $(this).text();
-        let index = $(this).index();
-        callback(action, index);
-    });
-
-    const { clientX: x, clientY: y } = event;
-    $actionPanel.css({ top: y + 20, left: x });*/
     makeVisible('unit_panel');
 }
 
 UIBuilder.prototype.hideUnitPanel = function() {
     makeHidden('unit_panel');
+}
+
+UIBuilder.prototype.textInput = function(title, text, callback) {
+    $('#ui-input-title').text(title);
+    $('#ui-input-message').text(text);
+
+    $('#ui-input-okay-uiokbut').text('Okay');
+    $('#ui-input-okay-uiokbut').click(function (event) {
+        event.preventDefault();
+
+        let cityName = $('#ui-input-text').val();
+
+        makeHidden('ui-input');
+        callback(cityName);
+    });
+
+    $('#ui-input-cancel-uiokbut').text('Cancel');
+    $('#ui-input-cancel-uiokbut').click(function (event) {
+        event.preventDefault();
+
+        makeHidden('ui-input');
+        // game.uiMessageClicked = true;
+    });
+
+    makeVisible('ui-input');
+    makeHidden('unit_panel');
+}
+
+UIBuilder.prototype.hideTextInput = function() {
+    makeHidden('ui-input');
 }
 
 // https://masteringjs.io/tutorials/fundamentals/enum

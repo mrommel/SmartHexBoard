@@ -18,14 +18,14 @@ import { TerrainType, FeatureType, FeatureTypes, ResourceType, ResourceTypes, Cl
  * @param {ResourceType} resourceType resource of tile
  */
 function Tile(terrainType, featureType, resourceType) {
-    // handle terrain type
+    // handle a terrain type
     if (!(terrainType instanceof TerrainType)) {
         throw new Error('expected type of first parameter is: TerrainType');
     } else {
         this.terrainType = terrainType;
     }
 
-    // handle feature type
+    // handle a feature type
     if (typeof (featureType) == 'undefined') {
         this.featureType = FeatureTypes.none;
     } else if (!(featureType instanceof FeatureType)) {
@@ -34,7 +34,7 @@ function Tile(terrainType, featureType, resourceType) {
         this.featureType = featureType;
     }
 
-    // handle resource type
+    // handle a resource type
     if (typeof (resourceType) == 'undefined') {
         this.resourceType = ResourceTypes.none;
     } else if (!(resourceType instanceof ResourceType)) {

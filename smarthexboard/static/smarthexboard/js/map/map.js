@@ -6,11 +6,12 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { HexPoint } from '../base/point.js';
-import { CGSize, CGPoint } from '../base/prototypes.js';
-import { TerrainType, TerrainTypes, FeatureType, ResourceType } from './types.js';
-import { Tile } from './tile.js';
-import { Unit } from './unit.js';
+import {HexPoint} from '../base/point.js';
+import {CGPoint, CGSize} from '../base/prototypes.js';
+import {FeatureType, ResourceType, TerrainType, TerrainTypes} from './types.js';
+import {Tile} from './tile.js';
+import {Unit} from './unit.js';
+import {City} from './city.js';
 
 // Map Constructor
 
@@ -26,9 +27,9 @@ function Map(cols, rows) {
 
 	this.tiles = Array(this.cols).fill().map(()=>Array(this.rows).fill());
 
-	for (var i = 0; i < this.cols; i++) {
-        for (var j = 0; j < this.rows; j++) {
-            this.tiles[i][j] = new Tile(TerrainTypes.ocean.clone());
+	for (let i = 0; i < this.cols; i++) {
+        for (let j = 0; j < this.rows; j++) {
+            this.tiles[i][j] = new Tile(TerrainTypes.ocean.clone(), FeatureType.none, ResourceType.none);
         }
     }
 
@@ -40,13 +41,14 @@ function Map(cols, rows) {
 
 Map.prototype.fromJson = function(json_dict) {
 
+    let i;
     this.cols = json_dict['width'];
 	this.rows = json_dict['height'];
 
 	this.tiles = Array(this.cols).fill().map(()=>Array(this.rows).fill());
 
-    for (var j = 0; j < this.rows; j++) {
-	    for (var i = 0; i < this.cols; i++) {
+    for (let j = 0; j < this.rows; j++) {
+	    for (i = 0; i < this.cols; i++) {
 	        const terrain_name = json_dict['tiles']['values']['' + j][i]['terrain'];
 	        const terrain_type = TerrainType.fromString(terrain_name);
             // console.log('terrain: ' + terrain_type);
@@ -67,10 +69,10 @@ Map.prototype.fromJson = function(json_dict) {
 
     this.units = []
     const units_json = json_dict['units'];
-    for (var i = 0; i < units_json.length; i++) {
+    for (i = 0; i < units_json.length; i++) {
         const unit_json = units_json[i];
         // console.log(' * ' + unit_json['name'] + ' (' + unit_json['x'] + ', ' + unit_json['y'] + ') ' + unit_json['player']);
-        var unitObj = new Unit();
+        const unitObj = new Unit();
         unitObj.fromJson(unit_json);
         this.units.push(unitObj);
     }
@@ -91,16 +93,16 @@ Map.prototype.copy = function(map) {
 }
 
 Map.prototype.canvasSize = function() {
-    var pt0 = new HexPoint(0, 0).toScreen();
-    var pt1 = new HexPoint(this.cols, 0).toScreen();
-    var pt2 = new HexPoint(0, this.rows).toScreen();
-    var pt3 = new HexPoint(this.cols, this.rows).toScreen();
+    const pt0 = new HexPoint(0, 0).toScreen();
+    const pt1 = new HexPoint(this.cols, 0).toScreen();
+    const pt2 = new HexPoint(0, this.rows).toScreen();
+    const pt3 = new HexPoint(this.cols, this.rows).toScreen();
 
-    var min_x = Math.min(Math.min(pt0.x, pt1.x), Math.min(pt2.x, pt3.x));
-    var max_x = Math.max(Math.max(pt0.x, pt1.x), Math.max(pt2.x, pt3.x));
+    const min_x = Math.min(Math.min(pt0.x, pt1.x), Math.min(pt2.x, pt3.x));
+    const max_x = Math.max(Math.max(pt0.x, pt1.x), Math.max(pt2.x, pt3.x));
 
-    var min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
-    var max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
+    const min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
+    const max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
 
     // console.log('size minx: ' + minx + ', maxx: ' + maxx);
     // console.log('size miny: ' + miny + ', maxy: ' + maxy);
@@ -109,14 +111,14 @@ Map.prototype.canvasSize = function() {
 }
 
 Map.prototype.canvasOffset = function() {
-    var pt0 = new HexPoint(0, 0).toScreen();
-    var pt1 = new HexPoint(this.cols, 0).toScreen();
-    var pt2 = new HexPoint(0, this.rows).toScreen();
-    var pt3 = new HexPoint(this.cols, this.rows).toScreen();
+    const pt0 = new HexPoint(0, 0).toScreen();
+    const pt1 = new HexPoint(this.cols, 0).toScreen();
+    const pt2 = new HexPoint(0, this.rows).toScreen();
+    const pt3 = new HexPoint(this.cols, this.rows).toScreen();
 
-    var min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
-    var max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
-    var content_y = max_y - min_y;
+    const min_y = Math.min(Math.min(pt0.y, pt1.y), Math.min(pt2.y, pt3.y));
+    const max_y = Math.max(Math.max(pt0.y, pt1.y), Math.max(pt2.y, pt3.y));
+    const content_y = max_y - min_y;
 
     // console.log('offset x: ' + pt0.x + ', y: ' + (content_y - pt0.y));
 
@@ -140,7 +142,7 @@ Map.prototype.valid = function(hexPoint) {
  * @return {Tile} at hexPoint
  */
 Map.prototype.tileAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -155,7 +157,7 @@ Map.prototype.tileAt = function(hexPoint) {
  * @return {TerrainType} at hexPoint
  */
 Map.prototype.terrainAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -170,7 +172,7 @@ Map.prototype.terrainAt = function(hexPoint) {
  * @param {HexPoint} hexPoint point to modify the terrain
  */
 Map.prototype.modifyTerrainAt = function(terrainType, hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -216,7 +218,7 @@ Map.prototype.isCoastalAt = function(hexPoint) {
 }
 
 Map.prototype.isHillsAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -225,7 +227,7 @@ Map.prototype.isHillsAt = function(hexPoint) {
 }
 
 Map.prototype.modifyHillsAt = function(isHills, hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -240,7 +242,7 @@ Map.prototype.modifyHillsAt = function(isHills, hexPoint) {
  * @return {FeatureType} at hexPoint
  */
 Map.prototype.featureAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -255,7 +257,7 @@ Map.prototype.featureAt = function(hexPoint) {
  * @param {HexPoint} hexPoint point to modify the terrain
  */
 Map.prototype.modifyFeatureAt = function(featureType, hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -275,7 +277,7 @@ Map.prototype.modifyFeatureAt = function(featureType, hexPoint) {
  * @return {ResourceType} at hexPoint
  */
 Map.prototype.resourceAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -290,7 +292,7 @@ Map.prototype.resourceAt = function(hexPoint) {
  * @param {HexPoint} hexPoint point to modify the resource
  */
 Map.prototype.modifyResourceAt = function(resourceType, hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -304,7 +306,7 @@ Map.prototype.modifyResourceAt = function(resourceType, hexPoint) {
 }
 
 Map.prototype.climateZoneAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -313,7 +315,7 @@ Map.prototype.climateZoneAt = function(hexPoint) {
 }
 
 Map.prototype.modifyClimateZoneAt = function(climateZone, hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
@@ -322,16 +324,60 @@ Map.prototype.modifyClimateZoneAt = function(climateZone, hexPoint) {
 }
 
 Map.prototype.unitsAt = function(hexPoint) {
-    // check point is on map
+    // check point is on the map
     if (!this.valid(hexPoint)) {
         throw new Error(hexPoint + ' is not on the map');
     }
 
-    const unitList = this.units.filter (function (elem) {
-	    return elem.location.x === hexPoint.x && elem.location.y === hexPoint.y;
+    return this.units.filter(function (elem) {
+        return elem.location.x === hexPoint.x && elem.location.y === hexPoint.y;
+    });
+}
+
+Map.prototype.removeUnit = function (unit) {
+    // check point is on the map
+    if (!this.valid(unit.location)) {
+        throw new Error(unit.location + ' is not on the map');
+    }
+
+    this.units = this.units.filter(function (elem) {
+        return elem.location.x !== unit.location.x || elem.location.y !== unit.location.y || elem.unitType.name !== unit.unitType.name || elem.player !== unit.player;
+    });
+}
+
+Map.prototype.cityAt = function(hexPoint) {
+    // check point is on the map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    console.log('Cities: ' + this.cities);
+    let citiesList = this.cities.filter(function (elem) {
+        return elem.location.x === hexPoint.x && elem.location.y === hexPoint.y;
     });
 
-    return unitList;
+    if (citiesList.length > 0) {
+        return citiesList[0];
+    }
+
+    return null;
+}
+
+Map.prototype.addCityAt = function(hexPoint, cityName, player) {
+    // check point is on the map
+    if (!this.valid(hexPoint)) {
+        throw new Error(hexPoint + ' is not on the map');
+    }
+
+    const city = new City();
+    city.name = cityName;
+    city.location = hexPoint;
+    city.player = player;
+    city.size = 1;
+
+    this.cities.push(city);
+
+    console.log('Added city ' + city.name + ' at ' + city.location.x + ', ' + city.location.y + ' for player ' + player + ' => ' + this.cities.length + ' cities');
 }
 
 Map.prototype.toString = function() {

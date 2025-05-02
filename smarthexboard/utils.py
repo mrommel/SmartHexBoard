@@ -2,7 +2,7 @@ import re
 from typing import Optional
 from uuid import UUID
 
-from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType
+from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType, UnitType
 from smarthexboard.smarthexboardlib.map.base import HexPoint
 
 
@@ -73,6 +73,27 @@ def parseUnitMapType(unit_type: str) -> Optional[UnitMapType]:
 
 	if unit_type == 'civilian':
 		return UnitMapType.civilian
+
+	print(f'Warning: Unknown unit type "{unit_type}"')
+
+	return None
+
+
+def parseUnitType(unit_type: str) -> Optional[UnitType]:
+	if unit_type == 'settler':
+		return UnitType.settler
+
+	if unit_type == 'scout':
+		return UnitType.scout
+
+	if unit_type == 'slinger':
+		return UnitType.slinger
+
+	if unit_type == 'builder':
+		return UnitType.builder
+
+	if unit_type == 'warrior':
+		return UnitType.warrior
 
 	print(f'Warning: Unknown unit type "{unit_type}"')
 

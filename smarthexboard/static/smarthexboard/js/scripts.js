@@ -7,10 +7,13 @@
 
 import { MouseInfo, CGPoint } from './base/prototypes.js';
 import { HexPoint } from './base/point.js';
-import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
+// import { TerrainTypes, FeatureTypes, ResourceTypes } from './map/types.js';
 import { Map } from './map/map.js';
-import { MapOptions, MapGenerator } from './map/generator.js';
+// import { MapOptions, MapGenerator } from './map/generator.js';
 import { Renderer } from './renderer.js';
+import { unitActions } from "./actions/unit.js";
+import { ActionState } from "./actions/actions.js";
+import { handleError } from "./errorHandling.js";
 
 // TABLE OF CONTENTS
 // 1. preloader
@@ -34,6 +37,7 @@ let cursor = new HexPoint(0, 0);
 const renderer = new Renderer(null);
 const uiRenderer = new UIBuilder();
 let uiState = UIState.splash;
+let actionState = ActionState.none;
 
 function preventExitOnReload(event) {
     // Cancel the event as stated by the standard.
@@ -80,6 +84,10 @@ function setupCanvas(canvasSize) {
     const featuresCanvas = document.getElementById('features');
     featuresCanvas.width = canvasSize.width;
     featuresCanvas.height = canvasSize.height;
+
+    const citiesCanvas = document.getElementById('cities');
+    citiesCanvas.width = canvasSize.width;
+    citiesCanvas.height = canvasSize.height;
 
     const unitsCanvas = document.getElementById('units');
     unitsCanvas.width = canvasSize.width;
@@ -205,6 +213,10 @@ function handleMouseMove(event) {
         resourcesCanvas.style.left = (event.clientX + offset.x) + 'px';
         resourcesCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
+        const citiesCanvas = document.getElementById('cities');
+        citiesCanvas.style.left = (event.clientX + offset.x) + 'px';
+        citiesCanvas.style.top  = (event.clientY + offset.y) + 'px';
+
         const unitsCanvas = document.getElementById('units');
         unitsCanvas.style.left = (event.clientX + offset.x) + 'px';
         unitsCanvas.style.top  = (event.clientY + offset.y) + 'px';
@@ -238,6 +250,8 @@ function locationFromEvent(event) {
     return new HexPoint(screen_position);
 }
 
+let game_uuid;
+
 function handleMouseUp(event) {
     if (mouseRightIsDown) {
         const new_cursor = locationFromEvent(event);
@@ -247,8 +261,9 @@ function handleMouseUp(event) {
             if (units.length > 0) {
                 let firstUnit = units[0];
                 console.log('unit action at ' + new_cursor + ' for ' + firstUnit);
-                let actions = firstUnit.actions();
-                showUnitPanel(event, actions);
+                unitActions(firstUnit, game_uuid, function(actions) {
+                    showUnitPanel(event, actions);
+                });
             }
         } else {
             if (units.length > 0) {
@@ -412,41 +427,17 @@ function changeUIState(newState) {
 }
 
 function initUI() {
-    // the current state is splash
+    // the current state is 'splash'
 
-    // start caching images
+    // start caching images ...
     renderer.cacheImages(function() {
+        // ... and switch to 'menu' state when done
         changeUIState(UIState.menu);
     });
 }
 
-function handleError(xhr, textStatus, exception) {
-
-    if (xhr.status === 0) {
-        console.log('Not connect.\n Verify Network.');
-    } else if (xhr.status === 404) {
-        // 404 page error
-        console.log('Requested page not found. [404]');
-    } else if (xhr.status === 500) {
-        // 500 Internal Server error
-        console.log('Internal Server Error [500].');
-    } else if (exception === 'parsererror') {
-        // Requested JSON parse
-        console.log('Requested JSON parse failed.');
-    } else if (exception === 'timeout') {
-        // Time out error
-        console.log('Time out error.');
-    } else if (exception === 'abort') {
-        // request aborted
-        console.log('Ajax request aborted.');
-    } else {
-        console.log('Uncaught Error.\n' + xhr.responseText);
-    }
-}
-
-var generation_check_timer;
-var update_check_timer;
-var game_uuid;
+let generation_check_timer;
+let update_check_timer;
 
 // to be called when you want to stop a timer
 function abortGenerationTimer() {
@@ -482,7 +473,7 @@ function checkGameUpdate() {
         type:"GET",
         url: "/smarthexboard/game/" + game_uuid + "/update?timestamp=" + Date.now(),
         success: function(response) {
-            // console.log('update game: ' + JSON.stringify(response));
+            console.log('update game: ' + JSON.stringify(response));
             // fixme: propagate progress to ui
 
             // $('#refresh_status').text(response.status);
@@ -599,9 +590,85 @@ function moveUnit(from_point, to_point, unit_type) {
     });
 }
 
+function foundCity(cityName) {
+    console.log('found city: ' + cityName + ' at ' + cursor);
+    const formData = new FormData();
+    formData.append('game_uuid', game_uuid);
+    formData.append('city_name', cityName);
+    formData.append('location', cursor.toString());
+
+    const csrf_token = $('#csrf_token').text();
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/smarthexboard/game/found_city",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(json_obj) {
+            console.log('founded city "' + cityName + '" at ' + cursor);
+            changeActionState(ActionState.none);
+            // @todo: remove unit, show city
+            let settler = renderer.map.unitsAt(cursor).filter(unit => unit.unitType.name === 'settler')[0];
+            renderer.map.removeUnit(settler);
+            renderer.map.addCityAt(cursor, cityName);
+
+            // Full page rendering
+            renderer.render();
+        },
+        error: function(xhr, textStatus, exception) {
+            handleError(xhr, textStatus, exception);
+            changeActionState(ActionState.none);
+        }
+    });
+}
+
+function changeActionState(newActionState) {
+    actionState = newActionState;
+
+    switch (actionState) {
+
+        case ActionState.selectMeleeTarget:
+            break;
+        case ActionState.inputCityName:
+            // console.log('input city name');
+            uiRenderer.textInput('City Name', 'Please enter a name for your new city:', function (cityName) {
+                // console.log('input city name: ' + cityName);
+                foundCity(cityName);
+            });
+            break;
+        case ActionState.none:
+            uiRenderer.hideTextInput();
+            break;
+        default:
+            console.log('action state ' + actionState + ' not handled');
+    }
+}
+
 function showUnitPanel(event, actions) {
     uiRenderer.unitPanel('Unit', actions, event, function (action, action_index) {
-        console.log('unit action clicked: ' + action + ' index: ' + action_index);
+        // console.log('unit action clicked: ' + action + ' index: ' + action_index);
+        cursor = locationFromEvent(event);
+        switch (action) {
+            case 'ACTION_ATTACK':
+                // console.log('attack action clicked');
+                // @todo: select target
+                changeActionState(ActionState.selectMeleeTarget);
+                break;
+            case 'ACTION_DISBAND':
+                // console.log('disband action clicked');
+                uiRenderer.message('Disband', 'Are you sure you want to disband this unit?');
+                break;
+            case 'ACTION_FOUND_CITY':
+                // console.log('found action clicked');
+                changeActionState(ActionState.inputCityName);
+                break;
+            default:
+                console.log('action ' + action + ' not handled');
+        }
     });
 }
 

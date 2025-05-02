@@ -14,7 +14,7 @@
     width: 600px;
     height: 400px;
     display: block;
-    padding: 0px;
+    padding: 0;
 }
 
 .dialog header {
@@ -23,9 +23,9 @@
     background-image: url('../img/ui/dialog/dialog_header.png');
     display: block;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .dialog header title {
@@ -43,8 +43,8 @@
     height: 40px;
 
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
 }
 
 .dialog content {

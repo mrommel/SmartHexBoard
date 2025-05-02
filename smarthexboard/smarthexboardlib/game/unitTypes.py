@@ -500,7 +500,7 @@ class UnitType(ExtendedEnum):
 		return self._data().obsoleteTech
 
 	def upgradesTo(self) -> [UnitType]:
-		types: [UnitType] = []
+		types: [UnitType] = [UnitType]
 
 		for unitType in list(UnitType):
 			if self in unitType.upgradesFrom():
@@ -653,6 +653,12 @@ class UnitType(ExtendedEnum):
 
 	def faithCost(self) -> int:
 		return self._data().faithCost
+
+	def unitMapType(self) -> UnitMapType:
+		if self.unitClass() == UnitClassType.civilian:
+			return UnitMapType.civilian
+		else:
+			return UnitMapType.combat
 
 	def _data(self) -> UnitTypeData:
 		# https://civilization.fandom.com/wiki/Module:Data/Civ5/BNW/Unit_Values

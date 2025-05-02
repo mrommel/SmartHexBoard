@@ -85,3 +85,22 @@ class UnitMoveForm(forms.Form):
 
     def clean(self):
         pass
+
+
+class UnitActionForm(forms.Form):
+    game_uuid = forms.CharField(label="game identifier", max_length=36)  # uuid
+    location = forms.CharField(label="old location", max_length=32)
+    unit_type = forms.CharField(label="unit type", max_length=24)
+    player = forms.CharField(label="player", max_length=32)
+
+    def clean(self):
+        pass
+
+
+class FoundCityForm(forms.Form):
+    game_uuid = forms.CharField(label="game identifier", max_length=36)  # uuid
+    location = forms.CharField(label="old location", max_length=32)
+    city_name = forms.CharField(label="city name", max_length=32)
+
+    def clean(self):
+        pass

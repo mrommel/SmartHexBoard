@@ -7,14 +7,16 @@ from django.template import loader
 from django_q.tasks import async_task
 
 from setup.settings import DEBUG
-from smarthexboard.forms import CreateGameForm, UnitMoveForm
+from smarthexboard.forms import CreateGameForm, UnitMoveForm, UnitActionForm, FoundCityForm
 from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.repositories import GameDataRepository
-from smarthexboard.utils import is_valid_uuid, parseUnitMapType, parseLocation
+from smarthexboard.utils import is_valid_uuid, parseUnitMapType, parseLocation, parseUnitType
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.civilizations import LeaderType
 from .smarthexboardlib.game.game import GameModel
 from .smarthexboardlib.game.generation import UserInterfaceImpl
+from .smarthexboardlib.game.states.builds import BuildType
+from .smarthexboardlib.game.unitTypes import UnitType, UnitMapType
 from .smarthexboardlib.game.units import Unit
 from .smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
 from .smarthexboardlib.serialisation.game import GameModelSchema
@@ -421,6 +423,203 @@ def game_move_unit(request):
 			json_payload = {
 				'game_uuid': game_uuid,
 				'current_turn': game.currentTurn
+				# notifications to human?
+			}
+			return JsonResponse(json_payload, status=200)
+		else:
+			json_payload = {
+				'status': 'Form not valid',
+				'errors': form.errors
+			}
+			return JsonResponse(json_payload, status=400)
+	else:
+		json_payload = {
+			'status': 'Invalid request method',
+			'errors': [f'Method {request.method} not allowed.']
+		}
+		return JsonResponse(json_payload, status=400)
+
+
+def game_actions(request):
+	# If this is a POST request, then process the Form data
+	if request.method == 'POST':
+
+		# Create a form instance and populate it with data from the request (binding):
+		form = UnitActionForm(request.POST)
+
+		# Check if the form is valid:
+		if form.is_valid():
+			game_uuid = form.cleaned_data['game_uuid']
+
+			if not GameDataRepository.inCacheOrDB(game_uuid):
+				json_payload = {
+					'uuid': game_uuid,
+					'status': 'Cannot get unit actions.',
+					'errors': [f'Game with {game_uuid} not found in db or cache.']
+				}
+				return JsonResponse(json_payload, status=404)
+
+			game = GameDataRepository.fetch(game_uuid)
+
+			game.userInterface = UserInterfaceImpl()
+
+			humanPlayer = game.humanPlayer()
+
+			if humanPlayer is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot get unit actions.',
+					'errors': ['Cannot find human player in game.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			unit_type_str: str = form.cleaned_data['unit_type']
+			location_str: str = form.cleaned_data['location']
+
+			unit_type: UnitType = parseUnitType(unit_type_str)
+			unit_map_type: UnitMapType = unit_type.unitMapType()
+			location = parseLocation(location_str)
+
+			print(f'try get unit actions {unit_type} unit at: {location}')
+
+			if location is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot get unit actions.',
+					'errors': [f'Could not parse location from {location_str}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			unit: Optional[Unit] = game.unitAt(location=location, unitMapType=unit_map_type)
+
+			if unit is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot move unit.',
+					'errors': [f'Could find {unit_map_type} unit at {location}.']}
+				return JsonResponse(json_payload, status=404)
+
+			action_list = list()
+
+			if unit.canHeal(game):
+				action_list.append('ACTION_HEAL')
+			if unit.canFoundAt(location, game):
+				action_list.append('ACTION_FOUND_CITY')
+			if unit.canAttack():
+				action_list.append('ACTION_ATTACK')
+			if unit.canAttackRanged():
+				action_list.append('ACTION_ATTACK_RANGED')
+			if unit.canPillageAt(location, game):
+				action_list.append('ACTION_PILLAGE')
+
+			for build in list(BuildType):
+				if unit.canBuild(build, location, True, True, game):
+					action_list.append(f'ACTION_BUILD_{build.name().upper()}')
+					break
+
+			if unit.canEverEmbark():
+				for embark_location in location.neighbors():
+					if unit.canEmbarkInto(embark_location, game):
+						action_list.append('ACTION_EMBARK')
+						break
+
+			action_list.append('ACTION_DISBAND')
+
+			json_payload = {
+				'game_uuid': game_uuid,
+				'current_turn': game.currentTurn,
+				'action_list': action_list
+				# notifications to human?
+			}
+			return JsonResponse(json_payload, status=200)
+		else:
+			json_payload = {
+				'status': 'Form not valid',
+				'errors': form.errors
+			}
+			return JsonResponse(json_payload, status=400)
+	else:
+		json_payload = {
+			'status': 'Invalid request method',
+			'errors': [f'Method {request.method} not allowed.']
+		}
+		return JsonResponse(json_payload, status=400)
+
+
+def game_found_city(request):
+	# If this is a POST request, then process the Form data
+	if request.method == 'POST':
+
+		# Create a form instance and populate it with data from the request (binding):
+		form = FoundCityForm(request.POST)
+
+		# Check if the form is valid:
+		if form.is_valid():
+			game_uuid = form.cleaned_data['game_uuid']
+
+			if not GameDataRepository.inCacheOrDB(game_uuid):
+				json_payload = {
+					'uuid': game_uuid,
+					'status': 'Cannot get unit actions.',
+					'errors': [f'Game with {game_uuid} not found in db or cache.']
+				}
+				return JsonResponse(json_payload, status=404)
+
+			game = GameDataRepository.fetch(game_uuid)
+
+			game.userInterface = UserInterfaceImpl()
+
+			humanPlayer = game.humanPlayer()
+
+			if humanPlayer is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot get unit actions.',
+					'errors': ['Cannot find human player in game.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			# unit_type_str: str = form.cleaned_data['unit_type']
+			location_str: str = form.cleaned_data['location']
+			city_name: str = form.cleaned_data['city_name']
+
+			# unit_type: UnitType = UnitType. # parseUnitType(unit_type_str)
+			unit_map_type: UnitMapType = UnitMapType.civilian  # unit_type.unitMapType()
+			location = parseLocation(location_str)
+
+			# print(f'try to get unit actions {unit_type} unit at: {location}')
+
+			if location is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot found city.',
+					'errors': [f'Could not parse location from {location_str}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			unit: Optional[Unit] = game.unitAt(location=location, unitMapType=unit_map_type)
+
+			if unit is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot found city.',
+					'errors': [f'Could find {unit_map_type} unit at {location}.']}
+				return JsonResponse(json_payload, status=404)
+
+			if not unit.canFoundAt(location, game):
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot found city.',
+					'errors': [f'Unit {unit} cannot found city at {location}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			found = unit.doFoundWith(city_name, game)
+
+			json_payload = {
+				'game_uuid': game_uuid,
+				'current_turn': game.currentTurn,
+				'found': found
 				# notifications to human?
 			}
 			return JsonResponse(json_payload, status=200)

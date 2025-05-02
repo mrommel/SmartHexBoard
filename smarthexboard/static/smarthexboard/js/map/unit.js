@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
- import { HexPoint } from './../base/point.js';
+ import { HexPoint } from '../base/point.js';
 
 // UnitType Constructor
 
@@ -71,7 +71,7 @@ function Unit() {
 	this.moves = 0;
 }
 
-// Map Object Public Methods
+// Unit Object Public Methods
 
 Unit.prototype.fromJson = function(json_dict) {
 
@@ -98,25 +98,6 @@ Unit.prototype.fromJson = function(json_dict) {
 
 Unit.prototype.toString = function() {
     return "Unit(" + this.name + ", at: " + this.location + ", of: " + this.player + ", at: " + this.health + ")";
-}
-
-Unit.prototype.actions = function() {
-    const actions = [];
-
-    if (this.unitType.name === 'settler') {
-        actions.push('settle');
-    } else if (this.unitType.name === 'builder') {
-        actions.push('build');
-    } else if (this.unitType.name === 'scout') {
-        actions.push('explore');
-    } else if (this.unitType.name === 'warrior') {
-        actions.push('attack');
-    }
-
-    actions.push('disband');
-    actions.push('upgrade');
-
-    return actions;
 }
 
 export { Unit, UnitTypes, UnitType };

@@ -1723,14 +1723,17 @@ class Unit:
 
 	def canFoundAt(self, location, simulation) -> bool:
 		if not self.unitType.canFound():
+			# print(f'WARNING: {self.unitType} cannot found cities')
 			return False
 
 		if not self.player.canFoundAt(location, simulation):
+			# print(f'WARNING: player cannot found cities')
 			return False
 
 		# isolationism - Domestic routes provide +2 Food, +2 Production.
 		# BUT: Can't train or buy Settlers nor settle new cities.
 		if self.player.government.hasCard(PolicyCardType.isolationism):
+			# print(f'WARNING: player cannot found cities when isolationism is active')
 			return False
 
 		return True
@@ -1852,6 +1855,7 @@ class Unit:
 				self.player.doGoodyHutAt(newPlot, self, simulation)
 
 		self.player.foundAt(self.location, name=name, simulation=simulation)
+		print(f'INFO: {self.player.name()} founded city {name} at {self.location}')
 
 		# ancestralHall - New cities receive a free Builder
 		if self.player.hasBuilding(BuildingType.ancestralHall, simulation):

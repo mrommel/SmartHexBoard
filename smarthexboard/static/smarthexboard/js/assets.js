@@ -20,6 +20,7 @@ function Assets() {
 	// game image cache dicts
 	this.imgTechs = {};
 	this.imgUnits = {};
+    this.imgCities = {};
 
 	this.tileTexturesLoaded = false;
 	this.gameTexturesLoaded = false;
@@ -188,6 +189,9 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
 	Object.values(UnitTypes).forEach(unitType => {
 	    imgList.push(unitType.texture);
 	});
+    imgList.push('city-tiny@3x.png');
+    imgList.push('city-small@3x.png');
+    imgList.push('city-medium@3x.png');
 
     let loaded = 0;
     let failed = 0;
@@ -241,6 +245,27 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
                 console.log('Failed to load ' + this.src + ' unit asset');
             }
             this.imgUnits[imgName].src = '/static/smarthexboard/img/units/' + imgName;
+        } else if (imgName.startsWith('city-')) {
+            if (typeof this.imgCities[imgName] !== "undefined") {
+                loaded++;
+                continue;
+            }
+
+            this.imgCities[imgName] = new Image();
+            this.imgCities[imgName].onload = function() {
+                loaded++;
+                if ((loaded + failed) === toLoad) {
+                    if (callbackFunction) {
+                        _this.gameTexturesLoaded = true;
+                        callbackFunction();
+                    }
+                }
+            }
+            this.imgCities[imgName].onerror = function() {
+                failed++;
+                console.log('Failed to load ' + this.src + ' city asset');
+            }
+            this.imgCities[imgName].src = '/static/smarthexboard/img/cities/' + imgName;
         } else {
             failed++;
             console.log('image type not handled: ' + imgName);
@@ -331,6 +356,25 @@ Assets.prototype.unitTexture = function(textureName) {
     }
 
     return this.imgUnits[textureName];
+}
+
+Assets.prototype.cityTexture = function(city) {
+    if (!this.gameTexturesLoaded) {
+        console.log('Try to get city texture but cache is not initialized.');
+        return new Image();
+    }
+
+    let sizeName = 'tiny';
+    // @todo other sizes: small, medium
+    let textureName = 'city-' + sizeName + '@3x.png';
+
+    if (!this.imgCities.hasOwnProperty(textureName)) {
+        console.log('Try to get city texture: ' + textureName + ' but is not in cache.');
+        return new Image();
+    }
+
+    // console.log('Try to get city texture: ' + textureName);
+    return this.imgCities[textureName];
 }
 
 export { Assets };

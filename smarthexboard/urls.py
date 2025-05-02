@@ -19,7 +19,8 @@ urlpatterns = [
 
     # game action api
     path('game/move_unit', views.game_move_unit, name='game_move_unit'),
-    # found city at
+    path('game/actions', views.game_actions, name='game_actions'),
+    path('game/found_city', views.game_found_city, name='game_found_city'),
     # open city
 
     # debug

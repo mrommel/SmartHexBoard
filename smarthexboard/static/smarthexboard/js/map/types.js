@@ -56,11 +56,11 @@ TerrainType.prototype.clone = function() {
 }
 
 TerrainType.prototype.isWater = function() {
-    return this.name == GenerationTypes.water.name || this.name == TerrainTypes.ocean.name || this.name == TerrainTypes.shore.name;
+    return this.name === GenerationTypes.water.name || this.name === TerrainTypes.ocean.name || this.name === TerrainTypes.shore.name;
 }
 
 TerrainType.prototype.isLand = function() {
-    return this.name != GenerationTypes.water.name && this.name != TerrainTypes.ocean.name && this.name != TerrainTypes.shore.name;
+    return this.name !== GenerationTypes.water.name && this.name !== TerrainTypes.ocean.name && this.name !== TerrainTypes.shore.name;
 }
 
 TerrainType.prototype.toString = function() {
