@@ -285,6 +285,19 @@ class CityCanvasRenderer extends CanvasRenderer {
         this.citiesCanvas.style.cssText = 'z-index: 4; position: absolute; left: 0px; top: 0px;';
 
         this.citiesCtx = this.citiesCanvas.getContext('2d');
+
+        if ((this.citiesBannerCanvas = document.getElementById('citiesBanner')) === null) {
+            this.citiesBannerCanvas = addTag('game', 'canvas');
+        }
+        this.citiesBannerCanvas.id = "citiesBanner";
+        this.citiesBannerCanvas.style.cssText = 'z-index: 6; position: absolute; left: 0px; top: 0px;';
+
+        this.citiesBannerCtx = this.citiesBannerCanvas.getContext('2d');
+
+        // colors
+        this.main = {"PLAYER_ALEXANDER": "#aeaeae", "key2": "value2"};
+        this.accent = {"PLAYER_ALEXANDER": "#f7d801", "key2": "value2"};
+
         console.log('cities canvas created');
     }
 
@@ -295,10 +308,38 @@ class CityCanvasRenderer extends CanvasRenderer {
 
         const city = this.map.cityAt(hexPoint);
         if (city !== null) {
-            console.log('city found: ' + city.toString());
+            // console.log('city found: ' + city.toString());
             const img = assets.cityTexture(city);
-            // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
             this.citiesCtx.drawImage(img, x, y, 72, 72);
+
+            this.citiesBannerCtx.font = '16px sans-serif';
+            let textWidth = this.citiesBannerCtx.measureText(city.name).width;
+            let bannerWidth = textWidth + 20 + 20 + 8;
+
+            // draw city banner
+            this.citiesBannerCtx.strokeStyle = this.accent[city.player];
+            this.citiesBannerCtx.lineWidth = 2;
+            this.citiesBannerCtx.fillStyle = this.main[city.player];
+            this.citiesBannerCtx.beginPath();
+            this.citiesBannerCtx.roundRect(x + 36 - (bannerWidth / 2), y - 6, bannerWidth, 20, 6);
+            this.citiesBannerCtx.stroke();
+            this.citiesBannerCtx.fill();
+
+            // draw city size
+            this.citiesBannerCtx.globalAlpha = 0.6;
+            this.citiesBannerCtx.beginPath();
+            this.citiesBannerCtx.arc(x + 26 + (bannerWidth / 2), y + 4, 9, 0, 2 * Math.PI, false);
+            this.citiesBannerCtx.fillStyle = '#333333';
+            this.citiesBannerCtx.fill();
+
+            // draw city size text
+            this.citiesBannerCtx.globalAlpha = 1.0;
+            this.citiesBannerCtx.fillStyle = '#ffffff';
+            this.citiesBannerCtx.fillText('1', x + 22 + (bannerWidth / 2), y + 10, 20);
+
+            // draw city banner text
+            this.citiesBannerCtx.fillStyle = this.accent[city.player];
+            this.citiesBannerCtx.fillText(city.name, x + 36 - (textWidth / 2), y + 10, 200);
         }
     }
 

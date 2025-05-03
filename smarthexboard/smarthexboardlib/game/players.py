@@ -2473,6 +2473,14 @@ class Player:
 
 			return f'Player({self.leader}, {self.leader.civilization()}, AI, {meta_str})'
 
+	def identifier(self) -> str:
+		if self.isCityState():
+			return f'PLAYER_CITYSTATE_{self.cityState.title().upper()}'
+		elif self.isBarbarian():
+			return 'PLAYER_BARBAR'
+		else:
+			return f'PLAYER_{self.name().upper()}'
+
 	def to_dict(self, simulation=None) -> dict:
 		return {
 			'hash': hash(self),

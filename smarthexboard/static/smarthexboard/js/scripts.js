@@ -89,6 +89,10 @@ function setupCanvas(canvasSize) {
     citiesCanvas.width = canvasSize.width;
     citiesCanvas.height = canvasSize.height;
 
+    const citiesBannerCanvas = document.getElementById('citiesBanner');
+    citiesBannerCanvas.width = canvasSize.width;
+    citiesBannerCanvas.height = canvasSize.height;
+
     const unitsCanvas = document.getElementById('units');
     unitsCanvas.width = canvasSize.width;
     unitsCanvas.height = canvasSize.height;
@@ -216,6 +220,10 @@ function handleMouseMove(event) {
         const citiesCanvas = document.getElementById('cities');
         citiesCanvas.style.left = (event.clientX + offset.x) + 'px';
         citiesCanvas.style.top  = (event.clientY + offset.y) + 'px';
+
+        const citiesBannerCanvas = document.getElementById('citiesBanner');
+        citiesBannerCanvas.style.left = (event.clientX + offset.x) + 'px';
+        citiesBannerCanvas.style.top  = (event.clientY + offset.y) + 'px';
 
         const unitsCanvas = document.getElementById('units');
         unitsCanvas.style.left = (event.clientX + offset.x) + 'px';
@@ -611,13 +619,18 @@ function foundCity(cityName) {
         success: function(json_obj) {
             console.log('founded city "' + cityName + '" at ' + cursor);
             changeActionState(ActionState.none);
-            // @todo: remove unit, show city
+
+            let player = json_obj['player'];
+
+            // remove unit, show city
             let settler = renderer.map.unitsAt(cursor).filter(unit => unit.unitType.name === 'settler')[0];
             renderer.map.removeUnit(settler);
-            renderer.map.addCityAt(cursor, cityName);
+            renderer.map.addCityAt(cursor, cityName, player);
 
             // Full page rendering
+            // renderer.render(cursor.x, cursor.y, 1);
             renderer.render();
+            renderer.clearCursor();
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);

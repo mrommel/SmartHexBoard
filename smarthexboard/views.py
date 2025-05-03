@@ -228,7 +228,7 @@ def game_info(request, game_uuid: str):
 		if loopPlayer.diplomacyAI.hasMetWith(humanPlayer):
 			otherPlayers.append(loopPlayer.to_dict())
 
-	# convert json string to dict
+	# convert JSON string to dict
 	json_payload = {
 		'turn': game.currentTurn,
 		'turnYear': game.turnYear(),
@@ -267,9 +267,9 @@ def game_update(request, game_uuid: str):
 	currentPlayerName = ''
 	if game.activePlayer() is not None:
 		if game.activePlayer().isCityState():
-			currentPlayerName = f'CityState: {game.activePlayer().cityState.title()}'
+			currentPlayerName = f'PLAYER_CITYSTATE_{game.activePlayer().cityState.title().upper()}'
 		else:
-			currentPlayerName = game.activePlayer().leader.name
+			currentPlayerName = f'PLAYER_{game.activePlayer().leader.name.upper()}'
 
 	GameDataRepository.store(game_uuid, game)
 
@@ -523,6 +523,11 @@ def game_actions(request):
 						action_list.append('ACTION_EMBARK')
 						break
 
+			if len(unit.gainedPromotions()) > 0:
+				action_list.append('ACTION_PROMOTE')
+
+			action_list.append('ACTION_SKIP')
+			action_list.append('ACTION_SLEEP')
 			action_list.append('ACTION_DISBAND')
 
 			json_payload = {
@@ -619,6 +624,7 @@ def game_found_city(request):
 			json_payload = {
 				'game_uuid': game_uuid,
 				'current_turn': game.currentTurn,
+				'player': unit.player.identifier(),
 				'found': found
 				# notifications to human?
 			}

@@ -351,7 +351,7 @@ Map.prototype.cityAt = function(hexPoint) {
         throw new Error(hexPoint + ' is not on the map');
     }
 
-    console.log('Cities: ' + this.cities);
+    // console.log('Cities: ' + this.cities);
     let citiesList = this.cities.filter(function (elem) {
         return elem.location.x === hexPoint.x && elem.location.y === hexPoint.y;
     });
