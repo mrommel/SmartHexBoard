@@ -1178,6 +1178,9 @@ class BuildingProductionAI:
 		raise InvalidEnumError(itemType)
 
 	def initWeights(self):
+		if self.player is None:
+			return
+
 		for flavorType in list(FlavorType):
 			if flavorType == FlavorType.none:
 				continue
@@ -1248,6 +1251,9 @@ class UnitProductionAI:
 		return self.unitWeights.weight(unitType)
 
 	def initWeights(self):
+		if self.city.player is None:
+			return
+
 		for flavorType in list(FlavorType):
 			if flavorType == FlavorType.none:
 				continue
@@ -1312,6 +1318,9 @@ class WonderProductionAI:
 		self.initWeights()
 
 	def initWeights(self):
+		if self.player is None:
+			return
+
 		for flavorType in list(FlavorType):
 			leaderFlavor = self.player.personalAndGrandStrategyFlavor(flavorType)
 

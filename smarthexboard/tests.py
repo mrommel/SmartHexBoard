@@ -1,11 +1,15 @@
 """ unittest module """
 import unittest
+from pprint import pprint
 from typing import Union, Optional
 
 import smarthexboard
+from smarthexboard.smarthexboardlib.game.cities import City
 from smarthexboard.smarthexboardlib.game.generation import GameGenerator
-from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType
+from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType, UnitType
+from smarthexboard.smarthexboardlib.game.units import Unit
 from smarthexboard.smarthexboardlib.serialisation.game import GameModelSchema
+from smarthexboard.smarthexboardlib.serialisation.map import CitySchema
 from smarthexboard.utils import parseLocation, parseUnitMapType
 from .smarthexboardlib.game.achievements import CivicAchievements
 from .smarthexboardlib.game.baseTypes import HandicapType
@@ -506,6 +510,34 @@ class TestSerialization(unittest.TestCase):
 		self.assertEqual(map_json_dict['width'], 32)
 		self.assertEqual(map_json_dict['height'], 22)
 		self.assertGreater(len(map_json_dict['units']), 0)
+
+	def test_serialize_and_restore_game(self):
+		def callbackFunc(state):
+			pass
+
+		options = MapOptions(mapSize=MapSize.duel, mapType=MapType.continents, leader=LeaderType.alexander)
+		generator = MapGenerator(options)
+
+		mapModel = generator.generate(callbackFunc)
+
+		gameGenerator = GameGenerator()
+		gameModel = gameGenerator.generate(mapModel, HandicapType.settler)
+
+		alexander = gameModel.playerFor(LeaderType.alexander)
+		gameModel.addUnit(Unit(location=HexPoint(1, 2), unitType=UnitType.warrior, player=alexander))
+		berlin = City(name='Berlin', location=HexPoint(1, 2), player=alexander, isCapital=True)
+		gameModel.addCity(berlin)
+
+		# berlin_result = CitySchema().dump(berlin)
+		# pprint(berlin_result, indent=2)
+		# restored_berlin = CitySchema().load(berlin_result)
+		# print(restored_berlin.player)
+
+		json_str = GameModelSchema().dump(gameModel)
+		# print(json_str)
+		restoredGame = GameModelSchema().load(json_str)
+		#
+		# self.assertEqual(gameModel.playerFor(LeaderType.alexander).name(), restoredGame.playerFor(LeaderType.alexander).name())
 
 
 class TestRequestParsing(unittest.TestCase):

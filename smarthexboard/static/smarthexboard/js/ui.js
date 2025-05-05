@@ -35,14 +35,14 @@ function UIBuilder() {
     }
 
     function createUnitPanel() {
-        // const unit_icon = addTag('unit_panel', 'div');
-        // unit_icon.id = 'action-panel';
-        $(".unit-command").each(function () {
-            this.addEventListener("click", function() {
-                console.log('clicked drag');
-            });
-            console.log('added clicked');
-        });
+        const $img = $("<img>")
+            .attr('id', 'unit_panel_icon_img')
+            .addClass('unit-icon')
+            .attr("alt", '')
+            .attr("src", '');
+
+        const $unitPanelIcon = $('#unit_panel_icon');
+        $unitPanelIcon.append($img);
 
         console.log('created unit panel');
     }
@@ -94,9 +94,13 @@ UIBuilder.prototype.message = function(title, message) {
     });
 }
 
-UIBuilder.prototype.unitPanel = function(title, actions, event, callback) {
-    console.log('unitPanel', title, actions/*, event, callback*/);
-    $('#unit_panel_title').text(title);
+UIBuilder.prototype.unitPanel = function(unit, actions, event, callback) {
+    // console.log('unitPanel: ' +  unit + ' => ' + actions);
+    // console.log('unitType: ' + unit.unitType.toString());
+    // console.log('texture: ' + unit.unitType.texture);
+    $('#unit_panel_title').text(unit.name);
+    $('#unit_panel_icon_img').attr('src', unit.icon());
+    $('#unit_panel_max_moves').text('? / ' + unit.unitType.max_moves);
 
     const $actionPanel = $('#unit_panel_actions');
     $actionPanel.empty();
@@ -104,7 +108,9 @@ UIBuilder.prototype.unitPanel = function(title, actions, event, callback) {
     const actionImages = new Map([
         ['ACTION_ATTACK', '/static/smarthexboard/img/ui/commands/command_button_attack@3x.png'],
         ['ACTION_DISBAND', '/static/smarthexboard/img/ui/commands/command_button_disband@3x.png'],
-        ['ACTION_FOUND_CITY', '/static/smarthexboard/img/ui/commands/command_button_found@3x.png']
+        ['ACTION_FOUND_CITY', '/static/smarthexboard/img/ui/commands/command_button_found@3x.png'],
+        ['ACTION_SKIP', '/static/smarthexboard/img/ui/commands/command_button_skip@3x.png'],
+        ['ACTION_SLEEP', '/static/smarthexboard/img/ui/commands/command_button_sleep@3x.png']
     ]);
 
     actions.forEach((action, index) => {

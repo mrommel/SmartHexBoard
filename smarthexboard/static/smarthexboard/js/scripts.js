@@ -269,9 +269,12 @@ function handleMouseUp(event) {
             if (units.length > 0) {
                 let firstUnit = units[0];
                 console.log('unit action at ' + new_cursor + ' for ' + firstUnit);
-                unitActions(firstUnit, game_uuid, function(actions) {
-                    showUnitPanel(event, actions);
+                unitActions(firstUnit, game_uuid, function(unit, actions) {
+                    showUnitPanel(unit, event, actions);
                 });
+            } else {
+                // console.log('no unit at ' + new_cursor);
+                uiRenderer.hideUnitPanel();
             }
         } else {
             if (units.length > 0) {
@@ -661,8 +664,8 @@ function changeActionState(newActionState) {
     }
 }
 
-function showUnitPanel(event, actions) {
-    uiRenderer.unitPanel('Unit', actions, event, function (action, action_index) {
+function showUnitPanel(unit, event, actions) {
+    uiRenderer.unitPanel(unit, actions, event, function (action, action_index) {
         // console.log('unit action clicked: ' + action + ' index: ' + action_index);
         cursor = locationFromEvent(event);
         switch (action) {

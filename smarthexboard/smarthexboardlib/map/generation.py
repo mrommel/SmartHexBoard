@@ -1280,7 +1280,7 @@ class MapGenerator:
 					if tile._resourceValue == resource:
 						resource_placed += 1
 
-			logging.info(f'Counted {resource_placed} of {resource.name()} placed on map')
+			logging.info(f'Counted {resource_placed} of {resource.title()} placed on map')
 
 	def _addNonUniqueResource(self, mapModel, resource):
 		resource_count = self._numberOfResourcesToAdd(mapModel, resource)
@@ -1332,7 +1332,7 @@ class MapGenerator:
 		# limit to possible
 		absolute_amount = max(0, min(absolute_amount, info.num_possible))
 
-		logging.debug(f'try to place {absolute_amount} of {resource.name()} on {info.num_possible} possible ({info.already_placed} already placed)')
+		logging.debug(f'try to place {absolute_amount} of {resource.title()} on {info.num_possible} possible ({info.already_placed} already placed)')
 		return absolute_amount
 
 	def numberOfResources(self, mapModel, resource: ResourceType) -> ResourcesInfo:

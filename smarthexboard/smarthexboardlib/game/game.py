@@ -198,7 +198,7 @@ class GameModel:
 
 			self.replayEvents = victoryTypes['replayEvents']
 		else:
-			raise Exception('Invalid combination of parameters')
+			raise Exception(f'Invalid combination of parameters: {victoryTypes}, {handicap}, {turnsElapsed}, {players}, {map}')
 
 	def update(self):
 		if self.userInterface is None:

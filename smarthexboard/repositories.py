@@ -38,8 +38,8 @@ class GameDataRepository:
 
 		# print(f'_fetchFromDatabase: {db_content}')
 
-		obj_dict = GameModelSchema().loads(db_content)
-		return GameModel(obj_dict)
+		obj = GameModelSchema().loads(db_content)
+		return obj
 
 	@staticmethod
 	def _storeToDatabase(game_uuid, gameModel):

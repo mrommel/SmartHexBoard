@@ -20,6 +20,10 @@ UnitType.prototype.clone = function() {
     return new UnitType(this.name, this.max_moves, this.texture);
 }
 
+UnitType.prototype.toString = function() {
+    return "UnitType(" + this.name + ", max_moves: " + this.max_moves + ")";
+}
+
 UnitType.fromString = function(unit_name) {
     switch (unit_name) {
         case 'none':
@@ -94,6 +98,10 @@ Unit.prototype.fromJson = function(json_dict) {
     */
 
 	console.log('Unit ' + this.location.x + ', ' + this.location.y + ' => ' + this.unitType);
+}
+
+Unit.prototype.icon = function() {
+    return '/static/smarthexboard/img/units/' + this.unitType.texture;
 }
 
 Unit.prototype.toString = function() {

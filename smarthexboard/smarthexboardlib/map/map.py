@@ -113,7 +113,8 @@ class Tile:
 			self._buildProgressList = WeightedBuildList()
 			self._area = None
 		elif isinstance(point_or_dict, dict):
-			self.point = HexPoint(point_or_dict.get('point', {'x': -1, 'y': -1}))
+			tmp_point = point_or_dict.get('point', {'x': -1, 'y': -1})
+			self.point = tmp_point if isinstance(tmp_point, HexPoint) else HexPoint(tmp_point)
 			self._terrainValue = TerrainType.fromName(point_or_dict.get('_terrainValue', 'TerrainType.grass'))
 			self._isHills = point_or_dict.get('_isHills', False)
 			self._featureValue = FeatureType.fromName(point_or_dict.get('_featureValue', 'FeatureType.none'))
@@ -141,7 +142,7 @@ class Tile:
 			self._buildProgressList = WeightedBuildList(point_or_dict.get('_buildProgressList', {}))
 			self._area = None  # fixme
 		else:
-			raise Exception('unsupported combination')
+			raise Exception(f'unsupported combination: {point_or_dict}, {terrain}')
 
 		self._builderAIScratchPad = BuilderAIScratchPad()
 		self._archaeologicalRecordValue = ArchaeologicalRecord()
@@ -1327,10 +1328,10 @@ class MapModel:
 
 			for y in range(self.height):
 				for x in range(self.width):
-					self.tiles.values[y][x] = Tile(tiles_dict[y][x])
+					self.tiles.values[y][x] = tiles_dict[y][x]
 
-			self._cities = [City(city_dict) for city_dict in dict_obj.get('_cities', [])]
-			self._units = [Unit(unit_dict) for unit_dict in dict_obj.get('_units', [])]
+			self._cities = dict_obj.get('_cities', [])
+			self._units = dict_obj.get('_units', [])
 
 			startLocations_list = dict_obj.get('startLocations', [])
 			self.startLocations = []

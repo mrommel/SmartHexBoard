@@ -192,8 +192,7 @@ def game_map(request, game_uuid: str):
 			return JsonResponse(json_payload, status=400)
 
 		game_str: str = game_generation.game
-		obj_dict = GameModelSchema().loads(game_str)
-		obj = GameModel(obj_dict)
+		obj = GameModelSchema().loads(game_str)
 		GameDataRepository.store(game_uuid, obj)
 
 		GameGenerationData.objects.filter(uuid=game_uuid).delete()
@@ -480,7 +479,7 @@ def game_actions(request):
 			unit_map_type: UnitMapType = unit_type.unitMapType()
 			location = parseLocation(location_str)
 
-			print(f'try get unit actions {unit_type} unit at: {location}')
+			# print(f'try get unit actions {unit_type} unit at: {location}')
 
 			if location is None:
 				json_payload = {
@@ -501,6 +500,8 @@ def game_actions(request):
 
 			action_list = list()
 
+			# if unit.canMove():
+			#	action_list.append('ACTION_MOVE')
 			if unit.canHeal(game):
 				action_list.append('ACTION_HEAL')
 			if unit.canFoundAt(location, game):
@@ -619,6 +620,7 @@ def game_found_city(request):
 				}
 				return JsonResponse(json_payload, status=400)
 
+			print(f'INFO: Found city "{city_name}" at {location}.')
 			found = unit.doFoundWith(city_name, game)
 
 			json_payload = {

@@ -1,9 +1,15 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load
+
+from smarthexboard.smarthexboardlib.map.base import HexPoint
 
 
 class PointSchema(Schema):
 	x = fields.Integer()
 	y = fields.Integer()
+
+	@post_load
+	def make_point(self, data, **kwargs):
+		return HexPoint(data['x'], data['y'])
 
 
 class HexAreaSchema(Schema):

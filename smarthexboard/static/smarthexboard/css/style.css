@@ -1368,8 +1368,8 @@ h1, h2, h3, h4, h5, h6 {
     background-image: url('../img/ui/unit-banner@3x.png');
     background-repeat: no-repeat;
     background-size: contain;
-    width: 502px;
-    height: 170px;
+    width: 450px;
+    height: 150px;
     display: none;
     z-index: 200;
 }
@@ -1377,13 +1377,111 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #center_footer_container #unit_panel #unit_panel_title {
     z-index: 202;
     position: fixed;
-    left: 120px;
-    top: 24px;
+    left: 90px;
+    top: 14px;
+
+    background-color: #25597bb8;
+    width: 200px;
+    height: 24px;
+    padding-left: 4px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_max_moves {
+    z-index: 202;
+    position: fixed;
+    left: 100px;
+    top: 42px;
+
+    background-color: #25597bb8;
+    width: 200px;
+    height: 24px;
+    padding-left: 24px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_max_moves::before {
+    content: url("../img/ui/unit-properties/max_moves.png");
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    left: -10px;
+    position: absolute;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_max_moves #unit_panel_max_moves_label {
+    float: right;
+    text-align: right;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_melee_strength {
+    z-index: 202;
+    position: fixed;
+    left: 100px;
+    top: 70px;
+
+    background-color: #25597bb8;
+    width: 200px;
+    height: 24px;
+    padding-left: 24px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_melee_strength #unit_panel_melee_strength_label {
+    float: right;
+    text-align: right;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_ranged_strength {
+    z-index: 202;
+    position: fixed;
+    left: 100px;
+    top: 98px;
+
+    background-color: #25597bb8;
+    width: 200px;
+    height: 24px;
+    padding-left: 24px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_ranged_strength #unit_panel_ranged_strength_label {
+    float: right;
+    text-align: right;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_ranged_range {
+    z-index: 202;
+    position: fixed;
+    left: 100px;
+    top: 126px;
+
+    background-color: #25597bb8;
+    width: 200px;
+    height: 24px;
+    padding-left: 24px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_ranged_range #unit_panel_ranged_range {
+    float: right;
+    text-align: right;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_icon {
+    width: 84px;
+    height: 84px;
+    position: absolute;
+    top: 36px;
+    left: 4px;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_icon #unit_panel_icon_img {
+    width: 84px;
+    height: 84px;
 }
 
 #uistate-game #center_footer_container #unit_panel #unit_panel_actions {
     display: flex;
     flex-direction: row;
+
+    position: absolute;
+    top: 2px;
 }
 
 #uistate-game #center_footer_container #unit_panel #unit_panel_actions .unit-command {

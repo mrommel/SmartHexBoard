@@ -266,7 +266,8 @@ class Unit:
 			raise Exception('Unsupported combination of parameters')
 
 	def __repr__(self):
-		return f'Unit({self.location}, {self.unitType}, {self.player.name()}, {self.experienceLevel()} exp)'
+		player_name = self.player.name() if self.player is not None else '-'
+		return f'Unit({self.location}, {self.unitType}, {player_name}, {self.experienceLevel()} exp)'
 
 	def __eq__(self, other):
 		if isinstance(other, Unit):
@@ -1855,7 +1856,7 @@ class Unit:
 				self.player.doGoodyHutAt(newPlot, self, simulation)
 
 		self.player.foundAt(self.location, name=name, simulation=simulation)
-		print(f'INFO: {self.player.name()} founded city {name} at {self.location}')
+		# print(f'INFO: {self.player.name()} has found city {name} at {self.location}')
 
 		# ancestralHall - New cities receive a free Builder
 		if self.player.hasBuilding(BuildingType.ancestralHall, simulation):

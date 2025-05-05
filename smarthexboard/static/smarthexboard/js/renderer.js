@@ -312,34 +312,38 @@ class CityCanvasRenderer extends CanvasRenderer {
             const img = assets.cityTexture(city);
             this.citiesCtx.drawImage(img, x, y, 72, 72);
 
-            this.citiesBannerCtx.font = '16px sans-serif';
+            this.citiesBannerCtx.font = '16px Cinzel Decorative';
             let textWidth = this.citiesBannerCtx.measureText(city.name).width;
+            let sizeText = '' + city.size;
+            let sizeWidth = this.citiesBannerCtx.measureText(sizeText).width;
             let bannerWidth = textWidth + 20 + 20 + 8;
+
+            let centerX = x + 36;
 
             // draw city banner
             this.citiesBannerCtx.strokeStyle = this.accent[city.player];
             this.citiesBannerCtx.lineWidth = 2;
             this.citiesBannerCtx.fillStyle = this.main[city.player];
             this.citiesBannerCtx.beginPath();
-            this.citiesBannerCtx.roundRect(x + 36 - (bannerWidth / 2), y - 6, bannerWidth, 20, 6);
+            this.citiesBannerCtx.roundRect(centerX - (bannerWidth / 2), y - 6, bannerWidth, 20, 8);
             this.citiesBannerCtx.stroke();
             this.citiesBannerCtx.fill();
 
             // draw city size
             this.citiesBannerCtx.globalAlpha = 0.6;
             this.citiesBannerCtx.beginPath();
-            this.citiesBannerCtx.arc(x + 26 + (bannerWidth / 2), y + 4, 9, 0, 2 * Math.PI, false);
+            this.citiesBannerCtx.arc(centerX - (bannerWidth / 2) + 10, y + 4, 9, 0, 2 * Math.PI, false);
             this.citiesBannerCtx.fillStyle = '#333333';
             this.citiesBannerCtx.fill();
 
             // draw city size text
             this.citiesBannerCtx.globalAlpha = 1.0;
             this.citiesBannerCtx.fillStyle = '#ffffff';
-            this.citiesBannerCtx.fillText('1', x + 22 + (bannerWidth / 2), y + 10, 20);
+            this.citiesBannerCtx.fillText(sizeText, centerX - (bannerWidth / 2) + 10 - (sizeWidth / 2), y + 9, 20);
 
             // draw city banner text
             this.citiesBannerCtx.fillStyle = this.accent[city.player];
-            this.citiesBannerCtx.fillText(city.name, x + 36 - (textWidth / 2), y + 10, 200);
+            this.citiesBannerCtx.fillText(city.name, centerX - (textWidth / 2), y + 10, 200);
         }
     }
 

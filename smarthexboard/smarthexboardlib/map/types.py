@@ -402,7 +402,7 @@ class TerrainType(ExtendedEnum):
 
 		raise Exception(f'No matching case for terrainName: "{terrainName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def isWater(self) -> bool:
@@ -691,7 +691,7 @@ class FeatureType(ExtendedEnum):
 
 		raise Exception(f'No matching case for featureName: "{featureName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def isRemovable(self) -> bool:
@@ -1330,7 +1330,7 @@ class ResourceType(ExtendedEnum):
 	def luxury() -> [ResourceType]:
 		return list(filter(lambda r: r.usage() == ResourceUsage.luxury, list(ResourceType)))
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def usage(self) -> ResourceUsage:

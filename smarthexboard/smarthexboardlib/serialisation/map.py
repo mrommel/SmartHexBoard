@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load
 
 from marshmallow_enum import EnumField
 
@@ -19,24 +19,27 @@ from smarthexboard.smarthexboardlib.game.units import Unit, UnitTradeRouteData, 
 from smarthexboard.smarthexboardlib.game.wonders import WonderType
 from smarthexboard.smarthexboardlib.map.areas import Ocean, Continent
 from smarthexboard.smarthexboardlib.map.base import HexDirection
-from smarthexboard.smarthexboardlib.map.map import MapModel, Tile
+from smarthexboard.smarthexboardlib.map.improvements import ImprovementType
+from smarthexboard.smarthexboardlib.map.map import MapModel, Tile, WeightedBuildList
 from smarthexboard.smarthexboardlib.map.path_finding.path import HexPath
-from smarthexboard.smarthexboardlib.map.types import StartLocation, ResourceType, YieldType
+from smarthexboard.smarthexboardlib.map.types import StartLocation, ResourceType, YieldType, TerrainType, ClimateZone, \
+	FeatureType, RouteType
 from smarthexboard.smarthexboardlib.serialisation.base import PointSchema, HexAreaSchema, WeightedListField
+from smarthexboard.smarthexboardlib.serialisation.player import PlayerSchema
 
 
 class TileSchema(Schema):
 	point = fields.Nested(PointSchema)
-	terrain = fields.String(attribute="_terrainValue", required=True)
+	terrain = fields.String(attribute='_terrainValue', required=True)
 	isHills = fields.Boolean(attribute="_isHills")
-	feature = fields.String(attribute="_featureValue")
-	resource = fields.String(attribute="_resourceValue")
+	feature = EnumField(FeatureType, attribute='_featureValue', allow_none=True)
+	resource = EnumField(ResourceType, attribute='_resourceValue', allow_none=True)
 	resourceQuantity = fields.Integer(attribute="_resourceQuantity")
 
 	river = fields.Integer(attribute="_riverValue")
 	riverName = fields.String(attribute="_riverName", allow_none=True)
 
-	climateZone = fields.String(attribute="_climateZone")
+	climateZone = EnumField(ClimateZone, attribute='_climateZone', allow_none=True)
 	route = fields.String(attribute="_route")
 	routePillaged = fields.Boolean(attribute="_routePillagedValue")
 	improvement = fields.String(attribute="_improvementValue")
@@ -58,6 +61,47 @@ class TileSchema(Schema):
 
 	def load_owner(self, value):
 		return value
+
+	@post_load
+	def make_tile(self, data, **kwargs):
+		# pprint(data, indent=2)
+		deserialized_tile = Tile(
+			point_or_dict=data['point'],
+			terrain=TerrainType.fromName(data['_terrainValue'])
+		)
+
+		deserialized_tile._owner = data['owner']
+
+		deserialized_tile._buildProgressList = WeightedBuildList()
+		for key, value in data['_buildProgressList'].items():
+			deserialized_tile._buildProgressList[key] = value
+
+		deserialized_tile.continentIdentifier = data['continentIdentifier']
+		deserialized_tile.oceanIdentifier = data['oceanIdentifier']
+
+		# private identifiers
+		deserialized_tile._climateZone = data['_climateZone']
+		deserialized_tile._districtValue = data['_districtValue']
+		deserialized_tile._featureValue = data['_featureValue']
+		deserialized_tile._improvementPillagedValue = data['_improvementPillagedValue']
+		deserialized_tile._improvementValue = ImprovementType.fromName(data['_improvementValue'])
+		deserialized_tile._isHills = data['_isHills']
+		deserialized_tile._resourceQuantity = data['_resourceQuantity']
+		deserialized_tile._resourceValue = data['_resourceValue']
+		deserialized_tile._riverName = data['_riverName']
+		deserialized_tile._riverValue = data['_riverValue']
+		deserialized_tile._route = RouteType.fromName(data['_route'])
+		deserialized_tile._routePillagedValue = data['_routePillagedValue']
+		deserialized_tile._wonderValue = data['_wonderValue']
+
+		for key, value in data['visible'].items():
+			deserialized_tile.visible[key] = value
+
+		for key, value in data['discovered'].items():
+			deserialized_tile.discovered[key] = value
+
+		# raise Exception(f'Tile deserialization not implemented yet - {data}')
+		return deserialized_tile
 
 	class Meta:
 		model = Tile
@@ -106,11 +150,11 @@ class CitySchema(Schema):
 	lastTurnFoodHarvested = fields.Float(attribute='_lastTurnFoodHarvestedValue')
 	lastTurnGarrisonAssigned = fields.Int(attribute='_lastTurnGarrisonAssigned')
 
-	player = fields.Function(lambda obj: hash(obj.player))
+	player = fields.Nested(PlayerSchema(only=("leader",)))  # fields.Function(lambda obj: hash(obj.player))
 	originalLeader = EnumField(LeaderType, attribute='originalLeaderValue')
-	originalCityState = EnumField(CityStateType, attribute='originalCityStateValue')
-	previousLeader = EnumField(LeaderType, attribute='previousLeaderValue')
-	previousCityState = EnumField(CityStateType, attribute='previousCityStateValue')
+	originalCityState = EnumField(CityStateType, attribute='originalCityStateValue', allow_none=True)
+	previousLeader = EnumField(LeaderType, attribute='previousLeaderValue', allow_none=True)
+	previousCityState = EnumField(CityStateType, attribute='previousCityStateValue', allow_none=True)
 
 	isFeatureSurrounded = fields.Bool(attribute='_isFeatureSurroundedValue')
 	cheapestPlotInfluence = fields.Int(attribute='_cheapestPlotInfluenceValue')
@@ -160,6 +204,20 @@ class CitySchema(Schema):
 	# self.cityTourism = None  # fixme
 
 	scratch = fields.Int(attribute='_scratchInt')
+
+	@post_load
+	def make_city(self, data, **kwargs):
+		# pprint(data, indent=2)
+		deserialized_city = City(
+			name=data['_name'],
+			location=data['location'],
+			player=None,  # data['player'] contains {'leader': <LeaderType.alexander: 'alexander'>}
+			isCapital=data['_capitalValue']
+		)
+
+		deserialized_city.tmp_leader = data['originalLeaderValue']
+
+		return deserialized_city
 
 	class Meta:
 		model = City
@@ -261,6 +319,21 @@ class UnitSchema(Schema):
 
 	def deserialize_originalPlayer(self, value):
 		return value
+
+	@post_load
+	def make_unit(self, data, **kwargs):
+		# pprint(data, indent=2)
+		print(data['location'])
+		deserialized_unit = Unit(
+			location=data['location'],
+			unitType=data['unitType'],
+			player=None
+		)
+
+		deserialized_unit.playerHash = data['player']
+		deserialized_unit.originalOwnerHash = data['originalPlayer']
+
+		return deserialized_unit
 
 	class Meta:
 		model = Unit

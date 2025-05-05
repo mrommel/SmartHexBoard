@@ -1661,7 +1661,7 @@ class City:
 	attackRange = 2
 	workRadius = 3
 
-	def __init__(self, name: Union[str, dict], location: HexPoint, isCapital: bool, player):
+	def __init__(self, name: Union[str, dict], location: Optional[HexPoint]=None, isCapital: Optional[bool]=None, player: Optional['Player']=None):
 		if isinstance(name, str):
 			self._name: str = name
 			self.location: HexPoint = location
@@ -1676,8 +1676,8 @@ class City:
 			self._lastTurnGarrisonAssigned: int = 0
 
 			self.player = player
-			self.originalLeaderValue: LeaderType = player.leader
-			self.originalCityStateValue: CityStateType = player.cityState
+			self.originalLeaderValue: LeaderType = player.leader if player is not None else LeaderType.none
+			self.originalCityStateValue: CityStateType = player.cityState if player is not None else None
 			self.previousLeaderValue: Optional[LeaderType] = None
 			self.previousCityStateValue: Optional[CityStateType] = None
 
@@ -1798,7 +1798,7 @@ class City:
 
 			self._scratchInt: int = -1
 		else:
-			raise Exception(f'Unsupported combination of params')
+			raise Exception(f'Unsupported combination of params: {name}, {location}, {isCapital}, {player}')
 
 	def __str__(self):
 		return f'City "{self._name}" at {self.location}'
