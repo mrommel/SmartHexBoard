@@ -100,7 +100,7 @@ UIBuilder.prototype.unitPanel = function(unit, actions, event, callback) {
     // console.log('texture: ' + unit.unitType.texture);
     $('#unit_panel_title').text(unit.name);
     $('#unit_panel_icon_img').attr('src', unit.icon());
-    $('#unit_panel_max_moves').text('? / ' + unit.unitType.max_moves);
+    $('#unit_panel_max_moves_text').text('? / ' + unit.unitType.max_moves);
 
     const $actionPanel = $('#unit_panel_actions');
     $actionPanel.empty();

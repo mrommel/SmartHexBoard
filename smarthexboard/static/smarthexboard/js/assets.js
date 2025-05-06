@@ -188,6 +188,7 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
 	});
 	Object.values(UnitTypes).forEach(unitType => {
 	    imgList.push(unitType.texture);
+        imgList.push(unitType.template);
 	});
     imgList.push('city-tiny@3x.png');
     imgList.push('city-small@3x.png');
@@ -244,7 +245,11 @@ Assets.prototype.cacheGameImages = function(callbackFunction) {
                 failed++;
                 console.log('Failed to load ' + this.src + ' unit asset');
             }
-            this.imgUnits[imgName].src = '/static/smarthexboard/img/units/' + imgName;
+            if (imgName.startsWith('unit-type')) {
+                this.imgUnits[imgName].src = '/static/smarthexboard/img/unit_types/' + imgName;
+            } else {
+                this.imgUnits[imgName].src = '/static/smarthexboard/img/units/' + imgName;
+            }
         } else if (imgName.startsWith('city-')) {
             if (typeof this.imgCities[imgName] !== "undefined") {
                 loaded++;

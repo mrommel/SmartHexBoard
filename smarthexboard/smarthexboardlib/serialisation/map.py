@@ -323,7 +323,6 @@ class UnitSchema(Schema):
 	@post_load
 	def make_unit(self, data, **kwargs):
 		# pprint(data, indent=2)
-		print(data['location'])
 		deserialized_unit = Unit(
 			location=data['location'],
 			unitType=data['unitType'],

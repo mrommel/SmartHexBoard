@@ -29,6 +29,12 @@ class CanvasRenderer {
     clearRect(x, y, width, height) {
         console.log('CanvasRenderer.clearRect(...) - should not happen');
     }
+
+    _validateHexPoint(hexPoint) {
+        if (!(hexPoint instanceof HexPoint)) {
+            throw new Error(hexPoint + ' is not a HexPoint');
+        }
+    }
 }
 
 // inheriting parent class
@@ -62,9 +68,7 @@ class TerrainCanvasRenderer extends CanvasRenderer {
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         // this.terrainsCtx.beginPath();
         // this.terrainsCtx.rect(0, 0, canvasSize.width, canvasSize.height);
@@ -209,9 +213,7 @@ class FeatureCanvasRenderer extends CanvasRenderer {
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         var feature = this.map.featureAt(hexPoint);
         if (feature.name !== FeatureTypes.none.name) {
@@ -252,9 +254,7 @@ class ResourceCanvasRenderer extends CanvasRenderer {
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         const resource = this.map.resourceAt(hexPoint);
         if (resource.name !== ResourceTypes.none.name) {
@@ -266,11 +266,12 @@ class ResourceCanvasRenderer extends CanvasRenderer {
 }
 
 class CityCanvasRenderer extends CanvasRenderer {
-    constructor() {
+    constructor(playerColors) {
         super('CityCanvasRenderer.constructor()');
 
         this.citiesCanvas = null;
 	    this.citiesCtx = null;
+        this.playerColors = playerColors
     }
 
     setup(map) {
@@ -294,17 +295,11 @@ class CityCanvasRenderer extends CanvasRenderer {
 
         this.citiesBannerCtx = this.citiesBannerCanvas.getContext('2d');
 
-        // colors
-        this.main = {"PLAYER_ALEXANDER": "#aeaeae", "key2": "value2"};
-        this.accent = {"PLAYER_ALEXANDER": "#f7d801", "key2": "value2"};
-
         console.log('cities canvas created');
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         const city = this.map.cityAt(hexPoint);
         if (city !== null) {
@@ -353,11 +348,12 @@ class CityCanvasRenderer extends CanvasRenderer {
 }
 
 class UnitCanvasRenderer extends CanvasRenderer {
-    constructor() {
+    constructor(playerColors) {
         super('UnitCanvasRenderer.constructor()');
 
         this.unitsCanvas = null;
 	    this.unitsCtx = null;
+        this.playerColors = playerColors
     }
 
     setup(map) {
@@ -376,20 +372,40 @@ class UnitCanvasRenderer extends CanvasRenderer {
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         const units = this.map.unitsAt(hexPoint);
         units.forEach((unit) => {
-            const img = assets.unitTexture(unit.unitType.texture);
-            // console.log('draw unit ' + unit.unitType + ' at ' + unit.location);
-            this.unitsCtx.drawImage(img, x, y, 72, 72);
+            this._drawUnit(unit, x, y);
         });
     }
 
     clearRect(x, y, width, height) {
         this.unitsCtx.clearRect(x, y, width, height);
+    }
+
+    _drawUnit(unit, x, y) {
+        const img = assets.unitTexture(unit.unitType.texture);
+        this.unitsCtx.drawImage(img, x, y, 72, 72);
+
+        const typeImg = assets.unitTexture(unit.unitType.template);
+        const accentColor = this.playerColors.get(unit.player).accent;
+        const tintedImage = this._createTintedImage(typeImg, accentColor, 24, 24);
+        this.unitsCtx.drawImage(tintedImage, x, y, 24, 24);
+    }
+
+    _createTintedImage(image, tintColor, width, height) {
+        const buffer = document.createElement('canvas');
+        buffer.width = width;
+        buffer.height = height;
+        const btx = buffer.getContext('2d');
+
+        btx.drawImage(image, 0, 0, width, height);
+        btx.fillStyle = tintColor;
+        btx.globalCompositeOperation = 'source-atop';
+        btx.fillRect(0, 0, width, height);
+
+        return buffer;
     }
 }
 
@@ -417,15 +433,37 @@ class CursorCanvasRenderer extends CanvasRenderer {
     }
 
     drawTile(hexPoint, x, y) {
-        if (!(hexPoint instanceof HexPoint)) {
-            throw new Error(hexPoint + ' is not a HexPoint');
-        }
+        this._validateHexPoint(hexPoint);
 
         this.cursorCtx.drawImage(this.cursorImage, x, y + 24, 72, 48);
     }
 
     clearRect(x, y, width, height) {
         this.cursorCtx.clearRect(x, y, width, height);
+    }
+}
+
+class ColorTuple {
+    constructor(main, accent) {
+        this.main = main;
+        this.accent = accent;
+    }
+}
+
+class PlayerColors {
+    constructor() {
+        // colors
+        this.main = {"PLAYER_ALEXANDER": "#aeaeae", "key2": "value2"};
+        this.accent = {"PLAYER_ALEXANDER": "#f7d801", "key2": "value2"};
+    }
+
+    get(player) {
+        if (this.main[player] == null || this.accent[player] == null) {
+            console.log('PlayerColors: no color for player ' + player);
+            return new ColorTuple("#000000","#ffffff");
+        }
+
+        return new ColorTuple(this.main[player], this.accent[player]);
     }
 }
 
@@ -450,12 +488,15 @@ function Renderer() {
 	// add an offset for better rounding of mouse position in a column
 	this.mousePrecisionOffset = this.s/100;
 
+    // player color
+    this.playerColors = new PlayerColors()
+
 	// internal renderers
 	this.terrainRenderer = new TerrainCanvasRenderer();
 	this.featureRenderer = new FeatureCanvasRenderer();
 	this.resourceRenderer = new ResourceCanvasRenderer();
-    this.cityRenderer = new CityCanvasRenderer();
-	this.unitRenderer = new UnitCanvasRenderer();
+    this.cityRenderer = new CityCanvasRenderer(this.playerColors);
+	this.unitRenderer = new UnitCanvasRenderer(this.playerColors);
 	this.cursorRenderer = new CursorCanvasRenderer();
 
     // canvasOffsetX = window.innerWidth/2 - imgMapBackground.width/2;

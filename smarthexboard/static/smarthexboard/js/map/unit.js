@@ -10,14 +10,15 @@
 
 // UnitType Constructor
 
-function UnitType(name, max_moves, texture) {
+function UnitType(name, max_moves, texture, template) {
     this.name = name;
     this.max_moves = max_moves;
     this.texture = texture;
+    this.template = template;
 }
 
 UnitType.prototype.clone = function() {
-    return new UnitType(this.name, this.max_moves, this.texture);
+    return new UnitType(this.name, this.max_moves, this.texture, this.template);
 }
 
 UnitType.prototype.toString = function() {
@@ -50,17 +51,17 @@ UnitType.fromString = function(unit_name) {
 }
 
 const UnitTypes = {
-	none: new UnitType("none", 0, "unit-scout@3x.png"),
+	none: new UnitType("none", 0, "unit-scout@3x.png", 'unit-type-template-scout@3x.png'),
 
 	// civilian
-	settler: new UnitType("settler", 2, "unit-settler@3x.png"),
-	builder: new UnitType("builder", 2, "unit-builder@3x.png"),
+	settler: new UnitType("settler", 2, "unit-settler@3x.png", 'unit-type-template-settler@3x.png'),
+	builder: new UnitType("builder", 2, "unit-builder@3x.png", 'unit-type-template-builder@3x.png'),
 
     // recon
-    scout: new UnitType("scout", 3, "unit-scout@3x.png"),
+    scout: new UnitType("scout", 3, "unit-scout@3x.png", 'unit-type-template-scout@3x.png'),
 
 	// melee
-	warrior: new UnitType("warrior", 2, "unit-warrior@3x.png"),
+	warrior: new UnitType("warrior", 2, "unit-warrior@3x.png", 'unit-type-template-warrior@3x.png'),
 }
 
 // Unit Constructor
@@ -102,6 +103,10 @@ Unit.prototype.fromJson = function(json_dict) {
 
 Unit.prototype.icon = function() {
     return '/static/smarthexboard/img/units/' + this.unitType.texture;
+}
+
+Unit.prototype.template = function() {
+    return '/static/smarthexboard/img/unit_types/' + this.unitType.template;
 }
 
 Unit.prototype.toString = function() {
