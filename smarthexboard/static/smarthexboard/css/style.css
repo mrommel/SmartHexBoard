@@ -1533,6 +1533,18 @@ h1, h2, h3, h4, h5, h6 {
 #uistate-game #center_footer_container #unit_panel #unit_panel_icon #unit_panel_icon_img {
     width: 84px;
     height: 84px;
+    position: absolute;
+}
+
+#uistate-game #center_footer_container #unit_panel #unit_panel_icon #unitHealth {
+    width: 84px;
+    height: 84px;
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    margin-top: -36px;
+    margin-left: -106px;
 }
 
 #uistate-game #center_footer_container #unit_panel #unit_panel_actions {
