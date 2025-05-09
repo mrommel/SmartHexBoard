@@ -5,6 +5,7 @@ export class ActionState {
     static selectRangedTarget = new ActionState('SelectRangedTarget');
     static selectEmbarkTarget = new ActionState('SelectEmbarkTarget');
     static inputCityName = new ActionState('InputCityName');
+    static disbandUnit = new ActionState('DisbandUnit');
 
     constructor(name) {
         this.name = name;

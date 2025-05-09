@@ -284,8 +284,12 @@ class Unit:
 			'greatPerson': self.greatPerson.value if self.greatPerson is not None else None,
 			'player': self.player.identifier(),
 			'playerHash': hash(self.player),
+			# dynamic values
 			'health': self.healthPoints(),
-			'moves': self.moves()
+			'moves': self.moves(),
+			'meleeStrength': self.baseCombatStrength(True),
+			'rangedStrength': self.baseRangedCombatStrength(),
+			'rangedRange': self.range(),
 			# @fixme
 		}
 

@@ -74,6 +74,11 @@ function Unit() {
     this.player = -1;
 	this.health = 0;
 	this.moves = 0;
+
+    // strength
+    this.meleeStrength = 0;
+    this.rangedStrength = 0;
+    this.rangedRange = 0;
 }
 
 // Unit Object Public Methods
@@ -88,15 +93,10 @@ Unit.prototype.fromJson = function(json_dict) {
 	this.health = json_dict['health'];
 	this.moves = json_dict['moves'];
 
-	/**
-	"name": "Settler",
-    "x": 19,
-    "y": 3,
-    "unitType": "settler",
-    "greatPerson": null,
-    "player": 1092765405,
-    "health": 100
-    */
+	// strength
+    this.meleeStrength = json_dict['meleeStrength'];
+    this.rangedStrength = json_dict['rangedStrength'];
+    this.rangedRange = json_dict['rangedRange'];
 
 	console.log('Unit ' + this.location.x + ', ' + this.location.y + ' => ' + this.unitType);
 }

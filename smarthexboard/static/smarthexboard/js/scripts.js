@@ -14,6 +14,7 @@ import { Renderer } from './renderer.js';
 import { unitActions } from "./actions/unit.js";
 import { ActionState } from "./actions/actions.js";
 import { handleError } from "./errorHandling.js";
+import { UIState, UIBuilder } from "./ui.js";
 
 // TABLE OF CONTENTS
 // 1. preloader
@@ -264,9 +265,13 @@ function handleMouseUp(event) {
     if (mouseRightIsDown) {
         const new_cursor = locationFromEvent(event);
         let units = renderer.map.unitsAt(new_cursor);
+        let city = renderer.map.cityAt(new_cursor);
 
         if (new_cursor.x === cursor.x && new_cursor.y === cursor.y) {
-            if (units.length > 0) {
+            // double click detected
+            if (city != null) {
+                console.log('city action at ' + new_cursor + ' for ' + city);
+            } else if (units.length > 0) {
                 let firstUnit = units[0];
                 console.log('unit action at ' + new_cursor + ' for ' + firstUnit);
                 unitActions(firstUnit, game_uuid, function(unit, actions) {
@@ -601,7 +606,7 @@ function moveUnit(from_point, to_point, unit_type) {
     });
 }
 
-function foundCity(cityName) {
+function foundCity(settler, cityName) {
     console.log('found city: ' + cityName + ' at ' + cursor);
     const formData = new FormData();
     formData.append('game_uuid', game_uuid);
@@ -626,7 +631,6 @@ function foundCity(cityName) {
             let player = json_obj['player'];
 
             // remove unit, show city
-            let settler = renderer.map.unitsAt(cursor).filter(unit => unit.unitType.name === 'settler')[0];
             renderer.map.removeUnit(settler);
             renderer.map.addCityAt(cursor, cityName, player);
 
@@ -642,6 +646,10 @@ function foundCity(cityName) {
     });
 }
 
+function disbandUnit(unit) {
+    console.log('disband-unit ' + unit);
+}
+
 function changeActionState(newActionState) {
     actionState = newActionState;
 
@@ -653,7 +661,14 @@ function changeActionState(newActionState) {
             // console.log('input city name');
             uiRenderer.textInput('City Name', 'Please enter a name for your new city:', function (cityName) {
                 // console.log('input city name: ' + cityName);
-                foundCity(cityName);
+                let settler = renderer.map.unitsAt(cursor).filter(unit => unit.unitType.name === 'settler')[0];
+                foundCity(settler, cityName);
+            });
+            break;
+        case ActionState.disbandUnit:
+            uiRenderer.message('Disband', 'Are you sure you want to disband this unit?', function () {
+                let unit = renderer.map.unitsAt(cursor)[0];
+                disbandUnit(unit);
             });
             break;
         case ActionState.none:
@@ -665,7 +680,7 @@ function changeActionState(newActionState) {
 }
 
 function showUnitPanel(unit, event, actions) {
-    uiRenderer.unitPanel(unit, actions, event, function (action, action_index) {
+    uiRenderer.unitPanel(unit, actions, function (action, action_index) {
         // console.log('unit action clicked: ' + action + ' index: ' + action_index);
         cursor = locationFromEvent(event);
         switch (action) {
@@ -675,11 +690,9 @@ function showUnitPanel(unit, event, actions) {
                 changeActionState(ActionState.selectMeleeTarget);
                 break;
             case 'ACTION_DISBAND':
-                // console.log('disband action clicked');
-                uiRenderer.message('Disband', 'Are you sure you want to disband this unit?');
+                changeActionState(ActionState.disbandUnit);
                 break;
             case 'ACTION_FOUND_CITY':
-                // console.log('found action clicked');
                 changeActionState(ActionState.inputCityName);
                 break;
             default:

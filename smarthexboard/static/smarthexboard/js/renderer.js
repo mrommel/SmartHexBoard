@@ -314,11 +314,12 @@ class CityCanvasRenderer extends CanvasRenderer {
             let bannerWidth = textWidth + 20 + 20 + 8;
 
             let centerX = x + 36;
+            let playerColors = this.playerColors.get(city.player);
 
             // draw city banner
-            this.citiesBannerCtx.strokeStyle = this.accent[city.player];
+            this.citiesBannerCtx.strokeStyle = playerColors.accent;
             this.citiesBannerCtx.lineWidth = 2;
-            this.citiesBannerCtx.fillStyle = this.main[city.player];
+            this.citiesBannerCtx.fillStyle = playerColors.main;
             this.citiesBannerCtx.beginPath();
             this.citiesBannerCtx.roundRect(centerX - (bannerWidth / 2), y - 6, bannerWidth, 20, 8);
             this.citiesBannerCtx.stroke();
@@ -337,7 +338,7 @@ class CityCanvasRenderer extends CanvasRenderer {
             this.citiesBannerCtx.fillText(sizeText, centerX - (bannerWidth / 2) + 10 - (sizeWidth / 2), y + 9, 20);
 
             // draw city banner text
-            this.citiesBannerCtx.fillStyle = this.accent[city.player];
+            this.citiesBannerCtx.fillStyle = playerColors.accent;
             this.citiesBannerCtx.fillText(city.name, centerX - (textWidth / 2), y + 10, 200);
         }
     }
