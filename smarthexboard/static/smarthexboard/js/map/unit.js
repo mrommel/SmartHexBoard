@@ -17,6 +17,25 @@ function UnitType(name, max_moves, texture, template) {
     this.template = template;
 }
 
+// UnitType Object Public Methods
+
+UnitType.prototype.mapType = function() {
+    switch (this.name) {
+        case 'settler':
+            return 'civilian';
+        case 'builder':
+            return 'civilian';
+
+        case 'scout':
+            return 'combat';
+        case 'warrior':
+            return 'combat';
+        default:
+            console.log('could not find map type for ' + this.name);
+            return 'none';
+    }
+}
+
 UnitType.prototype.clone = function() {
     return new UnitType(this.name, this.max_moves, this.texture, this.template);
 }

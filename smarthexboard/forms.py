@@ -79,7 +79,7 @@ class CreateGameForm(forms.Form):
 
 class UnitMoveForm(forms.Form):
     game_uuid = forms.CharField(label="game identifier", max_length=36)  # uuid
-    unit_type = forms.CharField(label="unit type", max_length=12)
+    unit_type = forms.CharField(label="unit type", max_length=48)
     old_location = forms.CharField(label="old location", max_length=32)
     new_location = forms.CharField(label="new location", max_length=32)
 

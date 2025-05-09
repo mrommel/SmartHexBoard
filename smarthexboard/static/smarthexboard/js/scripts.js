@@ -264,8 +264,10 @@ let game_uuid;
 function handleMouseUp(event) {
     if (mouseRightIsDown) {
         const new_cursor = locationFromEvent(event);
-        let units = renderer.map.unitsAt(new_cursor);
-        let city = renderer.map.cityAt(new_cursor);
+        let units = renderer.map.unitsAt(cursor);
+        let city = renderer.map.cityAt(cursor);
+
+        console.log('handleMouseUp: ' + cursor + ' to ' + new_cursor + ' units: ' + units.length + ' city: ' + city);
 
         if (new_cursor.x === cursor.x && new_cursor.y === cursor.y) {
             // double click detected
@@ -284,7 +286,8 @@ function handleMouseUp(event) {
         } else {
             if (units.length > 0) {
                 console.log('move unit from ' + cursor + ' to ' + new_cursor);
-                moveUnit(cursor, new_cursor, 'civilian'); // @todo: get this from unit type
+                let firstUnit = units[0];
+                moveUnit(cursor, new_cursor, firstUnit.unitType.mapType());
             }
         }
         cursor = new_cursor;
@@ -578,10 +581,10 @@ function loadMap(game_uuid) {
     });
 }
 
-function moveUnit(from_point, to_point, unit_type) {
+function moveUnit(from_point, to_point, unit_map_type) {
     const formData = new FormData();
     formData.append('game_uuid', game_uuid);
-    formData.append('unit_type', unit_type);
+    formData.append('unit_type', unit_map_type);
     formData.append('old_location', from_point);
     formData.append('new_location', to_point);
 
@@ -598,7 +601,15 @@ function moveUnit(from_point, to_point, unit_type) {
         contentType: false,
         success: function(json_obj) {
             console.log('moved unit from ' + from_point + ' to ' + to_point);
-            // @todo: move unit also in ui
+            let units = renderer.map.unitsAt(from_point);
+            let unit = units.filter(unit => unit.unitType.mapType() === unit_map_type)[0];
+            unit.moves = json_obj['moves'];
+            unit.location = to_point;
+
+            // full map rendering
+            renderer.render();
+
+            uiRenderer.hideUnitPanel(); // or update? the moves have changed
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);

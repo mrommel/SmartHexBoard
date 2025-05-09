@@ -421,7 +421,8 @@ def game_move_unit(request):
 
 			json_payload = {
 				'game_uuid': game_uuid,
-				'current_turn': game.currentTurn
+				'current_turn': game.currentTurn,
+				'moves': unit.movesLeft(),
 				# notifications to human?
 			}
 			return JsonResponse(json_payload, status=200)
