@@ -212,6 +212,14 @@ class UIBuilder {
     hideTextInput() {
         makeHidden('ui-input');
     }
+
+    cityPanel(city, city_info, callback) {
+        makeVisible('city_panel');
+    }
+
+    hideCityPanel() {
+        makeHidden('city_panel');
+    }
 }
 
 // https://masteringjs.io/tutorials/fundamentals/enum

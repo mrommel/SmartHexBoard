@@ -12,6 +12,7 @@ import { Map } from './map/map.js';
 // import { MapOptions, MapGenerator } from './map/generator.js';
 import { Renderer } from './renderer.js';
 import { unitActions } from "./actions/unit.js";
+import { cityInfoAt } from "./actions/city.js"
 import { ActionState } from "./actions/actions.js";
 import { handleError } from "./errorHandling.js";
 import { UIState, UIBuilder } from "./ui.js";
@@ -273,6 +274,18 @@ function handleMouseUp(event) {
             // double click detected
             if (city != null) {
                 console.log('city action at ' + new_cursor + ' for ' + city);
+                cityInfoAt(city.location, game_uuid, function(city_info) {
+                    uiRenderer.cityPanel(city, city_info, function(action, action_index) {
+                        console.log('city action clicked: ' + action + ' index: ' + action_index);
+                        // switch (action) {
+                        //     case 'ACTION_DISBAND':
+                        //         changeActionState(ActionState.disbandUnit);
+                        //         break;
+                        //     default:
+                        //         console.log('action ' + action + ' not handled');
+                        // }
+                    });
+                });
             } else if (units.length > 0) {
                 let firstUnit = units[0];
                 console.log('unit action at ' + new_cursor + ' for ' + firstUnit);

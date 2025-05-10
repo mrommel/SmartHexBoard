@@ -21,7 +21,7 @@ urlpatterns = [
     path('game/move_unit', views.game_move_unit, name='game_move_unit'),
     path('game/actions', views.game_actions, name='game_actions'),
     path('game/found_city', views.game_found_city, name='game_found_city'),
-    # open city
+    path('game/city_info', views.game_city_info, name='game_city_info'),
 
     # debug
     path('styleguide', views.styleguide, name='styleguide'),

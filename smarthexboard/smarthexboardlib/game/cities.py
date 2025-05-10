@@ -6844,3 +6844,47 @@ class City:
 				return True
 
 		return False
+
+	def infoDict(self, simulation) -> dict:
+		return {
+			'food': {
+				"food_per_turn": self.foodPerTurn(simulation),
+				"food_consumption": self.foodConsumption(),
+				'growth_food_per_turn': 0,
+				'amenities_growth_bonus': 0,
+				'other_growth_bonus': 0,
+				'modified_food_per_turn': 0,
+				'housing_multiplier': 0,
+				'occupied_city_multiplier': 0,
+				'total_food_surplus': 0,
+				'growth_in_turns': 0
+			},
+			'amenities': {
+				'amenities_present': 0,
+				'amenities_needed': 0,
+				'amenities_status':'CONTENT'
+			},
+		   'housing': {
+				'housing_present': self.housingPerTurn(simulation),
+				'housing_needed': 0,
+				'housing_status': 'CONTENT',
+				'housing_from_buildings': 0,
+				'housing_from_civics': 0,
+				'housing_from_districs': 0,
+				'housing_from_improvements': 0,
+				'housing_from_wonders': 0
+		    },
+			'assets': {
+				'buildings_and_districts': [],
+				'wonders': [],
+				'trading_posts': []
+			},
+			'yields': {
+				'food': self.foodPerTurn(simulation),
+				'production': self.productionPerTurn(simulation),
+				'gold': 0,
+				'science': 0,
+				'culture': 0,
+				'faith': 0
+			}
+		}

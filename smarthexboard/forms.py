@@ -104,3 +104,11 @@ class FoundCityForm(forms.Form):
 
     def clean(self):
         pass
+
+
+class CityInfoForm(forms.Form):
+    game_uuid = forms.CharField(label="game identifier", max_length=36)  # uuid
+    location = forms.CharField(label="old location", max_length=32)
+
+    def clean(self):
+        pass

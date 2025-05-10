@@ -7,11 +7,12 @@ from django.template import loader
 from django_q.tasks import async_task
 
 from setup.settings import DEBUG
-from smarthexboard.forms import CreateGameForm, UnitMoveForm, UnitActionForm, FoundCityForm
+from smarthexboard.forms import CreateGameForm, UnitMoveForm, UnitActionForm, FoundCityForm, CityInfoForm
 from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.repositories import GameDataRepository
 from smarthexboard.utils import is_valid_uuid, parseUnitMapType, parseLocation, parseUnitType
 from .smarthexboardlib.game.baseTypes import HandicapType
+from .smarthexboardlib.game.cities import City
 from .smarthexboardlib.game.civilizations import LeaderType
 from .smarthexboardlib.game.game import GameModel
 from .smarthexboardlib.game.generation import UserInterfaceImpl
@@ -20,6 +21,16 @@ from .smarthexboardlib.game.unitTypes import UnitType, UnitMapType
 from .smarthexboardlib.game.units import Unit
 from .smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, MapType, MapSize
 from .smarthexboardlib.serialisation.game import GameModelSchema
+
+
+class InvalidMethodResponse(JsonResponse):
+	def __init__(self, method, **kwargs):
+		response_data = {
+			'status': 'Invalid request method',
+			'errors': [f'Method "{method}" not allowed.'],
+		}
+		response_data.update(kwargs)
+		super().__init__(data=response_data, status=status_code)
 
 
 # ####################################
@@ -624,6 +635,8 @@ def game_found_city(request):
 			print(f'INFO: Found city "{city_name}" at {location}.')
 			found = unit.doFoundWith(city_name, game)
 
+			GameDataRepository.store(game_uuid, game)
+
 			json_payload = {
 				'game_uuid': game_uuid,
 				'current_turn': game.currentTurn,
@@ -644,3 +657,83 @@ def game_found_city(request):
 			'errors': [f'Method {request.method} not allowed.']
 		}
 		return JsonResponse(json_payload, status=400)
+
+
+def game_city_info(request):
+	# If this is a POST request, then process the Form data
+	if request.method == 'POST':
+
+		# Create a form instance and populate it with data from the request (binding):
+		form = CityInfoForm(request.POST)
+
+		# Check if the form is valid:
+		if form.is_valid():
+			game_uuid = form.cleaned_data['game_uuid']
+
+			if not GameDataRepository.inCacheOrDB(game_uuid):
+				json_payload = {
+					'uuid': game_uuid,
+					'status': 'Cannot find city info.',
+					'errors': [f'Game with {game_uuid} not found in db or cache.']
+				}
+				return JsonResponse(json_payload, status=404)
+
+			game = GameDataRepository.fetch(game_uuid)
+
+			game.userInterface = UserInterfaceImpl()
+
+			humanPlayer = game.humanPlayer()
+
+			if humanPlayer is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot find city info.',
+					'errors': ['Cannot find human player in game.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			location_str: str = form.cleaned_data['location']
+			location = parseLocation(location_str)
+
+			# print(f'try to get unit actions {unit_type} unit at: {location}')
+
+			if location is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot find city info.',
+					'errors': [f'Could not parse location from {location_str}.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			city: Optional[City] = game.cityAt(location=location)
+			if city is None:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot find city info.',
+					'errors': [f'Could not find city at {location}.']
+				}
+				return JsonResponse(json_payload, status=404)
+
+			if city.player != humanPlayer:
+				json_payload = {
+					'game_uuid': game_uuid,
+					'status': 'Cannot find city info.',
+					'errors': [f'City {city} is not owned by human player.']
+				}
+				return JsonResponse(json_payload, status=400)
+
+			json_payload = {
+				'game_uuid': game_uuid,
+				'current_turn': game.currentTurn,
+				'player': city.player.identifier(),
+				'info': city.infoDict(game),
+			}
+			return JsonResponse(json_payload, status=200)
+		else:
+			json_payload = {
+				'status': 'Form not valid',
+				'errors': form.errors
+			}
+			return JsonResponse(json_payload, status=400)
+	else:
+		return InvalidMethodResponse(request.method)
