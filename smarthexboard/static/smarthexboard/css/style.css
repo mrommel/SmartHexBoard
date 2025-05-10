@@ -1616,6 +1616,76 @@ h1, h2, h3, h4, h5, h6 {
     height: 103px;
 }
 
+#uistate-game #city_panel #city_info_panel #city_info_header #city_details_name {
+    width: 300px;
+    height: 20px;
+    text-align: center;
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header #city_name {
+    width: 300px;
+    height: 20px;
+    text-align: center;
+    position: fixed;
+    top: 58px;
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header #city_citizen_btn {
+    width: 44px;
+    height: 50px;
+    display: block;
+    background-size: contain;
+    position: fixed;
+    left: 75px;
+    top: 83px;
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_citizen_selected {
+    background-image: url(../img/ui/city/city_info_button_citizen_selected.png);
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_citizen_active {
+    background-image: url(../img/ui/city/city_info_button_citizen_active.png);
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header #city_breakdown_btn {
+    width: 44px;
+    height: 50px;
+    display: block;
+    background-size: contain;
+    position: fixed;
+    left: 120px;
+    top: 83px;
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_breakdown_active {
+    background-image: url(../img/ui/city/city_info_button_breakdown_active.png);
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_breakdown_selected {
+    background-image: url(../img/ui/city/city_info_button_breakdown_selected.png);
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header #city_loyalty_btn {
+    width: 44px;
+    height: 50px;
+    display: block;
+    background-size: contain;
+    position: fixed;
+    left: 165px;
+    top: 83px;
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_loyalty_active {
+    background-image: url(../img/ui/city/city_info_button_loyalty_active.png);
+}
+
+#uistate-game #city_panel #city_info_panel #city_info_header .city_loyalty_selected {
+    background-image: url(../img/ui/city/city_info_button_loyalty_selected.png);
+}
+
+/* production */
+
 #uistate-game #city_panel #city_production_panel {
     position: fixed;
     width: 300px;
