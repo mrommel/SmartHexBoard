@@ -1,6 +1,15 @@
+class CityViewSubHeader {
+    constructor(title, $parent) {
+        const $sub_header = $("<div>")
+            .attr('class', 'city_sub_header')
+            .text(title);
+        $parent.append($sub_header);
+    }
+}
+
 class CityView {
     constructor() {
-        this.cityDetailsTab = 'citizen';
+        this.cityDetailsTab = 'citizen'; // breakdown, loyalty
 
         const $cityInfoHeader = $('#city_info_header');
 
@@ -40,6 +49,8 @@ class CityView {
                 this._showDetailsTab('loyalty');
             });
         $cityInfoHeader.append($cityLoyaltyImg);
+
+        this._showCitizenContent();
     }
 
     _showDetailsTab(tabName) {
@@ -57,18 +68,49 @@ class CityView {
                 $cityCitizenBtn.addClass('city_citizen_selected');
                 $cityBreakdownBtn.addClass('city_breakdown_active');
                 $cityLoyaltyBtn.addClass('city_loyalty_active');
+                if (this.cityDetailsTab != tabName) {
+                    this._showCitizenContent();
+                }
+                this.cityDetailsTab = tabName;
                 break;
             case 'breakdown':
                 $cityCitizenBtn.addClass('city_citizen_active');
                 $cityBreakdownBtn.addClass('city_breakdown_selected');
                 $cityLoyaltyBtn.addClass('city_loyalty_active');
+                if (this.cityDetailsTab != tabName) {
+                    this._showBreakdownContent();
+                }
+                this.cityDetailsTab = tabName;
                 break;
             case 'loyalty':
                 $cityCitizenBtn.addClass('city_citizen_active');
                 $cityBreakdownBtn.addClass('city_breakdown_active');
                 $cityLoyaltyBtn.addClass('city_loyalty_selected');
+                if (this.cityDetailsTab != tabName) {
+                    this._showLoyaltyContent();
+                }
+                this.cityDetailsTab = tabName;
                 break;
         }
+    }
+
+    _showCitizenContent() {
+        const $cityInfoContent = $('#city_info_content');
+        $cityInfoContent.empty(); // reset
+
+        new CityViewSubHeader('Citizen Growth', $cityInfoContent);
+
+        new CityViewSubHeader('Amenities', $cityInfoContent);
+    }
+
+    _showBreakdownContent() {
+        const $cityInfoContent = $('#city_info_content');
+        $cityInfoContent.empty(); // reset
+    }
+
+    _showLoyaltyContent() {
+        const $cityInfoContent = $('#city_info_content');
+        $cityInfoContent.empty(); // reset
     }
 
     show(city, city_info, callback) {
