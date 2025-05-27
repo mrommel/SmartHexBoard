@@ -6,10 +6,10 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
-import { MessageView } from "./ui/messageView.js";
-import { InputView } from "./ui/inputView.js";
-import { UnitPanel } from "./ui/unitPanel.js";
-import { CityView } from "./ui/cityView.js";
+import { MessageView } from "./widgets/messageView.js";
+import { InputView } from "./widgets/inputView.js";
+import { UnitPanel } from "./widgets/unitPanel.js";
+import { CityView } from "./widgets/cityView.js";
 
 class UIBuilder {
     constructor() {

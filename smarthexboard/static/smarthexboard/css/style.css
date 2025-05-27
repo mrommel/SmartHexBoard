@@ -1684,13 +1684,53 @@ h1, h2, h3, h4, h5, h6 {
     background-image: url(../img/ui/city/city_info_button_loyalty_selected.png);
 }
 
-#uistate-game #city_panel #city_info_panel #city_info_content .city_sub_header {
+.city_sub_header {
     width: 280.5px;
     height: 31px;
     background-image: url(../img/ui/city/city_view_sub_header.png);
     background-size: contain;
     text-align: center;
     padding-top: 2px;
+    color: white;
+}
+
+.city_citizen_box {
+    width: 280.5px;
+    height: 58px;
+    background-image: url(../img/ui/city/citizen_box.png);
+    background-size: contain;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.city_citizen_box img.city_citizen_box_icon {
+    position: relative;
+    left: 10px;
+    width: 48px;
+    height: 48px;
+}
+
+.city_citizen_box .city_citizen_box_content {
+    display: flex;
+    flex-direction: column;
+    width: 335px;
+    padding-left: 20px;
+}
+
+.city_citizen_box h3.city_citizen_box_title {
+    color: white;
+    font-size: 16px;
+    margin-bottom: 0;
+    margin-top: 2px;
+    line-height: 0;
+}
+
+.city_citizen_box span.city_citizen_box_text {
+    color: white;
+    font-size: 12px;
+    height: 24px;
 }
 
 /* production */
@@ -1701,7 +1741,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 100%;
     background-color: rgb(100, 100, 100, 0.5);
     z-index: 300;
-    right: 0px;
+    right: 0;
     padding-top: 30px;
     pointer-events: all;
 }

@@ -5,6 +5,10 @@ class UnitPanel {
         // createUnitPanel
         const $unitPanelIcon = $('#unit_panel_icon');
 
+        if ($unitPanelIcon.length === 0) {
+            return
+        }
+
         const unitHealth = addTag('unit_panel_icon', 'div');
         unitHealth.id = 'unitHealth';
 

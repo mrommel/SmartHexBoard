@@ -1,15 +1,22 @@
-class CityViewSubHeader {
-    constructor(title, $parent) {
-        const $sub_header = $("<div>")
-            .attr('class', 'city_sub_header')
-            .text(title);
-        $parent.append($sub_header);
+class CityViewState {
+    static none = new CityViewState('None');
+
+    static citizen = new CityViewState('Citizen');
+    static breakdown = new CityViewState('Breakdown');
+    static loyalty = new CityViewState('Loyalty');
+
+    constructor(name) {
+        this.name = name;
+    }
+
+    toString() {
+        return `CityViewState.${this.name}`;
     }
 }
 
 class CityView {
     constructor() {
-        this.cityDetailsTab = 'citizen'; // breakdown, loyalty
+        this.cityDetailsTab = CityViewState.none;
 
         const $cityInfoHeader = $('#city_info_header');
 
@@ -50,10 +57,10 @@ class CityView {
             });
         $cityInfoHeader.append($cityLoyaltyImg);
 
-        this._showCitizenContent();
+        this._showDetailsTab(CityViewState.citizen);
     }
 
-    _showDetailsTab(tabName) {
+    _showDetailsTab(viewState) {
         const $cityCitizenBtn = $('#city_citizen_btn');
         const $cityBreakdownBtn = $('#city_breakdown_btn');
         const $cityLoyaltyBtn = $('#city_loyalty_btn');
@@ -63,33 +70,33 @@ class CityView {
         $cityBreakdownBtn.removeClass();
         $cityLoyaltyBtn.removeClass();
 
-        switch (tabName) {
-            case 'citizen':
+        switch (viewState) {
+            case CityViewState.citizen:
                 $cityCitizenBtn.addClass('city_citizen_selected');
                 $cityBreakdownBtn.addClass('city_breakdown_active');
                 $cityLoyaltyBtn.addClass('city_loyalty_active');
-                if (this.cityDetailsTab != tabName) {
+                if (this.cityDetailsTab !== viewState) {
                     this._showCitizenContent();
                 }
-                this.cityDetailsTab = tabName;
+                this.cityDetailsTab = viewState;
                 break;
-            case 'breakdown':
+            case CityViewState.breakdown:
                 $cityCitizenBtn.addClass('city_citizen_active');
                 $cityBreakdownBtn.addClass('city_breakdown_selected');
                 $cityLoyaltyBtn.addClass('city_loyalty_active');
-                if (this.cityDetailsTab != tabName) {
+                if (this.cityDetailsTab !== viewState) {
                     this._showBreakdownContent();
                 }
-                this.cityDetailsTab = tabName;
+                this.cityDetailsTab = viewState;
                 break;
-            case 'loyalty':
+            case CityViewState.loyalty:
                 $cityCitizenBtn.addClass('city_citizen_active');
                 $cityBreakdownBtn.addClass('city_breakdown_active');
                 $cityLoyaltyBtn.addClass('city_loyalty_selected');
-                if (this.cityDetailsTab != tabName) {
+                if (this.cityDetailsTab !== viewState) {
                     this._showLoyaltyContent();
                 }
-                this.cityDetailsTab = tabName;
+                this.cityDetailsTab = viewState;
                 break;
         }
     }
@@ -98,9 +105,21 @@ class CityView {
         const $cityInfoContent = $('#city_info_content');
         $cityInfoContent.empty(); // reset
 
-        new CityViewSubHeader('Citizen Growth', $cityInfoContent);
+        const citizenGrowthHeader = $("<div></div>")
+            .attr('id', 'citizenGrowthHeader')
+            .cityViewSubHeader({title: 'Citizen Growth'});
+        $cityInfoContent.append(citizenGrowthHeader);
 
-        new CityViewSubHeader('Amenities', $cityInfoContent);
+        // new CityViewCitizenBox('abc', $cityInfoContent);
+        const citizenBox = $("<div></div>")
+            .attr('id', 'citizenBox')
+            .cityViewCitizenBox({title: 'Citizen Growth', text: 'abc', icon: 'icon.png'});
+        $cityInfoContent.append(citizenBox);
+
+        const amenitiesHeader = $("<div></div>")
+            .attr('id', 'amenitiesHeader')
+            .cityViewSubHeader({title: 'Amenities'});
+        $cityInfoContent.append(amenitiesHeader);
     }
 
     _showBreakdownContent() {
@@ -114,6 +133,8 @@ class CityView {
     }
 
     show(city, city_info, callback) {
+        $('#city_name').text(city.name);
+
         makeVisible('city_panel');
     }
 

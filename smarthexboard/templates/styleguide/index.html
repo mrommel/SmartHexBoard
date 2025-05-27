@@ -24,6 +24,21 @@
     <link rel="stylesheet" href="{% static 'smarthexboard/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'smarthexboard/css/dialogs.css' %}">
     <link rel="stylesheet" href="{% static 'smarthexboard/css/styleguide.css' %}">
+
+    <!--jQuery-->
+    <script src="{% static 'smarthexboard/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/jquery-ui.css' %}">
+
+    <!-- custom js -->
+    <script src="{% static 'smarthexboard/js/widgets/widgets.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/prototypes.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/point.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/dom.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/renderer.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/ui.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/dialogs.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/scripts.js' %}"></script>
 </head>
 
 <body>
@@ -281,6 +296,62 @@
                                 </div>
                             </div>
 
+                            <div class="col-6 col-lg-6 col-xl-6">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        CityViewSubHeader
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="city_info_content_card"></div>
+                                        <button onclick="updateCitizenGrowthHeader()">Update</button>
+                                        <script>
+                                            const $cityInfoContentCard = $('#city_info_content_card');
+
+                                            const citizenGrowthHeader = $("<div></div>")
+                                                .attr('id', 'citizenGrowthHeader')
+                                                .cityViewSubHeader();
+                                            citizenGrowthHeader.cityViewSubHeader({title: 'Citizen Growth'});
+                                            $cityInfoContentCard.append(citizenGrowthHeader);
+
+                                            function updateCitizenGrowthHeader() {
+                                                const $citizenGrowthHeader = $('#citizenGrowthHeader');
+                                                $citizenGrowthHeader.cityViewSubHeader({title: 'Citizen Growth2'});
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-lg-6 col-xl-6">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        CityViewCitizenBox
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="citizen_box_card"></div>
+                                        <button onclick="updateCitizenBox()">Update</button>
+                                        <script>
+                                            const $citizenBoxCard = $('#citizen_box_card');
+
+                                            const citizenBoxHeader = $("<div></div>")
+                                                .attr('id', 'citizenBoxHeader')
+                                                .cityViewCitizenBox();
+                                            citizenBoxHeader.cityViewCitizenBox({title: 'Citizen Box'});
+                                            $citizenBoxCard.append(citizenBoxHeader);
+
+                                            function updateCitizenBox() {
+                                                const $citizenBoxHeader = $('#citizenBoxHeader');
+                                                $citizenBoxHeader.cityViewCitizenBox({
+                                                    title: 'Citizens',
+                                                    text: '17 turns until a new citizen is born',
+                                                    icon: '/static/smarthexboard/img/ui/city/citizen_icon_increase.png'
+                                                });
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div><!--end row-->
 
                     </div>
@@ -361,6 +432,10 @@
                 </div>
             </div>
 
+            <div id="game" style="display: none">
+                <div id="tooltip">Tile</div>
+            </div>
+
         </div><!--end row-->
 
     </main><!-- /.container -->
@@ -375,8 +450,6 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <!--jQuery-->
-    <script src="{% static 'smarthexboard/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'smarthexboard/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

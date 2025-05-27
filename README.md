@@ -84,7 +84,7 @@ python3 ../manage.py compilemessages
 
 * style turn banner
 * return only the tiles visible to the human player
-* show progress indicator, when game is created (use uistate-generate)
+* show progress indicator when a game is created (use uistate-generate)
 
 ## Links
 
@@ -106,3 +106,14 @@ python3 ../manage.py compilemessages
 * https://codepen.io/dehnavi/pen/MebRbj (nine patch + css)
 * https://www.crazyegg.com/blog/loading-spinners-css3-animation/
 * https://www.creative-tim.com/live/material-dashboard-laravel (Assets Template)
+
+## Civ 6 Documentation
+
+* https://github.com/Wild-W/Civ-6-Documentation/tree/main?tab=readme-ov-file
+
+## Stable Diffusion
+
+* https://www.digitalocean.com/community/tutorials/dreambooth-stable-diffusion-tutorial-part-2-textual-inversion
+* https://huggingface.co/docs/diffusers/training/text_inversion?training-inference=PyTorch
+* https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Textual-Inversion
+* https://www.scenario.com/post/build-isometric-tiles-with-ai
