@@ -1,6 +1,6 @@
 import math
 import uuid
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum
 
@@ -195,7 +195,7 @@ class HexArea:
 	def first(self) -> Optional[HexPoint]:
 		return next(iter(self._points), None)
 
-	def points(self) -> [HexPoint]:
+	def points(self) -> List[HexPoint]:
 		return self._points
 
 	def divideHorizontally(self, dx: int) -> (HexArea, HexArea):

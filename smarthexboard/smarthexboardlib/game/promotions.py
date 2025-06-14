@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, contains, InvalidEnumError
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
@@ -13,7 +13,7 @@ class PromotionCombatModifierDirection(ExtendedEnum):
 
 
 class PromotionCombatModifierData:
-	def __init__(self, amount: int, unitClasses: [UnitClassType], combatDirection: PromotionCombatModifierDirection,
+	def __init__(self, amount: int, unitClasses: List[UnitClassType], combatDirection: PromotionCombatModifierDirection,
 	             damagedOnly: bool = False, fortifiedOnly: bool = False, roughOnly: bool = False):
 		self.amount = amount
 		self.unitClasses = unitClasses
@@ -23,7 +23,7 @@ class PromotionCombatModifierData:
 		self.roughOnly = roughOnly
 
 
-def unitClassesOf(domain) -> [UnitClassType]:
+def unitClassesOf(domain) -> List[UnitClassType]:
 	if isinstance(domain, UnitDomainType):
 		unitClasses = []
 		for it in list(UnitClassType):
@@ -39,6 +39,9 @@ def unitClassesOf(domain) -> [UnitClassType]:
 
 		return unitClasses
 
+	raise InvalidEnumError(domain)
+
+
 class UnitPromotionType:
 	pass
 
@@ -49,13 +52,13 @@ class UnitPromotionTypeData:
 	https://github.com/LoneGazebo/Community-Patch-DLL/blob/b33ee4a04e91d27356af0bcc421de1b7899ac073/(2)%20Vox%20Populi/Balance%20Changes/Units/PromotionChanges.xml
 	"""
 
-	def __init__(self, name: str, effect: str, tier: int, unitClass: UnitClassType, requiredOr: [UnitPromotionType],
+	def __init__(self, name: str, effect: str, tier: int, unitClass: UnitClassType, requiredOr: List[UnitPromotionType],
 	             consumable: bool, enemyRoute: bool = False, ignoreZoneOfControl: bool = False,
 	             combatModifier: Optional[PromotionCombatModifierData] = None,
 	             openAttack: int = 0, openDefense: int = 0, roughAttack: int = 0, roughDefense: int = 0,
 	             openRangedAttackModifier: int = 0, movesChange: int = 0, isCanMoveAfterAttacking: bool = False,
 	             extraAttacks: int = 0, rangeChange: int = 0, defenseModifier: int = 0, noDefensive: bool = False,
-	             flavors: [Flavor] = []):
+	             flavors: List[Flavor] = []):
 		self.name = name
 		self.effect = effect
 		self.tier = tier
@@ -202,7 +205,7 @@ class UnitPromotionType(ExtendedEnum):
 	def unitClass(self) -> UnitClassType:
 		return self._data().unitClass
 
-	def requiredOr(self) -> [UnitPromotionType]:
+	def requiredOr(self) -> List[UnitPromotionType]:
 		return self._data().requiredOr
 
 	def consumable(self) -> bool:
@@ -1388,12 +1391,12 @@ class UnitPromotionType(ExtendedEnum):
 class UnitPromotions:
 	def __init__(self, unit):
 		self.unit = unit
-		self._promotions: [UnitPromotionType] = []
+		self._promotions: List[UnitPromotionType] = []
 
 	def hasPromotion(self, promotion: UnitPromotionType) -> bool:
 		return promotion in self._promotions
 
-	def gainedPromotions(self) -> [UnitPromotionType]:
+	def gainedPromotions(self) -> List[UnitPromotionType]:
 		return self._promotions
 
 	def earnPromotion(self, promotion: UnitPromotionType) -> bool:
@@ -1407,8 +1410,8 @@ class UnitPromotions:
 
 		return True
 
-	def possiblePromotions(self) -> [UnitPromotionType]:
-		promotionList: [UnitPromotionType] = []
+	def possiblePromotions(self) -> List[UnitPromotionType]:
+		promotionList: List[UnitPromotionType] = []
 
 		for promotion in list(UnitPromotionType):
 			if not self.unit.isOfUnitClass(promotion.unitClass()):

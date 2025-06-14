@@ -1,7 +1,7 @@
 import logging
 import random
 import sys
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, WeightedBaseList
 from smarthexboard.smarthexboardlib.game.ai.tactics import TacticalMoveType
@@ -186,7 +186,7 @@ class Unit:
 			self._processedInTurnValue: bool = False
 			self._capturedAsIs: bool = False
 
-			self._missions: [UnitMission] = []
+			self._missions: List[UnitMission] = []
 			self._missionTimerValue: int = 0
 			self._buildTypeValue: Optional[BuildType] = None
 			self._buildChargesValue = unitType.buildCharges()
@@ -1024,7 +1024,7 @@ class Unit:
 
 		return value
 
-	def canMoveInto(self, point: HexPoint, options: [MoveOption], simulation):
+	def canMoveInto(self, point: HexPoint, options: List[MoveOption], simulation):
 		if self.location == point:
 			return True
 
@@ -3207,7 +3207,7 @@ class Unit:
 
 		return baseStrength + modifierValue
 
-	def defensiveStrengthModifierAgainst(self, unit, city, tile, ranged, simulation) -> [CombatModifier]:
+	def defensiveStrengthModifierAgainst(self, unit, city, tile, ranged, simulation) -> List[CombatModifier]:
 		civics = self.player.civics
 		government = self.player.government
 

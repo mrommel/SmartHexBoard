@@ -1,7 +1,5 @@
-import array
-import math
 from enum import Enum
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.game.civilizations import CivilizationType
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
@@ -132,7 +130,7 @@ class UnitClassType(ExtendedEnum):
 	city = 'city'
 
 	@classmethod
-	def combat(cls) -> [UnitClassType]:
+	def combat(cls) -> List[UnitClassType]:
 		return [
 			UnitClassType.melee, UnitClassType.recon, UnitClassType.ranged, UnitClassType.antiCavalry,
 			UnitClassType.lightCavalry, UnitClassType.heavyCavalry, UnitClassType.siege,
@@ -287,7 +285,6 @@ class BitArray(bytearray):
 
 			return byte_value_list[start_offset: -stop_offset:key.step]
 
-
 		self._assert_key(key)
 
 		byte_idx = key // 8
@@ -342,15 +339,15 @@ class UnitType:
 
 
 class UnitTypeData:
-	def __init__(self, name: str, baseType: Optional[UnitType], domain: UnitDomainType, effects: [str],
-				 abilities: [UnitAbilityType], era: EraType, requiredResource: Optional[ResourceType],
-				 civilization: Optional[CivilizationType], unitTasks: [UnitTaskType],
+	def __init__(self, name: str, baseType: Optional[UnitType], domain: UnitDomainType, effects: List[str],
+				 abilities: List[UnitAbilityType], era: EraType, requiredResource: Optional[ResourceType],
+				 civilization: Optional[CivilizationType], unitTasks: List[UnitTaskType],
 				 defaultTask: UnitTaskType, movementType: UnitMovementType, productionCost: int,
 				 purchaseCost: int, faithCost: int, maintenanceCost: int, sight: int, range: int,
 				 supportDistance: int, strength: int, targetType: UnitClassType, flags: Optional[BitArray],
 				 meleeAttack: int, rangedAttack: int, moves: int, requiredTech: Optional[TechType],
 				 obsoleteTech: Optional[TechType], requiredCivic: Optional[CivicType],
-				 upgradesFrom: [UnitType], flavors: [Flavor]):
+				 upgradesFrom: List[UnitType], flavors: List[Flavor]):
 		self.name = name
 		self.baseType = baseType
 		self.domain = domain
@@ -472,7 +469,7 @@ class UnitType(ExtendedEnum):
 	barbarianArcher = 'barbarianArcher'
 
 	@classmethod
-	def greatPersons(cls) -> [UnitType]:
+	def greatPersons(cls) -> List[UnitType]:
 		return [UnitType.general, UnitType.admiral, UnitType.missionary, UnitType.apostle, UnitType.inquisitor, UnitType.prophet]
 
 	def title(self) -> str:  # cannot use 'name'
@@ -499,8 +496,8 @@ class UnitType(ExtendedEnum):
 	def obsoleteTech(self) -> TechType:
 		return self._data().obsoleteTech
 
-	def upgradesTo(self) -> [UnitType]:
-		types: [UnitType] = [UnitType]
+	def upgradesTo(self) -> List[UnitType]:
+		types: List[UnitType] = []
 
 		for unitType in list(UnitType):
 			if self in unitType.upgradesFrom():
@@ -508,13 +505,13 @@ class UnitType(ExtendedEnum):
 
 		return types
 
-	def upgradesFrom(self) -> [UnitType]:
+	def upgradesFrom(self) -> List[UnitType]:
 		return self._data().upgradesFrom
 
 	def defaultTask(self) -> UnitTaskType:
 		return self._data().defaultTask
 
-	def unitTasks(self) -> [UnitTaskType]:
+	def unitTasks(self) -> List[UnitTaskType]:
 		return self._data().unitTasks
 
 	def domain(self) -> UnitDomainType:
@@ -596,7 +593,7 @@ class UnitType(ExtendedEnum):
 	def hasAbility(self, ability: UnitAbilityType) -> bool:
 		return ability in self.abilities()
 
-	def abilities(self) -> [UnitAbilityType]:
+	def abilities(self) -> List[UnitAbilityType]:
 		return self._data().abilities
 
 	def sight(self) -> int:
@@ -605,7 +602,7 @@ class UnitType(ExtendedEnum):
 	def movementType(self) -> UnitMovementType:
 		return self._data().movementType
 
-	def _flavors(self) -> [Flavor]:
+	def _flavors(self) -> List[Flavor]:
 		return self._data().flavors
 
 	def flavor(self, flavorType: FlavorType) -> int:
@@ -693,7 +690,7 @@ class UnitType(ExtendedEnum):
 				requiredTech=None,
 				requiredCivic=None,
 				obsoleteTech=None,
-				upgradesFrom=None,
+				upgradesFrom=[],
 				flavors=[]
 			)
 
