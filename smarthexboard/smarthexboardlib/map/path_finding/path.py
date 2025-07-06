@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.map.base import HexPoint
 
@@ -8,7 +8,7 @@ class HexPath:
 
 
 class HexPath:
-	def __init__(self, points: [HexPoint], costs=None):
+	def __init__(self, points: List[HexPoint], costs=None):
 		if costs is None:
 			costs = []
 
@@ -43,7 +43,7 @@ class HexPath:
 		else:
 			return False
 
-	def points(self) -> [HexPoint]:
+	def points(self) -> List[HexPoint]:
 		return self._points
 
 	def addCost(self, cost: float):
@@ -98,4 +98,3 @@ class HexPath:
 			raise Exception('cannot get negative or zero segments of path')
 
 		return HexPath(self._points[0:numberOfPoints], self._costs[0:numberOfPoints])
-

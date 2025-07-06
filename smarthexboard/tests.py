@@ -1,15 +1,12 @@
 """ unittest module """
 import unittest
-from pprint import pprint
 from typing import Union, Optional
 
-import smarthexboard
 from smarthexboard.smarthexboardlib.game.cities import City
 from smarthexboard.smarthexboardlib.game.generation import GameGenerator
 from smarthexboard.smarthexboardlib.game.unitTypes import UnitMapType, UnitType
 from smarthexboard.smarthexboardlib.game.units import Unit
 from smarthexboard.smarthexboardlib.serialisation.game import GameModelSchema
-from smarthexboard.smarthexboardlib.serialisation.map import CitySchema
 from smarthexboard.utils import parseLocation, parseUnitMapType
 from .smarthexboardlib.game.achievements import CivicAchievements
 from .smarthexboardlib.game.baseTypes import HandicapType

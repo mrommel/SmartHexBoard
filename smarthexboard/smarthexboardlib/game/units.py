@@ -457,7 +457,7 @@ class Unit:
 	def hasPromotion(self, promotion: UnitPromotionType) -> bool:
 		return self._promotions.hasPromotion(promotion)
 
-	def gainedPromotions(self) -> [UnitPromotionType]:
+	def gainedPromotions(self) -> List[UnitPromotionType]:
 		return self._promotions.gainedPromotions()
 
 	def doPromotion(self, simulation):
