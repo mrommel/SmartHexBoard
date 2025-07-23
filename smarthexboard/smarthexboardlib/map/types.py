@@ -1,6 +1,6 @@
 from builtins import float
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.types import EraType
 from smarthexboard.smarthexboardlib.game.cityStates import CityStateType
@@ -60,7 +60,7 @@ class MapSize(ExtendedEnum):
 
 		raise Exception(f'Cannot get MapSize from name: "{sizeName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def size(self) -> Size:
@@ -153,7 +153,7 @@ class MapType(ExtendedEnum):
 
 		raise Exception(f'Cannot get MapType from name: "{typeName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def _data(self) -> MapTypeData:
@@ -177,6 +177,8 @@ class MapType(ExtendedEnum):
 			return MapTypeData(
 				name=_('TXT_KEY_MAP_TYPE_ARCHIPELAGO_NAME')
 			)
+
+		raise InvalidEnumError(self)
 
 
 class YieldTypeData:
@@ -287,15 +289,31 @@ class Yields:
 		self.appeal = appeal
 
 	def __str__(self):
-		str = f'{self.food} Food, ' if self.food > 0 else ''
-		str += f'{self.production} Production, ' if self.production > 0 else ''
-		str += f'{self.gold} Gold, ' if self.gold > 0 else ''
-		str += f'{self.science} Science, ' if self.science > 0 else ''
-		str += f'{self.culture} Culture, ' if self.culture > 0 else ''
-		str += f'{self.faith} Faith, ' if self.faith > 0 else ''
-		str += f'{self.housing} Housing, ' if self.housing > 0 else ''
-		str += f'{self.appeal} Appeal, ' if self.appeal > 0 else ''
-		return str
+		str_val = f'{self.food} Food, ' if self.food > 0 else ''
+		str_val += f'{self.production} Production, ' if self.production > 0 else ''
+		str_val += f'{self.gold} Gold, ' if self.gold > 0 else ''
+		str_val += f'{self.science} Science, ' if self.science > 0 else ''
+		str_val += f'{self.culture} Culture, ' if self.culture > 0 else ''
+		str_val += f'{self.faith} Faith, ' if self.faith > 0 else ''
+		str_val += f'{self.housing} Housing, ' if self.housing > 0 else ''
+		str_val += f'{self.appeal} Appeal, ' if self.appeal > 0 else ''
+
+		return str_val[:-2] if len(str_val) > 0 else 'No Yields'
+
+	def __add__(self, other):
+		if isinstance(other, Yields):
+			return Yields(
+				food=self.food + other.food,
+				production=self.production + other.production,
+				gold=self.gold + other.gold,
+				science=self.science + other.science,
+				culture=self.culture + other.culture,
+				faith=self.faith + other.faith,
+				housing=self.housing + other.housing,
+				appeal=self.appeal + other.appeal
+			)
+		else:
+			raise Exception(f'type is not accepted {type(other)}')
 
 	def __iadd__(self, other):
 		if isinstance(other, Yields):
@@ -336,10 +354,35 @@ class Yields:
 
 
 class YieldList(WeightedBaseList):
+	"""List of key-value pairs representing yields (and their value) in the game."""
+
 	def __init__(self):
+		"""Initialize the YieldList with all yield types set to 0."""
 		super().__init__()
 		for yieldType in list(YieldType):
-			self[yieldType] = 0
+			if yieldType != YieldType.none:
+				# Initialize all real yields to 0
+				self[yieldType] = 0
+
+	def __iadd__(self, other):
+		if isinstance(other, YieldList):
+			for yieldType in list(YieldType):
+				if yieldType != YieldType.none:
+					self[yieldType] += other[yieldType]
+
+			return self
+
+		raise Exception(f'type is not accepted {type(other)}')
+
+	def __str__(self):
+		str_value = ''
+		for yieldType in list(YieldType):
+			if yieldType == YieldType.none:
+				continue
+
+			if self[yieldType] > 0:
+				str_value += f'{self[yieldType]} {yieldType.title()}, '
+		return str_value[:-2] if str_value else 'No yields'
 
 
 class HillsYieldChange:
@@ -359,9 +402,9 @@ class TerrainData:
 		self.defenseModifier = defenseModifier
 
 		if hillsYieldChanges is None:
-			self.hillsYieldChanges: [HillsYieldChange] = []
+			self.hillsYieldChanges: List[HillsYieldChange] = []
 		else:
-			self.hillsYieldChanges: [HillsYieldChange] = hillsYieldChanges
+			self.hillsYieldChanges: List[HillsYieldChange] = hillsYieldChanges
 
 
 class TerrainType:
@@ -526,6 +569,15 @@ class TerrainType(ExtendedEnum):
 				antiquityPriority=0,
 				defenseModifier=0
 			)
+		elif self == TerrainType.undiscovered:
+			return TerrainData(
+				name='Undiscovered',
+				yields=Yields(food=0, production=0, gold=0),
+				isWater=False,
+				domain=UnitDomainType.land,
+				antiquityPriority=0,
+				defenseModifier=0
+			)
 
 		raise InvalidEnumError(self)
 
@@ -611,13 +663,9 @@ class FeatureData:
 		self.turnDamage = turnDamage
 
 		if hillsYieldChanges is None:
-			self.hillsYieldChanges: [HillsYieldChange] = []
+			self.hillsYieldChanges: List[HillsYieldChange] = []
 		else:
-			self.hillsYieldChanges: [HillsYieldChange] = hillsYieldChanges
-
-
-class FeatureType:
-	pass
+			self.hillsYieldChanges: List[HillsYieldChange] = hillsYieldChanges
 
 
 class FeatureType(ExtendedEnum):
@@ -645,7 +693,7 @@ class FeatureType(ExtendedEnum):
 	uluru = 'uluru'
 
 	@staticmethod
-	def fromName(featureName: str) -> FeatureType:
+	def fromName(featureName: str) -> 'FeatureType':
 		if featureName == 'FeatureType.none' or featureName == 'none':
 			return FeatureType.none
 		elif featureName == 'FeatureType.atoll' or featureName == 'atoll':
@@ -1144,9 +1192,9 @@ class ResourceUsage(ExtendedEnum):
 class ResourceTypeData:
 	def __init__(self, name: str, usage: ResourceUsage, revealTech: Optional[TechType],
 	             revealCivic: Optional[CivicType], placementOrder: int, baseAmount: int, placeOnHills: bool,
-	             placeOnRiverSide: bool, placeOnFlatlands: bool, placeOnFeatures: [FeatureType],
-	             placeOnFeatureTerrains: [TerrainType], placeOnTerrains: [TerrainType], peakEra: Optional[EraType],
-	             yields: Yields, flavors: [Flavor]):
+	             placeOnRiverSide: bool, placeOnFlatlands: bool, placeOnFeatures: List[FeatureType],
+	             placeOnFeatureTerrains: List[TerrainType], placeOnTerrains: List[TerrainType],
+	             peakEra: Optional[EraType], yields: Yields, flavors: List[Flavor]):
 		self.name = name
 		self.usage = usage
 		self.revealTech = revealTech
@@ -1323,11 +1371,11 @@ class ResourceType(ExtendedEnum):
 		raise Exception(f'No matching case for resourceName: "{resourceName}"')
 
 	@staticmethod
-	def strategic() -> [ResourceType]:
+	def strategic() -> List[ResourceType]:
 		return list(filter(lambda r: r.usage() == ResourceUsage.strategic, list(ResourceType)))
 
 	@staticmethod
-	def luxury() -> [ResourceType]:
+	def luxury() -> List[ResourceType]:
 		return list(filter(lambda r: r.usage() == ResourceUsage.luxury, list(ResourceType)))
 
 	def title(self) -> str:
@@ -2391,6 +2439,8 @@ class RouteType(ExtendedEnum):
 				movementCost=0.5
 			)
 
+		raise InvalidEnumError(self)
+
 
 class Tutorials(Enum):
 	none = 'none'
@@ -2420,7 +2470,7 @@ class StartLocation:
 
 	def __str__(self):
 		human_str = '(Human)' if self.isHuman else ''
-		cityState_str = self.cityState.name() if self.cityState is not None else ''
+		cityState_str = self.cityState.title() if self.cityState is not None else ''
 		return f'StartLocation at: {self.location} for {self.leader} {cityState_str} {human_str}'
 
 

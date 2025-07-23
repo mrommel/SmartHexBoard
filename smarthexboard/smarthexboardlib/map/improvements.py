@@ -77,7 +77,7 @@ class ImprovementType(ExtendedEnum):
 
 		raise Exception(f'No matching case for improvementName: "{improvementName}"')
 
-	def name(self):
+	def title(self):
 		return self._data().name
 
 	def requiredTech(self) -> Optional[TechType]:

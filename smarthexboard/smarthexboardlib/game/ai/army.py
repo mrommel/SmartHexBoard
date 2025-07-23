@@ -1,6 +1,6 @@
 import sys
 import uuid
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.ai.militaryTypes import UnitFormationType, ArmyState, UnitFormationPosition
 from smarthexboard.smarthexboardlib.map import constants
@@ -43,7 +43,7 @@ class Army:
 		self.position: HexPoint = constants.invalidHexPoint
 
 		self.area: Optional[HexArea]
-		self.formationEntries: [ArmyFormationSlot] = []
+		self.formationEntries: List[ArmyFormationSlot] = []
 
 		self.identifier = str(uuid.uuid4())
 		self.owner = player

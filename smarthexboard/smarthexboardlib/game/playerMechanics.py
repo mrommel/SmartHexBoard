@@ -2,7 +2,7 @@ import logging
 import random
 import sys
 from functools import reduce
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.base import WeightedBaseList, ExtendedEnum, InvalidEnumError
 from smarthexboard.smarthexboardlib.game.ai.baseTypes import PlayerStateAllWars, WarGoalType, MilitaryStrategyType
@@ -65,9 +65,9 @@ class TechEurekas:
 
 
 class PlayerTechs:
-	def __init__(self, player):
+	def __init__(self, player: 'Player'):
 		self.player = player
-		self._techs: [TechType] = []
+		self._techs: List[TechType] = []
 		self._currentTechValue: Optional[TechType] = None
 		self._overflowValue: float = 0.0
 		self._lastScienceEarnedValue: float = 1.0
@@ -200,8 +200,8 @@ class PlayerTechs:
 			if not self.player.civics.inspirationTriggeredFor(CivicType.massMedia):
 				self.player.civics.triggerInspirationFor(CivicType.massMedia, simulation)
 
-	def possibleTechs(self) -> [TechType]:
-		returnTechs: [TechType] = []
+	def possibleTechs(self) -> List[TechType]:
+		returnTechs: List[TechType] = []
 
 		for tech in list(TechType):
 			if tech == TechType.none:
@@ -393,10 +393,10 @@ class CivicInspirations:
 
 
 class PlayerCivics:
-	def __init__(self, player):
+	def __init__(self, player: 'Player'):
 		self.player = player
 
-		self._civics: [CivicType] = []
+		self._civics: List[CivicType] = []
 		self._currentCivicValue: Optional[CivicType] = None
 		self._lastCultureEarnedValue: float = 1.0
 		self._progresses = WeightedCivicList()
@@ -471,7 +471,7 @@ class PlayerCivics:
 		pass
 
 	def possibleCivics(self):
-		returnCivics: [CivicType] = []
+		returnCivics: List[CivicType] = []
 
 		for civic in list(CivicType):
 			if civic == CivicType.none:
@@ -930,7 +930,7 @@ class DiplomaticAIPlayerItem:
 		self.researchAgreement = DiplomaticPact()
 
 		# deals
-		self.deals: [DiplomaticDeal] = []  # fixme: peaceTreaty alredy included here?
+		self.deals: List[DiplomaticDeal] = []  # fixme: peaceTreaty alredy included here?
 
 		self.isDenounced: bool = False  # this player has been denounced by us
 		self.isRecklessExpander: bool = False
@@ -959,7 +959,7 @@ class DiplomaticAIPlayerItem:
 		self.peaceTreatyWillingToAccept: PeaceTreatyType = PeaceTreatyType.none
 
 		# statement log
-		self.proposedStatements: [StatementLogEntry] = []
+		self.proposedStatements: List[StatementLogEntry] = []
 
 
 class DiplomaticAIPlayersItem:
@@ -1002,8 +1002,8 @@ class StatementLogEntry:
 
 class DiplomaticPlayerDict:
 	def __init__(self):
-		self.items: [DiplomaticAIPlayerItem] = []
-		self.itemsOther: [DiplomaticAIPlayersItem] = []
+		self.items: List[DiplomaticAIPlayerItem] = []
+		self.itemsOther: List[DiplomaticAIPlayersItem] = []
 
 		self._personalityMajorCivApproachBiases = WeightedBaseList()
 		self._personalityMinorCivApproachBiases = WeightedBaseList()
@@ -1347,8 +1347,8 @@ class DiplomaticPlayerDict:
 
 		raise Exception("not gonna happen")
 
-	def allPlayersWithDefensivePacts(self) -> [LeaderType]:
-		defPlayers: [LeaderType] = []
+	def allPlayersWithDefensivePacts(self) -> List[LeaderType]:
+		defPlayers: List[LeaderType] = []
 
 		for item in self.items:
 			if item.defensivePact.isActive():
@@ -2174,7 +2174,7 @@ class DiplomaticPlayerDict:
 			item.opinion = opinion
 		else:
 			newItem = DiplomaticAIPlayersItem(fromPlayer, toPlayer)
-			newItem.militaryThreat = opinion
+			newItem.opinion = opinion
 			self.itemsOther.append(newItem)
 
 	def otherPlayerNumberOfMinorsAttackedBy(self, otherPlayer) -> int:
@@ -5890,7 +5890,7 @@ class DiplomaticAI:
 			self.playerDict.updateMajorApproachValueTowards(otherPlayer, MajorPlayerApproachType.war.level())
 			self.playerDict.updateWarStateTowards(otherPlayer, PlayerWarStateType.defensive)
 
-	def activateDefensivePactsAgainst(self, otherPlayer, simulation):
+	def activateDefensivePactsAgainst(self, otherPlayer: 'Player', simulation):
 		for friendLeader in self.allPlayersWithDefensivePacts():
 			friendPlayer = simulation.playerFor(friendLeader)
 			friendPlayer.diplomacyAI.doDeclareWarFromDefensivePactTo(otherPlayer, simulation)
@@ -5901,17 +5901,17 @@ class DiplomaticAI:
 		self.playerDict.signDefensivePactWith(otherPlayer, turn)
 		return
 
-	def cancelDefensivePactWith(self, otherPlayer):
+	def cancelDefensivePactWith(self, otherPlayer: 'Player'):
 		self.playerDict.cancelDefensivePactWith(otherPlayer)
 		return
 
-	def allPlayersWithDefensivePacts(self) -> [LeaderType]:
+	def allPlayersWithDefensivePacts(self) -> List[LeaderType]:
 		return self.playerDict.allPlayersWithDefensivePacts()
 
-	def addGossipItem(self, gossipItem: GossipItem, otherPlayer):
+	def addGossipItem(self, gossipItem: GossipItem, otherPlayer: 'Player'):
 		self.playerDict.addGossipItem(gossipItem, otherPlayer)
 
-	def isOpenBordersExchangeAcceptableWith(self, otherPlayer) -> bool:
+	def isOpenBordersExchangeAcceptableWith(self, otherPlayer: 'Player') -> bool:
 		"""Are we willing to swap Open Borders with otherPlayer?"""
 		approach: MajorPlayerApproachType = self.majorCivApproachTowards(otherPlayer, hideTrueFeelings=True)
 
@@ -5922,46 +5922,46 @@ class DiplomaticAI:
 
 		return False
 
-	def isOpenBordersAgreementActiveWith(self, otherPlayer) -> bool:
+	def isOpenBordersAgreementActiveWith(self, otherPlayer: 'Player') -> bool:
 		return self.playerDict.isOpenBordersAgreementActiveWith(otherPlayer)
 
-	def changeOtherPlayerWarValueLostBy(self, fromPlayer, toPlayer, delta: int):
+	def changeOtherPlayerWarValueLostBy(self, fromPlayer: 'Player', toPlayer: 'Player', delta: int):
 		value = self.playerDict.otherPlayerWarValueLostFrom(fromPlayer, toPlayer)
 		self.playerDict.updateOtherPlayerWarValueLostFrom(fromPlayer, toPlayer, value + delta)
 
-	def otherPlayerWarValueLostBy(self, fromPlayer, toPlayer) -> int:
+	def otherPlayerWarValueLostBy(self, fromPlayer: 'Player', toPlayer: 'Player') -> int:
 		return self.playerDict.otherPlayerWarValueLostFrom(fromPlayer, toPlayer)
 
-	def changeWarValueLostBy(self, otherPlayer, delta: int):
+	def changeWarValueLostBy(self, otherPlayer: 'Player', delta: int):
 		if self.player == otherPlayer:
 			return
 
 		value = self.playerDict.warValueLostWith(otherPlayer)
 		self.playerDict.updateWarValueLostWith(otherPlayer, value + delta)
 
-	def changeWarWearinessWith(self, otherPlayer, value):
+	def changeWarWearinessWith(self, otherPlayer: 'Player', value):
 		self.playerDict.changeWarWearinessWith(otherPlayer, value)
 
-	def numberOfTurnsLockedIntoWarWith(self, otherPlayer) -> int:
+	def numberOfTurnsLockedIntoWarWith(self, otherPlayer: 'Player') -> int:
 		return self.playerDict.numberOfTurnsLockedIntoWarWith(otherPlayer)
 
-	def changeNumberOfTurnsLockedIntoWarWith(self, otherPlayer, delta: int):
+	def changeNumberOfTurnsLockedIntoWarWith(self, otherPlayer: 'Player', delta: int):
 		value = self.playerDict.numberOfTurnsLockedIntoWarWith(otherPlayer)
 		self.playerDict.updateNumberOfTurnsLockedIntoWarWith(otherPlayer, value + delta)
 
-	def warStateTowards(self, otherPlayer) -> PlayerWarStateType:
+	def warStateTowards(self, otherPlayer: 'Player') -> PlayerWarStateType:
 		return self.playerDict.warStateTowards(otherPlayer)
 
-	def warGoalTowards(self, otherPlayer) -> WarGoalType:
+	def warGoalTowards(self, otherPlayer: 'Player') -> WarGoalType:
 		return self.playerDict.warGoalTowards(otherPlayer)
 
-	def isWarGoalDamageTowards(self, otherPlayer) -> bool:
+	def isWarGoalDamageTowards(self, otherPlayer: 'Player') -> bool:
 		return self.warGoalTowards(otherPlayer) < WarGoalType.damage
 
-	def militaryStrengthOf(self, otherPlayer) -> StrengthType:
+	def militaryStrengthOf(self, otherPlayer: 'Player') -> StrengthType:
 		return self.playerDict.militaryStrengthComparedToUsOf(otherPlayer)
 
-	def targetValueOf(self, otherPlayer) -> PlayerTargetValueType:
+	def targetValueOf(self, otherPlayer: 'Player') -> PlayerTargetValueType:
 		return self.playerDict.targetValueOf(otherPlayer)
 
 	def totalLandDisputeLevel(self, simulation) -> int:
@@ -10475,7 +10475,7 @@ class DiplomacyRequests:
 class PlayerMoments:
 	def __init__(self, player):
 		self.player = player
-		self._momentsArray: [Moment] = []
+		self._momentsArray: List[Moment] = []
 		self._currentEraScore: int = 0
 
 	def add(self, moment: Moment):
@@ -10494,7 +10494,7 @@ class PlayerMoments:
 
 		self._currentEraScore += momentType.eraScore()
 
-	def moments(self) -> [Moment]:
+	def moments(self) -> List[Moment]:
 		return self._momentsArray
 
 	def eraScore(self) -> int:
@@ -10538,8 +10538,8 @@ class ReligionAI:
 		return ReligionType.none
 
 	def choosePantheonType(self, simulation) -> PantheonType:
-		takenPantheonTypes: [PantheonType] = [r.pantheon() for r in simulation.religions()]
-		availablePantheons: [PantheonType] = list(filter(lambda r: r not in takenPantheonTypes, PantheonType.all()))
+		takenPantheonTypes: List[PantheonType] = [r.pantheon() for r in simulation.religions()]
+		availablePantheons: List[PantheonType] = list(filter(lambda r: r not in takenPantheonTypes, PantheonType.all()))
 
 		weights: WeightedBaseList = WeightedBaseList()
 
@@ -10744,7 +10744,7 @@ class ReligionAI:
 		if not self.player.canFoundReligion(simulation):
 			raise Exception('Cannot choose religion - player cannot found')
 
-		availableReligions: [ReligionType] = simulation.availableReligions()
+		availableReligions: List[ReligionType] = simulation.availableReligions()
 
 		if len(availableReligions) == 0:
 			raise Exception('Cannot choose religion - no religion left')

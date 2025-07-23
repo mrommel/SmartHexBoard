@@ -1,3 +1,5 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum
 from smarthexboard.smarthexboardlib.core.types import EraType
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
@@ -35,8 +37,8 @@ class TechType:
 
 
 class TechTypeData:
-	def __init__(self, name: str, eureka_summary: str, eureka_description: str, quoteTexts: [str], era: EraType,
-				 cost: int, required: [TechType], flavors: [Flavor]):
+	def __init__(self, name: str, eureka_summary: str, eureka_description: str, quoteTexts: List[str], era: EraType,
+				 cost: int, required: List[TechType], flavors: List[Flavor]):
 		self.name = name
 		self.eureka_summary = eureka_summary
 		self.eureka_description = eureka_description
@@ -138,10 +140,10 @@ class TechType(ExtendedEnum):
 
 	futureTech = 'futureTech'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
-	def required(self) -> []:
+	def required(self) -> List['TechType']:
 		return self._data().required
 
 	def era(self) -> EraType:
@@ -161,8 +163,8 @@ class TechType(ExtendedEnum):
 	def isGoodyTech(self) -> bool:
 		return self.era() == EraType.ancient
 
-	def leadsTo(self) -> [TechType]:
-		leadingTo: [TechType] = []
+	def leadsTo(self) -> List[TechType]:
+		leadingTo: List[TechType] = []
 
 		for tech in list(TechType):
 			if self in tech.required():
@@ -1370,7 +1372,7 @@ class TechType(ExtendedEnum):
 		raise AttributeError(f'cant get data for tech {self}')
 
 	def __str__(self):
-		return self.name()
+		return self.title()
 
 
 class CivicType:
@@ -1378,8 +1380,9 @@ class CivicType:
 
 
 class CivicTypeData:
-	def __init__(self, name: str, inspiration_summary: str, inspiration_description: str, quoteTexts: [str],
-				 era: EraType, cost: int, required: [CivicType], flavors: [Flavor], governorTitle: bool, envoys: int):
+	def __init__(self, name: str, inspiration_summary: str, inspiration_description: str, quoteTexts: List[str],
+				 era: EraType, cost: int, required: List[CivicType], flavors: List[Flavor], governorTitle: bool,
+				 envoys: int):
 		self.name = name
 		self.inspiration_summary = inspiration_summary
 		self.inspiration_description = inspiration_description
@@ -1475,7 +1478,7 @@ class CivicType(ExtendedEnum):
 	smartPowerDoctrine = 'smartPowerDoctrine'
 	futureCivic = 'futureCivic'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def required(self) -> []:
@@ -1493,8 +1496,8 @@ class CivicType(ExtendedEnum):
 	def era(self) -> EraType:
 		return self._data().era
 
-	def leadsTo(self) -> [CivicType]:
-		leadingTo: [CivicType] = []
+	def leadsTo(self) -> List[CivicType]:
+		leadingTo: List[CivicType] = []
 
 		for civic in list(CivicType):
 			if self in civic.required():
@@ -2533,4 +2536,4 @@ class CivicType(ExtendedEnum):
 		raise AttributeError(f'cant get data for civic {self}')
 
 	def __str__(self):
-		return self.name()
+		return self.title()

@@ -1,3 +1,5 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
 from smarthexboard.smarthexboardlib.game.unitTypes import UnitTaskType
 from smarthexboard.smarthexboardlib.map import constants
@@ -44,6 +46,8 @@ class MilitaryThreatType(ExtendedEnum):
 			return 6
 		elif self == MilitaryThreatType.critical:
 			return 10
+
+		raise InvalidEnumError(self)
 
 
 class ArmyState(ExtendedEnum):
@@ -138,7 +142,7 @@ class TacticalMoveType(ExtendedEnum):
 	barbarianPillageNextTurn = 'barbarianPillageNextTurn'  # AI_TACTICAL_BARBARIAN_PILLAGE_NEXT_TURN
 
 	@staticmethod
-	def allBarbarianMoves() -> [TacticalMoveType]:
+	def allBarbarianMoves() -> List[TacticalMoveType]:
 		return [
 			TacticalMoveType.barbarianCaptureCity,
 			TacticalMoveType.barbarianDamageCity,
@@ -164,7 +168,7 @@ class TacticalMoveType(ExtendedEnum):
 		]
 
 	@staticmethod
-	def allPlayerMoves() -> [TacticalMoveType]:
+	def allPlayerMoves() -> List[TacticalMoveType]:
 		return [
 			TacticalMoveType.moveNoncombatantsToSafety,
 			TacticalMoveType.captureCity,
@@ -706,6 +710,8 @@ class TacticalMoveType(ExtendedEnum):
 				priority=4
 			)
 
+		raise InvalidEnumError(self)
+
 
 class TacticalTargetType(ExtendedEnum):
 	none = 'none'  # AI_TACTICAL_TARGET_NONE
@@ -849,7 +855,7 @@ class UnitFormationType(ExtendedEnum):
 	cityStateInvasion = 'cityStateInvasion'  # MUFORMATION_CITY_STATE_INVASION
 	cityStateAttackForce = 'cityStateAttackForce'  # MUFORMATION_CITY_STATE_ATTACK_FORCE
 
-	def slots(self) -> [UnitFormationSlot]:
+	def slots(self) -> List[UnitFormationSlot]:
 		# https://civilization.fandom.com/wiki/Module:Data/Civ5/BNW/MultiUnitFormation_Values
 		# https://github.com/LoneGazebo/Community-Patch-DLL/blob/3783d7f1f870984ebdbfaa486eca181335151322/Community%20Patch/Core%20Files/Core%20Values/New_CIV5MultiUnitFormations.xml
 

@@ -3053,11 +3053,11 @@ class Unit:
 
 		return self.baseCombatStrength(ignoreEmbarked=isEmbarkedAttackingLand) + modifierValue
 
-	def attackStrengthModifierAgainst(self, unit, city, tile, simulation) -> [CombatModifier]:
+	def attackStrengthModifierAgainst(self, unit, city, tile, simulation) -> List[CombatModifier]:
 		government = self.player.government
 		civics = self.player.civics
 
-		result: [CombatModifier] = []
+		result: List[CombatModifier] = []
 
 		# Healty
 		healthPenalty = -10 * (int(Unit.maxHealth) - self.healthPoints()) / int(Unit.maxHealth)
@@ -3214,12 +3214,12 @@ class Unit:
 		if self.isBarbarian():
 			return []
 
-		result: [CombatModifier] = []
+		result: List[CombatModifier] = []
 
 		# twilightValor - All units +5 Combat Strength for all melee attack units.
 		# BUT: Cannot heal outside your territory.
 		if government.hasCard(PolicyCardType.twilightValor) and self.unitClassType() == UnitClassType.melee:
-			result.append(CombatModifier(5, PolicyCardType.twilightValor.name()))
+			result.append(CombatModifier(5, PolicyCardType.twilightValor.title()))
 
 		# // // // // // // // // // // //
 		# tile bonus

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.buildings import BuildingType
 from smarthexboard.smarthexboardlib.game.districts import DistrictType
@@ -13,9 +13,9 @@ from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumEr
 
 
 class WonderTypeData:
-	def __init__(self, name: str, effects: [str], era: EraType, productionCost: int, requiredTech: Optional[TechType],
+	def __init__(self, name: str, effects: List[str], era: EraType, productionCost: int, requiredTech: Optional[TechType],
 	             requiredCivic: Optional[CivicType], obsoleteEra: EraType, amenities: float, yields: Yields,
-	             slots: [GreatWorkSlotType], flavors: [Flavor]):
+	             slots: List[GreatWorkSlotType], flavors: List[Flavor]):
 		self.name = name
 		self.effects = effects
 		self.era = era
@@ -233,7 +233,7 @@ class WonderType(ExtendedEnum):
 	def amenities(self) -> float:
 		return self._data().amenities
 
-	def _flavors(self) -> [Flavor]:
+	def _flavors(self) -> List[Flavor]:
 		return self._data().flavors
 
 	def flavor(self, flavorType: FlavorType) -> int:

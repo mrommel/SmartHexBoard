@@ -30,8 +30,8 @@ class CombatResult:
 
 
 class Combat:
-	@classmethod
-	def predictMeleeAttack(cls, attacker, defender, simulation) -> CombatResult:
+	@staticmethod
+	def predictMeleeAttack(attacker, defender, simulation) -> CombatResult:
 		attackerTile = simulation.tileAt(attacker.location)
 		defenderTile = simulation.tileAt(defender.location)
 

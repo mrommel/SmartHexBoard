@@ -15,6 +15,7 @@ import { unitActions } from "./actions/unit.js";
 import { cityInfoAt } from "./actions/city.js"
 import { ActionState } from "./actions/actions.js";
 import { handleError } from "./errorHandling.js";
+import "./widgets/widgets.js";
 import { UIState, UIBuilder } from "./ui.js";
 
 // TABLE OF CONTENTS
@@ -495,7 +496,11 @@ function checkGameGeneration() {
             }
         },
         error: function(xhr, textStatus, exception) {
-            handleError(xhr, textStatus, exception);
+            if (xhr.status === 404) {
+                console.error('Service not running: make run-qcluster');
+            } else {
+                handleError(xhr, textStatus, exception);
+            }
         }
     });
 }

@@ -113,7 +113,7 @@ class CityView {
         // new CityViewCitizenBox('abc', $cityInfoContent);
         const citizenBox = $("<div></div>")
             .attr('id', 'citizenBox')
-            .cityViewCitizenBox({title: 'Citizen Growth', text: 'abc', icon: 'icon.png'});
+            .cityViewCitizenBox({title: 'Citizen Growth', text: 'abc', icon: '/static/smarthexboard/img/ui/logo.png'});
         $cityInfoContent.append(citizenBox);
 
         const amenitiesHeader = $("<div></div>")

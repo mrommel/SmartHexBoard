@@ -9,6 +9,7 @@ class PointSchema(Schema):
 
 	@post_load
 	def make_point(self, data, **kwargs):
+		"""directly convert the deserialized data into a HexPoint object."""
 		return HexPoint(data['x'], data['y'])
 
 

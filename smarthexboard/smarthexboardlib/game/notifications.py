@@ -180,7 +180,7 @@ class NotificationType(ExtendedEnum):
 
 		raise Exception(f'No matching case for notificationName: "{notificationName}"')
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def message(self) -> str:

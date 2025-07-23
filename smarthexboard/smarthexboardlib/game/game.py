@@ -43,15 +43,45 @@ from smarthexboard.smarthexboardlib.map.types import FeatureType, Tutorials, Uni
 	ResourceType, TerrainType
 
 
+class GameRankingItem:
+	"""Class to represent a single ranking item."""
+
+	def __init__(self, leader: LeaderType):
+		"""Initialize the GameRankingItem with a leader."""
+		self.leader = leader
+		# data lists for various game statistics
+		self.culturePerTurn = []
+		self.goldBalance = []
+
+	def __repr__(self):
+		"""Return a string representation of the GameRankingItem."""
+		return f"game ranking of: {self.leader.name}"
+
+
 class GameRankingData:
+	"""Class to handle game ranking data for various leaders."""
+
 	def __init__(self, rankingDict: Optional[dict] = None):
-		pass
+		"""Initialize the GameRankingData with an optional ranking dictionary."""
+		self.rankingDict = rankingDict if rankingDict is not None else {}
 
 	def addCulturePerTurn(self, culture: float, leader: LeaderType):
-		pass
+		if leader == LeaderType.cityState:
+			return
+
+		if leader not in self.rankingDict:
+			self.rankingDict[leader] = GameRankingItem(leader)
+
+		self.rankingDict[leader].culturePerTurn.append(culture)
 
 	def addGoldBalance(self, gold: float, leader: LeaderType):
-		pass
+		if leader == LeaderType.cityState:
+			return
+
+		if leader not in self.rankingDict:
+			self.rankingDict[leader] = GameRankingItem(leader)
+
+		self.rankingDict[leader].goldBalance.append(gold)
 
 	def addTotalCities(self, cities: int, leader: LeaderType):
 		pass
@@ -92,11 +122,17 @@ class GameRankingData:
 	def addTotalPantheonsFounded(self, pantheonsFounded: int, leader: LeaderType):
 		pass
 
+	def __str__(self):
+		return f"game ranking of: {self.rankingDict}"
+
+	def __repr__(self):
+		"""Return a string representation of the GameRankingData."""
+		return f"game ranking of: {self.rankingDict}"
+
 
 class GameWonders:
 	def __init__(self):
-		self._wonders: [WonderType] = []
-
+		self._wonders: List[WonderType] = []
 
 	def buildWonder(self, wonderType: WonderType):
 		self._wonders.append(wonderType)
@@ -128,11 +164,11 @@ class GameModel:
 		if isinstance(victoryTypes, List):
 			self.turnSliceValue = 0
 			self.waitDiploPlayer = None
-			self.players: [Player] = players
+			self.players: List[Player] = players
 			self._activePlayer: Optional[Player] = None
 			self.currentTurn: int = turnsElapsed
 			self.maxTurns: int = 500
-			self.victoryTypes: [VictoryType] = victoryTypes
+			self.victoryTypes: List[VictoryType] = victoryTypes
 			self.handicap: HandicapType = handicap
 			self._map: MapModel = map
 			self.userInterface = None
@@ -162,7 +198,7 @@ class GameModel:
 		elif isinstance(victoryTypes, dict):
 			self.turnSliceValue = 0
 			self.waitDiploPlayer = None
-			self.players: [Player] = [Player(player_dict) for player_dict in victoryTypes['players']]
+			self.players: List[Player] = [Player(player_dict) for player_dict in victoryTypes['players']]
 			self._activePlayer: Optional[Player] = None  # fixme
 			self.currentTurn: int = victoryTypes['currentTurn']
 			self.maxTurns: int = victoryTypes['maxTurns']
@@ -286,13 +322,13 @@ class GameModel:
 	def capitalOf(self, player: Player) -> City:
 		return self._map.capitalOf(player)
 
-	def points(self) -> [HexPoint]:
+	def points(self) -> List[HexPoint]:
 		return self._map.points()
 
-	def unitsOf(self, player: Player) -> [Unit]:
+	def unitsOf(self, player: Player) -> List[Unit]:
 		return self._map.unitsOf(player)
 
-	def unitsAt(self, location: HexPoint) -> [Unit]:
+	def unitsAt(self, location: HexPoint) -> List[Unit]:
 		return self._map.unitsAt(location)
 
 	def unitAt(self, location: HexPoint, unitMapType: UnitMapType) -> Optional[Unit]:
@@ -310,13 +346,13 @@ class GameModel:
 	def cityAt(self, location: HexPoint) -> Optional[City]:
 		return self._map.cityAt(location)
 
-	def citiesOf(self, player) -> [City]:
+	def citiesOf(self, player) -> List[City]:
 		return self._map.citiesOf(player)
 
-	def citiesInAreaOf(self, player, area) -> [City]:
+	def citiesInAreaOf(self, player, area) -> List[City]:
 		return self._map.citiesInAreaOf(player, area)
 
-	def citiesIn(self, area) -> [City]:
+	def citiesIn(self, area) -> List[City]:
 		return self._map.citiesIn(area)
 
 	def addCity(self, city):
@@ -611,7 +647,7 @@ class GameModel:
 												continue
 
 											logging.warning(
-												f"GAME HANG - unit of {player.leader.name()} has no orders: {unit.name()} at {unit.location}")
+												f"GAME HANG - unit of {player.leader.title()} has no orders: {unit.name()} at {unit.location}")
 
 										# debug
 										player.endTurnsForReadyUnits(self)
@@ -1076,7 +1112,7 @@ class GameModel:
 	def spawnArchaeologySites(self):
 		# we should now have a map of the dig sites
 		# turn this map into set of RESOURCE_ARTIFACTS
-		randomLandArtifacts: [ArtifactType] = [
+		randomLandArtifacts: List[ArtifactType] = [
 			ArtifactType.ancientRuin,
 			ArtifactType.ancientRuin,
 			ArtifactType.razedCity,
@@ -1086,7 +1122,7 @@ class GameModel:
 			ArtifactType.battleRanged
 		]
 
-		randomSeaArtifacts: [ArtifactType] = [
+		randomSeaArtifacts: List[ArtifactType] = [
 			ArtifactType.battleSeaMelee,
 			ArtifactType.battleSeaRanged
 		]
@@ -1130,8 +1166,8 @@ class GameModel:
 		# fill the historical buffer with the archaeological data
 		gridPoints = self._map.points()
 		assert len(gridPoints) > 0, "gridSize is zero"
-		historicalDigSites: [ArchaeologicalRecord] = [ArchaeologicalRecord() for _ in range(len(gridPoints))]
-		scratchDigSites: [ArchaeologicalRecord] = [ArchaeologicalRecord() for _ in range(len(gridPoints))]
+		historicalDigSites: List[ArchaeologicalRecord] = [ArchaeologicalRecord() for _ in range(len(gridPoints))]
+		scratchDigSites: List[ArchaeologicalRecord] = [ArchaeologicalRecord() for _ in range(len(gridPoints))]
 
 		for index, gridPoint in enumerate(gridPoints):
 			plot = self.tileAt(gridPoint)
@@ -1197,7 +1233,7 @@ class GameModel:
 					historicalDigSites[index] = plot.archaeologicalRecord()
 
 		# calculate initial weights
-		digSiteWeights: [int] = [0 for _ in range(len(gridPoints))]
+		digSiteWeights: List[int] = [0 for _ in range(len(gridPoints))]
 		self.calculateDigSiteWeights(len(gridPoints), historicalDigSites, scratchDigSites, digSiteWeights)
 
 		# build a weight vector
@@ -1593,7 +1629,7 @@ class GameModel:
 
 		return
 
-	def calculateDigSiteWeights(self, gridSize: int, historicalDigSites: [ArchaeologicalRecord], scratchDigSites: [ArchaeologicalRecord], digSiteWeights: [int]):
+	def calculateDigSiteWeights(self, gridSize: int, historicalDigSites: List[ArchaeologicalRecord], scratchDigSites: List[ArchaeologicalRecord], digSiteWeights: List[int]):
 		for index in range(gridSize):
 			digSiteWeights[index] = self.calculateDigSiteWeightAt(index, historicalDigSites, scratchDigSites)
 
@@ -1618,7 +1654,7 @@ class GameModel:
 
 		return None
 
-	def calculateDigSiteWeightAt(self, index: int, historicalDigSites: [ArchaeologicalRecord], scratchDigSites: [ArchaeologicalRecord]) -> int:
+	def calculateDigSiteWeightAt(self, index: int, historicalDigSites: List[ArchaeologicalRecord], scratchDigSites: List[ArchaeologicalRecord]) -> int:
 		baseWeight = 0
 
 		# if we have not already chosen this spot for a dig site

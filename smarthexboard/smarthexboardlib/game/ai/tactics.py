@@ -1,7 +1,7 @@
 import logging
 import random
 import sys
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.ai.army import ArmyFormationSlotConstants
 from smarthexboard.smarthexboardlib.game.ai.baseTypes import PlayerStateAllWars
@@ -421,7 +421,7 @@ class TacticalAnalysisMap:
 		self.turnBuild = -1
 		self.isBuild = False
 		self.enemyUnits = []
-		self.dominanceZones: [TacticalDominanceZone] = []
+		self.dominanceZones: List[TacticalDominanceZone] = []
 		self.ignoreLineOfSight = False
 
 		self.playerBuild = None

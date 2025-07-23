@@ -24,7 +24,7 @@ class CityStateCategory(ExtendedEnum):
 	scientific = 'scientific'
 	trade = 'trade'  # MINOR_CIV_TRAIT_MERCANTILE
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def _data(self):

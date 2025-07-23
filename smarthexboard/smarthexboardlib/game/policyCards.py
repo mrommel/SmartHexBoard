@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
 from smarthexboard.smarthexboardlib.game.types import CivicType, EraType
@@ -35,14 +35,10 @@ class PolicyCardSlot(ExtendedEnum):
 		raise InvalidEnumError(self)
 
 
-class PolicyCardType:
-	pass
-
-
 class PolicyCardTypeData:
 	def __init__(self, name: str, bonus: str, slot: PolicyCardSlot, requiredCivic: Optional[CivicType] = None,
 	             obsoleteCivic: Optional[CivicType] = None, startEra: Optional[EraType] = None,
-	             endEra: Optional[EraType] = None, replace: [PolicyCardType] = [], flavors: [Flavor] = [],
+	             endEra: Optional[EraType] = None, replace: List['PolicyCardType'] = [], flavors: List[Flavor] = [],
 	             requiresDarkAge: bool = False):
 		"""
 		@param name: name of this policy card
@@ -63,7 +59,7 @@ class PolicyCardTypeData:
 		self.obsoleteCivic = obsoleteCivic
 		self.startEra = startEra
 		self.endEra = endEra
-		self.replace = replace,
+		self.replace: List['PolicyCardType'] = replace
 		self.flavors = flavors
 		self.requiresDarkAge = requiresDarkAge
 
@@ -232,7 +228,7 @@ class PolicyCardType(ExtendedEnum):
 	# softTargets
 	twilightValor = 'twilightValor'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def slot(self) -> PolicyCardSlot:
@@ -253,7 +249,7 @@ class PolicyCardType(ExtendedEnum):
 	def requiresDarkAge(self) -> bool:
 		return self._data().requiresDarkAge
 
-	def replacePolicyCards(self) -> [PolicyCardType]:
+	def replacePolicyCards(self) -> List['PolicyCardType']:
 		return self._data().replace
 
 	def flavorValue(self, flavorType: FlavorType) -> int:

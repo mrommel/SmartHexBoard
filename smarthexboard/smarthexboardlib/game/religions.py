@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
 from smarthexboard.smarthexboardlib.core.types import EraType
@@ -47,24 +47,24 @@ class PantheonTypeData:
 		self.maxDistance: int = maxDistance
 
 		if terrainYieldChanges is None:
-			self.terrainYieldChanges: [TerrainYieldChange] = []
+			self.terrainYieldChanges: List[TerrainYieldChange] = []
 		else:
-			self.terrainYieldChanges: [TerrainYieldChange] = terrainYieldChanges
+			self.terrainYieldChanges: List[TerrainYieldChange] = terrainYieldChanges
 
 		if featureYieldChanges is None:
-			self.featureYieldChanges: [FeatureYieldChange] = []
+			self.featureYieldChanges: List[FeatureYieldChange] = []
 		else:
-			self.featureYieldChanges: [FeatureYieldChange] = featureYieldChanges
+			self.featureYieldChanges: List[FeatureYieldChange] = featureYieldChanges
 
 		if improvedResourceYieldChanges is None:
-			self.improvedResourceYieldChanges: [ImprovedResourceYieldChanges] = []
+			self.improvedResourceYieldChanges: List[ImprovedResourceYieldChanges] = []
 		else:
-			self.improvedResourceYieldChanges: [ImprovedResourceYieldChanges] = improvedResourceYieldChanges
+			self.improvedResourceYieldChanges: List[ImprovedResourceYieldChanges] = improvedResourceYieldChanges
 
 		if improvementYieldChanges is None:
-			self.improvementYieldChanges: [ImprovementYieldChange] = []
+			self.improvementYieldChanges: List[ImprovementYieldChange] = []
 		else:
-			self.improvementYieldChanges: [ImprovementYieldChange] = improvementYieldChanges
+			self.improvementYieldChanges: List[ImprovementYieldChange] = improvementYieldChanges
 
 		self.cityGrowthModifier: int = cityGrowthModifier
 		self.militaryUnitProductionModifier: int = militaryUnitProductionModifier
@@ -107,7 +107,7 @@ class PantheonType(ExtendedEnum):
 	stoneCircles = 'stoneCircles'
 
 	@classmethod
-	def all(cls) -> [PantheonType]:
+	def all(cls) -> List[PantheonType]:
 		return [
 			PantheonType.cityPatronGoddess,
 			PantheonType.danceOfTheAurora,
@@ -136,7 +136,7 @@ class PantheonType(ExtendedEnum):
 			PantheonType.stoneCircles,
 		]
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def faithFromKills(self) -> int:
@@ -415,14 +415,12 @@ class PantheonType(ExtendedEnum):
 				]
 			)
 
+		raise InvalidEnumError(self)
+
 
 class ReligionTypeData:
 	def __init__(self, name: str):
 		self.name = name
-
-
-class ReligionType:
-	pass
 
 
 class ReligionType(ExtendedEnum):
@@ -444,7 +442,7 @@ class ReligionType(ExtendedEnum):
 	zoroastrianism = 'zoroastrianism'
 
 	@classmethod
-	def all(cls) -> [ReligionType]:
+	def all(cls) -> List['ReligionType']:
 		return [
 			ReligionType.atheism,
 			ReligionType.buddhism,
@@ -461,7 +459,7 @@ class ReligionType(ExtendedEnum):
 			ReligionType.zoroastrianism
 		]
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def _data(self) -> ReligionTypeData:
@@ -523,6 +521,8 @@ class ReligionType(ExtendedEnum):
 			return ReligionTypeData(
 				name='Zoroastrianism'
 			)
+
+		raise InvalidEnumError(self)
 
 
 class FaithPurchaseType(ExtendedEnum):
@@ -613,7 +613,7 @@ class BeliefType(ExtendedEnum):
 	stupa = 'stupa'  # BELIEF_STUPA
 	darEMehr = 'darEMehr'  # BELIEF_DAR_E_MEHR
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def category(self) -> BeliefCategory:

@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 from smarthexboard.smarthexboardlib.game.types import TechType, CivicType
 from smarthexboard.smarthexboardlib.game.units import UnitType
@@ -20,8 +21,8 @@ class ReplayEventType(ExtendedEnum):
 class HandicapTypeData:
 	def __init__(self, name: str, value: int, barbarianCampGold: int, barbarianSpawnMod: int,
 	             earliestBarbarianReleaseTurn: int, barbarianLandTargetRange: int, barbarianSpawnModifier: int,
-	             freeHumanTechs: [TechType], freeHumanCivics: [CivicType], freeHumanStartingUnitTypes: [UnitType],
-	             freeHumanCombatBonus: int, freeAIStartingUnitTypes: [UnitType], freeAICombatBonus: int):
+	             freeHumanTechs: List[TechType], freeHumanCivics: List[CivicType], freeHumanStartingUnitTypes: List[UnitType],
+	             freeHumanCombatBonus: int, freeAIStartingUnitTypes: List[UnitType], freeAICombatBonus: int):
 		self.name = name
 		self.value = value
 		# barbarian
@@ -89,7 +90,7 @@ class HandicapType(ExtendedEnum):
 	def value(self) -> int:
 		return self._data().value
 
-	def freeHumanStartingUnitTypes(self) -> [UnitType]:
+	def freeHumanStartingUnitTypes(self) -> List[UnitType]:
 		return self._data().freeHumanStartingUnitTypes
 
 	def freeHumanCombatBonus(self) -> int:
@@ -293,7 +294,9 @@ class HandicapType(ExtendedEnum):
 				freeAICombatBonus=4
 			)
 
-	def freeAIStartingUnitTypes(self) -> [UnitType]:
+		raise InvalidEnumError(self)
+
+	def freeAIStartingUnitTypes(self) -> List[UnitType]:
 		return self._data().freeAIStartingUnitTypes
 
 	def firstImpressionBaseValue(self):
@@ -323,17 +326,17 @@ class HandicapType(ExtendedEnum):
 
 		raise InvalidEnumError(self)
 
-	def freeHumanTechs(self) -> [TechType]:
+	def freeHumanTechs(self) -> List[TechType]:
 		return self._data().freeHumanTechs
 
-	def freeHumanCivics(self) -> [CivicType]:
+	def freeHumanCivics(self) -> List[CivicType]:
 		return self._data().freeHumanCivics
 
-	def freeAITechs(self) -> [TechType]:
+	def freeAITechs(self) -> List[TechType]:
 		# fixme
 		return []
 
-	def freeAICivics(self) -> [CivicType]:
+	def freeAICivics(self) -> List[CivicType]:
 		# fixme
 		return []
 
@@ -424,7 +427,6 @@ class PlayerTargetValueType(ExtendedEnum):
 			return PlayerTargetValueType.average
 		elif self == PlayerTargetValueType.soft:
 			return PlayerTargetValueType.favorable
-
 
 
 class WarDamageLevelType(ExtendedEnum):

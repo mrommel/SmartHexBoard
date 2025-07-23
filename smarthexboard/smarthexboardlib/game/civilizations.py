@@ -1,3 +1,5 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.game.ai.diplomaticTypes import MajorPlayerApproachType, MinorPlayerApproachType
 from smarthexboard.smarthexboardlib.game.flavors import FlavorType, Flavor
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError, WeightedBaseList
@@ -19,7 +21,7 @@ class CivilizationAbility(ExtendedEnum):
 	freeImperialCities = 'freeImperialCities'
 	legendOfTheFiveSuns = 'legendOfTheFiveSuns'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return 'ability'
 	
 
@@ -43,26 +45,26 @@ class StartBiasResource:
 
 
 class CivilizationData:
-	def __init__(self, name: str, ability: CivilizationAbility, cityNames: [str],
+	def __init__(self, name: str, ability: CivilizationAbility, cityNames: List[str],
 	             startBiasTerrains=None, startBiasFeatures=None, startBiasResource=None, startBiasRiverTier: int = 0):
 		self.name = name
 		self.ability = ability
 		self.cityNames = cityNames
 
 		if startBiasTerrains is None:
-			self.startBiasTerrains: [StartBiasTerrain] = []
+			self.startBiasTerrains: List[StartBiasTerrain] = []
 		else:
-			self.startBiasTerrains: [StartBiasTerrain] = startBiasTerrains
+			self.startBiasTerrains: List[StartBiasTerrain] = startBiasTerrains
 
 		if startBiasFeatures is None:
-			self.startBiasFeatures: [StartBiasFeature] = []
+			self.startBiasFeatures: List[StartBiasFeature] = []
 		else:
-			self.startBiasFeatures: [StartBiasFeature] = startBiasFeatures
+			self.startBiasFeatures: List[StartBiasFeature] = startBiasFeatures
 
 		if startBiasResource is None:
-			self.startBiasResource: [StartBiasResource] = []
+			self.startBiasResource: List[StartBiasResource] = []
 		else:
-			self.startBiasResource: [StartBiasResource] = startBiasResource
+			self.startBiasResource: List[StartBiasResource] = startBiasResource
 
 		self.startBiasRiverTier: int = startBiasRiverTier
 
@@ -84,7 +86,7 @@ class CivilizationType(ExtendedEnum):
 	germany = 'germany'  # CIVILIZATION_GERMANY
 	aztec = 'aztec'  # CIVILIZATION_AZTEC
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def ability(self) -> CivilizationAbility:
@@ -469,8 +471,8 @@ class MinorCivApproachBias:
 
 
 class LeaderTypeData:
-	def __init__(self, name: str, civilization: CivilizationType, ability: LeaderAbility, flavors: [Flavor],
-	             majorCivApproachBiases: [MajorCivApproachBias], minorCivApproachBiases: [MinorCivApproachBias],
+	def __init__(self, name: str, civilization: CivilizationType, ability: LeaderAbility, flavors: List[Flavor],
+	             majorCivApproachBiases: List[MajorCivApproachBias], minorCivApproachBiases: List[MinorCivApproachBias],
 	             victoryCompetitiveness: int, wonderCompetitiveness: int, minorCivCompetitiveness: int,
 	             boldness: int, diplomaticBalance: int, warmongerHate: int, denounceWillingness: int,
 	             declarationOfFriendshipWillingness: int, loyalty: int, neediness: int, forgiveness: int,
@@ -478,10 +480,10 @@ class LeaderTypeData:
 		self.name: str = name
 		self.civilization: CivilizationType = civilization
 		self.ability: LeaderAbility = ability
-		self.flavors: [Flavor] = flavors
+		self.flavors: List[Flavor] = flavors
 
-		self.majorCivApproachBiases: [MajorCivApproachBias] = majorCivApproachBiases
-		self.minorCivApproachBiases: [MinorCivApproachBias] = minorCivApproachBiases
+		self.majorCivApproachBiases: List[MajorCivApproachBias] = majorCivApproachBiases
+		self.minorCivApproachBiases: List[MinorCivApproachBias] = minorCivApproachBiases
 
 		self.victoryCompetitiveness = victoryCompetitiveness
 		self.wonderCompetitiveness = wonderCompetitiveness
@@ -508,6 +510,7 @@ class LeaderType(ExtendedEnum):
 	barbar = 'barbar'
 	cityState = 'cityState'
 	freeCities = 'freeCities'
+	unmet = 'unmet'
 
 	alexander = 'alexander'  # LEADER_ALEXANDER
 	trajan = 'trajan'  # LEADER_TRAJAN
@@ -545,6 +548,8 @@ class LeaderType(ExtendedEnum):
 			return LeaderType.montezuma
 		elif leaderName == 'LeaderType.qin' or leaderName == 'qin':
 			return LeaderType.qin
+		elif leaderName == 'LeaderType.unmet' or leaderName == 'unmet':
+			return LeaderType.unmet
 
 		raise Exception(f'No matching case for leaderName: "{leaderName}"')
 
@@ -566,7 +571,7 @@ class LeaderType(ExtendedEnum):
 		# raise Exception(f'Leader majorCivApproachBiases of {self} does not contain a value for {approach}')
 		return 0
 
-	def _majorCivApproachBiases(self) -> [MajorCivApproachBias]:
+	def _majorCivApproachBiases(self) -> List[MajorCivApproachBias]:
 		return self._data().majorCivApproachBiases
 
 	def minorCivApproachBiasTowards(self, approach: MinorPlayerApproachType) -> int:
@@ -578,7 +583,7 @@ class LeaderType(ExtendedEnum):
 		# raise Exception(f'Leader minorCivApproachBiases of {self} does not contain a value for {approach}')
 		return 0
 
-	def _minorCivApproachBiases(self) -> [MinorCivApproachBias]:
+	def _minorCivApproachBiases(self) -> List[MinorCivApproachBias]:
 		return self._data().minorCivApproachBiases
 
 	def victoryCompetitiveness(self) -> int:
@@ -631,7 +636,7 @@ class LeaderType(ExtendedEnum):
 
 		return 0
 
-	def _flavors(self) -> [Flavor]:
+	def _flavors(self) -> List[Flavor]:
 		return self._data().flavors
 
 	def _data(self) -> LeaderTypeData:
@@ -1209,6 +1214,28 @@ class LeaderType(ExtendedEnum):
 					MinorCivApproachBias(MinorPlayerApproachType.conquest, 5),
 					MinorCivApproachBias(MinorPlayerApproachType.bully, 4),
 				],
+				victoryCompetitiveness=5,
+				wonderCompetitiveness=5,
+				minorCivCompetitiveness=5,
+				boldness=5,
+				diplomaticBalance=5,
+				warmongerHate=5,
+				denounceWillingness=5,
+				declarationOfFriendshipWillingness=5,
+				loyalty=5,
+				neediness=5,
+				forgiveness=5,
+				chattiness=5,
+				meanness=5
+			)
+		elif self == LeaderType.unmet:
+			return LeaderTypeData(
+				name=_('TXT_KEY_LEADER_UNMET'),
+				civilization=CivilizationType.unmet,
+				ability=LeaderAbility.none,
+				flavors=[],
+				majorCivApproachBiases=[],
+				minorCivApproachBiases=[],
 				victoryCompetitiveness=5,
 				wonderCompetitiveness=5,
 				minorCivCompetitiveness=5,

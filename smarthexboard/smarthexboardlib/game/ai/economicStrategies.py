@@ -50,7 +50,7 @@ class EconomicStrategyType(ExtendedEnum):
 	# ECONOMICAISTRATEGY_GS_SPACESHIP
 	# ECONOMICAISTRATEGY_GS_SPACESHIP_HOMESTRETCH
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return EconomicStrategies().strategy(self).name
 
 	def isNoMinorCivs(self) -> bool:

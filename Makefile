@@ -6,6 +6,7 @@ all: venv
 
 $(VENV)/bin/activate: requirements.txt
 	python3.12 -m venv $(VENV)
+	./$(VENV)/bin/pip3.12 install --upgrade pip
 	./$(VENV)/bin/pip3.12 install --upgrade setuptools
 	# ./$(VENV)/bin/pip3.12 install --upgrade distribute
 	./$(VENV)/bin/pip3.12 install -r requirements.txt
@@ -40,18 +41,25 @@ clean:
 
 makemigrations: venv
 	./$(VENV)/bin/python3.12 manage.py makemigrations
-	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexboard 0012
+	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexboard 0015
 	./$(VENV)/bin/python3.12 manage.py sqlmigrate smarthexassets 0002
 	./$(VENV)/bin/python3.12 manage.py migrate
 
 migrate: venv
 	./$(VENV)/bin/python3.12 manage.py migrate
 
-preparetranslations: venv
-	./$(VENV)/bin/python3.12 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*
+# preparetranslations: venv
+#	./$(VENV)/bin/python3.12 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*
 
-compiletranslations: venv
-	./$(VENV)/bin/python3.12 manage.py compilemessages --ignore=venv/*
+# compiletranslations: venv
+#	./$(VENV)/bin/python3.12 manage.py compilemessages --ignore=venv/*
+
+# translations
+makemessages: venv
+	./$(VENV)/bin/python3.12 manage.py makemessages --locale en --locale de --ignore=.venv/* --ignore=venv/*
+
+compilemessages: venv
+	./$(VENV)/bin/python3.12 manage.py compilemessages --ignore=.venv/* --ignore=venv/*
 
 createsuperuser: venv
 	./$(VENV)/bin/python3.12 manage.py createsuperuser

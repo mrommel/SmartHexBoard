@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.ai.diplomaticTypes import DiplomaticDeal, DiplomaticDealItemType, DiplomaticDealType, DiplomaticDealItem
 from smarthexboard.smarthexboardlib.game.notifications import NotificationType
@@ -11,9 +11,9 @@ class GameDeals:
 	def __init__(self):
 		self.dealCounter = 0
 
-		self.proposedDeals: [DiplomaticDeal] = []
-		self.currentDeals: [DiplomaticDeal] = []
-		self.historicalDeals: [DiplomaticDeal] = []
+		self.proposedDeals: List[DiplomaticDeal] = []
+		self.currentDeals: List[DiplomaticDeal] = []
+		self.historicalDeals: List[DiplomaticDeal] = []
 
 	def doTurn(self, simulation):
 		"""Update deals for the start of a new turn"""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-08 12:24+0000\n"
+"POT-Creation-Date: 2025-07-23 18:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,227 +17,4091 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: setup/settings.py:133
+#: setup/settings.py:143
 msgid "German"
-msgstr "Deutsch"
+msgstr ""
 
-#: setup/settings.py:134
+#: setup/settings.py:144
 msgid "English"
-msgstr "Englisch"
+msgstr ""
 
-#: smarthexboard/game/types.py:7 smarthexboard/game/types.py:45
-msgid "none"
-msgstr "kein"
+#: smarthexassets/models.py:8
+msgid "Unknown"
+msgstr ""
 
-#: smarthexboard/game/types.py:10
+#: smarthexassets/models.py:10
+msgid "Layer"
+msgstr ""
+
+#: smarthexassets/models.py:11
+msgid "Object"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:62
+msgid "TXT_KEY_ERA_ANCIENT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:69
+msgid "TXT_KEY_ERA_CLASSICAL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:76
+msgid "TXT_KEY_ERA_MEDIEVAL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:83
+msgid "TXT_KEY_ERA_RENAISSANCE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:90
+msgid "TXT_KEY_ERA_INDUSTRIAL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:97
+msgid "TXT_KEY_ERA_MODERN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:104
+msgid "TXT_KEY_ERA_ATOMIC"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:111
+msgid "TXT_KEY_ERA_INFORMATION"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/core/types.py:118
+msgid "TXT_KEY_ERA_FUTURE"
+msgstr "Zukunft"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:118
+msgid "TXT_KEY_HANDICAP_SETTLER"
+msgstr "Siedler"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:137
+msgid "TXT_KEY_HANDICAP_CHIEFTAIN"
+msgstr "Häuptling"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:156
+msgid "TXT_KEY_HANDICAP_WARLORD"
+msgstr "Kriegsherr"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:177
+msgid "TXT_KEY_HANDICAP_PRINCE"
+msgstr "Prinz"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:196
+msgid "TXT_KEY_HANDICAP_KING"
+msgstr "König"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:215
+msgid "TXT_KEY_HANDICAP_EMPEROR"
+msgstr "Kaiser"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:241
+msgid "TXT_KEY_HANDICAP_IMMORTAL"
+msgstr "Unsterblich"
+
+#: smarthexboard/smarthexboardlib/game/baseTypes.py:269
+msgid "TXT_KEY_HANDICAP_DEITY"
+msgstr "Göttlich"
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:33
+msgid "TXT_KEY_CITY_STATE_CATEGORY_CULTURAL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:35
+msgid "TXT_KEY_CITY_STATE_CATEGORY_CULTURAL_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:36
+msgid "TXT_KEY_CITY_STATE_CATEGORY_CULTURAL_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:37
+msgid "TXT_KEY_CITY_STATE_CATEGORY_CULTURAL_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:41
+msgid "TXT_KEY_CITY_STATE_CATEGORY_INDUSTRIAL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:43
+msgid "TXT_KEY_CITY_STATE_CATEGORY_INDUSTRIAL_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:44
+msgid "TXT_KEY_CITY_STATE_CATEGORY_INDUSTRIAL_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:45
+msgid "TXT_KEY_CITY_STATE_CATEGORY_INDUSTRIAL_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:49
+msgid "TXT_KEY_CITY_STATE_CATEGORY_MILITARISTIC_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:51
+msgid "TXT_KEY_CITY_STATE_CATEGORY_MILITARISTIC_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:52
+msgid "TXT_KEY_CITY_STATE_CATEGORY_MILITARISTIC_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:53
+msgid "TXT_KEY_CITY_STATE_CATEGORY_MILITARISTIC_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:57
+msgid "TXT_KEY_CITY_STATE_CATEGORY_RELIGIOUS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:59
+msgid "TXT_KEY_CITY_STATE_CATEGORY_RELIGIOUS_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:60
+msgid "TXT_KEY_CITY_STATE_CATEGORY_RELIGIOUS_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:61
+msgid "TXT_KEY_CITY_STATE_CATEGORY_RELIGIOUS_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:65
+msgid "TXT_KEY_CITY_STATE_CATEGORY_SCIENTIFIC_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:67
+msgid "TXT_KEY_CITY_STATE_CATEGORY_SCIENTIFIC_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:68
+msgid "TXT_KEY_CITY_STATE_CATEGORY_SCIENTIFIC_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:69
+msgid "TXT_KEY_CITY_STATE_CATEGORY_SCIENTIFIC_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:73
+msgid "TXT_KEY_CITY_STATE_CATEGORY_TRADE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:75
+msgid "TXT_KEY_CITY_STATE_CATEGORY_TRADE_FIRST_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:76
+msgid "TXT_KEY_CITY_STATE_CATEGORY_TRADE_THIRD_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:77
+msgid "TXT_KEY_CITY_STATE_CATEGORY_TRADE_SIXTH_ENVOY_BONUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:270
+msgid "TXT_KEY_CITY_STATE_AMSTERDAM_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:272
+msgid "TXT_KEY_CITY_STATE_AMSTERDAM_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:278
+msgid "TXT_KEY_CITY_STATE_ANTANANARIVO_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:280
+msgid "TXT_KEY_CITY_STATE_ANTANANARIVO_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:285
+msgid "TXT_KEY_CITY_STATE_ANTIOCH_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:287
+msgid "TXT_KEY_CITY_STATE_ANTIOCH_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:293
+msgid "TXT_KEY_CITY_STATE_AUCKLAND_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:295
+msgid "TXT_KEY_CITY_STATE_AUCKLAND_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:301
+msgid "TXT_KEY_CITY_STATE_BABYLON_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:303
+msgid "TXT_KEY_CITY_STATE_BABYLON_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:309
+msgid "TXT_KEY_CITY_STATE_BOLOGNA_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:311
+msgid "TXT_KEY_CITY_STATE_BOLOGNA_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:316
+msgid "TXT_KEY_CITY_STATE_BRUSSELS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:318
+msgid "TXT_KEY_CITY_STATE_BRUSSELS_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:327
+msgid "TXT_KEY_CITY_STATE_CARTHAGE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:329
+msgid "TXT_KEY_CITY_STATE_CARTHAGE_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:336
+msgid "TXT_KEY_CITY_STATE_GENEVA_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:338
+msgid "TXT_KEY_CITY_STATE_GENEVA_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:349
+msgid "TXT_KEY_CITY_STATE_JOHANNESBURG_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:351
+msgid "TXT_KEY_CITY_STATE_JOHANNESBURG_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:356
+msgid "TXT_KEY_CITY_STATE_KABUL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:358
+msgid "TXT_KEY_CITY_STATE_KABUL_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:364
+msgid "TXT_KEY_CITY_STATE_KUMASI_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:366
+msgid "TXT_KEY_CITY_STATE_KUMASI_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:387
+msgid "TXT_KEY_CITY_STATE_SEOUL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:389
+msgid "TXT_KEY_CITY_STATE_SEOUL_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:394
+msgid "TXT_KEY_CITY_STATE_SINGAPORE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:396
+msgid "TXT_KEY_CITY_STATE_SINGAPORE_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:401
+msgid "TXT_KEY_CITY_STATE_STOCKHOLM_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:403
+msgid "TXT_KEY_CITY_STATE_STOCKHOLM_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:408
+msgid "TXT_KEY_CITY_STATE_TARUGA_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:410
+msgid "TXT_KEY_CITY_STATE_TARUGA_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:415
+msgid "TXT_KEY_CITY_STATE_TORONTO_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:417
+msgid "TXT_KEY_CITY_STATE_TORONTO_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:422
+msgid "TXT_KEY_CITY_STATE_VALLETTA_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:424
+msgid "TXT_KEY_CITY_STATE_VALLETTA_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:430
+msgid "TXT_KEY_CITY_STATE_VENICE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:432
+msgid "TXT_KEY_CITY_STATE_VENICE_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:437
+msgid "TXT_KEY_CITY_STATE_VILNIUS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:439
+msgid "TXT_KEY_CITY_STATE_VILNIUS_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:444
+msgid "TXT_KEY_CITY_STATE_WOLIN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/cityStates.py:446
+msgid "TXT_KEY_CITY_STATE_WOLIN_SUZARIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:124
+msgid "TXT_KEY_CIVILIZATION_NONE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:132
+msgid "TXT_KEY_CIVILIZATION_BARBARIAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:140
+msgid "TXT_KEY_CIVILIZATION_FREE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:148
+msgid "TXT_KEY_CIVILIZATION_UNMET"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:156
+msgid "TXT_KEY_CIVILIZATION_CITY_STATE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:167
+msgid "TXT_KEY_CIVILIZATION_GREECE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:170
+msgid "TXT_KEY_CITY_NAME_ATHENS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:171
+msgid "TXT_KEY_CITY_NAME_SPARTA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:172
+msgid "TXT_KEY_CITY_NAME_CORINTH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:173
+msgid "TXT_KEY_CITY_NAME_EPHESUS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:174
+msgid "TXT_KEY_CITY_NAME_ARGOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:175
+msgid "TXT_KEY_CITY_NAME_KNOSSOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:176
+msgid "TXT_KEY_CITY_NAME_MYCENAE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:177
+msgid "TXT_KEY_CITY_NAME_PHARSALOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:178
+msgid "TXT_KEY_CITY_NAME_RHODES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:179
+msgid "TXT_KEY_CITY_NAME_OLYMPIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:180
+msgid "TXT_KEY_CITY_NAME_ERETRIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:181
+msgid "TXT_KEY_CITY_NAME_PERGAMON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:182
+msgid "TXT_KEY_CITY_NAME_MILETOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:183
+msgid "TXT_KEY_CITY_NAME_MEGARA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:184
+msgid "TXT_KEY_CITY_NAME_PHOCAEA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:185
+msgid "TXT_KEY_CITY_NAME_DELPHI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:186
+msgid "TXT_KEY_CITY_NAME_MARATHON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:187
+msgid "TXT_KEY_CITY_NAME_PATRAS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:200
+msgid "TXT_KEY_CIVILIZATION_ROME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:203
+msgid "TXT_KEY_CITY_NAME_ROME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:204
+msgid "TXT_KEY_CITY_NAME_OSTIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:205
+msgid "TXT_KEY_CITY_NAME_ANTIUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:206
+msgid "TXT_KEY_CITY_NAME_CUMAE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:207
+msgid "TXT_KEY_CITY_NAME_AQUILEIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:208
+msgid "TXT_KEY_CITY_NAME_RAVENNA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:209
+msgid "TXT_KEY_CITY_NAME_PUTEOLI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:210
+msgid "TXT_KEY_CITY_NAME_ARRETIUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:211
+msgid "TXT_KEY_CITY_NAME_MEDIOLANUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:212
+msgid "TXT_KEY_CITY_NAME_LUGDUNUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:213
+msgid "TXT_KEY_CITY_NAME_ARPINUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:214
+msgid "TXT_KEY_CITY_NAME_SETIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:215
+msgid "TXT_KEY_CITY_NAME_VELITRAE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:216
+msgid "TXT_KEY_CITY_NAME_DUROCORTORUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:217
+msgid "TXT_KEY_CITY_NAME_BRUNDISIUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:218
+msgid "TXT_KEY_CITY_NAME_CAESARAUGUSTA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:219
+msgid "TXT_KEY_CITY_NAME_PALMYRA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:220
+msgid "TXT_KEY_CITY_NAME_HISPALIS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:221
+msgid "TXT_KEY_CITY_NAME_CAESAREA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:222
+msgid "TXT_KEY_CITY_NAME_ARTAXATA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:223
+msgid "TXT_KEY_CITY_NAME_PAPHOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:224
+msgid "TXT_KEY_CITY_NAME_SALONAE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:225
+msgid "TXT_KEY_CITY_NAME_EBURACUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:226
+msgid "TXT_KEY_CITY_NAME_LAURIACUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:227
+msgid "TXT_KEY_CITY_NAME_VERONA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:228
+msgid "TXT_KEY_CITY_NAME_COLONIA_AGRIPPINA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:229
+msgid "TXT_KEY_CITY_NAME_NARBO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:230
+msgid "TXT_KEY_CITY_NAME_TINGI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:231
+msgid "TXT_KEY_CITY_NAME_SARMIZEGETUSA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:232
+msgid "TXT_KEY_CITY_NAME_SIRMIUM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:239
+msgid "TXT_KEY_CIVILIZATION_ENGLAND"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:242
+msgid "TXT_KEY_CITY_NAME_LONDON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:243
+msgid "TXT_KEY_CITY_NAME_LIVERPOOL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:244
+msgid "TXT_KEY_CITY_NAME_MANCHESTER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:245
+msgid "TXT_KEY_CITY_NAME_BIRMINGHAM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:246
+msgid "TXT_KEY_CITY_NAME_LEEDS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:247
+msgid "TXT_KEY_CITY_NAME_SHEFFIELD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:248
+msgid "TXT_KEY_CITY_NAME_BRISTOL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:249
+msgid "TXT_KEY_CITY_NAME_PLYMOUTH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:250
+msgid "TXT_KEY_CITY_NAME_NEWCASTLE_UPON_TYNE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:251
+msgid "TXT_KEY_CITY_NAME_BRADFORD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:252
+msgid "TXT_KEY_CITY_NAME_STOKE_UPON_TRENT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:253
+msgid "TXT_KEY_CITY_NAME_HULL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:254
+msgid "TXT_KEY_CITY_NAME_PORTSMOUTH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:255
+msgid "TXT_KEY_CITY_NAME_PRESTON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:256
+msgid "TXT_KEY_CITY_NAME_SUNDERLAND"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:257
+msgid "TXT_KEY_CITY_NAME_BRIGHTON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:258
+msgid "TXT_KEY_CITY_NAME_NORWICH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:259
+msgid "TXT_KEY_CITY_NAME_YORK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:260
+msgid "TXT_KEY_CITY_NAME_NOTTINGHAM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:261
+msgid "TXT_KEY_CITY_NAME_LEICESTER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:262
+msgid "TXT_KEY_CITY_NAME_BLACKBURN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:263
+msgid "TXT_KEY_CITY_NAME_WOLVERHAMPTON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:264
+msgid "TXT_KEY_CITY_NAME_BATH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:265
+msgid "TXT_KEY_CITY_NAME_COVENTRY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:266
+msgid "TXT_KEY_CITY_NAME_EXETER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:267
+msgid "TXT_KEY_CITY_NAME_LINCOLN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:268
+msgid "TXT_KEY_CITY_NAME_CANTERBURY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:269
+msgid "TXT_KEY_CITY_NAME_IPSWICH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:270
+msgid "TXT_KEY_CITY_NAME_DOVER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:271
+msgid "TXT_KEY_CITY_NAME_HASTINGS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:272
+msgid "TXT_KEY_CITY_NAME_OXFORD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:273
+msgid "TXT_KEY_CITY_NAME_SHREWSBURY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:274
+msgid "TXT_KEY_CITY_NAME_CAMBRIDGE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:275
+msgid "TXT_KEY_CITY_NAME_NEWCASTLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:276
+msgid "TXT_KEY_CITY_NAME_WARWICK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:290
+msgid "TXT_KEY_CIVILIZATION_RUSSIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:293
+msgid "TXT_KEY_CITY_NAME_ST_PETERSBURG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:294
+msgid "TXT_KEY_CITY_NAME_MOSCOW"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:295
+msgid "TXT_KEY_CITY_NAME_NOVGOROD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:296
+msgid "TXT_KEY_CITY_NAME_KAZAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:297
+msgid "TXT_KEY_CITY_NAME_ASTRAKHAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:298
+msgid "TXT_KEY_CITY_NAME_YAROSLAVL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:299
+msgid "TXT_KEY_CITY_NAME_SMOLENSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:300
+msgid "TXT_KEY_CITY_NAME_VORONEZH"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:301
+msgid "TXT_KEY_CITY_NAME_TULA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:302
+msgid "TXT_KEY_CITY_NAME_SOLIKAMSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:303
+msgid "TXT_KEY_CITY_NAME_TVER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:304
+msgid "TXT_KEY_CITY_NAME_NIZHNIY_NOVGOROD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:305
+msgid "TXT_KEY_CITY_NAME_ARKHANGELSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:306
+msgid "TXT_KEY_CITY_NAME_VOLOGDA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:307
+msgid "TXT_KEY_CITY_NAME_OLONETS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:308
+msgid "TXT_KEY_CITY_NAME_SARATOV"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:309
+msgid "TXT_KEY_CITY_NAME_TAMBOV"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:310
+msgid "TXT_KEY_CITY_NAME_PSKOV"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:311
+msgid "TXT_KEY_CITY_NAME_KRASNOYARSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:312
+msgid "TXT_KEY_CITY_NAME_IRKUTSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:313
+msgid "TXT_KEY_CITY_NAME_YEKATERINBURG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:314
+msgid "TXT_KEY_CITY_NAME_ROSTOV"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:315
+msgid "TXT_KEY_CITY_NAME_BRYANSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:316
+msgid "TXT_KEY_CITY_NAME_YAKUTSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:317
+msgid "TXT_KEY_CITY_NAME_STARAYA_RUSSA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:318
+msgid "TXT_KEY_CITY_NAME_PERM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:319
+msgid "TXT_KEY_CITY_NAME_PETROZAVODSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:320
+msgid "TXT_KEY_CITY_NAME_OKHOTSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:321
+msgid "TXT_KEY_CITY_NAME_KOSTROMA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:322
+msgid "TXT_KEY_CITY_NAME_NIZHNEKOLYMSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:323
+msgid "TXT_KEY_CITY_NAME_SERGIYEV_POSAD"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:324
+msgid "TXT_KEY_CITY_NAME_OMSK"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:335
+msgid "TXT_KEY_CIVILIZATION_MACEDON"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:338
+#: smarthexboard/tests/test_player.py:176
+msgid "TXT_KEY_CITY_NAME_AIGAI"
+msgstr "Aigai"
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:339
+#: smarthexboard/tests/test_player.py:177
+msgid "TXT_KEY_CITY_NAME_ALEXANDRIA"
+msgstr "Alexandria"
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:340
+msgid "TXT_KEY_CITY_NAME_METHONE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:341
+msgid "TXT_KEY_CITY_NAME_CHALKIDIKI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:342
+msgid "TXT_KEY_CITY_NAME_DION"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:343
+msgid "TXT_KEY_CITY_NAME_ALEXANDROPOULI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:350
+msgid "TXT_KEY_CIVILIZATION_CHINA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:353
+msgid "TXT_KEY_CITY_NAME_TAIYUAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:354
+msgid "TXT_KEY_CITY_NAME_CHENGDU"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:355
+msgid "TXT_KEY_CITY_NAME_JIAODONG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:356
+msgid "TXT_KEY_CITY_NAME_CHANGSHA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:357
+msgid "TXT_KEY_CITY_NAME_LONGXI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:358
+msgid "TXT_KEY_CITY_NAME_GUANGZHOU"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:359
+msgid "TXT_KEY_CITY_NAME_HANDAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:360
+msgid "TXT_KEY_CITY_NAME_SHENYANG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:361
+msgid "TXT_KEY_CITY_NAME_SHANGHAI"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:362
+msgid "TXT_KEY_CITY_NAME_WUHAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:363
+msgid "TXT_KEY_CITY_NAME_YIYANG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:370
+msgid "TXT_KEY_CIVILIZATION_EGYPT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:373
+msgid "TXT_KEY_CITY_NAME_MEMPHIS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:374
+msgid "TXT_KEY_CITY_NAME_AKHETATEN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:375
+msgid "TXT_KEY_CITY_NAME_SHEDET"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:376
+msgid "TXT_KEY_CITY_NAME_IWNW"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:377
+msgid "TXT_KEY_CITY_NAME_SWENETT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:378
+msgid "TXT_KEY_CITY_NAME_NEKHEN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:379
+msgid "TXT_KEY_CITY_NAME_SAIS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:380
+msgid "TXT_KEY_CITY_NAME_ABYDOS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:381
+msgid "TXT_KEY_CITY_NAME_APU"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:382
+msgid "TXT_KEY_CITY_NAME_EDFU"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:383
+msgid "TXT_KEY_CITY_NAME_MENDES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:394
+msgid "TXT_KEY_CIVILIZATION_GERMANY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:397
+msgid "TXT_KEY_CITY_NAME_COLOGNE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:398
+msgid "TXT_KEY_CITY_NAME_FRANKFURT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:399
+msgid "TXT_KEY_CITY_NAME_MAGDEBURG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:400
+msgid "TXT_KEY_CITY_NAME_MAINZ"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:401
+msgid "TXT_KEY_CITY_NAME_HEIDELBERG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:402
+msgid "TXT_KEY_CITY_NAME_TRIER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:403
+msgid "TXT_KEY_CITY_NAME_BERLIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:404
+msgid "TXT_KEY_CITY_NAME_ULM"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:405
+msgid "TXT_KEY_CITY_NAME_HAMBURG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:406
+msgid "TXT_KEY_CITY_NAME_DORTMUND"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:407
+msgid "TXT_KEY_CITY_NAME_NUREMBERG"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:418
+msgid "TXT_KEY_CIVILIZATION_AZTEC"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:421
+msgid "TXT_KEY_CITY_NAME_TEXCOCO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:422
+msgid "TXT_KEY_CITY_NAME_ATZCAPOTZALCO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:423
+msgid "TXT_KEY_CITY_NAME_TEOTIHUACAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:424
+msgid "TXT_KEY_CITY_NAME_TLACOPAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:425
+msgid "TXT_KEY_CITY_NAME_XOCHICALCO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:426
+msgid "TXT_KEY_CITY_NAME_MALINALCO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:427
+msgid "TXT_KEY_CITY_NAME_TEAYO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:428
+msgid "TXT_KEY_CITY_NAME_CEMPOALA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:429
+msgid "TXT_KEY_CITY_NAME_CHALCO"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:430
+msgid "TXT_KEY_CITY_NAME_IXTAPALUCA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:431
+msgid "TXT_KEY_CITY_NAME_TENAYUCA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:694
+msgid "TXT_KEY_LEADER_BARBARIAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:716
+msgid "TXT_KEY_LEADER_FREE_CITIES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:739
+msgid "TXT_KEY_LEADER_ALEXANDER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:796
+msgid "TXT_KEY_LEADER_TRAJAN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:853
+msgid "TXT_KEY_LEADER_VICTORIA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:910
+msgid "TXT_KEY_LEADER_PETER"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:985
+msgid "TXT_KEY_LEADER_BARBAROSSA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:1060
+msgid "TXT_KEY_LEADER_CLEOPATRA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:1083
+msgid "TXT_KEY_LEADER_MONTEZUMA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:1158
+msgid "TXT_KEY_LEADER_QIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/civilizations.py:1233
+msgid "TXT_KEY_LEADER_UNMET"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/deals.py:273
+msgid "TXT_KEY_MISC_MADE_PEACE_WITH_MINOR_ALLIES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/deals.py:274
+msgid "TXT_KEY_MISC_MADE_PEACE_WITH_MINOR_ALLIES_SUMMARY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/accessLevels.py:48
+msgid "TXT_KEY_ACCESS_LEVEL_NONE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/accessLevels.py:54
+msgid "TXT_KEY_ACCESS_LEVEL_LIMITED_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/accessLevels.py:60
+msgid "TXT_KEY_ACCESS_LEVEL_OPEN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/accessLevels.py:66
+msgid "TXT_KEY_ACCESS_LEVEL_SECRET_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/accessLevels.py:72
+msgid "TXT_KEY_ACCESS_LEVEL_TOP_SECRET_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/diplomaticMessages.py:308
+msgid "TXT_KEY_DIPLOMATIC_REQUEST_HOSTILE_AGGRESSIVE_MILITARY_WARNING"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/diplomaticMessages.py:310
+msgid "TXT_KEY_DIPLOMATIC_REQUEST_AGGRESSIVE_MILITARY_WARNING"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:71
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITY_CONQUEST"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:76
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_PANTHEON_CREATED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:81
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_RELIGIONS_FOUNDED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:86
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_DECLARATIONS_OF_WAR"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:91
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_WEAPONS_OF_MASS_DESTRUCTION_STRIKES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:96
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_SPACE_RACE_PROJECTS_COMPLETED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:103
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_ALLIANCES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:108
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_FRIENDSHIPS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:113
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_GOVERNMENT_CHANGES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:118
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_DENUNCIATION"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:123
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITIES_FOUNDED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:128
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITIES_LIBERATED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:133
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITIES_RAZED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:138
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITIES_BESIEGED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:143
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_TRADE_DEALS_ENACTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:148
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_TRADE_DEALS_RENEGED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:153
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_BARBARIAN_CAMP_CLEARED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:160
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_BUILDINGS_CONSTRUCTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:165
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_DISTRICTS_CONSTRUCTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:170
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_GREAT_PEOPLE_RECRUITED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:175
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_WONDERS_STARTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:180
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_ARTIFACTS_EXTRACTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:185
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_INQUISITION_LAUNCHED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:192
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CITY_STATE_INFLUENCED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:197
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_CIVICS_COMPLETED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:202
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_TECHNOLOGIES_RESEARCHED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:207
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_SETTLERS_TRAINED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:214
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_WEAPON_OF_MASS_DESTRUCTION_BUILT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:219
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_ATTACKS_LAUNCHED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:224
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_PROJECTS_STARTED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:229
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_VICTORY_STRATEGY_CHANGED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/states/gossips.py:234
+msgid "TXT_KEY_DIPLOMACY_GOSSIP_NAME_WAR_PREPARATIONS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:178
+msgid "TXT_KEY_TECH_NONE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:192
 msgid "TXT_KEY_TECH_MINING_NAME"
-msgstr "Bergbau"
+msgstr ""
 
-#: smarthexboard/game/types.py:11
-#: smarthexboard/templates/styleguide/index.html:159
+#: smarthexboard/smarthexboardlib/game/types.py:193
+msgid "TXT_KEY_TECH_MINING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:194
+msgid "TXT_KEY_TECH_MINING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:195
+msgid "TXT_KEY_TECH_MINING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:195
+msgid "TXT_KEY_TECH_MINING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:207
+#: smarthexboard/templates/styleguide/index.html:174
 msgid "TXT_KEY_TECH_POTTERY_NAME"
-msgstr "Töpfern"
+msgstr ""
 
-#: smarthexboard/game/types.py:12
+#: smarthexboard/smarthexboardlib/game/types.py:208
+#: smarthexboard/templates/styleguide/index.html:177
+msgid "TXT_KEY_TECH_POTTERY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:209
+msgid "TXT_KEY_TECH_POTTERY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:210
+msgid "TXT_KEY_TECH_POTTERY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:210
+msgid "TXT_KEY_TECH_POTTERY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:221
 msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_NAME"
-msgstr "Tierhaltung"
+msgstr ""
 
-#: smarthexboard/game/types.py:13
+#: smarthexboard/smarthexboardlib/game/types.py:222
+msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:223
+msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:224
+msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:224
+msgid "TXT_KEY_TECH_ANIMAL_HUSBANDRY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:236
 msgid "TXT_KEY_TECH_SAILING_NAME"
-msgstr "Segeln"
+msgstr ""
 
-#: smarthexboard/game/types.py:14
+#: smarthexboard/smarthexboardlib/game/types.py:237
+msgid "TXT_KEY_TECH_SAILING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:238
+msgid "TXT_KEY_TECH_SAILING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:239
+msgid "TXT_KEY_TECH_SAILING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:239
+msgid "TXT_KEY_TECH_SAILING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:253
 msgid "TXT_KEY_TECH_ASTROLOGY_NAME"
-msgstr "Astrologie"
+msgstr ""
 
-#: smarthexboard/game/types.py:15
+#: smarthexboard/smarthexboardlib/game/types.py:254
+msgid "TXT_KEY_TECH_ASTROLOGY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:255
+msgid "TXT_KEY_TECH_ASTROLOGY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:256
+msgid "TXT_KEY_TECH_ASTROLOGY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:256
+msgid "TXT_KEY_TECH_ASTROLOGY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:269
 msgid "TXT_KEY_TECH_IRRIGATION_NAME"
-msgstr "Bewässerung"
+msgstr ""
 
-#: smarthexboard/game/types.py:16
+#: smarthexboard/smarthexboardlib/game/types.py:270
+msgid "TXT_KEY_TECH_IRRIGATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:271
+msgid "TXT_KEY_TECH_IRRIGATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:272
+msgid "TXT_KEY_TECH_IRRIGATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:272
+msgid "TXT_KEY_TECH_IRRIGATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:283
 msgid "TXT_KEY_TECH_WRITING_NAME"
-msgstr "Schrift"
+msgstr ""
 
-#: smarthexboard/game/types.py:17
+#: smarthexboard/smarthexboardlib/game/types.py:284
+msgid "TXT_KEY_TECH_WRITING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:285
+msgid "TXT_KEY_TECH_WRITING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:286
+msgid "TXT_KEY_TECH_WRITING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:286
+msgid "TXT_KEY_TECH_WRITING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:299
 msgid "TXT_KEY_TECH_MASONRY_NAME"
-msgstr "Mauerei"
+msgstr ""
 
-#: smarthexboard/game/types.py:18
+#: smarthexboard/smarthexboardlib/game/types.py:300
+msgid "TXT_KEY_TECH_MASONRY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:301
+msgid "TXT_KEY_TECH_MASONRY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:302
+msgid "TXT_KEY_TECH_MASONRY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:302
+msgid "TXT_KEY_TECH_MASONRY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:316
 msgid "TXT_KEY_TECH_ARCHERY_NAME"
-msgstr "Bogenschießen"
+msgstr ""
 
-#: smarthexboard/game/types.py:19
+#: smarthexboard/smarthexboardlib/game/types.py:317
+msgid "TXT_KEY_TECH_ARCHERY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:318
+msgid "TXT_KEY_TECH_ARCHERY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:319
+msgid "TXT_KEY_TECH_ARCHERY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:319
+msgid "TXT_KEY_TECH_ARCHERY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:331
 msgid "TXT_KEY_TECH_BRONZE_WORKING_NAME"
-msgstr "Bronzeverarbeitung"
+msgstr ""
 
-#: smarthexboard/game/types.py:20
+#: smarthexboard/smarthexboardlib/game/types.py:332
+msgid "TXT_KEY_TECH_BRONZE_WORKING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:333
+msgid "TXT_KEY_TECH_BRONZE_WORKING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:334
+msgid "TXT_KEY_TECH_BRONZE_WORKING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:334
+msgid "TXT_KEY_TECH_BRONZE_WORKING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:347
 msgid "TXT_KEY_TECH_WHEEL_NAME"
-msgstr "Rad"
+msgstr ""
 
-#: smarthexboard/game/types.py:23
+#: smarthexboard/smarthexboardlib/game/types.py:348
+msgid "TXT_KEY_TECH_WHEEL_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:349
+msgid "TXT_KEY_TECH_WHEEL_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:350
+msgid "TXT_KEY_TECH_WHEEL_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:350
+msgid "TXT_KEY_TECH_WHEEL_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:367
 msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_NAME"
 msgstr ""
 
-#: smarthexboard/game/types.py:24
-msgid "TXT_KEY_TECH_HORSEBACK_RIDING_NAME"
-msgstr "Reiten"
+#: smarthexboard/smarthexboardlib/game/types.py:368
+msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_EUREKA"
+msgstr ""
 
-#: smarthexboard/game/types.py:25
+#: smarthexboard/smarthexboardlib/game/types.py:369
+msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:370
+msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:370
+msgid "TXT_KEY_TECH_CELESTIAL_NAVIGATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:382
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:383
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:384
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:385
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:385
+msgid "TXT_KEY_TECH_HORSEBACK_RIDING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:397
 msgid "TXT_KEY_TECH_CURRENCY_NAME"
 msgstr ""
 
-#: smarthexboard/game/types.py:26
+#: smarthexboard/smarthexboardlib/game/types.py:398
+msgid "TXT_KEY_TECH_CURRENCY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:399
+msgid "TXT_KEY_TECH_CURRENCY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:400
+msgid "TXT_KEY_TECH_CURRENCY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:400
+msgid "TXT_KEY_TECH_CURRENCY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:412
 msgid "TXT_KEY_TECH_CONSTRUCTION_NAME"
 msgstr ""
 
-#: smarthexboard/game/types.py:27
+#: smarthexboard/smarthexboardlib/game/types.py:413
+msgid "TXT_KEY_TECH_CONSTRUCTION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:414
+msgid "TXT_KEY_TECH_CONSTRUCTION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:415
+msgid "TXT_KEY_TECH_CONSTRUCTION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:415
+msgid "TXT_KEY_TECH_CONSTRUCTION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:428
 msgid "TXT_KEY_TECH_IRON_WORKING_NAME"
-msgstr "Eisenverarbeitung"
+msgstr ""
 
-#: smarthexboard/game/types.py:28
+#: smarthexboard/smarthexboardlib/game/types.py:429
+msgid "TXT_KEY_TECH_IRON_WORKING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:430
+msgid "TXT_KEY_TECH_IRON_WORKING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:431
+msgid "TXT_KEY_TECH_IRON_WORKING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:431
+msgid "TXT_KEY_TECH_IRON_WORKING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:444
 msgid "TXT_KEY_TECH_SHIP_BUILDING_NAME"
-msgstr "Schiffbau"
+msgstr ""
 
-#: smarthexboard/game/types.py:29
+#: smarthexboard/smarthexboardlib/game/types.py:445
+msgid "TXT_KEY_TECH_SHIP_BUILDING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:446
+msgid "TXT_KEY_TECH_SHIP_BUILDING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:447
+msgid "TXT_KEY_TECH_SHIP_BUILDING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:447
+msgid "TXT_KEY_TECH_SHIP_BUILDING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:460
 msgid "TXT_KEY_TECH_MATHEMATICS_NAME"
-msgstr "Mathematik"
+msgstr ""
 
-#: smarthexboard/game/types.py:30
+#: smarthexboard/smarthexboardlib/game/types.py:461
+msgid "TXT_KEY_TECH_MATHEMATICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:462
+msgid "TXT_KEY_TECH_MATHEMATICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:463
+msgid "TXT_KEY_TECH_MATHEMATICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:463
+msgid "TXT_KEY_TECH_MATHEMATICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:475
 msgid "TXT_KEY_TECH_ENGINEERING_NAME"
-msgstr "Ingenieurwissenschaften"
+msgstr ""
 
-#: smarthexboard/game/types.py:37
+#: smarthexboard/smarthexboardlib/game/types.py:476
+msgid "TXT_KEY_TECH_ENGINEERING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:477
+msgid "TXT_KEY_TECH_ENGINEERING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:478
+msgid "TXT_KEY_TECH_ENGINEERING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:478
+msgid "TXT_KEY_TECH_ENGINEERING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:493
+msgid "TXT_KEY_TECH_MILITARY_TACTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:494
+msgid "TXT_KEY_TECH_MILITARY_TACTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:495
+msgid "TXT_KEY_TECH_MILITARY_TACTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:496
+msgid "TXT_KEY_TECH_MILITARY_TACTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:496
+msgid "TXT_KEY_TECH_MILITARY_TACTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:510
+msgid "TXT_KEY_TECH_BUTTRESS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:511
+msgid "TXT_KEY_TECH_BUTTRESS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:512
+msgid "TXT_KEY_TECH_BUTTRESS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:513
+msgid "TXT_KEY_TECH_BUTTRESS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:513
+msgid "TXT_KEY_TECH_BUTTRESS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:524
+msgid "TXT_KEY_TECH_APPRENTICESHIP_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:525
+msgid "TXT_KEY_TECH_APPRENTICESHIP_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:526
+msgid "TXT_KEY_TECH_APPRENTICESHIP_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:527
+msgid "TXT_KEY_TECH_APPRENTICESHIP_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:527
+msgid "TXT_KEY_TECH_APPRENTICESHIP_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:539
+msgid "TXT_KEY_TECH_STIRRUPS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:540
+msgid "TXT_KEY_TECH_STIRRUPS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:541
+msgid "TXT_KEY_TECH_STIRRUPS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:542
+msgid "TXT_KEY_TECH_STIRRUPS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:542
+msgid "TXT_KEY_TECH_STIRRUPS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:556
+msgid "TXT_KEY_TECH_MACHINERY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:557
+msgid "TXT_KEY_TECH_MACHINERY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:558
+msgid "TXT_KEY_TECH_MACHINERY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:559
+msgid "TXT_KEY_TECH_MACHINERY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:559
+msgid "TXT_KEY_TECH_MACHINERY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:571
+msgid "TXT_KEY_TECH_EDUCATION_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:572
+msgid "TXT_KEY_TECH_EDUCATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:573
+msgid "TXT_KEY_TECH_EDUCATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:574
+msgid "TXT_KEY_TECH_EDUCATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:574
+msgid "TXT_KEY_TECH_EDUCATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:586
+msgid "TXT_KEY_TECH_MILITARY_ENGINEERING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:587
+msgid "TXT_KEY_TECH_MILITARY_ENGINEERING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:588
+msgid "TXT_KEY_TECH_MILITARY_ENGINEERING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:589
+msgid "TXT_KEY_TECH_MILITARY_ENGINEERING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:589
+msgid "TXT_KEY_TECH_MILITARY_ENGINEERING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:601
+msgid "TXT_KEY_TECH_CASTLES_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:602
+msgid "TXT_KEY_TECH_CASTLES_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:603
+msgid "TXT_KEY_TECH_CASTLES_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:604
+msgid "TXT_KEY_TECH_CASTLES_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:604
+msgid "TXT_KEY_TECH_CASTLES_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:617
+msgid "TXT_KEY_TECH_CARTOGRAPHY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:618
+msgid "TXT_KEY_TECH_CARTOGRAPHY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:619
+msgid "TXT_KEY_TECH_CARTOGRAPHY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:620
+msgid "TXT_KEY_TECH_CARTOGRAPHY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:620
+msgid "TXT_KEY_TECH_CARTOGRAPHY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:631
+#: smarthexboard/smarthexboardlib/game/types.py:632
+msgid "TXT_KEY_TECH_MASS_PRODUCTION_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:633
+msgid "TXT_KEY_TECH_MASS_PRODUCTION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:635
+msgid "TXT_KEY_TECH_MASS_PRODUCTION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:636
+msgid "TXT_KEY_TECH_MASS_PRODUCTION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:648
+#: smarthexboard/smarthexboardlib/game/types.py:649
+msgid "TXT_KEY_TECH_BANKING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:650
+msgid "TXT_KEY_TECH_BANKING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:652
+msgid "TXT_KEY_TECH_BANKING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:653
+msgid "TXT_KEY_TECH_BANKING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:665
+msgid "TXT_KEY_TECH_GUNPOWDER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:666
+msgid "TXT_KEY_TECH_GUNPOWDER_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:667
+msgid "TXT_KEY_TECH_GUNPOWDER_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:669
+msgid "TXT_KEY_TECH_GUNPOWDER_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:670
+msgid "TXT_KEY_TECH_GUNPOWDER_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:684
+msgid "TXT_KEY_TECH_PRINTING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:685
+msgid "TXT_KEY_TECH_PRINTING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:686
+msgid "TXT_KEY_TECH_PRINTING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:688
+msgid "TXT_KEY_TECH_PRINTING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:689
+msgid "TXT_KEY_TECH_PRINTING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:701
+msgid "TXT_KEY_TECH_SQUARE_RIGGING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:702
+msgid "TXT_KEY_TECH_SQUARE_RIGGING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:703
+msgid "TXT_KEY_TECH_SQUARE_RIGGING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:705
+msgid "TXT_KEY_TECH_SQUARE_RIGGING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:706
+msgid "TXT_KEY_TECH_SQUARE_RIGGING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:720
+#: smarthexboard/smarthexboardlib/game/types.py:721
+#: smarthexboard/smarthexboardlib/game/types.py:722
+msgid "TXT_KEY_TECH_ASTRONOMY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:724
+msgid "TXT_KEY_TECH_ASTRONOMY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:725
+msgid "TXT_KEY_TECH_ASTRONOMY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:737
+msgid "TXT_KEY_TECH_METAL_CASTING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:738
+msgid "TXT_KEY_TECH_METAL_CASTING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:739
+msgid "TXT_KEY_TECH_METAL_CASTING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:741
+msgid "TXT_KEY_TECH_METAL_CASTING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:742
+msgid "TXT_KEY_TECH_METAL_CASTING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:754
+msgid "TXT_KEY_TECH_SIEGE_TACTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:755
+msgid "TXT_KEY_TECH_SIEGE_TACTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:756
+msgid "TXT_KEY_TECH_SIEGE_TACTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:758
+msgid "TXT_KEY_TECH_SIEGE_TACTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:759
+msgid "TXT_KEY_TECH_SIEGE_TACTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:774
 msgid "TXT_KEY_TECH_INDUSTRIALIZATION_NAME"
-msgstr "Industralisierung"
+msgstr ""
 
-#: smarthexboard/game/types.py:40
+#: smarthexboard/smarthexboardlib/game/types.py:775
+msgid "TXT_KEY_TECH_INDUSTRIALIZATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:776
+msgid "TXT_KEY_TECH_INDUSTRIALIZATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:778
+msgid "TXT_KEY_TECH_INDUSTRIALIZATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:779
+msgid "TXT_KEY_TECH_INDUSTRIALIZATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:791
+msgid "TXT_KEY_TECH_SCIENTIFIC_THEORY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:792
+msgid "TXT_KEY_TECH_SCIENTIFIC_THEORY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:793
+msgid "TXT_KEY_TECH_SCIENTIFIC_THEORY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:795
+msgid "TXT_KEY_TECH_SCIENTIFIC_THEORY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:796
+msgid "TXT_KEY_TECH_SCIENTIFIC_THEORY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:809
+msgid "TXT_KEY_TECH_BALLISTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:810
+msgid "TXT_KEY_TECH_BALLISTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:811
+msgid "TXT_KEY_TECH_BALLISTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:813
+msgid "TXT_KEY_TECH_BALLISTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:814
+msgid "TXT_KEY_TECH_BALLISTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:827
+msgid "TXT_KEY_TECH_MILITARY_SCIENCE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:828
+msgid "TXT_KEY_TECH_MILITARY_SCIENCE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:829
+msgid "TXT_KEY_TECH_MILITARY_SCIENCE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:831
+msgid "TXT_KEY_TECH_MILITARY_SCIENCE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:832
+msgid "TXT_KEY_TECH_MILITARY_SCIENCE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:844
+msgid "TXT_KEY_TECH_STEAM_POWER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:845
+msgid "TXT_KEY_TECH_STEAM_POWER_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:846
+msgid "TXT_KEY_TECH_STEAM_POWER_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:848
+msgid "TXT_KEY_TECH_STEAM_POWER_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:849
+msgid "TXT_KEY_TECH_STEAM_POWER_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:863
+msgid "TXT_KEY_TECH_SANITATION_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:864
+msgid "TXT_KEY_TECH_SANITATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:865
+msgid "TXT_KEY_TECH_SANITATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:867
+msgid "TXT_KEY_TECH_SANITATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:868
+msgid "TXT_KEY_TECH_SANITATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:880
+msgid "TXT_KEY_TECH_ECONOMICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:881
+msgid "TXT_KEY_TECH_ECONOMICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:882
+msgid "TXT_KEY_TECH_ECONOMICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:884
+msgid "TXT_KEY_TECH_ECONOMICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:885
+msgid "TXT_KEY_TECH_ECONOMICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:897
+msgid "TXT_KEY_TECH_RIFLING_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:898
+msgid "TXT_KEY_TECH_RIFLING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:899
+msgid "TXT_KEY_TECH_RIFLING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:901
+msgid "TXT_KEY_TECH_RIFLING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:902
+msgid "TXT_KEY_TECH_RIFLING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:916
+msgid "TXT_KEY_TECH_FLIGHT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:917
+msgid "TXT_KEY_TECH_FLIGHT_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:918
+msgid "TXT_KEY_TECH_FLIGHT_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:920
+msgid "TXT_KEY_TECH_FLIGHT_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:921
+msgid "TXT_KEY_TECH_FLIGHT_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:933
+msgid "TXT_KEY_TECH_REPLACEABLE_PARTS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:934
+msgid "TXT_KEY_TECH_REPLACEABLE_PARTS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:935
+msgid "TXT_KEY_TECH_REPLACEABLE_PARTS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:937
+msgid "TXT_KEY_TECH_REPLACEABLE_PARTS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:938
+msgid "TXT_KEY_TECH_REPLACEABLE_PARTS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:952
+msgid "TXT_KEY_TECH_STEEL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:953
+msgid "TXT_KEY_TECH_STEEL_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:954
+msgid "TXT_KEY_TECH_STEEL_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:956
+msgid "TXT_KEY_TECH_STEEL_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:957
+msgid "TXT_KEY_TECH_STEEL_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:970
 msgid "TXT_KEY_TECH_REFINING_NAME"
 msgstr ""
 
-#: smarthexboard/models.py:11
-msgid "Open"
-msgstr "Wartend"
+#: smarthexboard/smarthexboardlib/game/types.py:971
+msgid "TXT_KEY_TECH_REFINING_EUREKA"
+msgstr ""
 
-#: smarthexboard/models.py:12
-msgid "Running"
-msgstr "In Arbeit"
+#: smarthexboard/smarthexboardlib/game/types.py:972
+msgid "TXT_KEY_TECH_REFINING_EUREKA_TEXT"
+msgstr ""
 
-#: smarthexboard/models.py:13
-msgid "Ready"
-msgstr "Fertig"
+#: smarthexboard/smarthexboardlib/game/types.py:974
+msgid "TXT_KEY_TECH_REFINING_QUOTE1"
+msgstr ""
 
-#: smarthexboard/models.py:39
-msgid "Settler"
-msgstr "Siedler"
+#: smarthexboard/smarthexboardlib/game/types.py:987
+msgid "TXT_KEY_TECH_ELECTRICITY_NAME"
+msgstr ""
 
-#: smarthexboard/models.py:40
-msgid "Chieftain"
-msgstr "Häuptling"
+#: smarthexboard/smarthexboardlib/game/types.py:988
+msgid "TXT_KEY_TECH_ELECTRICITY_EUREKA"
+msgstr ""
 
-#: smarthexboard/models.py:41
-msgid "Warlord"
-msgstr "Kriegsherr"
+#: smarthexboard/smarthexboardlib/game/types.py:989
+msgid "TXT_KEY_TECH_ELECTRICITY_EUREKA_TEXT"
+msgstr ""
 
-#: smarthexboard/models.py:42
-msgid "Prince"
-msgstr "Prinz"
+#: smarthexboard/smarthexboardlib/game/types.py:991
+msgid "TXT_KEY_TECH_ELECTRICITY_QUOTE1"
+msgstr ""
 
-#: smarthexboard/models.py:43
-msgid "King"
-msgstr "König"
+#: smarthexboard/smarthexboardlib/game/types.py:992
+msgid "TXT_KEY_TECH_ELECTRICITY_QUOTE2"
+msgstr ""
 
-#: smarthexboard/models.py:44
-msgid "Emperor"
-msgstr "Kaiser"
+#: smarthexboard/smarthexboardlib/game/types.py:1005
+msgid "TXT_KEY_TECH_RADIO_NAME"
+msgstr ""
 
-#: smarthexboard/models.py:45
-msgid "Immortal"
-msgstr "Unsterblich"
+#: smarthexboard/smarthexboardlib/game/types.py:1006
+msgid "TXT_KEY_TECH_RADIO_EUREKA"
+msgstr ""
 
-#: smarthexboard/models.py:46
-msgid "Deity"
-msgstr "Göttlich"
+#: smarthexboard/smarthexboardlib/game/types.py:1007
+msgid "TXT_KEY_TECH_RADIO_EUREKA_TEXT"
+msgstr ""
 
-#: smarthexboard/models.py:84
-msgid "Alexander"
-msgstr "Alexander"
+#: smarthexboard/smarthexboardlib/game/types.py:1009
+msgid "TXT_KEY_TECH_RADIO_QUOTE1"
+msgstr ""
 
-#: smarthexboard/models.py:85
-msgid "Trajan"
-msgstr "Trajan"
+#: smarthexboard/smarthexboardlib/game/types.py:1010
+msgid "TXT_KEY_TECH_RADIO_QUOTE2"
+msgstr ""
 
-#: smarthexboard/models.py:86
-msgid "Victoria"
-msgstr "Victoria"
+#: smarthexboard/smarthexboardlib/game/types.py:1022
+msgid "TXT_KEY_TECH_CHEMISTRY_NAME"
+msgstr ""
 
-#: smarthexboard/models.py:87
-msgid "Montezuma"
-msgstr "Montezuma"
+#: smarthexboard/smarthexboardlib/game/types.py:1023
+msgid "TXT_KEY_TECH_CHEMISTRY_EUREKA"
+msgstr ""
 
-#: smarthexboard/models.py:88
-msgid "Cyrus"
-msgstr "Cyrus"
+#: smarthexboard/smarthexboardlib/game/types.py:1024
+msgid "TXT_KEY_TECH_CHEMISTRY_EUREKA_TEXT"
+msgstr ""
 
-#: smarthexboard/models.py:89
-msgid "Napoleon"
-msgstr "Napoleon"
+#: smarthexboard/smarthexboardlib/game/types.py:1026
+msgid "TXT_KEY_TECH_CHEMISTRY_QUOTE1"
+msgstr ""
 
-#: smarthexboard/models.py:90
-msgid "Cleopatra"
-msgstr "Cleopatra"
+#: smarthexboard/smarthexboardlib/game/types.py:1027
+msgid "TXT_KEY_TECH_CHEMISTRY_QUOTE2"
+msgstr ""
 
-#: smarthexboard/models.py:91
-msgid "Barbarossa"
-msgstr "Barbarossa"
+#: smarthexboard/smarthexboardlib/game/types.py:1040
+msgid "TXT_KEY_TECH_COMBUSTION_NAME"
+msgstr ""
 
-#: smarthexboard/models.py:92
-msgid "Peter the Great"
-msgstr "Peter der Große"
+#: smarthexboard/smarthexboardlib/game/types.py:1041
+msgid "TXT_KEY_TECH_COMBUSTION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1042
+msgid "TXT_KEY_TECH_COMBUSTION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1044
+msgid "TXT_KEY_TECH_COMBUSTION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1045
+msgid "TXT_KEY_TECH_COMBUSTION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1060
+msgid "TXT_KEY_TECH_ADVANCED_FLIGHT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1061
+msgid "TXT_KEY_TECH_ADVANCED_FLIGHT_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1062
+msgid "TXT_KEY_TECH_ADVANCED_FLIGHT_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1064
+msgid "TXT_KEY_TECH_ADVANCED_FLIGHT_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1065
+msgid "TXT_KEY_TECH_ADVANCED_FLIGHT_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1077
+msgid "TXT_KEY_TECH_ROCKETRY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1078
+msgid "TXT_KEY_TECH_ROCKETRY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1079
+msgid "TXT_KEY_TECH_ROCKETRY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1081
+msgid "TXT_KEY_TECH_ROCKETRY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1082
+msgid "TXT_KEY_TECH_ROCKETRY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1094
+msgid "TXT_KEY_TECH_ADVANCED_BALLISTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1095
+msgid "TXT_KEY_TECH_ADVANCED_BALLISTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1096
+msgid "TXT_KEY_TECH_ADVANCED_BALLISTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1098
+msgid "TXT_KEY_TECH_ADVANCED_BALLISTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1099
+msgid "TXT_KEY_TECH_ADVANCED_BALLISTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1112
+msgid "TXT_KEY_TECH_COMBINED_ARMS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1113
+msgid "TXT_KEY_TECH_COMBINED_ARMS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1114
+msgid "TXT_KEY_TECH_COMBINED_ARMS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1116
+msgid "TXT_KEY_TECH_COMBINED_ARMS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1117
+msgid "TXT_KEY_TECH_COMBINED_ARMS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1129
+msgid "TXT_KEY_TECH_PLASTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1130
+msgid "TXT_KEY_TECH_PLASTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1131
+msgid "TXT_KEY_TECH_PLASTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1133
+msgid "TXT_KEY_TECH_PLASTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1134
+msgid "TXT_KEY_TECH_PLASTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1147
+msgid "TXT_KEY_TECH_COMPUTERS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1148
+msgid "TXT_KEY_TECH_COMPUTERS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1149
+msgid "TXT_KEY_TECH_COMPUTERS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1151
+msgid "TXT_KEY_TECH_COMPUTERS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1152
+msgid "TXT_KEY_TECH_COMPUTERS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1166
+msgid "TXT_KEY_TECH_NUCLEAR_FISSION_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1167
+msgid "TXT_KEY_TECH_NUCLEAR_FISSION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1168
+msgid "TXT_KEY_TECH_NUCLEAR_FISSION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1170
+msgid "TXT_KEY_TECH_NUCLEAR_FISSION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1171
+msgid "TXT_KEY_TECH_NUCLEAR_FISSION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1183
+msgid "TXT_KEY_TECH_SYNTHETIC_MATERIALS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1184
+msgid "TXT_KEY_TECH_SYNTHETIC_MATERIALS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1185
+msgid "TXT_KEY_TECH_SYNTHETIC_MATERIALS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1187
+msgid "TXT_KEY_TECH_SYNTHETIC_MATERIALS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1188
+msgid "TXT_KEY_TECH_SYNTHETIC_MATERIALS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1203
+msgid "TXT_KEY_TECH_TELECOMMUNICATIONS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1204
+msgid "TXT_KEY_TECH_TELECOMMUNICATIONS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1205
+msgid "TXT_KEY_TECH_TELECOMMUNICATIONS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1207
+msgid "TXT_KEY_TECH_TELECOMMUNICATIONS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1208
+msgid "TXT_KEY_TECH_TELECOMMUNICATIONS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1220
+msgid "TXT_KEY_TECH_SATELLITES_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1221
+msgid "TXT_KEY_TECH_SATELLITES_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1222
+msgid "TXT_KEY_TECH_SATELLITES_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1224
+msgid "TXT_KEY_TECH_SATELLITES_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1225
+msgid "TXT_KEY_TECH_SATELLITES_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1238
+msgid "TXT_KEY_TECH_GUIDANCE_SYSTEMS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1239
+msgid "TXT_KEY_TECH_GUIDANCE_SYSTEMS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1240
+msgid "TXT_KEY_TECH_GUIDANCE_SYSTEMS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1242
+msgid "TXT_KEY_TECH_GUIDANCE_SYSTEMS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1243
+msgid "TXT_KEY_TECH_GUIDANCE_SYSTEMS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1255
+msgid "TXT_KEY_TECH_LASERS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1256
+msgid "TXT_KEY_TECH_LASERS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1257
+msgid "TXT_KEY_TECH_LASERS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1259
+msgid "TXT_KEY_TECH_LASERS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1260
+msgid "TXT_KEY_TECH_LASERS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1272
+msgid "TXT_KEY_TECH_COMPOSITES_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1273
+msgid "TXT_KEY_TECH_COMPOSITES_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1274
+msgid "TXT_KEY_TECH_COMPOSITES_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1276
+msgid "TXT_KEY_TECH_COMPOSITES_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1277
+msgid "TXT_KEY_TECH_COMPOSITES_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1289
+msgid "TXT_KEY_TECH_STEALTH_TECHNOLOGY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1290
+msgid "TXT_KEY_TECH_STEALTH_TECHNOLOGY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1291
+msgid "TXT_KEY_TECH_STEALTH_TECHNOLOGY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1293
+msgid "TXT_KEY_TECH_STEALTH_TECHNOLOGY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1294
+msgid "TXT_KEY_TECH_STEALTH_TECHNOLOGY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1306
+msgid "TXT_KEY_TECH_ROBOTICS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1307
+msgid "TXT_KEY_TECH_ROBOTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1308
+msgid "TXT_KEY_TECH_ROBOTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1310
+msgid "TXT_KEY_TECH_ROBOTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1311
+msgid "TXT_KEY_TECH_ROBOTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1324
+msgid "TXT_KEY_TECH_NUCLEAR_FUSION_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1325
+msgid "TXT_KEY_TECH_NUCLEAR_FUSION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1326
+msgid "TXT_KEY_TECH_NUCLEAR_FUSION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1328
+msgid "TXT_KEY_TECH_NUCLEAR_FUSION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1329
+msgid "TXT_KEY_TECH_NUCLEAR_FUSION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1341
+msgid "TXT_KEY_TECH_NANOTECHNOLOGY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1342
+msgid "TXT_KEY_TECH_NANOTECHNOLOGY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1343
+msgid "TXT_KEY_TECH_NANOTECHNOLOGY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1345
+msgid "TXT_KEY_TECH_NANOTECHNOLOGY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1346
+msgid "TXT_KEY_TECH_NANOTECHNOLOGY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1359
+msgid "TXT_KEY_TECH_FUTURE_TECH_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1360
+msgid "TXT_KEY_TECH_FUTURE_TECH_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1361
+msgid "TXT_KEY_TECH_FUTURE_TECH_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1363
+msgid "TXT_KEY_TECH_FUTURE_TECH_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1364
+msgid "TXT_KEY_TECH_FUTURE_TECH_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1520
+msgid "TXT_KEY_CIVIC_NONE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1536
+msgid "TXT_KEY_CIVIC_STATE_WORKFORCE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1537
+msgid "TXT_KEY_CIVIC_STATE_WORKFORCE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1538
+msgid "TXT_KEY_CIVIC_STATE_WORKFORCE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1540
+msgid "TXT_KEY_CIVIC_STATE_WORKFORCE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1541
+msgid "TXT_KEY_CIVIC_STATE_WORKFORCE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1553
+msgid "TXT_KEY_CIVIC_CRAFTSMANSHIP_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1554
+msgid "TXT_KEY_CIVIC_CRAFTSMANSHIP_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1555
+msgid "TXT_KEY_CIVIC_CRAFTSMANSHIP_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1570
+msgid "TXT_KEY_CIVIC_CODE_OF_LAWS_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1571
+msgid "TXT_KEY_CIVIC_CODE_OF_LAWS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1572
+msgid "TXT_KEY_CIVIC_CODE_OF_LAWS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1574
+msgid "TXT_KEY_CIVIC_CODE_OF_LAWS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1575
+msgid "TXT_KEY_CIVIC_CODE_OF_LAWS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1587
+msgid "TXT_KEY_CIVIC_EARLY_EMPIRE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1588
+msgid "TXT_KEY_CIVIC_EARLY_EMPIRE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1589
+msgid "TXT_KEY_CIVIC_EARLY_EMPIRE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1591
+msgid "TXT_KEY_CIVIC_EARLY_EMPIRE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1592
+msgid "TXT_KEY_CIVIC_EARLY_EMPIRE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1604
+msgid "TXT_KEY_CIVIC_FOREIGN_TRADE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1605
+msgid "TXT_KEY_CIVIC_FOREIGN_TRADE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1606
+msgid "TXT_KEY_CIVIC_FOREIGN_TRADE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1608
+msgid "TXT_KEY_CIVIC_FOREIGN_TRADE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1609
+msgid "TXT_KEY_CIVIC_FOREIGN_TRADE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1621
+msgid "TXT_KEY_CIVIC_MYSTICISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1622
+msgid "TXT_KEY_CIVIC_MYSTICISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1623
+msgid "TXT_KEY_CIVIC_MYSTICISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1625
+msgid "TXT_KEY_CIVIC_MYSTICISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1626
+msgid "TXT_KEY_CIVIC_MYSTICISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1638
+msgid "TXT_KEY_CIVIC_MILITARY_TRADITION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1639
+msgid "TXT_KEY_CIVIC_MILITARY_TRADITION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1640
+msgid "TXT_KEY_CIVIC_MILITARY_TRADITION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1642
+msgid "TXT_KEY_CIVIC_MILITARY_TRADITION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1643
+msgid "TXT_KEY_CIVIC_MILITARY_TRADITION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1657
+msgid "TXT_KEY_CIVIC_DEFENSIVE_TACTICS_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1658
+msgid "TXT_KEY_CIVIC_DEFENSIVE_TACTICS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1659
+msgid "TXT_KEY_CIVIC_DEFENSIVE_TACTICS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1661
+msgid "TXT_KEY_CIVIC_DEFENSIVE_TACTICS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1662
+msgid "TXT_KEY_CIVIC_DEFENSIVE_TACTICS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1674
+msgid "TXT_KEY_CIVIC_GAMES_AND_RECREATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1675
+msgid "TXT_KEY_CIVIC_GAMES_AND_RECREATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1676
+msgid "TXT_KEY_CIVIC_GAMES_AND_RECREATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1678
+msgid "TXT_KEY_CIVIC_GAMES_AND_RECREATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1679
+msgid "TXT_KEY_CIVIC_GAMES_AND_RECREATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1691
+msgid "TXT_KEY_CIVIC_POLITICAL_PHILOSOPHY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1692
+msgid "TXT_KEY_CIVIC_POLITICAL_PHILOSOPHY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1693
+msgid "TXT_KEY_CIVIC_POLITICAL_PHILOSOPHY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1695
+msgid "TXT_KEY_CIVIC_POLITICAL_PHILOSOPHY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1696
+msgid "TXT_KEY_CIVIC_POLITICAL_PHILOSOPHY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1708
+msgid "TXT_KEY_CIVIC_RECORDED_HISTORY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1709
+msgid "TXT_KEY_CIVIC_RECORDED_HISTORY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1710
+msgid "TXT_KEY_CIVIC_RECORDED_HISTORY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1712
+msgid "TXT_KEY_CIVIC_RECORDED_HISTORY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1713
+msgid "TXT_KEY_CIVIC_RECORDED_HISTORY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1725
+msgid "TXT_KEY_CIVIC_DRAMA_AND_POETRY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1726
+msgid "TXT_KEY_CIVIC_DRAMA_AND_POETRY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1727
+msgid "TXT_KEY_CIVIC_DRAMA_AND_POETRY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1729
+msgid "TXT_KEY_CIVIC_DRAMA_AND_POETRY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1730
+msgid "TXT_KEY_CIVIC_DRAMA_AND_POETRY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1742
+msgid "TXT_KEY_CIVIC_THEOLOGY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1743
+msgid "TXT_KEY_CIVIC_THEOLOGY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1744
+msgid "TXT_KEY_CIVIC_THEOLOGY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1746
+msgid "TXT_KEY_CIVIC_THEOLOGY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1747
+msgid "TXT_KEY_CIVIC_THEOLOGY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1759
+msgid "TXT_KEY_CIVIC_MILITARY_TRAINING_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1760
+msgid "TXT_KEY_CIVIC_MILITARY_TRAINING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1761
+msgid "TXT_KEY_CIVIC_MILITARY_TRAINING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1763
+msgid "TXT_KEY_CIVIC_MILITARY_TRAINING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1764
+msgid "TXT_KEY_CIVIC_MILITARY_TRAINING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1778
+msgid "TXT_KEY_CIVIC_NAVAL_TRADITION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1779
+msgid "TXT_KEY_CIVIC_NAVAL_TRADITION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1780
+msgid "TXT_KEY_CIVIC_NAVAL_TRADITION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1782
+msgid "TXT_KEY_CIVIC_NAVAL_TRADITION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1783
+msgid "TXT_KEY_CIVIC_NAVAL_TRADITION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1795
+msgid "TXT_KEY_CIVIC_FEUDALISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1796
+msgid "TXT_KEY_CIVIC_FEUDALISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1797
+msgid "TXT_KEY_CIVIC_FEUDALISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1799
+msgid "TXT_KEY_CIVIC_FEUDALISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1800
+msgid "TXT_KEY_CIVIC_FEUDALISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1812
+msgid "TXT_KEY_CIVIC_MEDIEVAL_FAIRES_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1813
+msgid "TXT_KEY_CIVIC_MEDIEVAL_FAIRES_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1814
+msgid "TXT_KEY_CIVIC_MEDIEVAL_FAIRES_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1816
+msgid "TXT_KEY_CIVIC_MEDIEVAL_FAIRES_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1817
+msgid "TXT_KEY_CIVIC_MEDIEVAL_FAIRES_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1829
+msgid "TXT_KEY_CIVIC_CIVIL_SERVICE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1830
+msgid "TXT_KEY_CIVIC_CIVIL_SERVICE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1831
+msgid "TXT_KEY_CIVIC_CIVIL_SERVICE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1833
+msgid "TXT_KEY_CIVIC_CIVIL_SERVICE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1834
+msgid "TXT_KEY_CIVIC_CIVIL_SERVICE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1846
+msgid "TXT_KEY_CIVIC_GUILDS_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1847
+msgid "TXT_KEY_CIVIC_GUILDS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1848
+msgid "TXT_KEY_CIVIC_GUILDS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1850
+msgid "TXT_KEY_CIVIC_GUILDS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1851
+msgid "TXT_KEY_CIVIC_GUILDS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1863
+msgid "TXT_KEY_CIVIC_MERCENARIES_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1864
+msgid "TXT_KEY_CIVIC_MERCENARIES_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1865
+msgid "TXT_KEY_CIVIC_MERCENARIES_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1867
+msgid "TXT_KEY_CIVIC_MERCENARIES_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1868
+msgid "TXT_KEY_CIVIC_MERCENARIES_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1880
+msgid "TXT_KEY_CIVIC_DIVINE_RIGHT_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1881
+msgid "TXT_KEY_CIVIC_DIVINE_RIGHT_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1882
+msgid "TXT_KEY_CIVIC_DIVINE_RIGHT_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1884
+msgid "TXT_KEY_CIVIC_DIVINE_RIGHT_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1885
+msgid "TXT_KEY_CIVIC_DIVINE_RIGHT_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1899
+msgid "TXT_KEY_CIVIC_ENLIGHTENMENT_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1900
+msgid "TXT_KEY_CIVIC_ENLIGHTENMENT_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1901
+msgid "TXT_KEY_CIVIC_ENLIGHTENMENT_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1903
+msgid "TXT_KEY_CIVIC_ENLIGHTENMENT_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1904
+msgid "TXT_KEY_CIVIC_ENLIGHTENMENT_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1916
+msgid "TXT_KEY_CIVIC_HUMANISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1917
+msgid "TXT_KEY_CIVIC_HUMANISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1918
+msgid "TXT_KEY_CIVIC_HUMANISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1920
+msgid "TXT_KEY_CIVIC_HUMANISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1921
+msgid "TXT_KEY_CIVIC_HUMANISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1933
+msgid "TXT_KEY_CIVIC_MERCANTILISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1934
+msgid "TXT_KEY_CIVIC_MERCANTILISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1935
+msgid "TXT_KEY_CIVIC_MERCANTILISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1937
+msgid "TXT_KEY_CIVIC_MERCANTILISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1938
+msgid "TXT_KEY_CIVIC_MERCANTILISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1950
+msgid "TXT_KEY_CIVIC_DIPLOMATIC_SERVICE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1951
+msgid "TXT_KEY_CIVIC_DIPLOMATIC_SERVICE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1952
+msgid "TXT_KEY_CIVIC_DIPLOMATIC_SERVICE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1954
+msgid "TXT_KEY_CIVIC_DIPLOMATIC_SERVICE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1955
+msgid "TXT_KEY_CIVIC_DIPLOMATIC_SERVICE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1967
+msgid "TXT_KEY_CIVIC_EXPLORATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1968
+msgid "TXT_KEY_CIVIC_EXPLORATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1969
+msgid "TXT_KEY_CIVIC_EXPLORATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1971
+msgid "TXT_KEY_CIVIC_EXPLORATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1972
+msgid "TXT_KEY_CIVIC_EXPLORATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1984
+msgid "TXT_KEY_CIVIC_REFORMED_CHURCH_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1985
+msgid "TXT_KEY_CIVIC_REFORMED_CHURCH_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1986
+msgid "TXT_KEY_CIVIC_REFORMED_CHURCH_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1988
+msgid "TXT_KEY_CIVIC_REFORMED_CHURCH_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:1989
+msgid "TXT_KEY_CIVIC_REFORMED_CHURCH_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2003
+msgid "TXT_KEY_CIVIC_CIVIL_ENGINEERING_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2004
+msgid "TXT_KEY_CIVIC_CIVIL_ENGINEERING_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2005
+msgid "TXT_KEY_CIVIC_CIVIL_ENGINEERING_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2007
+msgid "TXT_KEY_CIVIC_CIVIL_ENGINEERING_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2008
+msgid "TXT_KEY_CIVIC_CIVIL_ENGINEERING_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2020
+msgid "TXT_KEY_CIVIC_COLONIALISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2021
+msgid "TXT_KEY_CIVIC_COLONIALISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2022
+msgid "TXT_KEY_CIVIC_COLONIALISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2024
+msgid "TXT_KEY_CIVIC_COLONIALISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2025
+msgid "TXT_KEY_CIVIC_COLONIALISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2037
+msgid "TXT_KEY_CIVIC_NATIONALISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2038
+msgid "TXT_KEY_CIVIC_NATIONALISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2039
+msgid "TXT_KEY_CIVIC_NATIONALISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2041
+msgid "TXT_KEY_CIVIC_NATIONALISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2042
+msgid "TXT_KEY_CIVIC_NATIONALISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2054
+msgid "TXT_KEY_CIVIC_OPERA_AND_BALLET_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2055
+msgid "TXT_KEY_CIVIC_OPERA_AND_BALLET_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2056
+msgid "TXT_KEY_CIVIC_OPERA_AND_BALLET_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2058
+msgid "TXT_KEY_CIVIC_OPERA_AND_BALLET_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2059
+msgid "TXT_KEY_CIVIC_OPERA_AND_BALLET_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2071
+msgid "TXT_KEY_CIVIC_NATURAL_HISTORY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2072
+msgid "TXT_KEY_CIVIC_NATURAL_HISTORY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2073
+msgid "TXT_KEY_CIVIC_NATURAL_HISTORY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2075
+msgid "TXT_KEY_CIVIC_NATURAL_HISTORY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2076
+msgid "TXT_KEY_CIVIC_NATURAL_HISTORY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2088
+msgid "TXT_KEY_CIVIC_URBANIZATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2089
+msgid "TXT_KEY_CIVIC_URBANIZATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2090
+msgid "TXT_KEY_CIVIC_URBANIZATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2092
+msgid "TXT_KEY_CIVIC_URBANIZATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2093
+msgid "TXT_KEY_CIVIC_URBANIZATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2105
+msgid "TXT_KEY_CIVIC_SCORCHED_EARTH_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2106
+msgid "TXT_KEY_CIVIC_SCORCHED_EARTH_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2107
+msgid "TXT_KEY_CIVIC_SCORCHED_EARTH_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2109
+msgid "TXT_KEY_CIVIC_SCORCHED_EARTH_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2110
+msgid "TXT_KEY_CIVIC_SCORCHED_EARTH_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2124
+msgid "TXT_KEY_CIVIC_CONSERVATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2125
+msgid "TXT_KEY_CIVIC_CONSERVATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2126
+msgid "TXT_KEY_CIVIC_CONSERVATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2128
+msgid "TXT_KEY_CIVIC_CONSERVATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2129
+msgid "TXT_KEY_CIVIC_CONSERVATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2141
+msgid "TXT_KEY_CIVIC_MASS_MEDIA_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2142
+msgid "TXT_KEY_CIVIC_MASS_MEDIA_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2143
+msgid "TXT_KEY_CIVIC_MASS_MEDIA_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2145
+msgid "TXT_KEY_CIVIC_MASS_MEDIA_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2146
+msgid "TXT_KEY_CIVIC_MASS_MEDIA_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2158
+msgid "TXT_KEY_CIVIC_MOBILIZATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2159
+msgid "TXT_KEY_CIVIC_MOBILIZATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2160
+msgid "TXT_KEY_CIVIC_MOBILIZATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2162
+msgid "TXT_KEY_CIVIC_MOBILIZATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2163
+msgid "TXT_KEY_CIVIC_MOBILIZATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2175
+msgid "TXT_KEY_CIVIC_CAPITALISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2176
+msgid "TXT_KEY_CIVIC_CAPITALISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2177
+msgid "TXT_KEY_CIVIC_CAPITALISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2179
+msgid "TXT_KEY_CIVIC_CAPITALISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2180
+msgid "TXT_KEY_CIVIC_CAPITALISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2192
+msgid "TXT_KEY_CIVIC_IDEOLOGY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2193
+msgid "TXT_KEY_CIVIC_IDEOLOGY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2194
+msgid "TXT_KEY_CIVIC_IDEOLOGY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2196
+msgid "TXT_KEY_CIVIC_IDEOLOGY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2197
+msgid "TXT_KEY_CIVIC_IDEOLOGY_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2209
+msgid "TXT_KEY_CIVIC_NUCLEAR_PROGRAM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2210
+msgid "TXT_KEY_CIVIC_NUCLEAR_PROGRAM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2211
+msgid "TXT_KEY_CIVIC_NUCLEAR_PROGRAM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2213
+msgid "TXT_KEY_CIVIC_NUCLEAR_PROGRAM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2214
+msgid "TXT_KEY_CIVIC_NUCLEAR_PROGRAM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2226
+msgid "TXT_KEY_CIVIC_SUFFRAGE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2227
+msgid "TXT_KEY_CIVIC_SUFFRAGE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2228
+msgid "TXT_KEY_CIVIC_SUFFRAGE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2230
+msgid "TXT_KEY_CIVIC_SUFFRAGE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2231
+msgid "TXT_KEY_CIVIC_SUFFRAGE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2243
+msgid "TXT_KEY_CIVIC_TOTALITARIANISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2244
+msgid "TXT_KEY_CIVIC_TOTALITARIANISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2245
+msgid "TXT_KEY_CIVIC_TOTALITARIANISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2247
+msgid "TXT_KEY_CIVIC_TOTALITARIANISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2248
+msgid "TXT_KEY_CIVIC_TOTALITARIANISM_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2260
+msgid "TXT_KEY_CIVIC_CLASS_STRUGGLE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2261
+msgid "TXT_KEY_CIVIC_CLASS_STRUGGLE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2262
+msgid "TXT_KEY_CIVIC_CLASS_STRUGGLE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2264
+msgid "TXT_KEY_CIVIC_CLASS_STRUGGLE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2265
+msgid "TXT_KEY_CIVIC_CLASS_STRUGGLE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2279
+msgid "TXT_KEY_CIVIC_CULTURAL_HERITAGE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2280
+msgid "TXT_KEY_CIVIC_CULTURAL_HERITAGE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2281
+msgid "TXT_KEY_CIVIC_CULTURAL_HERITAGE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2283
+msgid "TXT_KEY_CIVIC_CULTURAL_HERITAGE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2284
+msgid "TXT_KEY_CIVIC_CULTURAL_HERITAGE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2296
+msgid "TXT_KEY_CIVIC_COLD_WAR_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2297
+msgid "TXT_KEY_CIVIC_COLD_WAR_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2298
+msgid "TXT_KEY_CIVIC_COLD_WAR_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2300
+msgid "TXT_KEY_CIVIC_COLD_WAR_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2301
+msgid "TXT_KEY_CIVIC_COLD_WAR_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2313
+msgid "TXT_KEY_CIVIC_PROFESSIONAL_SPORTS_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2314
+msgid "TXT_KEY_CIVIC_PROFESSIONAL_SPORTS_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2315
+msgid "TXT_KEY_CIVIC_PROFESSIONAL_SPORTS_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2317
+msgid "TXT_KEY_CIVIC_PROFESSIONAL_SPORTS_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2318
+msgid "TXT_KEY_CIVIC_PROFESSIONAL_SPORTS_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2330
+msgid "TXT_KEY_CIVIC_RAPID_DEPLOYMENT_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2331
+msgid "TXT_KEY_CIVIC_RAPID_DEPLOYMENT_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2332
+msgid "TXT_KEY_CIVIC_RAPID_DEPLOYMENT_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2334
+msgid "TXT_KEY_CIVIC_RAPID_DEPLOYMENT_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2335
+msgid "TXT_KEY_CIVIC_RAPID_DEPLOYMENT_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2347
+msgid "TXT_KEY_CIVIC_SPACE_RACE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2348
+msgid "TXT_KEY_CIVIC_SPACE_RACE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2349
+msgid "TXT_KEY_CIVIC_SPACE_RACE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2351
+msgid "TXT_KEY_CIVIC_SPACE_RACE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2352
+msgid "TXT_KEY_CIVIC_SPACE_RACE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2366
+msgid "TXT_KEY_CIVIC_ENVIRONMENTALISM_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2367
+msgid "TXT_KEY_CIVIC_ENVIRONMENTALISM_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2368
+msgid "TXT_KEY_CIVIC_ENVIRONMENTALISM_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2370
+msgid "TXT_KEY_CIVIC_ENVIRONMENTALISM_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2382
+msgid "TXT_KEY_CIVIC_GLOBALIZATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2383
+msgid "TXT_KEY_CIVIC_GLOBALIZATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2384
+msgid "TXT_KEY_CIVIC_GLOBALIZATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2386
+msgid "TXT_KEY_CIVIC_GLOBALIZATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2387
+msgid "TXT_KEY_CIVIC_GLOBALIZATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2399
+msgid "TXT_KEY_CIVIC_SOCIAL_MEDIA_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2400
+msgid "TXT_KEY_CIVIC_SOCIAL_MEDIA_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2401
+msgid "TXT_KEY_CIVIC_SOCIAL_MEDIA_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2403
+msgid "TXT_KEY_CIVIC_SOCIAL_MEDIA_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2404
+msgid "TXT_KEY_CIVIC_SOCIAL_MEDIA_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2418
+msgid "TXT_KEY_CIVIC_NEAR_FUTURE_GOVERNANCE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2419
+msgid "TXT_KEY_CIVIC_NEAR_FUTURE_GOVERNANCE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2420
+msgid "TXT_KEY_CIVIC_NEAR_FUTURE_GOVERNANCE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2422
+msgid "TXT_KEY_CIVIC_NEAR_FUTURE_GOVERNANCE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2440
+msgid "TXT_KEY_CIVIC_INFORMATION_WARFARE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2441
+msgid "TXT_KEY_CIVIC_INFORMATION_WARFARE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2442
+msgid "TXT_KEY_CIVIC_INFORMATION_WARFARE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2444
+msgid "TXT_KEY_CIVIC_INFORMATION_WARFARE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2445
+msgid "TXT_KEY_CIVIC_INFORMATION_WARFARE_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2457
+msgid "TXT_KEY_CIVIC_GLOBAL_WARMING_MITIGATION_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2458
+msgid "TXT_KEY_CIVIC_GLOBAL_WARMING_MITIGATION_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2459
+msgid "TXT_KEY_CIVIC_GLOBAL_WARMING_MITIGATION_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2461
+msgid "TXT_KEY_CIVIC_GLOBAL_WARMING_MITIGATION_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2462
+msgid "TXT_KEY_CIVIC_GLOBAL_WARMING_MITIGATION_QUOTE2"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2474
+msgid "TXT_KEY_CIVIC_CULTURAL_HEGEMONY_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2475
+msgid "TXT_KEY_CIVIC_CULTURAL_HEGEMONY_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2476
+msgid "TXT_KEY_CIVIC_CULTURAL_HEGEMONY_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2478
+msgid "TXT_KEY_CIVIC_CULTURAL_HEGEMONY_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2490
+msgid "TXT_KEY_CIVIC_EXODUS_IMPERATIVE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2491
+msgid "TXT_KEY_CIVIC_EXODUS_IMPERATIVE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2492
+msgid "TXT_KEY_CIVIC_EXODUS_IMPERATIVE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2494
+msgid "TXT_KEY_CIVIC_EXODUS_IMPERATIVE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2506
+msgid "TXT_KEY_CIVIC_SMART_POWER_DOCTRINE_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2507
+msgid "TXT_KEY_CIVIC_SMART_POWER_DOCTRINE_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2508
+msgid "TXT_KEY_CIVIC_SMART_POWER_DOCTRINE_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2510
+msgid "TXT_KEY_CIVIC_SMART_POWER_DOCTRINE_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2522
+msgid "TXT_KEY_CIVIC_FUTURE_CIVIC_TITLE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2523
+msgid "TXT_KEY_CIVIC_FUTURE_CIVIC_EUREKA"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2524
+msgid "TXT_KEY_CIVIC_FUTURE_CIVIC_EUREKA_TEXT"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/types.py:2526
+msgid "TXT_KEY_CIVIC_FUTURE_CIVIC_QUOTE1"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:700
+msgid "TXT_KEY_UNIT_SETTLER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:737
+msgid "TXT_KEY_UNIT_BUILDER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:782
+msgid "TXT_KEY_UNIT_TRADER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:824
+msgid "TXT_KEY_UNIT_SCOUT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:861
+msgid "TXT_KEY_UNIT_SKIRMISHER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:902
+msgid "TXT_KEY_UNIT_WARRIOR_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:940
+msgid "TXT_KEY_UNIT_SWORDMAN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:977
+msgid "TXT_KEY_UNIT_MAN_AT_ARMS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1017
+msgid "TXT_KEY_UNIT_SLINGER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1056
+msgid "TXT_KEY_UNIT_ARCHER_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1095
+msgid "TXT_KEY_UNIT_CROSSBOWMAN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1136
+msgid "TXT_KEY_UNIT_SPEARMAN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1174
+msgid "TXT_KEY_UNIT_PIKEMAN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1215
+msgid "TXT_KEY_UNIT_HORSEMAN_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1292
+msgid "TXT_KEY_UNIT_HEAVY_CHARIOT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1333
+msgid "TXT_KEY_UNIT_KNIGHT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1373
+msgid "TXT_KEY_UNIT_CATAPULT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1412
+msgid "TXT_KEY_UNIT_TREBUCHET_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1454
+msgid "TXT_KEY_UNIT_GALLEY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1504
+msgid "TXT_KEY_UNIT_QUADRIREME_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1946
+msgid "TXT_KEY_MISSION_MOVE_TO_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1948
+msgid "TXT_KEY_MISSION_ROUTE_TO_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1950
+msgid "TXT_KEY_MISSION_FOLLOW_PATH_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1952
+msgid "TXT_KEY_MISSION_GARRISON_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1954
+msgid "TXT_KEY_MISSION_PILLAGE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1956
+msgid "TXT_KEY_MISSION_PLUNDER_TRADE_ROUTE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1958
+msgid "TXT_KEY_MISSION_BUILD_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1965
+msgid "TXT_KEY_MISSION_SLEEP_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1967
+msgid "TXT_KEY_MISSION_FORTIFY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1969
+msgid "TXT_KEY_MISSION_ALERT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1971
+msgid "TXT_KEY_MISSION_AIR_PATROL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1973
+msgid "TXT_KEY_MISSION_HEAL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1976
+msgid "TXT_KEY_MISSION_EMBARK_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1978
+msgid "TXT_KEY_MISSION_DISEMBARK_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1980
+msgid "TXT_KEY_MISSION_REBASE_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1982
+msgid "TXT_KEY_MISSION_SWAP_UNITS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/game/unitTypes.py:1984
+msgid "TXT_KEY_MISSION_MOVE_TO_UNIT_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:770
+msgid "TXT_KEY_MAP_GENERATOR_START"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:776
+msgid "TXT_KEY_MAP_GENERATOR_INITED"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:782
+msgid "TXT_KEY_MAP_GENERATOR_ELEVATION"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:787
+msgid "TXT_KEY_MAP_GENERATOR_CLIMATE"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:793
+msgid "TXT_KEY_MAP_GENERATOR_COASTAL"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:799
+msgid "TXT_KEY_MAP_GENERATOR_TERRAIN"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:803
+msgid "TXT_KEY_MAP_GENERATOR_RESOURCES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:808
+msgid "TXT_KEY_MAP_GENERATOR_RIVERS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:813
+msgid "TXT_KEY_MAP_GENERATOR_FEATURES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:818
+msgid "TXT_KEY_MAP_GENERATOR_NATURAL_WONDERS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:823
+msgid "TXT_KEY_MAP_GENERATOR_CONTINENTS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:827
+msgid "TXT_KEY_MAP_GENERATOR_OCEANS"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:835
+msgid "TXT_KEY_MAP_GENERATOR_GOODIES"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/generation.py:841
+msgid "TXT_KEY_MAP_GENERATOR_READY"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:84
+msgid "TXT_KEY_MAP_SIZE_DUEL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:93
+msgid "TXT_KEY_MAP_SIZE_TINY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:102
+msgid "TXT_KEY_MAP_SIZE_SMALL_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:111
+msgid "TXT_KEY_MAP_SIZE_STANDARD_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:162
+msgid "TXT_KEY_MAP_TYPE_EMPTY_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:166
+msgid "TXT_KEY_MAP_TYPE_EARTH_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:170
+msgid "TXT_KEY_MAP_TYPE_PANGAEA_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:174
+msgid "TXT_KEY_MAP_TYPE_CONTINENTS_NAME"
+msgstr ""
+
+#: smarthexboard/smarthexboardlib/map/types.py:178
+msgid "TXT_KEY_MAP_TYPE_ARCHIPELAGO_NAME"
+msgstr ""
 
 #: smarthexboard/templates/styleguide/index.html:9
-#: smarthexboard/templates/styleguide/index.html:38
+#: smarthexboard/templates/styleguide/index.html:53
 msgid "Styleguide"
-msgstr "Styleguide"
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:44
+#: smarthexboard/templates/styleguide/index.html:59
 msgid "Admin"
-msgstr "Admin"
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:51
+#: smarthexboard/templates/styleguide/index.html:66
 msgid "SmartHexBoard"
-msgstr "SmartHexBoard"
-
-#: smarthexboard/templates/styleguide/index.html:52
-msgid "Basic UI definitions"
-msgstr "UI Grundlagen"
-
-#: smarthexboard/templates/styleguide/index.html:65
-#: smarthexboard/templates/styleguide/index.html:82
-#: smarthexboard/templates/styleguide/index.html:123
-msgid "Basic"
-msgstr "Grundlagen"
+msgstr ""
 
 #: smarthexboard/templates/styleguide/index.html:67
+msgid "Basic UI definitions"
+msgstr ""
+
+#: smarthexboard/templates/styleguide/index.html:80
+#: smarthexboard/templates/styleguide/index.html:97
+#: smarthexboard/templates/styleguide/index.html:138
+msgid "Basic"
+msgstr ""
+
+#: smarthexboard/templates/styleguide/index.html:82
 msgid "LOGO_TITLE"
-msgstr "Logo"
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:69
+#: smarthexboard/templates/styleguide/index.html:84
 msgid "LOGO_DESC"
-msgstr "Das Logo repräsentiert ein Hexagon mit dem Namen des Programms: 'HexBoard'."
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:148
+#: smarthexboard/templates/styleguide/index.html:163
+#: smarthexboard/templates/styleguide/index.html:368
 msgid "Complex"
-msgstr "Komplex"
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:150
+#: smarthexboard/templates/styleguide/index.html:165
 msgid "Components"
-msgstr "Komponenten"
+msgstr ""
 
-#: smarthexboard/templates/styleguide/index.html:160
+#: smarthexboard/templates/styleguide/index.html:175
 #, python-format
 msgid "%(turns)s KEY_TXT_TECH_TURNS"
-msgstr "%(turns)s Runden"
+msgstr ""
 
-#~ msgid "Hello World"
-#~ msgstr "Hallo Welt"
+#: smarthexboard/templates/styleguide/index.html:176
+msgid "TXT_KEY_TO_BOOST"
+msgstr ""

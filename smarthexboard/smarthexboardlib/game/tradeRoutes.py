@@ -1,3 +1,5 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.game.cityStates import CityStateType
 from smarthexboard.smarthexboardlib.game.civilizations import CivilizationAbility
 from smarthexboard.smarthexboardlib.game.governors import GovernorTitleType, GovernorType
@@ -172,11 +174,11 @@ class TradeRoutePathfinderDataSource:  # (AStarDataSource):
 
 		self.simulation = simulation
 
-		self.tradingPostLocations: [HexPoint] = []  # fixme
+		self.tradingPostLocations: List[HexPoint] = []  # fixme
 
-	def walkableAdjacentTilesCoords(self, tile_coord: HexPoint) -> [HexPoint]:
+	def walkableAdjacentTilesCoords(self, tile_coord: HexPoint) -> List[HexPoint]:
 		startCity = self.simulation.cityAt(self.startLocation)
-		walkableCoords: [HexPoint] = []
+		walkableCoords: List[HexPoint] = []
 
 		for neighbor in tile_coord.neighbors():
 			# if mapModel.wrapX

@@ -193,7 +193,7 @@ class UnitPromotionType(ExtendedEnum):
 
 	# support
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def effect(self) -> str:
@@ -236,7 +236,7 @@ class UnitPromotionType(ExtendedEnum):
 			return None
 
 		if contains(lambda unitClass: unitClass == defender.unitClassType(), combatModifier.unitClasses):
-			return CombatModifier(combatModifier.amount, self.name())
+			return CombatModifier(combatModifier.amount, self.title())
 
 		return None
 
@@ -253,7 +253,7 @@ class UnitPromotionType(ExtendedEnum):
 			return None
 
 		if contains(lambda unitClass: unitClass == attacker.unitClassType(), combatModifier.unitClasses):
-			return CombatModifier(combatModifier.amount, self.name())
+			return CombatModifier(combatModifier.amount, self.title())
 
 		return None
 

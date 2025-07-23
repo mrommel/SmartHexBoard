@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.combat import Combat, CombatResultType
 from smarthexboard.smarthexboardlib.game.states.builds import BuildType
@@ -13,12 +13,13 @@ from smarthexboard.smarthexboardlib.map.types import UnitDomainType
 class UnitMission:
 	def __init__(self, missionType: UnitMissionType, buildType: Optional[BuildType] = None,
 				 target: Optional[HexPoint] = None, path: Optional[HexPath] = None,
-				 options: [MoveOption] = []):
+				 options: List[MoveOption] = []):
+
 		self.missionType: UnitMissionType = missionType
 		self.buildType: Optional[BuildType] = buildType
 		self.target: Optional[HexPoint] = target
 		self.path: Optional[HexPath] = path
-		self.options: [MoveOption] = options
+		self.options: List[MoveOption] = options
 		self.unit = None
 
 		self.startedInTurn: int = -1

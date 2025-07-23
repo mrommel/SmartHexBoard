@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from smarthexboard.smarthexboardlib.game.baseTypes import HandicapType
 from smarthexboard.smarthexboardlib.game.civilizations import LeaderType
@@ -31,12 +32,12 @@ class GameGenerator:
 	def __init__(self):
 		pass
 
-	def freeCityStateStartingUnitTypes(self) -> [UnitType]:
+	def freeCityStateStartingUnitTypes(self) -> List[UnitType]:
 		return [UnitType.settler, UnitType.warrior, UnitType.builder]
 
 	def generate(self, map: MapModel, handicap: HandicapType) -> GameModel:
-		players: [Player] = []
-		units: [Unit] = []
+		players: List[Player] = []
+		units: List[Unit] = []
 
 		# ---- Barbar
 		playerBarbar = Player(leader=LeaderType.barbar, human=False)
@@ -110,7 +111,7 @@ class GameGenerator:
 
 		return gameModel
 
-	def _allocateUnits(self, units, startLocation: HexPoint, unitTypes: [UnitType], player):
+	def _allocateUnits(self, units, startLocation: HexPoint, unitTypes: List[UnitType], player):
 		for unitType in unitTypes:
 			unit = Unit(startLocation, unitType, player)
 			units.append(unit)

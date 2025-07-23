@@ -7,7 +7,7 @@ class LoyaltyState(ExtendedEnum):
 	disloyal = 'disloyal'
 	unrest = 'unrest'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		if self == LoyaltyState.loyal:
 			return "Loyal"
 		elif self == LoyaltyState.wavering:

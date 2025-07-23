@@ -1,7 +1,7 @@
 import logging
 import random
 import sys
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.game.ai.cities import CityStrategyAI, CitySpecializationType, BuildableItem, BuildableType
 from smarthexboard.smarthexboardlib.game.ai.economicStrategies import EconomicStrategyType
@@ -50,9 +50,9 @@ class CityDistrictItem:
 
 
 class CityDistricts:
-	def __init__(self, city):
+	def __init__(self, city: 'City'):
 		self.city = city
-		self._items: [CityDistrictItem] = []
+		self._items: List[CityDistrictItem] = []
 		self._housingVal = 0.0
 
 	def build(self, district: DistrictType, location: HexPoint):
@@ -211,7 +211,7 @@ class CityWonders:
 	def __init__(self, city):
 		self.city = city
 
-		self._wonders: [CityWonderItem] = []
+		self._wonders: List[CityWonderItem] = []
 
 	def hasWonder(self, wonder: WonderType) -> bool:
 		return len(list(filter(lambda item: item.wonder == wonder, self._wonders))) > 0
@@ -419,16 +419,16 @@ class CityCitizens:
 
 		return
 
-	def workingTileLocations(self) -> [HexPoint]:
-		locations: [HexPoint] = []
+	def workingTileLocations(self) -> List[HexPoint]:
+		locations: List[HexPoint] = []
 
 		for plot in self._workingPlots:
 			locations.append(plot.location)
 
 		return locations
 
-	def workedTileLocations(self) -> [HexPoint]:
-		locations: [HexPoint] = []
+	def workedTileLocations(self) -> List[HexPoint]:
+		locations: List[HexPoint] = []
 
 		for plot in self._workingPlots:
 			if self.isWorkedAt(plot.location):
@@ -842,7 +842,7 @@ class CityCitizens:
 			raise Exception('simulation must not be None')
 
 		bestPlotValue: int = -1
-		bestPlotID: [HexPoint] = None
+		bestPlotID: Optional[HexPoint] = None
 
 		# Look at all workable Plots
 		for workableTile in self.workableTiles(simulation):
@@ -1395,14 +1395,14 @@ class ReligiousFollowChangeReason(ExtendedEnum):
 
 
 class CityReligion:
-	def __init__(self, city):
+	def __init__(self, city: 'City'):
 		self.city = city
 
 		self.pressure = ReligiousWeightList()
 		self.pressure.fill()
 
 		self.majorityCityReligion = ReligionType.atheism
-		self.religionStatus: [ReligionInCity] = []
+		self.religionStatus: List[ReligionInCity] = []
 
 	def numberOfFollowersOf(self, religion: ReligionType) -> int:
 		sumValue: float = self.pressure.totalWeights()
@@ -1553,10 +1553,6 @@ class CityTourism:
 
 
 class YieldValues:
-	pass
-
-
-class YieldValues:
 	def __init__(self, value: float, percentage: float = 0.0):
 		self.value = value
 		self.percentage = percentage
@@ -1575,7 +1571,7 @@ class YieldValues:
 
 class BuildQueue:
 	def __init__(self):
-		self._items: [BuildableItem] = []
+		self._items: List[BuildableItem] = []
 
 	def __iter__(self):
 		return self._items.__iter__()
@@ -1652,7 +1648,7 @@ class BuildQueue:
 	def removeItem(self, buildItem: BuildableItem):
 		self._items = list(filter(lambda it: it != buildItem, self._items))
 
-	def unitTypesTraining(self) -> [UnitType]:
+	def unitTypesTraining(self) -> List[UnitType]:
 		unitsCurrentlyTraining = list(filter(lambda it: it.buildableType == BuildableType.unit, self._items))
 		return [u.unitType for u in list(filter(lambda it: it.buildableType == BuildableType.unit, self._items))]
 
@@ -1697,7 +1693,7 @@ class City:
 			self._threatValue: int = 0
 			self.amenitiesForWarWearinessValue: int = 0
 
-			self._luxuries: [ResourceType] = []
+			self._luxuries: List[ResourceType] = []
 
 			self.baseYieldRateFromSpecialists: YieldList = YieldList()
 			self.extraSpecialistYield: YieldList = YieldList()
@@ -1765,7 +1761,7 @@ class City:
 			self._threatValue: int = 0
 			self.amenitiesForWarWearinessValue: int = 0
 
-			self._luxuries: [ResourceType] = []
+			self._luxuries: List[ResourceType] = []
 
 			self.baseYieldRateFromSpecialists: YieldList = YieldList()
 			self.extraSpecialistYield: YieldList = YieldList()
@@ -1813,7 +1809,7 @@ class City:
 		self._name = name
 
 	def doFoundMessage(self, simulation):
-		message = f"{self.name()} was founded by the {self.player.leader.civilization().name()}"
+		message = f"{self.name()} was founded by the {self.player.leader.civilization().title()}"
 		simulation.addReplayEvent(ReplayEventType.cityFounded, message, self.location)
 
 	def initialize(self, simulation):
@@ -2866,8 +2862,8 @@ class City:
 
 		return None
 
-	def buyablePlotList(self, simulation) -> [HexPoint]:
-		aiPlotList: [HexPoint] = []
+	def buyablePlotList(self, simulation) -> List[HexPoint]:
+		aiPlotList: List[HexPoint] = []
 
 		lowestCost = sys.maxsize
 		maxRange = 5  # MAXIMUM_ACQUIRE_PLOT_DISTANCE
@@ -2953,7 +2949,6 @@ class City:
 							if plotDistance <= 3 or adjacentResource.usage() != ResourceUsage.bonus:
 								influenceCost -= 1
 
-
 						if adjacentPlot.feature().isNaturalWonder():
 							if plotDistance <= 3:
 								# grab for this city
@@ -2988,7 +2983,8 @@ class City:
 				# Are we cheap enough to get picked next?
 				if influenceCost < lowestCost:
 					# clear reset list
-					aiPlotList = [loopPoint]
+					aiPlotList: List[HexPoint] = []
+					aiPlotList.append(loopPoint)
 					lowestCost = influenceCost
 
 				if influenceCost == lowestCost:
@@ -3888,8 +3884,8 @@ class City:
 	def isEnemyInRange(self, simulation) -> bool:
 		return len(self.rangedCombatTargetLocations(simulation)) > 0
 
-	def rangedCombatTargetLocations(self, simulation) -> [HexPoint]:
-		targets: [HexPoint] = []
+	def rangedCombatTargetLocations(self, simulation) -> List[HexPoint]:
+		targets: List[HexPoint] = []
 
 		for targetLocation in self.location.areaWithRadius(City.attackRange):
 			targetUnits = simulation.unitsAt(targetLocation)
@@ -4633,7 +4629,7 @@ class City:
 		# Civil Prestige - +1 Amenity and +2 Housing in cities with established Governors with 2+ promotions.
 		if self.player.government.hasCard(PolicyCardType.retainers):
 			if self.governor() is not None:
-				if self.governor().titlesCount() >= 2:
+				if self.governor().numberOfTitles() >= 2:
 					amenitiesFromCivics += 1
 
 		# Liberalism - +1 Amenity in cities with 2 + specialty districts.
@@ -4653,7 +4649,7 @@ class City:
 		# civilPrestige - Established Governors with at least 2 Promotions provide +1 Amenity and +2 Housing.
 		if self.player.government.hasCard(PolicyCardType.civilPrestige):
 			if self.governor() is not None:
-				if self.governor().titlesCount() >= 2:
+				if self.governor().numberOfTitles() >= 2:
 					amenitiesFromCivics += 1.0
 
 		# Sports Media + 100 % Theater Square adjacency bonuses, and Stadiums generate + 1 Amenity.

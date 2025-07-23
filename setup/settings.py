@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-d^!i)exgik$sn8d50)mrkj3mq23k-49*hjbip$%hw1-f!lil8&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver', ]
 
 
 # Application definition
@@ -48,13 +48,13 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -131,7 +131,7 @@ CACHES = {
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
@@ -144,7 +144,9 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
-LOCALE_PATHS = [BASE_DIR / 'smarthexboard' / 'locale', ]
+# LOCALE_PATHS = [BASE_DIR / 'smarthexboard' / 'locale', ]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'smarthexboard/locale'), ]
+# print(f"LOCALE_PATHS: {LOCALE_PATHS}")
 
 
 # Static files (CSS, JavaScript, Images)

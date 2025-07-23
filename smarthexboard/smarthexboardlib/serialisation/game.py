@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pprint
-
 from marshmallow import Schema, fields, post_load
 from marshmallow_enum import EnumField
 

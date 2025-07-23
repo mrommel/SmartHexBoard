@@ -1,7 +1,7 @@
 import logging
 import math
 import random
-from typing import Union, Optional
+from typing import Union, Optional, List
 
 from smarthexboard.smarthexboardlib.game.ai.baseTypes import MilitaryStrategyType, PlayerStateAllWars
 from smarthexboard.smarthexboardlib.game.buildings import BuildingType
@@ -21,7 +21,7 @@ from smarthexboard.smarthexboardlib.utils.base import firstOrNone
 
 class CitySpecializationTypeData:
 	def __init__(self, name: str, yieldType: Optional[YieldType], isDefault: bool, isWonder: bool,
-	             isOperationUnitProvider: bool, mustBeCoastal: bool, flavors: [Flavor]):
+	             isOperationUnitProvider: bool, mustBeCoastal: bool, flavors: List[Flavor]):
 		self.name = name
 		self.yieldType = yieldType
 		self.isDefault = isDefault
@@ -253,7 +253,7 @@ class CitySpecializationType(ExtendedEnum):
 
 class CityStrategyTypeData:
 	def __init__(self, name: str, requiredTech: Optional[TechType], obsoleteTech: Optional[TechType],
-				 weightThreshold: int, flavorModifiers: [Flavor], flavorThresholdModifiers: [Flavor],
+				 weightThreshold: int, flavorModifiers: List[Flavor], flavorThresholdModifiers: List[Flavor],
 	             permanent: bool, checkEachTurns: int, minimumAdoptionTurns: int):
 		self.name = name
 		self.requiredTech = requiredTech
@@ -313,7 +313,7 @@ class CityStrategyType(ExtendedEnum):
 	def minimumAdoptionTurns(self) -> int:
 		return self._data().minimumAdoptionTurns
 
-	def flavorModifiers(self) -> [Flavor]:
+	def flavorModifiers(self) -> List[Flavor]:
 		return self._data().flavorModifiers
 
 	def weightThreshold(self) -> int:
@@ -327,7 +327,7 @@ class CityStrategyType(ExtendedEnum):
 
 		return value
 
-	def flavorThresholdModifiers(self) -> [Flavor]:
+	def flavorThresholdModifiers(self) -> List[Flavor]:
 		return self._data().flavorThresholdModifiers
 
 	def flavorThresholdModifierFor(self, flavorType: FlavorType) -> int:
@@ -768,7 +768,6 @@ class CityStrategyType(ExtendedEnum):
 			if numBuilders < 1:
 				return True
 
-
 			weightThresholdModifier = self.weightThresholdModifierFor(city.player)  # 2 Extra Weight per TILE_IMPROVEMENT Flavor
 			perCityThreshold = self.weightThreshold() + weightThresholdModifier  # 40
 
@@ -873,8 +872,8 @@ class CityStrategyType(ExtendedEnum):
 
 		if numTotalWorkablePlots > 0:
 			cityStrategy: CityStrategyType = CityStrategyType.needNavalGrowth
-			weightThresholdModifier = cityStrategy.weightThresholdModifierFor(city.player) # -1 Weight per NAVAL_GROWTH Flavor
-			weightThreshold = cityStrategy.weightThreshold() + weightThresholdModifier # 40
+			weightThresholdModifier = cityStrategy.weightThresholdModifierFor(city.player)  # -1 Weight per NAVAL_GROWTH Flavor
+			weightThreshold = cityStrategy.weightThreshold() + weightThresholdModifier  # 40
 
 			# If at least 35% (Average Player) of a City's workable Tiles are low-food Water then we really should be building a Harbor
 			# [35 Weight is Average; range is 30 to 40]
@@ -1435,7 +1434,7 @@ class BuildableItem:
 				 location: Optional[HexPoint] = None):
 		if isinstance(item, DistrictType):
 			self.buildableType = BuildableType.district
-			self.districtType: DistrictType = item
+			self.districtType: Optional[DistrictType] = item
 			self.buildingType = None
 			self.unitType = None
 			self.wonderType = None
@@ -1445,7 +1444,7 @@ class BuildableItem:
 		elif isinstance(item, BuildingType):
 			self.buildableType = BuildableType.building
 			self.districtType = None
-			self.buildingType: BuildingType = item
+			self.buildingType: Optional[BuildingType] = item
 			self.unitType = None
 			self.wonderType = None
 			self.projectType = None
@@ -1455,7 +1454,7 @@ class BuildableItem:
 			self.buildableType = BuildableType.unit
 			self.districtType = None
 			self.buildingType = None
-			self.unitType: UnitType = item
+			self.unitType: Optional[UnitType] = item
 			self.wonderType = None
 			self.projectType = None
 			self.location = None  # units don't need a location
@@ -1465,7 +1464,7 @@ class BuildableItem:
 			self.districtType = None
 			self.buildingType = None
 			self.unitType = None
-			self.wonderType: WonderType = item
+			self.wonderType: Optional[WonderType] = item
 			self.projectType = None
 			self.location = location
 			self.production = 0.0
@@ -1475,7 +1474,7 @@ class BuildableItem:
 			self.buildingType = None
 			self.unitType = None
 			self.wonderType = None
-			self.projectType: ProjectType = item
+			self.projectType: Optional[ProjectType] = item
 			self.location = location
 			self.production = 0.0
 		else:
@@ -1565,6 +1564,8 @@ class BuildableItem:
 		elif self.buildableType == BuildableType.project:
 			projectType = self.projectType
 			return float(projectType.productionCost()) - self.production
+
+		raise InvalidEnumError(self.buildableType)
 
 	def ready(self, player) -> bool:
 		return self.productionLeftFor(player) <= 0
@@ -1912,9 +1913,9 @@ class CityStrategyAI:
 
 		populationToEvaluate = self.city.population() + 2
 
-		bestFoodYields: [YieldValue] = []
-		bestProductionYields: [YieldValue] = []
-		bestGoldYields: [YieldValue] = []
+		bestFoodYields: List[YieldValue] = []
+		bestProductionYields: List[YieldValue] = []
+		bestGoldYields: List[YieldValue] = []
 
 		for workingTileLocation in self.city.cityCitizens.workingTileLocations():
 			workingTile = simulation.tileAt(workingTileLocation)

@@ -1,9 +1,11 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.game.types import EraType
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
 
 
 class DedicationTypeData:
-	def __init__(self, name: str, normalEffect: str, goldenEffect: str, eras: [EraType]):
+	def __init__(self, name: str, normalEffect: str, goldenEffect: str, eras: List[EraType]):
 		self.name = name
 		self.normalEffect = normalEffect
 		self.goldenEffect = goldenEffect
@@ -25,7 +27,7 @@ class DedicationType(ExtendedEnum):
 	skyAndStars = 'skyAndStars'  #  # , #
 	automatonWarfare = 'automatonWarfare'  #  # , #
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def normalEffect(self) -> str:

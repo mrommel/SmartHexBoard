@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum
 from smarthexboard.smarthexboardlib.utils.plugin import Tests
@@ -57,8 +58,8 @@ class Flavor:
 class Flavors:
     def __init__(self, initialList=None):
         if initialList is None:
-            initialList: [Flavor] = []
-        self._items: [Flavor] = initialList
+            initialList: List[Flavor] = []
+        self._items: List[Flavor] = initialList
 
     def isEmpty(self):
         return len(self._items) == 0

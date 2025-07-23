@@ -200,9 +200,9 @@ class MomentType(ExtendedEnum):
 	dedicationTriggered = 'dedicationTriggered'  # 302 for dedications
 
 	def __repr__(self):
-		return f'MomentType.{self.name()}'
+		return f'MomentType.{self.title()}'
 
-	def name(self):
+	def title(self):
 		return self._data().name
 
 	def eraScore(self):

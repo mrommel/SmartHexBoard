@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.districts import DistrictType
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
@@ -28,17 +28,13 @@ class BuildingCategoryType(ExtendedEnum):
 	conservation = 'conservation'
 
 
-class BuildingType:
-	pass
-
-
 class BuildingTypeData:
-	def __init__(self, name: str, effects: [str], category: BuildingCategoryType, era: EraType, district: DistrictType,
+	def __init__(self, name: str, effects: List[str], category: BuildingCategoryType, era: EraType, district: DistrictType,
 				 requiredTech: Optional[TechType], requiredCivic: Optional[CivicType],
-				 requiredBuildingsOr: [BuildingType], requiredGovernmentsOr: [GovernmentType],
-				 obsoleteBuildingsOr: [BuildingType], productionCost: int,
+				 requiredBuildingsOr: List['BuildingType'], requiredGovernmentsOr: List[GovernmentType],
+				 obsoleteBuildingsOr: List['BuildingType'], productionCost: int,
 				 goldCost: int, faithCost: int, maintenanceCost: int, yields: Yields, defense: int,
-				 slots: [GreatWorkSlotType], specialSlots: Optional[SpecialistSlots], flavors: [Flavor]):
+				 slots: List[GreatWorkSlotType], specialSlots: Optional[SpecialistSlots], flavors: List[Flavor]):
 		self.name = name
 		self.effects = effects
 		self.category = category
@@ -134,7 +130,7 @@ class BuildingType(ExtendedEnum):
 	# information
 	# --
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def categoryType(self) -> BuildingCategoryType:
@@ -146,10 +142,10 @@ class BuildingType(ExtendedEnum):
 	def requiredCivic(self) -> CivicType:
 		return self._data().requiredCivic
 
-	def requiredBuildings(self) -> [BuildingType]:
+	def requiredBuildings(self) -> List['BuildingType']:
 		return self._data().requiredBuildingsOr
 
-	def obsoleteBuildings(self) -> [BuildingType]:
+	def obsoleteBuildings(self) -> List['BuildingType']:
 		return self._data().obsoleteBuildingsOr
 
 	def requiredTech(self) -> TechType:
@@ -185,10 +181,10 @@ class BuildingType(ExtendedEnum):
 
 		return self._data().specialSlots.specialistType
 
-	def slotsForGreatWork(self) -> [GreatWorkSlotType]:
+	def slotsForGreatWork(self) -> List[GreatWorkSlotType]:
 		return self._data().slots
 
-	def _flavors(self) -> [Flavor]:
+	def _flavors(self) -> List[Flavor]:
 		return self._data().flavors
 
 	def flavor(self, flavorType: FlavorType) -> int:

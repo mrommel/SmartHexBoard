@@ -1,7 +1,7 @@
 import random
-from typing import Optional
+from typing import Optional, List
 
-from smarthexboard.smarthexboardlib.core.base import ExtendedEnum
+from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
 from smarthexboard.smarthexboardlib.core.types import EraType
 
 
@@ -58,13 +58,13 @@ class GreatWork:
 
 
 class GreatPersonData:
-	def __init__(self, name: str, greatPersonType: GreatPersonType, era: EraType, bonus: str, charges: int, works: [GreatWork]):
+	def __init__(self, name: str, greatPersonType: GreatPersonType, era: EraType, bonus: str, charges: int, works: List[GreatWork]):
 		self.name: str = name
 		self.greatPersonType: GreatPersonType = greatPersonType
 		self.era: EraType = era
 		self.bonus: str = bonus
 		self.charges: int = charges
-		self.works: [GreatWork] = works
+		self.works: List[GreatWork] = works
 
 
 class GreatPerson(ExtendedEnum):
@@ -722,6 +722,8 @@ class GreatPerson(ExtendedEnum):
 				charges=2,
 				works=[GreatWork.eineKleineNachtmusik, GreatWork.symphony40Mvt1]
 			)
+
+		raise InvalidEnumError(self)
 
 
 class GreatPersons:

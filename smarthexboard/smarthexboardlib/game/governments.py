@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.civilizations import CivilizationAbility
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
@@ -24,8 +24,8 @@ class PolicyCardSlots:
 		self.diplomatic = diplomatic
 		self.wildcard = wildcard
 
-	def types(self) -> [PolicyCardSlotType]:
-		list: [PolicyCardSlotType] = []
+	def types(self) -> List[PolicyCardSlotType]:
+		list: List[PolicyCardSlotType] = []
 
 		for _ in range(self.military):
 			list.append(PolicyCardSlotType.military)
@@ -44,7 +44,7 @@ class PolicyCardSlots:
 
 class GovernmentTypeData:
 	def __init__(self, name: str, bonus1Summary: str, bonus2Summary: str, era: EraType,
-	             requiredCivic: Optional[CivicType], policyCardSlots: PolicyCardSlots, flavors: [Flavor],
+	             requiredCivic: Optional[CivicType], policyCardSlots: PolicyCardSlots, flavors: List[Flavor],
 	             influencePointsPerTurn: int, envoyPerInfluencePoints: int, envoysFromInfluencePoints: int,
 	             tourismFactor: int):
 		self.name = name
@@ -286,7 +286,7 @@ class GovernmentType(ExtendedEnum):
 class PolicyCardSet:
 	def __init__(self, cards_dict: Optional[dict] = None):
 		if cards_dict is None:
-			self._cards: [PolicyCardType] = []
+			self._cards: List[PolicyCardType] = []
 		elif isinstance(cards_dict, dict):
 			self._cards = cards_dict['_cards']
 		else:
@@ -298,7 +298,7 @@ class PolicyCardSet:
 	def addCard(self, policyCard: PolicyCardType):
 		self._cards.append(policyCard)
 
-	def cards(self) -> [PolicyCardType]:
+	def cards(self) -> List[PolicyCardType]:
 		return self._cards
 
 	def removeCard(self, policyCard: PolicyCardType):
@@ -504,7 +504,7 @@ class PlayerGovernment:
 
 	def verify(self, simulation):
 		possibleCards = self.possiblePolicyCards()
-		cardTypesToRemove: [PolicyCardType] = []
+		cardTypesToRemove: List[PolicyCardType] = []
 
 		for cardType in self._policyCards.cards():
 			if cardType not in possibleCards:
@@ -515,8 +515,8 @@ class PlayerGovernment:
 
 		return
 
-	def possiblePolicyCards(self) -> [PolicyCardType]:
-		cards: [PolicyCardType] = []
+	def possiblePolicyCards(self) -> List[PolicyCardType]:
+		cards: List[PolicyCardType] = []
 
 		for cardType in list(PolicyCardType):
 			if cardType is PolicyCardType.none:
@@ -552,7 +552,7 @@ class PlayerGovernment:
 			if requiredCondition and not obsoleteCondition:
 				cards.append(cardType)
 
-		filteredCards: [PolicyCardType] = []
+		filteredCards: List[PolicyCardType] = []
 
 		# remove 'replaced' (better) cards
 		for card in cards:

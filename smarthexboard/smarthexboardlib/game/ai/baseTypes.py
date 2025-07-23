@@ -78,7 +78,7 @@ class MilitaryStrategyType(ExtendedEnum):
 	winningWars = 'winningWars'
 	losingWars = 'losingWars'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def isNoMinorCivs(self) -> bool:

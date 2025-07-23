@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
 from smarthexboard.smarthexboardlib.map.base import HexPoint
@@ -217,11 +217,11 @@ class DiplomaticDealType(ExtendedEnum):
 
 
 class DiplomaticDeal:
-	def __init__(self, fromPlayer, toPlayer):
+	def __init__(self, fromPlayer: 'Player', toPlayer: 'Player'):
 		self.fromPlayer = fromPlayer
 		self.toPlayer = toPlayer
 		# self.surrendering: LeaderType = LeaderType.none
-		self.tradeItems: [DiplomaticDealItem] = []
+		self.tradeItems: List[DiplomaticDealItem] = []
 		self.peaceTreatyType = PeaceTreatyType.none
 		self._surrenderingPlayer = None
 		self._requestingPlayer = None
@@ -665,8 +665,9 @@ class DiplomaticDeal:
 
 	def goldTrade(self, player) -> int:
 		for it in self.tradeItems:
-			if it.itemType == DiplomaticDealItemType.gold and it.fromPlayer == player:
-				return it.amount
+			if self.fromPlayer == player:
+				if it.itemType == DiplomaticDealItemType.gold:
+					return it.amount
 
 		return 0
 
@@ -784,12 +785,13 @@ class DiplomaticDeal:
 			raise Exception('DEAL: Adding deal item for a player that\'s not actually in this deal!')
 
 		for it in self.tradeItems:
-			if it.itemType == DiplomaticDealItemType.resources and it.fromPlayer == dealPlayer and it.resource == resource:
-				if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.resources, amount=amount, resource=resource, simulation=simulation):
-					it.amount = amount
-					it.duration = dealDuration
-					it.finalTurn = simulation.currentTurn + dealDuration
-					return True
+			if self.fromPlayer == dealPlayer:
+				if it.itemType == DiplomaticDealItemType.resources and it.resource == resource:
+					if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.resources, amount=amount, resource=resource, simulation=simulation):
+						it.amount = amount
+						it.duration = dealDuration
+						it.finalTurn = simulation.currentTurn + dealDuration
+						return True
 
 		return False
 
@@ -813,10 +815,11 @@ class DiplomaticDeal:
 
 		return False
 
-	def goldPerTurnTrade(self, otherPlayer) -> int:
+	def goldPerTurnTrade(self, otherPlayer: 'Player') -> int:
 		for it in self.tradeItems:
-			if it.itemType == DiplomaticDealItemType.goldPerTurn and it.fromPlayer == otherPlayer:
-				return it.amount
+			if self.fromPlayer == otherPlayer:
+				if it.itemType == DiplomaticDealItemType.goldPerTurn:
+					return it.amount
 
 		return 0
 
@@ -870,24 +873,25 @@ class DiplomaticDeal:
 
 		return False
 
-	def changeGoldTrade(self, dealPlayer, newAmount: int, simulation) -> bool:
+	def changeGoldTrade(self, dealPlayer: 'Player', newAmount: int, simulation) -> bool:
 		if dealPlayer != self.fromPlayer and dealPlayer != self.toPlayer:
 			raise Exception('DEAL: Changing deal item for a player that\'s not actually in this deal!')
 
 		for it in self.tradeItems:
-			if it.itemType == DiplomaticDealItemType.gold and it.fromPlayer == dealPlayer:
-				# Reduce Gold value to 0 first, because otherwise IsPossibleToTradeItem will think we're trying to 
-				# spend more than we have
-				oldValue = it.amount
-				it.amount = 0
+			if self.fromPlayer == dealPlayer:
+				if it.itemType == DiplomaticDealItemType.gold:
+					# Reduce Gold value to 0 first, because otherwise IsPossibleToTradeItem will think we're trying to
+					# spend more than we have
+					oldValue = it.amount
+					it.amount = 0
 
-				if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.gold, newAmount, simulation=simulation):
-					it.amount = newAmount
-					return True
+					if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.gold, newAmount, simulation=simulation):
+						it.amount = newAmount
+						return True
 
-				# If we can't do this then restore the previous Gold quantity
-				else:
-					it.amount = oldValue
+					# If we can't do this then restore the previous Gold quantity
+					else:
+						it.amount = oldValue
 
 		return False
 
@@ -896,17 +900,18 @@ class DiplomaticDeal:
 		self.tradeItems = list(filter(lambda it: not (it.itemType == itemType and (fromPlayer is None or it.fromPlayer == fromPlayer)), self.tradeItems))
 		return
 
-	def changeGoldPerTurnTrade(self, dealPlayer, newAmount: int, duration: int, simulation):
+	def changeGoldPerTurnTrade(self, dealPlayer: 'Player', newAmount: int, duration: int, simulation):
 		if dealPlayer != self.fromPlayer and dealPlayer != self.toPlayer:
 			raise Exception('DEAL: Changing deal item for a player that\'s not actually in this deal!')
 
 		for it in self.tradeItems:
-			if it.itemType == DiplomaticDealItemType.goldPerTurn and it.fromPlayer == dealPlayer:
-				if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.goldPerTurn, amount=newAmount, simulation=simulation):
-					it.amount = newAmount
-					it.duration = duration
-					it.finalTurn = simulation.currentTurn + duration
-					return True
+			if self.fromPlayer == dealPlayer:
+				if it.itemType == DiplomaticDealItemType.goldPerTurn:
+					if self.isPossibleToTradeItem(dealPlayer, self.otherPlayerOf(dealPlayer), DiplomaticDealItemType.goldPerTurn, amount=newAmount, simulation=simulation):
+						it.amount = newAmount
+						it.duration = duration
+						it.finalTurn = simulation.currentTurn + duration
+						return True
 
 		return False
 
@@ -981,7 +986,7 @@ class MinorPlayerApproachType(ExtendedEnum):
 	bully = 'bully'  # MINOR_CIV_APPROACH_BULLY
 
 	@staticmethod
-	def all() -> [MinorPlayerApproachType]:
+	def all() -> List[MinorPlayerApproachType]:
 		return [
 			MinorPlayerApproachType.ignore,
 			MinorPlayerApproachType.friendly,
@@ -1007,7 +1012,7 @@ class MajorPlayerApproachType(ExtendedEnum):
 	friendly = 'friendly'  # MAJOR_CIV_APPROACH_FRIENDLY
 
 	@staticmethod
-	def all() -> [MajorPlayerApproachType]:
+	def all() -> List[MajorPlayerApproachType]:
 		return [
 			MajorPlayerApproachType.war,
 			MajorPlayerApproachType.hostile,
@@ -1102,7 +1107,7 @@ class MajorCivOpinionType(ExtendedEnum):
 	ally = 'ally'  # MAJOR_CIV_OPINION_ALLY
 
 	@staticmethod
-	def all() -> [MajorCivOpinionType]:
+	def all() -> List[MajorCivOpinionType]:
 		return [
 			MajorCivOpinionType.unforgivable,
 			MajorCivOpinionType.enemy,

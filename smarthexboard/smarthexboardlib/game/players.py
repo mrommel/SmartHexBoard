@@ -2,7 +2,7 @@ import logging
 import math
 import random
 import sys
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, WeightedBaseList
 from smarthexboard.smarthexboardlib.game.ai.baseTypes import MilitaryStrategyType
@@ -73,14 +73,14 @@ class Player:
 
 
 class PlayerTradeRoutes:
-	def __init__(self, player):
+	def __init__(self, player: 'Player'):
 		self.player = player
-		self._routes: [TradeRoute] = []
+		self._routes: List[TradeRoute] = []
 
 	def __iter__(self):
 		return self._routes.__iter__()
 
-	def tradeRoutesStartingAt(self, city) -> [TradeRoute]:
+	def tradeRoutesStartingAt(self, city) -> List[TradeRoute]:
 		cityLocation = city.location
 		return list(filter(lambda route: route.start == cityLocation, self._routes))
 
@@ -404,7 +404,7 @@ class PlayerReligion:
 		self._pantheon = pantheon
 
 		# inform other players, that a pantheon was founded
-		simulation.sendGossip(GossipType.pantheonCreated, pantheonName=pantheon.name(), player=self.player)
+		simulation.sendGossip(GossipType.pantheonCreated, pantheonName=pantheon.title(), player=self.player)
 
 	def faith(self) -> float:
 		return self._faithVal
@@ -505,7 +505,7 @@ class PlayerReligion:
 					if 0 < cost < faith:
 						return True
 
-			return False
+		return False
 
 	def hasCreatedReligion(self):
 		return self._religionFounded != ReligionType.none
@@ -703,7 +703,7 @@ class PlayerGovernors:
 			score each governor for each city
 			start assigning the best value
 		"""
-		cityLocations: [HexPoint] = list(map(lambda c: c.location, simulation.citiesOf(self.player)))
+		cityLocations: List[HexPoint] = list(map(lambda c: c.location, simulation.citiesOf(self.player)))
 		reassigned: bool = False
 
 		logging.debug(f'Try to distribute {len(self.governors)} governors to {len(cityLocations)} cities')
@@ -748,7 +748,7 @@ class PlayerGovernors:
 			bestCity.assignGovernor(governor.governorType())
 			governor.assignTo(bestCity)
 
-			logging.info(f"{self.player.leader.title()} assigned governor {governor.governorType().name()} to city {bestCity.name()}")
+			logging.info(f"{self.player.leader.title()} assigned governor {governor.governorType().title()} to city {bestCity.name()}")
 
 		if not reassigned:
 			logging.debug(f"{self.player.leader.title()} did no reassignments of governors")
@@ -781,7 +781,7 @@ class PlayerGovernors:
 		return numActiveGovernors
 
 	def _promoteGovernor(self):
-		possiblePromotions: [GovernorTitleType] = []
+		possiblePromotions: List[GovernorTitleType] = []
 
 		for governor in self.governors:
 			possiblePromotions += governor.possiblePromotions()
@@ -914,7 +914,7 @@ class CitySpecializationAI:
 
 		self.wonderChosen: bool = False
 		self.wonderCity = None
-		self.specializationsNeeded: [CitySpecializationType] = []
+		self.specializationsNeeded: List[CitySpecializationType] = []
 		self.productionSubtypeWeights = ProductionSpecializationList()
 		self.nextSpecializationDesired: CitySpecializationType = CitySpecializationType.none
 
@@ -1159,7 +1159,7 @@ class CitySpecializationAI:
 
 	def assignSpecializations(self, simulation):
 		"""Assign specializations to cities"""
-		citiesWithoutSpecialization: [CitySpecializationData] = []
+		citiesWithoutSpecialization: List[CitySpecializationData] = []
 
 		self.nextSpecializationDesired = CitySpecializationType.none
 		# citiesWithoutSpecialization.removeAll()
@@ -1941,7 +1941,7 @@ class PlayerOperations:
 		self._operations = []
 
 	def doDelayedDeath(self, simulation):
-		operationsToDelete: [Operation] = []
+		operationsToDelete: List[Operation] = []
 
 		for operation in self._operations:
 			if operation.doDelayedDeath(simulation):
@@ -1963,7 +1963,7 @@ class PlayerOperations:
 	def deleteOperation(self, operation: Operation):
 		self._operations = list(filter(lambda op: op != operation, self._operations))
 
-	def operationsOfType(self, operationType: UnitOperationType) -> [Operation]:
+	def operationsOfType(self, operationType: UnitOperationType) -> List[Operation]:
 		return list(filter(lambda op: op.operationType == operationType, self._operations))
 
 	def numberOfOperationsOfType(self, operationType: UnitOperationType) -> int:
@@ -2117,10 +2117,10 @@ class PlayerEnvoys:
 
 		return True
 
-	def envoyEffects(self, simulation) -> [EnvoyEffect]:
+	def envoyEffects(self, simulation) -> List[EnvoyEffect]:
 		diplomacyAI = self.player.diplomacyAI
 
-		effects: [EnvoyEffect] = []
+		effects: List[EnvoyEffect] = []
 
 		for loopPlayer in simulation.players:
 			if loopPlayer == self.player:
@@ -2301,15 +2301,15 @@ class Player:
 
 			self._currentEraValue: EraType = EraType.ancient
 			self._currentAgeValue: AgeType = AgeType.normal
-			self._currentDedicationsValue: [DedicationType] = []
+			self._currentDedicationsValue: List[DedicationType] = []
 			self._numberOfDarkAgesValue: int = 0
 			self._numberOfGoldenAgesValue: int = 0
 			self._totalImprovementsBuilt: int = 0
 			self._trainedSettlersValue: int = 0
 			self._tradingCapacityValue: int = 0
 			self._boostExoplanetExpeditionValue: int = 0
-			self._discoveredNaturalWonders: [FeatureType] = []
-			self._discoveredBarbarianCampLocations: [HexPoint] = []
+			self._discoveredNaturalWonders: List[FeatureType] = []
+			self._discoveredBarbarianCampLocations: List[HexPoint] = []
 			self._area = HexArea([])
 			self._faithEarned = 0.0
 			self._cultureEarned = 0.0
@@ -2317,8 +2317,8 @@ class Player:
 			self._resourceStockpile = WeightedBaseList()
 			self._resourceMaxStockpile = WeightedBaseList()
 			self._suzerainValue: Optional[LeaderType] = None
-			self._oldQuests: [CityStateQuest] = []
-			self._quests: [CityStateQuest] = []
+			self._oldQuests: List[CityStateQuest] = []
+			self._quests: List[CityStateQuest] = []
 			self._influencePointsValue: int = 0
 			self._canChangeGovernmentValue: bool = False
 			self._faithPurchaseType: FaithPurchaseType = FaithPurchaseType.noAutomaticFaithPurchase
@@ -2409,8 +2409,8 @@ class Player:
 			self._resourceStockpile = WeightedBaseList()  # fixme
 			self._resourceMaxStockpile = WeightedBaseList()  # fixme
 			self._suzerainValue: Optional[LeaderType] = None  # fixme
-			self._oldQuests: [CityStateQuest] = []  # fixme
-			self._quests: [CityStateQuest] = []  # fixme
+			self._oldQuests: List[CityStateQuest] = []  # fixme
+			self._quests: List[CityStateQuest] = []  # fixme
 			self._influencePointsValue: int = 0  # fixme
 			self._canChangeGovernmentValue: bool = False  # fixme
 			self._faithPurchaseType: FaithPurchaseType = FaithPurchaseType.noAutomaticFaithPurchase  # fixme
@@ -3842,8 +3842,8 @@ class Player:
 	def tradingCapacity(self) -> int:
 		return self._tradingCapacityValue
 
-	def possibleTradeRoutes(self, originCity, simulation) -> [TradeRoute]:
-		routes: [TradeRoute] = []
+	def possibleTradeRoutes(self, originCity, simulation) -> List[TradeRoute]:
+		routes: List[TradeRoute] = []
 
 		tmpTrader = Unit(originCity.location, UnitType.trader, self)
 		pathFinderDataSource = simulation.unitAwarePathfinderDataSource(tmpTrader)
@@ -4278,7 +4278,7 @@ class Player:
 				# )
 				pass
 
-			message = f"{oldCity.name()} was captured by the {self.leader.civilization().name()}!!!"
+			message = f"{oldCity.name()} was captured by the {self.leader.civilization().title()}!!!"
 			simulation.addReplayEvent(ReplayEventType.cityCaptured, message, oldCity.location)
 
 			# inform other players, that a city was conquered or liberated
@@ -4313,7 +4313,7 @@ class Player:
 		oldPopulation = oldCity.population()
 		# iHighestPopulation = pOldCity->getHighestPopulation();
 		everCapital = oldCity.isEverCapital()
-		oldName = oldCity.name
+		oldName = oldCity.name()
 		oldCultureLevel = oldCity.cultureLevel()
 		hasMadeAttack = oldCity.isOutOfAttacks(simulation)
 		oldBattleDamage = oldCity.damage()
@@ -4328,7 +4328,7 @@ class Player:
 			if oldBattleDamage > battleDamageThreshold:
 				oldBattleDamage = battleDamageThreshold
 
-		oldDistricts: [CityDistrictItem] = []
+		oldDistricts: List[CityDistrictItem] = []
 		for districtType in list(DistrictType):
 			if districtType == DistrictType.cityCenter:
 				continue
@@ -4337,12 +4337,12 @@ class Player:
 				oldLocation = oldCity.locationOfDistrict(districtType)
 				oldDistricts.append(CityDistrictItem(districtType, oldLocation))
 
-		oldBuildings: [BuildingType] = []
+		oldBuildings: List[BuildingType] = []
 		for buildingType in list(BuildingType):
 			if oldCity.hasBuilding(buildingType):
 				oldBuildings.append(buildingType)
 
-		oldWonders: [CityWonderItem] = []
+		oldWonders: List[CityWonderItem] = []
 		for wonderType in list(WonderType):
 			if oldCity.hasWonder(wonderType):
 				oldLocation = oldCity.locationOfWonder(wonderType)
@@ -5208,9 +5208,9 @@ class Player:
 				techs.triggerEurekaFor(selectedTech, simulation)
 
 		if not self.isHuman():
-			dedications: [DedicationType] = list(filter(lambda d: era in d.eras(), list(DedicationType)))
+			dedications: List[DedicationType] = list(filter(lambda d: era in d.eras(), list(DedicationType)))
 			selectable = self._currentAgeValue.numDedicationsSelectable()
-			selected: [DedicationType] = []
+			selected: List[DedicationType] = []
 			for _ in range(selectable):
 				selectedDedication = random.choice(dedications)
 				selected.append(selectedDedication)
@@ -5220,10 +5220,10 @@ class Player:
 
 		return
 
-	def selectDedications(self, dedications: [DedicationType]):
+	def selectDedications(self, dedications: List[DedicationType]):
 		self._currentDedicationsValue = dedications
 
-	def currentDedications(self) -> [DedicationType]:
+	def currentDedications(self) -> List[DedicationType]:
 		return self._currentDedicationsValue
 
 	def selectCurrentAge(self, simulation):

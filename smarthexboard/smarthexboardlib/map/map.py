@@ -1,5 +1,6 @@
 import sys
-from typing import Optional, Union
+from abc import ABC, abstractmethod
+from typing import Optional, Union, List
 
 from smarthexboard.smarthexboardlib.core.types import EraType
 from smarthexboard.smarthexboardlib.game.baseTypes import ArtifactType
@@ -21,11 +22,7 @@ from smarthexboard.smarthexboardlib.map.improvements import ImprovementType
 from smarthexboard.smarthexboardlib.map.types import TerrainType, FeatureType, ResourceType, ClimateZone, RouteType, UnitMovementType, MapSize, \
 	Tutorials, Yields, AppealLevel, UnitDomainType, ResourceUsage, StartLocation, \
 	ArchaeologicalRecord, YieldType
-from smarthexboard.smarthexboardlib.core.base import WeightedBaseList, ExtendedEnum
-
-
-class Tile:
-	pass
+from smarthexboard.smarthexboardlib.core.base import WeightedBaseList, ExtendedEnum, InvalidEnumError
 
 
 class WeightedBuildList(WeightedBaseList):
@@ -68,7 +65,31 @@ class BuilderAIScratchPad:
 		self.value: int = -1
 
 
-class Tile:
+class TileBase(ABC):
+	def __init__(self):
+		self.point = None
+
+	@abstractmethod
+	def isRiverToCrossTowards(self, otherTile: 'TileBase') -> bool:
+		pass
+
+	@abstractmethod
+	def isRiverInNorth(self) -> bool:
+		pass
+
+	@abstractmethod
+	def isRiverInNorthEast(self) -> bool:
+		pass
+
+	@abstractmethod
+	def isRiverInSouthEast(self) -> bool:
+		pass
+
+
+_river_cache = {}
+
+
+class Tile(TileBase):
 	"""
 		class that holds a single tile of a Map
 
@@ -149,6 +170,10 @@ class Tile:
 
 	def __repr__(self):
 		return f'Tile({self.point}, {self._terrainValue}, hills={self._isHills}, {self._featureValue}, {self._resourceValue})'
+
+	@staticmethod
+	def resetRiverCache():
+		_river_cache.clear()
 
 	def owner(self) -> Optional[Player]:
 		return self._owner
@@ -259,7 +284,7 @@ class Tile:
 
 		return False
 
-	def movementCost(self, movement_type: UnitMovementType, from_tile: Tile) -> int:
+	def movementCost(self, movement_type: UnitMovementType, from_tile: TileBase) -> int:
 		"""
 			cost to enter a terrain given the specified movement_type
 
@@ -303,24 +328,43 @@ class Tile:
 
 		return terrain_cost + hill_costs + feature_costs + river_cost
 
-	def isRiverToCrossTowards(self, target: Tile) -> bool:
+	def isRiverToCrossTowards(self, target: TileBase) -> bool:
+		cache_key = f'{hash(self.point)}-{hash(target.point)}'
+		if cache_key in _river_cache:
+			return _river_cache[cache_key]
+
 		if not self.isNeighborTo(target.point):
+			_river_cache[cache_key] = False
 			return False
 
 		direction = self.point.directionTowards(target.point)
 
 		if direction == HexDirection.north:
-			return self.isRiverInNorth()
+			tmp_value = self.isRiverInNorth()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
 		elif direction == HexDirection.northEast:
-			return self.isRiverInNorthEast()
+			tmp_value = self.isRiverInNorthEast()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
 		elif direction == HexDirection.southEast:
-			return self.isRiverInSouthEast()
+			tmp_value = self.isRiverInSouthEast()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
 		elif direction == HexDirection.south:
-			return target.isRiverInNorth()
+			tmp_value = target.isRiverInNorth()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
 		elif direction == HexDirection.southWest:
-			return target.isRiverInNorthEast()
+			tmp_value = target.isRiverInNorthEast()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
 		elif direction == HexDirection.northWest:
-			return target.isRiverInSouthEast()
+			tmp_value = target.isRiverInSouthEast()
+			_river_cache[cache_key] = tmp_value
+			return tmp_value
+
+		raise InvalidEnumError(direction)
 
 	def setRiver(self, river: River, flow: FlowDirection):
 		self._riverName = river.name()
@@ -986,8 +1030,15 @@ class Tile:
 		if flow != FlowDirection.east and flow != FlowDirection.west:
 			raise Exception(f'{flow} unsupported in north')
 
+		# reset cache
+		target = self.point.neighbor(HexDirection.north)
+		cache_key = f'{hash(self.point)}-{hash(target)}'
+		del _river_cache[cache_key]
+		r_cache_key = f'{hash(target)}-{hash(self.point)}'
+		del _river_cache[r_cache_key]
+
 		if not self.isRiverIn(flow):
-			self._riverValue += int(flow.value)
+			self._riverValue += int(flow._value_)
 
 		return
 
@@ -995,17 +1046,34 @@ class Tile:
 		if flow != FlowDirection.northEast and flow != FlowDirection.southWest:
 			raise Exception(f'{flow} unsupported in southEast')
 
+		# reset cache
+		target = self.point.neighbor(HexDirection.southEast)
+		cache_key = f'{hash(self.point)}-{hash(target)}'
+		del _river_cache[cache_key]
+		r_cache_key = f'{hash(target)}-{hash(self.point)}'
+		del _river_cache[r_cache_key]
+
 		if not self.isRiverIn(flow):
-			self._riverValue += int(flow.value)
+			self._riverValue += int(flow._value_)
 
 		return
 
-	def setRiverFlowInNorthEast(self, flow:  FlowDirection):
+	def setRiverFlowInNorthEast(self, flow: FlowDirection):
 		if flow != FlowDirection.northWest and flow != FlowDirection.southEast:
 			raise Exception(f'{flow} unsupported in northEast')
 
+		# reset cache entries
+		target = self.point.neighbor(HexDirection.northEast)
+		cache_key = f'{hash(self.point)}-{hash(target)}'
+		if cache_key in _river_cache:
+			del _river_cache[cache_key]
+
+		r_cache_key = f'{hash(target)}-{hash(self.point)}'
+		if r_cache_key in _river_cache:
+			del _river_cache[r_cache_key]
+
 		if not self.isRiverIn(flow):
-			self._riverValue += int(flow.value)
+			self._riverValue += int(flow._value_)
 
 		return
 
@@ -1479,7 +1547,7 @@ class MapModel:
 		else:
 			raise AttributeError(f'Map.valid with wrong attributes: {x_or_hex} / {y}')
 
-	def points(self) -> [HexPoint]:
+	def points(self) -> List[HexPoint]:
 		point_arr = []
 
 		for x in range(self.width):
@@ -1687,10 +1755,10 @@ class MapModel:
 		item = next((city for city in self._cities if city.player == player and city.isCapital()), None)
 		return item
 
-	def unitsOf(self, player: Player) -> [Unit]:
+	def unitsOf(self, player: Player) -> List[Unit]:
 		return list(filter(lambda unit: unit.player == player, self._units))
 
-	def unitsAt(self, location) -> [Unit]:
+	def unitsAt(self, location) -> List[Unit]:
 		return list(filter(lambda unit: unit.location == location, self._units))
 
 	def unitAt(self, location, unitMapType: UnitMapType) -> Optional[Unit]:
@@ -1705,13 +1773,13 @@ class MapModel:
 	def cityAt(self, location: HexPoint) -> Optional[City]:
 		return next(filter(lambda city: city.location == location, self._cities), None)
 
-	def citiesOf(self, player) -> [City]:
+	def citiesOf(self, player) -> List[City]:
 		return list(filter(lambda city: city.player == player, self._cities))
 
-	def citiesInAreaOf(self, player, area) -> [City]:
+	def citiesInAreaOf(self, player, area) -> List[City]:
 		return list(filter(lambda city: city.player == player and city.location in area, self._cities))
 
-	def citiesIn(self, area) -> [City]:
+	def citiesIn(self, area) -> List[City]:
 		return list(filter(lambda city: city.location in area, self._cities))
 
 	def addCity(self, city: City, simulation):

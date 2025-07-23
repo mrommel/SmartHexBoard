@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
 from smarthexboard.smarthexboardlib.game.types import CivicType, TechType
@@ -8,9 +8,9 @@ from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumEr
 
 
 class DistrictTypeData:
-	def __init__(self, name: str, specialty: bool, effects: [str], productionCost: int, maintenanceCost: int,
+	def __init__(self, name: str, specialty: bool, effects: List[str], productionCost: int, maintenanceCost: int,
 	             requiredTech: Optional[TechType], requiredCivic: Optional[CivicType], domesticTradeYields: Yields,
-	             foreignTradeYields: Yields, flavors: [Flavor], oncePerCivilization: bool = False):
+	             foreignTradeYields: Yields, flavors: List[Flavor], oncePerCivilization: bool = False):
 		self.name = name
 		self.specialty = specialty
 		self.effects = effects
@@ -57,7 +57,7 @@ class DistrictType(ExtendedEnum):
 	def maintenanceCost(self) -> float:
 		return self._data().maintenanceCost
 
-	def _flavors(self) -> [Flavor]:
+	def _flavors(self) -> List[Flavor]:
 		return self._data().flavors
 
 	def flavor(self, flavorType: FlavorType) -> int:

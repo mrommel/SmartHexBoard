@@ -10,12 +10,12 @@ urlpatterns = [
     path('tests', views.tests, name='tests'),
 
     # game api
-    path('game/create', views.game_create, name='game_create'),
-    path('game/<str:game_uuid>/create/status', views.game_create_status, name='game_create_status'),
-    path('game/<str:game_uuid>/map', views.game_map, name='game_map'),
-    path('game/<str:game_uuid>/info', views.game_info, name='game_info'),
-    path('game/<str:game_uuid>/update', views.game_update, name='game_update'),
-    path('game/<str:game_uuid>/turn', views.game_turn, name='game_turn'),
+    path('create', views.game_create, name='game_create'),
+    path('<str:game_uuid>/create/status', views.game_create_status, name='game_create_status'),
+    path('<str:game_uuid>/map', views.game_map, name='game_map'),
+    path('<str:game_uuid>/info', views.game_info, name='game_info'),
+    path('<str:game_uuid>/update', views.game_update, name='game_update'),
+    path('<str:game_uuid>/turn', views.game_turn, name='game_turn'),
 
     # game action api
     path('game/move_unit', views.game_move_unit, name='game_move_unit'),

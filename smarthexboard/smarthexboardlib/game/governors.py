@@ -1,3 +1,5 @@
+from typing import List
+
 from smarthexboard.smarthexboardlib.game.flavors import Flavor, FlavorType
 from smarthexboard.smarthexboardlib.map import constants
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
@@ -8,7 +10,7 @@ class GovernorTitleType:
 
 
 class GovernorTitleTypeData:
-	def __init__(self, name: str, effects: [str], tier: int, requiredOr: [GovernorTitleType], flavors: [Flavor]):
+	def __init__(self, name: str, effects: List[str], tier: int, requiredOr: List[GovernorTitleType], flavors: List[Flavor]):
 		self.name = name
 		self.effects = effects
 		self.tier = tier
@@ -75,7 +77,7 @@ class GovernorTitleType(ExtendedEnum):
 	spaceInitiative = 'spaceInitiative'
 	curator = 'curator'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def _data(self) -> GovernorTitleTypeData:
@@ -558,7 +560,7 @@ class GovernorTitleType(ExtendedEnum):
 
 class GovernorTypeData:
 	def __init__(self, name: str, title: str, turnsToEstablish: int, defaultTitle: GovernorTitleType,
-				 titles: [GovernorTitleType], flavors: [Flavor]):
+				 titles: List[GovernorTitleType], flavors: List[Flavor]):
 		self.name = name
 		self.title = title
 		self.turnsToEstablish = turnsToEstablish
@@ -578,7 +580,7 @@ class GovernorType(ExtendedEnum):
 	liang = 'liang'
 	pingala = 'pingala'
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def defaultTitle(self) -> GovernorTitleType:

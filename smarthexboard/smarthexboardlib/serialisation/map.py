@@ -32,14 +32,14 @@ class TileSchema(Schema):
 	point = fields.Nested(PointSchema)
 	terrain = fields.String(attribute='_terrainValue', required=True)
 	isHills = fields.Boolean(attribute="_isHills")
-	feature = EnumField(FeatureType, attribute='_featureValue', allow_none=True)
+	feature = fields.String(attribute='_featureValue', allow_none=True)
 	resource = EnumField(ResourceType, attribute='_resourceValue', allow_none=True)
 	resourceQuantity = fields.Integer(attribute="_resourceQuantity")
 
 	river = fields.Integer(attribute="_riverValue")
 	riverName = fields.String(attribute="_riverName", allow_none=True)
 
-	climateZone = EnumField(ClimateZone, attribute='_climateZone', allow_none=True)
+	climateZone = fields.String(attribute='_climateZone', allow_none=True)
 	route = fields.String(attribute="_route")
 	routePillaged = fields.Boolean(attribute="_routePillagedValue")
 	improvement = fields.String(attribute="_improvementValue")
@@ -65,40 +65,94 @@ class TileSchema(Schema):
 	@post_load
 	def make_tile(self, data, **kwargs):
 		# pprint(data, indent=2)
+		# Deserialize the point or dict to a HexPoint
+		terrainValue = TerrainType.grass
+		if '_terrainValue' in data:
+			terrainValue = data['_terrainValue']
+			if isinstance(terrainValue, str):
+				terrainValue = TerrainType.fromName(terrainValue)
+			elif isinstance(terrainValue, TerrainType):
+				terrainValue = terrainValue
+			else:
+				raise TypeError(f'Invalid terrain type: {type(terrainValue)} for tile {data["point"]}')
+
 		deserialized_tile = Tile(
 			point_or_dict=data['point'],
-			terrain=TerrainType.fromName(data['_terrainValue'])
+			terrain=terrainValue
 		)
 
-		deserialized_tile._owner = data['owner']
+		deserialized_tile._owner = data['owner'] if 'owner' in data else None
 
 		deserialized_tile._buildProgressList = WeightedBuildList()
-		for key, value in data['_buildProgressList'].items():
-			deserialized_tile._buildProgressList[key] = value
+		if '_buildProgressList' in data:
+			for key, value in data['_buildProgressList'].items():
+				deserialized_tile._buildProgressList[key] = value
 
 		deserialized_tile.continentIdentifier = data['continentIdentifier']
 		deserialized_tile.oceanIdentifier = data['oceanIdentifier']
 
 		# private identifiers
-		deserialized_tile._climateZone = data['_climateZone']
-		deserialized_tile._districtValue = data['_districtValue']
-		deserialized_tile._featureValue = data['_featureValue']
+		deserialized_tile._climateZone = ClimateZone.fromName(data['_climateZone'])
+		deserialized_tile._districtValue = DistrictType.none
+		if '_districtValue' in data:
+			districtValue = data['_districtValue']
+			if isinstance(districtValue, str):
+				deserialized_tile._districtValue = DistrictType.fromName(districtValue)
+			elif isinstance(districtValue, DistrictType):
+				deserialized_tile._districtValue = districtValue
+			else:
+				raise TypeError(f'Invalid district type: {type(districtValue)} for tile {data["point"]}')
+
+		# feature deserialization
+		deserialized_tile._featureValue = FeatureType.none
+		if '_featureValue' in data:
+			featureValue = data['_featureValue']
+			if isinstance(featureValue, str):
+				deserialized_tile._featureValue = FeatureType.fromName(featureValue)
+			elif isinstance(featureValue, FeatureType):
+				deserialized_tile._featureValue = featureValue
+			else:
+				raise TypeError(f'Invalid feature type: {type(featureValue)} for tile {data["point"]}')
+
 		deserialized_tile._improvementPillagedValue = data['_improvementPillagedValue']
 		deserialized_tile._improvementValue = ImprovementType.fromName(data['_improvementValue'])
 		deserialized_tile._isHills = data['_isHills']
 		deserialized_tile._resourceQuantity = data['_resourceQuantity']
-		deserialized_tile._resourceValue = data['_resourceValue']
+
+		# resource deserialization
+		deserialized_tile._resourceValue = ResourceType.none
+		if '_resourceValue' in data:
+			resourceValue = data['_resourceValue']
+			if isinstance(resourceValue, str):
+				deserialized_tile._resourceValue = ResourceType.fromName(resourceValue)
+			elif isinstance(resourceValue, ResourceType):
+				deserialized_tile._resourceValue = resourceValue
+			else:
+				raise TypeError(f'Invalid resource type: {type(resourceValue)} for tile {data["point"]}')
+
 		deserialized_tile._riverName = data['_riverName']
 		deserialized_tile._riverValue = data['_riverValue']
 		deserialized_tile._route = RouteType.fromName(data['_route'])
-		deserialized_tile._routePillagedValue = data['_routePillagedValue']
-		deserialized_tile._wonderValue = data['_wonderValue']
+		deserialized_tile._routePillagedValue = data['_routePillagedValue'] if '_routePillagedValue' in data else False
 
-		for key, value in data['visible'].items():
-			deserialized_tile.visible[key] = value
+		# wonder deserialization
+		deserialized_tile._wonderValue = WonderType.none
+		if '_wonderValue' in data:
+			wonderValue = data['_wonderValue']
+			if isinstance(wonderValue, str):
+				deserialized_tile._wonderValue = WonderType.fromName(wonderValue)
+			elif isinstance(wonderValue, WonderType):
+				deserialized_tile._wonderValue = wonderValue
+			else:
+				raise TypeError(f'Invalid wonder type: {type(wonderValue)} for tile {data["point"]}')
 
-		for key, value in data['discovered'].items():
-			deserialized_tile.discovered[key] = value
+		if 'visible' in data:
+			for key, value in data['visible'].items():
+				deserialized_tile.visible[key] = value
+
+		if 'discovered' in data:
+			for key, value in data['discovered'].items():
+				deserialized_tile.discovered[key] = value
 
 		# raise Exception(f'Tile deserialization not implemented yet - {data}')
 		return deserialized_tile

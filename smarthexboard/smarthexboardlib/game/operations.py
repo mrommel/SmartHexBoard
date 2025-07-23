@@ -1,6 +1,6 @@
 import logging
 import sys
-from typing import Optional
+from typing import Optional, List
 
 from smarthexboard.smarthexboardlib.core.base import InvalidEnumError, WeightedBaseList
 from smarthexboard.smarthexboardlib.game.ai.army import Army, ArmyFormationSlotConstants
@@ -303,7 +303,7 @@ class Operation:
 		returnVal = True
 
 		# Copy over the list
-		secondList: [OperationSlot] = []
+		secondList: List[OperationSlot] = []
 		for item in self.listOfUnitsWeStillNeedToBuild:
 			secondList.append(item)
 
@@ -343,7 +343,7 @@ class Operation:
 		return
 
 	def findBestFitReserveUnit(self, slot: OperationSlot, simulation) -> (bool, bool):
-		searchList: [OperationSearchUnit] = []
+		searchList: List[OperationSearchUnit] = []
 
 		for loopUnit in simulation.unitsOf(self.player):
 			# Make sure he's not needed by the tactical AI or already in an army or scouting
@@ -377,7 +377,7 @@ class Operation:
 		# If not required, let our calling routine know that
 		return True, slot.slot.required
 
-	def closestUnitIn(self, searchList: [OperationSearchUnit], needToCheckTarget: bool,
+	def closestUnitIn(self, searchList: List[OperationSearchUnit], needToCheckTarget: bool,
 					  simulation):  # -> Optional[Unit]:
 		bestUnit = None
 		bestDistance: float = float(UnitMovementType.max.value)
@@ -654,7 +654,7 @@ class Operation:
 
 	def logOperationStart(self):
 		"""Log that an operation has started"""
-		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().name()}), '
+		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().title()}), '
 		strTemp += f'{self.operationType}, '
 		strTemp += f'Started, Army: {self.army.identifier[0:8]}, '
 		strTemp += f'Units Recruited: {self.army.numberOfSlotsFilled()}, '
@@ -663,7 +663,7 @@ class Operation:
 		logging.info(strTemp)
 
 	def logOperationStatus(self):
-		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().name()}), '
+		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().title()}), '
 		strTemp += f'{self.operationType}, '
 
 		if self.state == OperationStateType.aborted:
@@ -704,7 +704,7 @@ class Operation:
 
 	def logOperationEnd(self):
 		"""Log that an operation has ended"""
-		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().name()}), '
+		strTemp = f'=== Operation: {self.player.name()} ({self.player.leader.civilization().title()}), '
 		strTemp += f'{self.operationType}, '
 		strTemp += "Ended, "
 

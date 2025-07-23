@@ -63,7 +63,7 @@ class HomelandMoveType(ExtendedEnum):
 	# addSpaceshipPart = ''  # AI_HOMELAND_MOVE_ADD_SPACESHIP_PART,
 	# airlift = ''  # AI_HOMELAND_MOVE_AIRLIFT
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def priority(self) -> int:

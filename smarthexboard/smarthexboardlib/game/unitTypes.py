@@ -138,7 +138,7 @@ class UnitClassType(ExtendedEnum):
 			UnitClassType.airFighter, UnitClassType.airBomber
 		]
 
-	def name(self) -> str:
+	def title(self) -> str:
 		return self._data().name
 
 	def domain(self) -> UnitDomainType:
