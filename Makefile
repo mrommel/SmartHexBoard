@@ -12,6 +12,9 @@ $(VENV)/bin/activate: requirements.txt
 	./$(VENV)/bin/pip3.12 install -r requirements.txt
 	#./$(VENV)/bin/pip3.12 install --force-reinstall -r requirements.txt --only-binary=:all:
 
+install_requirements: $(VENV)/bin/activate
+	./$(VENV)/bin/pip3.12 install -r requirements.txt
+
 # venv is a shortcut target
 venv: $(VENV)/bin/activate
 
@@ -24,16 +27,20 @@ pylint: venv
 #	./$(VENV)/bin/python3.12 -m unittest
 
 tests: venv
-	./$(VENV)/bin/pytest -q smarthexboard/tests.py
-	./$(VENV)/bin/pytest -q smarthexboard/test_service.py
+	# ./$(VENV)/bin/pytest -q smarthexboard/tests.py
+	# ./$(VENV)/bin/pytest -q smarthexboard/test_service.py
+	./$(VENV)/bin/pytest -q smarthexboard/*.py
 
 run-qcluster: venv
 	./$(VENV)/bin/python3.12 manage.py qcluster
 
 run: venv
-	rm -rf django_smarthexboard_cache
 	./$(VENV)/bin/python3.12 -m pip install --upgrade pip
+	./$(VENV)/bin/python3.12 manage.py clearcache
 	./$(VENV)/bin/python3.12 manage.py runserver 8081
+
+clearcache: venv
+	./$(VENV)/bin/python3.12 manage.py clearcache
 
 clean:
 	rm -rf $(VENV)
@@ -47,6 +54,9 @@ makemigrations: venv
 
 migrate: venv
 	./$(VENV)/bin/python3.12 manage.py migrate
+
+# createcachetable: venv
+#	./$(VENV)/bin/python3.12 manage.py createcachetable
 
 # preparetranslations: venv
 #	./$(VENV)/bin/python3.12 manage.py makemessages -l de -l en -e html,txt,py --ignore=venv/*

@@ -9,6 +9,9 @@ import pytest
 from django.test import Client, TestCase
 from parameterized import parameterized
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'setup.settings')
+django.setup()
+
 from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.repositories import GameDataRepository
 from smarthexboard.services import generate_game
@@ -23,9 +26,6 @@ from smarthexboard.smarthexboardlib.map.base import HexPoint
 from smarthexboard.smarthexboardlib.map.types import MapSize, MapType, FeatureType, TerrainType
 from smarthexboard.tests.test_utils import MapModelMock
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'setup.settings')
-django.setup()
-
 
 class TestGenerationRequest(TestCase):
 
@@ -35,7 +35,7 @@ class TestGenerationRequest(TestCase):
 		client = Client()
 
 		data = urlencode({"something": "something"})
-		response = client.post('/game/create', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/create', data, content_type="application/x-www-form-urlencoded")
 		if response.status_code != 200:
 			print(response.content)
 
@@ -54,7 +54,7 @@ class TestGenerationRequest(TestCase):
 		client = Client()
 
 		data = urlencode({"leader": "random", 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
-		response = client.post('/game/create', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
@@ -70,7 +70,7 @@ class TestGenerationRequest(TestCase):
 		client = Client()
 
 		data = urlencode({'leader': 'trajan', 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'random'})
-		response = client.post('/game/create', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		status = json_object['status']
@@ -91,7 +91,7 @@ class TestGenerationRequest(TestCase):
 		client = Client()
 
 		data = urlencode({'leader': leader, 'handicap': handicap, 'mapSize': mapSize, 'mapType': mapType})
-		response = client.post('/game/create', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		game_id = json_object['game_id']
@@ -102,7 +102,7 @@ class TestGenerationRequest(TestCase):
 		"""Test that the map generation request status returns error for invalid id parameter"""
 		client = Client()
 
-		response = client.get(f'/game/123-324/create/status')
+		response = client.get(f'/smarthexboard/123-324/create/status')
 		# print(response.content)
 		self.assertEqual(response.status_code, 400)
 
@@ -121,7 +121,7 @@ class TestGenerationRequest(TestCase):
 
 		# 1 - start map creation
 		data = urlencode({'leader': 'alexander', 'handicap': 'settler', 'mapSize': 'tiny', 'mapType': 'continents'})
-		response = client.post('/game/create', data, content_type="application/x-www-form-urlencoded")
+		response = client.post('/smarthexboard/create', data, content_type="application/x-www-form-urlencoded")
 		# print(response.content)
 		json_object = json.loads(response.content)
 		game_id = json_object['game_id']
@@ -129,7 +129,7 @@ class TestGenerationRequest(TestCase):
 		self.assertEqual(response.status_code, 201)
 
 		# fake the async generation - not working with the test currently
-		game_id = generate_game(LeaderType.alexander, HandicapType.settler, MapSize.tiny, MapType.continents)
+		generate_game(game_id, LeaderType.alexander, HandicapType.settler, MapSize.tiny, MapType.continents)
 		# print(f'game_id: {game_id}')
 		sleep(1)
 
@@ -143,7 +143,7 @@ class TestGenerationRequest(TestCase):
 		testing_status = GameGenerationState.RUNNING
 		while testing_status != GameGenerationState.READY and testing_count < 10:
 			ts = time()
-			response = client.get(f'/game/{game_id}/create/status?timestamp={int(ts * 1000)}')
+			response = client.get(f'/smarthexboard/{game_id}/create/status?timestamp={int(ts * 1000)}')
 			print(response.content)
 			self.assertEqual(response.status_code, 200)
 
@@ -161,13 +161,13 @@ class TestGenerationRequest(TestCase):
 		self.assertEqual(testing_count < 10, True)
 
 		# 3 - get map
-		response = client.get(f'/game/{game_id}/map')
+		response = client.get(f'/smarthexboard/{game_id}/map')
 		if response.status_code != 200:
 			print(response.content)
 		self.assertEqual(response.status_code, 200)
 
 		# 4 - info
-		response = client.get(f'/game/{game_id}/info')
+		response = client.get(f'/smarthexboard/{game_id}/info')
 		if response.status_code != 200:
 			print(response.content)
 		self.assertEqual(response.status_code, 200)
@@ -177,10 +177,10 @@ class TestGenerationRequest(TestCase):
 		iteration: int = 0
 		while not human_active and iteration < 20:
 			ts = time()
-			response = client.get(f'/game/{game_id}/update?timestamp={int(ts * 1000)}')
+			response = client.get(f'/smarthexboard/{game_id}/update?timestamp={int(ts * 1000)}')
 			self.assertEqual(response.status_code, 200)
 			json_object = json.loads(response.content)
-			game_id_status = int(json_object['game_id'])
+			game_id_status = json_object['game_id']
 			current_turn_status = json_object['current_turn']
 			human_active = json_object['human_active']
 			# current_player = json_object['current_player']
@@ -235,9 +235,9 @@ class TestGamePlayRequest(unittest.TestCase):
 	def test_unit_move_request_no_game(self):
 		"""Test that the unit move"""
 		client = Client()
-		another_id = 42
+		another_id = -1
 		data = {'game_id': another_id, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '1,1'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -256,11 +256,11 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '1,1'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
-		# if response.status_code != 200:
-		# 	print(response.status_code)
-		# 	print(response.content)
+		if response.status_code != 200:
+			print(response.status_code)
+			print(response.content)
 
 		json_object = json.loads(response.content)
 		errors = json_object['errors']
@@ -275,7 +275,7 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'clown', 'old_location': '0,0', 'new_location': '1,1'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -294,7 +294,7 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '0,_', 'new_location': '1,1'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -313,11 +313,11 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '0,0', 'new_location': '123'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
-		# if response.status_code != 400:
-		#	print(response.status_code)
-		#	print(response.content)
+		if response.status_code != 400:
+			print(response.status_code)
+			print(response.content)
 
 		json_object = json.loads(response.content)
 		errors = json_object['errors']
@@ -332,7 +332,7 @@ class TestGamePlayRequest(unittest.TestCase):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '1,1', 'new_location': '1,2'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -344,7 +344,7 @@ class TestGamePlayRequest(unittest.TestCase):
 
 		self.assertEqual(response.status_code, 400)
 		self.assertEqual(status, 'Cannot move unit.')
-		self.assertEqual(errors, ['Cannot move units from another player. The unit you are trying to move is from TXT_KEY_LEADER_ALEXANDER.'])
+		self.assertEqual(errors, ['Cannot move units from another player. The unit you are trying to move is from Alexander.'])
 
 	@pytest.mark.django_db
 	def test_unit_move_request_no_moves_left(self):
@@ -354,11 +354,11 @@ class TestGamePlayRequest(unittest.TestCase):
 
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '2,2', 'new_location': '1,2'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
-		# if response.status_code != 200:
-		# 	print(response.status_code)
-		# 	print(response.content)
+		if response.status_code != 400:
+			print(response.status_code)
+			print(response.content)
 
 		json_object = json.loads(response.content)
 		errors = json_object['errors']
@@ -367,14 +367,14 @@ class TestGamePlayRequest(unittest.TestCase):
 		self.assertEqual(response.status_code, 400)
 		self.assertEqual(status, 'Cannot move unit.')
 		# print(errors)
-		self.assertEqual(errors, ['Unit Unit(HexPoint(2, 2), UnitType.warrior, TXT_KEY_LEADER_BARBAROSSA, 1 exp) could not be moved from HexPoint(2, 2) to HexPoint(1, 2).'])
+		self.assertEqual(errors, ['Unit Unit(HexPoint(2, 2), UnitType.warrior, Barbarossa, 1 exp) could not be moved from HexPoint(2, 2) to HexPoint(1, 2).'])
 
 	@pytest.mark.django_db
 	def test_unit_move_request_success(self):
 		"""Test that the unit move"""
 		client = Client()
 		data = {'game_id': self.game_id, 'unit_type': 'combat', 'old_location': '2,2', 'new_location': '1,2'}
-		response = client.post(f'/game/move_unit', data)
+		response = client.post(f'/smarthexboard/move_unit', data)
 
 		# if response.status_code != 200:
 		# 	print(response.status_code)
@@ -386,7 +386,7 @@ class TestGamePlayRequest(unittest.TestCase):
 		self.assertEqual(response.status_code, 200)
 		self.assertNotIn('errors', json_object)
 		self.assertNotIn('status', json_object)
-		self.assertEqual(game_id, self.game_id)
+		self.assertEqual(game_id, str(self.game_id))
 
 
 if __name__ == '__main__':

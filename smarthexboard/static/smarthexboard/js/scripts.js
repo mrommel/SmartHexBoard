@@ -261,7 +261,7 @@ function locationFromEvent(event) {
     return new HexPoint(screen_position);
 }
 
-let game_uuid;
+let game_id;
 
 function handleMouseUp(event) {
     if (mouseRightIsDown) {
@@ -275,7 +275,7 @@ function handleMouseUp(event) {
             // double click detected
             if (city != null) {
                 console.log('city action at ' + new_cursor + ' for ' + city);
-                cityInfoAt(city.location, game_uuid, function(city_info) {
+                cityInfoAt(city.location, game_id, function(city_info) {
                     uiRenderer.cityPanel(city, city_info, function(action, action_index) {
                         console.log('city action clicked: ' + action + ' index: ' + action_index);
                         // switch (action) {
@@ -290,7 +290,7 @@ function handleMouseUp(event) {
             } else if (units.length > 0) {
                 let firstUnit = units[0];
                 console.log('unit action at ' + new_cursor + ' for ' + firstUnit);
-                unitActions(firstUnit, game_uuid, function(unit, actions) {
+                unitActions(firstUnit, game_id, function(unit, actions) {
                     showUnitPanel(unit, event, actions);
                 });
             } else {
@@ -484,7 +484,7 @@ function abortUpdateTimer() {
 function checkGameGeneration() {
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/game/" + game_uuid + "/create/status?timestamp=" + Date.now(),
+        url: "/smarthexboard/" + game_id + "/create/status?timestamp=" + Date.now(),
         success: function(response) {
             console.log('refresh game generation status: ' + response.status + ', progress: ' + response.progress);
             // fixme: propagate progress to ui
@@ -492,7 +492,7 @@ function checkGameGeneration() {
             // $('#refresh_status').text(response.status);
             if (response.status === 'Ready') {
                 abortGenerationTimer();
-                loadMap(game_uuid);
+                loadMap(game_id);
             }
         },
         error: function(xhr, textStatus, exception) {
@@ -508,7 +508,7 @@ function checkGameGeneration() {
 function checkGameUpdate() {
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/game/" + game_uuid + "/update?timestamp=" + Date.now(),
+        url: "/smarthexboard/" + game_id + "/update?timestamp=" + Date.now(),
         success: function(response) {
             console.log('update game: ' + JSON.stringify(response));
             // fixme: propagate progress to ui
@@ -535,7 +535,7 @@ function formatDecimal(value) {
 function fetchGameInfo() {
     $.ajax({
         type:"GET",
-        url: "/smarthexboard/game/" + game_uuid + "/info",
+        url: "/smarthexboard/" + game_id + "/info",
         success: function(response) {
             console.log('update game info: ' + JSON.stringify(response));
 
@@ -571,17 +571,17 @@ function fetchGameInfo() {
     });
 }
 
-function loadMap(game_uuid) {
+function loadMap(game_id) {
     $.ajax({
         type:"GET",
         dataType: "json",
-        url: "/smarthexboard/game/" + game_uuid + "/map",
+        url: "/smarthexboard/" + game_id + "/map",
         success: function(json_obj) {
-            console.log('loaded map of game: ' + game_uuid);
+            console.log('loaded map of game: ' + game_id);
 
             var mapObj = new Map();
             mapObj.fromJson(json_obj);
-            console.log('map: ' + game_uuid + ' deserialized');
+            console.log('map: ' + game_id + ' deserialized');
             renderer.setup(mapObj);
 
             // create canvas with this size
@@ -601,7 +601,7 @@ function loadMap(game_uuid) {
 
 function moveUnit(from_point, to_point, unit_map_type) {
     const formData = new FormData();
-    formData.append('game_uuid', game_uuid);
+    formData.append('game_id', game_id);
     formData.append('unit_type', unit_map_type);
     formData.append('old_location', from_point);
     formData.append('new_location', to_point);
@@ -611,7 +611,7 @@ function moveUnit(from_point, to_point, unit_map_type) {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/smarthexboard/game/move_unit",
+        url: "/smarthexboard/move_unit",
         headers: {'X-CSRFToken': csrf_token},
         mode: 'same-origin',
         data: formData,
@@ -638,7 +638,7 @@ function moveUnit(from_point, to_point, unit_map_type) {
 function foundCity(settler, cityName) {
     console.log('found city: ' + cityName + ' at ' + cursor);
     const formData = new FormData();
-    formData.append('game_uuid', game_uuid);
+    formData.append('game_id', game_id);
     formData.append('city_name', cityName);
     formData.append('location', cursor.toString());
 
@@ -647,7 +647,7 @@ function foundCity(settler, cityName) {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/smarthexboard/game/found_city",
+        url: "/smarthexboard/found_city",
         headers: {'X-CSRFToken': csrf_token},
         mode: 'same-origin',
         data: formData,
@@ -788,7 +788,7 @@ window.startGame = function startGame() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/smarthexboard/game/create",
+        url: "/smarthexboard/create",
         headers: {'X-CSRFToken': csrf_token},
         mode: 'same-origin',
         data: formData,
@@ -796,8 +796,8 @@ window.startGame = function startGame() {
         contentType: false,
         success: function(json_obj) {
             // console.log('created game: ' + JSON.stringify(json_obj));
-            console.log('created game: ' + json_obj.game_uuid);
-            game_uuid = json_obj.game_uuid;
+            console.log('created game: ' + json_obj.game_id);
+            game_id = json_obj.game_id;
 
             changeUIState(UIState.generate);
 
@@ -827,7 +827,7 @@ window.quickGame = function quickGame() {
     $.ajax({
         type: "POST",
         dataType: "json",
-        url: "/smarthexboard/game/create",
+        url: "/smarthexboard/create",
         headers: {'X-CSRFToken': csrf_token},
         mode: 'same-origin',
         data: formData,
@@ -835,8 +835,8 @@ window.quickGame = function quickGame() {
         contentType: false,
         success: function(json_obj) {
             // console.log('created game: ' + JSON.stringify(json_obj));
-            console.log('created game: ' + json_obj.game_uuid);
-            game_uuid = json_obj.game_uuid;
+            console.log('created game: ' + json_obj.game_id);
+            game_id = json_obj.game_id;
 
             changeUIState(UIState.generate);
 
@@ -904,9 +904,9 @@ window.turnButtonClicked = function turnButtonClicked() {
     $.ajax({
         type:"GET",
         dataType: "json",
-        url: "/smarthexboard/game/" + game_uuid + "/turn",
+        url: "/smarthexboard/" + game_id + "/turn",
         success: function(json_obj) {
-            console.log('game turned: ' + game_uuid);
+            console.log('game turned: ' + game_id);
         },
         error: function(xhr, textStatus, exception) {
             handleError(xhr, textStatus, exception);

@@ -44,8 +44,11 @@ class GameDataRepository:
 
 	@staticmethod
 	def _fetchFromDatabase(game_id: str) -> Optional[GameModel]:
-		game_data = GameDataModel.objects.get(id=game_id)
-		if game_data is None:
+		print(f'_fetchFromDatabase: {game_id}')
+		try:
+			game_data = GameData.objects.get(id=game_id)
+		except GameData.DoesNotExist:
+			print(f'_fetchFromDatabase: {game_id} not found in database')
 			return None
 
 		db_content = game_data.content
@@ -63,10 +66,12 @@ class GameDataRepository:
 		if not isinstance(gameModel, GameModel):
 			raise Exception(f"GameModel is not an instance of GameModel: {type(gameModel)}")
 
-		try:
-			obj = GameData.objects.get(id=game_id)
-		except GameData.DoesNotExist:
-			obj = None
+		obj = None
+		if game_id is not None:
+			try:
+				obj = GameData.objects.get(id=game_id)
+			except GameData.DoesNotExist:
+				pass
 
 		json_str = GameModelSchema().dumps(gameModel)
 
@@ -76,8 +81,10 @@ class GameDataRepository:
 			raise Exception(f'Cannot store game - game data is more than 5 MB: {len(json_str)}')
 
 		if obj is None:
-			game = GameData.objects.create(name='name', content=json_str)
-			game_id = game.id
+			if game_id is None:
+				game_id = GameData.objects.create(name='name', content=json_str).id
+			else:
+				GameData.objects.create(id=game_id, name='name', content=json_str)
 		else:
 			obj.content = json_str
 			obj.save()

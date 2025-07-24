@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-d^!i)exgik$sn8d50)mrkj3mq23k-49*hjbip$%hw1-f!lil8&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['testserver', ]
+ALLOWED_HOSTS = ['127.0.0.1', 'testserver', ]
 
 
 # Application definition
@@ -109,15 +109,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 Q_CLUSTER = {
-    'name': 'smarthexboard_q_django',
-    'label': 'Django Q',
-    'retry': 25,
-    'timeout': 20,
-    'redis': {
-        'host': '127.0.0.1',
-        'port': 6379,
-        'db': 0,
-    }
+    'name': 'DjangORM',
+    'workers': 4,
+    'timeout': 90,
+    'retry': 120,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
 }
 
 CACHES = {

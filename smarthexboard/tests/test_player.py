@@ -38,7 +38,8 @@ def mock_gettext(message: str) -> str:
 	elif message == 'TXT_KEY_CITY_NAME_ALEXANDRIA':
 		return 'Alexandria'
 
-	raise f'Translation not available for message: "{message}"'
+	# raise f'Translation not available for message: "{message}"'
+	return message
 
 
 class TestDiplomacyAI(unittest.TestCase):

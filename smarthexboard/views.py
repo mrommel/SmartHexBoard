@@ -1,4 +1,4 @@
-import uuid
+import random
 from typing import Optional
 
 from django.core.cache import cache
@@ -10,11 +10,10 @@ from setup.settings import DEBUG
 from smarthexboard.forms import CreateGameForm, UnitMoveForm, UnitActionForm, FoundCityForm, CityInfoForm
 from smarthexboard.models import GameGenerationData, GameGenerationState
 from smarthexboard.repositories import GameDataRepository
-from smarthexboard.utils import is_valid_uuid, parseUnitMapType, parseLocation, parseUnitType
+from smarthexboard.utils import parseUnitMapType, parseLocation, parseUnitType, is_integer
 from .smarthexboardlib.game.baseTypes import HandicapType
 from .smarthexboardlib.game.cities import City
 from .smarthexboardlib.game.civilizations import LeaderType
-from .smarthexboardlib.game.game import GameModel
 from .smarthexboardlib.game.generation import UserInterfaceImpl
 from .smarthexboardlib.game.states.builds import BuildType
 from .smarthexboardlib.game.unitTypes import UnitType, UnitMapType
@@ -24,7 +23,7 @@ from .smarthexboardlib.serialisation.game import GameModelSchema
 
 
 class InvalidMethodResponse(JsonResponse):
-	def __init__(self, method, **kwargs):
+	def __init__(self, method, status_code, **kwargs):
 		response_data = {
 			'status': 'Invalid request method',
 			'errors': [f'Method "{method}" not allowed.'],
@@ -54,7 +53,7 @@ def index(request):
 		if leader == LeaderType.cityState:
 			continue
 
-		leader_selection.append((leader.value, f'{leader.title()} ({leader.civilization().name()})'))
+		leader_selection.append((leader.value, f'{leader.title()} ({leader.civilization().title()})'))
 
 	difficulty_selection = []
 	for handicap in list(HandicapType):
@@ -62,11 +61,11 @@ def index(request):
 
 	map_type_selection = []
 	for mapType in list(MapType):
-		map_type_selection.append((mapType.value, mapType.name()))
+		map_type_selection.append((mapType.value, mapType.title()))
 
 	map_size_selection = []
 	for mapSize in list(MapSize):
-		map_size_selection.append((mapSize.value, mapSize.name()))
+		map_size_selection.append((mapSize.value, mapSize.title()))
 
 	template = loader.get_template('index.html')
 	context = {
@@ -141,18 +140,18 @@ def game_create(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
-			game_uuid = uuid.uuid4()
+			game_id: str = f'{random.randint(100000, 999999)}'
 
 			leader: LeaderType = form.leaderValue()
 			handicap: HandicapType = form.handicapValue()
 			mapSize: MapSize = form.mapSizeValue()
 			mapType: MapType = form.mapTypeValue()
 
-			print(f'generate_game({game_uuid}, {leader}, {handicap}, {mapSize}, {mapType})')
-			# uuid, leader: LeaderType, handicap: HandicapType, mapSize: MapSize, mapType: MapType
-			async_task("smarthexboard.services.generate_game", game_uuid, leader, handicap, mapSize, mapType)
+			print(f'generate_game({game_id}, {leader}, {handicap}, {mapSize}, {mapType})')
+			# game_id, leader: LeaderType, handicap: HandicapType, mapSize: MapSize, mapType: MapType
+			async_task("smarthexboard.services.generate_game", game_id, leader, handicap, mapSize, mapType)
 
-			json_payload = {'status': 'Created', 'game_uuid': game_uuid}
+			json_payload = {'status': 'Created', 'game_id': game_id}
 			return JsonResponse(json_payload, status=201)
 		else:
 			# print(form.errors)
@@ -163,52 +162,52 @@ def game_create(request):
 		return JsonResponse(json_payload, status=400)
 
 
-def game_create_status(request, game_uuid: str):
-	if not is_valid_uuid(game_uuid):
+def game_create_status(request, game_id: str):
+	if not is_integer(game_id):
 		json_payload = {
 			'error': 'invalid arg',
-			'field': 'game_uuid',
-			'value': game_uuid,
+			'field': 'game_id',
+			'value': game_id,
 			'message': 'Invalid request: not a valid uuid format'
 		}
 		return JsonResponse(json_payload, status=400)
 
-	game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
+	game_generation = GameGenerationData.objects.filter(id=game_id).first()
 	if game_generation is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generation with uuid: {game_uuid}'}
+		json_payload = {'id': game_id, 'status': f'Cannot find game generation with id: {game_id}'}
 		return JsonResponse(json_payload, status=404)
 
 	json_payload = {
-		'uuid': game_uuid,
+		'game_id': game_id,
 		'status': GameGenerationState(game_generation.state).label,
 		'progress': game_generation.progress
 	}
 	return JsonResponse(json_payload, status=200)
 
 
-def game_map(request, game_uuid: str):
-	if not is_valid_uuid(game_uuid):
-		json_payload = {'uuid': game_uuid, 'status': 'Invalid request: not a valid uuid format'}
+def game_map(request, game_id: str):
+	if not is_integer(game_id):
+		json_payload = {'id': game_id, 'status': 'Invalid request: not a valid game_id format'}
 		return JsonResponse(json_payload, status=400)
 
-	if not GameDataRepository.inCacheOrDB(game_uuid):
-		game_generation = GameGenerationData.objects.filter(uuid=game_uuid).first()
+	if not GameDataRepository.inCacheOrDB(game_id):
+		game_generation = GameGenerationData.objects.filter(id=game_id).first()
 		if game_generation is None:
-			json_payload = {'uuid': game_uuid, 'status': f'Cannot find game generated with uuid: {game_uuid}'}
+			json_payload = {'game_id': game_id, 'status': f'Cannot find game generated with id: {game_id}'}
 			return JsonResponse(json_payload, status=404)
 
 		current_state = GameGenerationState(game_generation.state)
 		if current_state != GameGenerationState.READY:
-			json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} is not ready yet: {current_state}'}
+			json_payload = {'game_id': game_id, 'status': f'Game with {game_id} is not ready yet: {current_state}'}
 			return JsonResponse(json_payload, status=400)
 
 		game_str: str = game_generation.game
 		obj = GameModelSchema().loads(game_str)
-		GameDataRepository.store(game_uuid, obj)
+		GameDataRepository.store(game_id, obj)
 
-		GameGenerationData.objects.filter(uuid=game_uuid).delete()
+		GameGenerationData.objects.filter(id=game_id).delete()
 	else:
-		obj = GameDataRepository.fetch(game_uuid)
+		obj = GameDataRepository.fetch(game_id)
 
 	map_dict = obj._map.to_dict(human=obj.humanPlayer())
 
@@ -217,11 +216,11 @@ def game_map(request, game_uuid: str):
 	return JsonResponse(json_payload, status=200)
 
 
-def game_info(request, game_uuid: str):
-	game = GameDataRepository.fetch(game_uuid)
+def game_info(request, game_id: str):
+	game = GameDataRepository.fetch(game_id)
 
 	if game is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} not found in db or cache.'}
+		json_payload = {'game_id': game_id, 'status': f'Game with id {game_id} not found in db or cache.'}
 		return JsonResponse(json_payload, status=400)
 
 	humanPlayer = game.humanPlayer()
@@ -248,16 +247,16 @@ def game_info(request, game_uuid: str):
 	return JsonResponse(json_payload, status=200)
 
 
-def game_update(request, game_uuid: str):
-	game = GameDataRepository.fetch(game_uuid)
-	cache_key = f'game_updating_{game_uuid}'
+def game_update(request, game_id: str):
+	game = GameDataRepository.fetch(game_id)
+	cache_key = f'game_updating_{game_id}'
 
 	if game is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} not found in db or cache.'}
+		json_payload = {'game_id': game_id, 'status': f'Game with id {game_id} not found in db or cache.'}
 		return JsonResponse(json_payload, status=400)
 
 	if cache.get(cache_key) is not None:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with id {game_uuid} currently updating.'}
+		json_payload = {'game_id': game_id, 'status': f'Game with id {game_id} currently updating.'}
 		return JsonResponse(json_payload, status=400)
 
 	game.userInterface = UserInterfaceImpl()
@@ -265,14 +264,14 @@ def game_update(request, game_uuid: str):
 	humanPlayer = game.humanPlayer()
 
 	if humanPlayer.hasProcessedAutoMoves() and humanPlayer.turnFinished():
-		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
+		json_payload = {'game_id': game_id, 'status': f'Game turn for human is finished.'}
 		return JsonResponse(json_payload, status=400)
 
 	cache.set(cache_key, True)
-	# print(f'start updating {game_uuid}')
+	# print(f'start updating {game_id}')
 	game.update()
 	cache.delete(cache_key)
-	# print(f'stop updating {game_uuid}')
+	# print(f'stop updating {game_id}')
 
 	currentPlayerName = ''
 	if game.activePlayer() is not None:
@@ -281,10 +280,10 @@ def game_update(request, game_uuid: str):
 		else:
 			currentPlayerName = f'PLAYER_{game.activePlayer().leader.name.upper()}'
 
-	GameDataRepository.store(game_uuid, game)
+	GameDataRepository.store(game_id, game)
 
 	json_payload = {
-		'game_uuid': game_uuid,
+		'game_id': game_id,
 		'current_turn': game.currentTurn,
 		'current_player': currentPlayerName,
 		'human_active': humanPlayer.turnActive
@@ -293,11 +292,11 @@ def game_update(request, game_uuid: str):
 	return JsonResponse(json_payload, status=200)
 
 
-def game_turn(request, game_uuid: str):
-	game = GameDataRepository.fetch(game_uuid)
+def game_turn(request, game_id: str):
+	game = GameDataRepository.fetch(game_id)
 
 	if game is None:
-		json_payload = {'uuid': game_uuid, 'status': f'Game with {game_uuid} not found in db or cache.'}
+		json_payload = {'game_id': game_id, 'status': f'Game with {game_id} not found in db or cache.'}
 		return JsonResponse(json_payload, status=400)
 
 	game.userInterface = UserInterfaceImpl()
@@ -305,7 +304,7 @@ def game_turn(request, game_uuid: str):
 	humanPlayer = game.humanPlayer()
 
 	if humanPlayer.hasProcessedAutoMoves() and humanPlayer.turnFinished():
-		json_payload = {'uuid': game_uuid, 'status': f'Game turn for human is finished.'}
+		json_payload = {'game_id': game_id, 'status': f'Game turn for human is finished.'}
 		return JsonResponse(json_payload, status=400)
 
 	if humanPlayer.isTurnActive():
@@ -315,10 +314,10 @@ def game_turn(request, game_uuid: str):
 	else:
 		raise Exception('unknown')
 
-	GameDataRepository.store(game_uuid, game)
+	GameDataRepository.store(game_id, game)
 
 	json_payload = {
-		'game_uuid': game_uuid,
+		'game_id': game_id,
 		'current_turn': game.currentTurn
 		# notifications to human?
 	}
@@ -341,17 +340,17 @@ def game_move_unit(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
-			game_uuid = form.cleaned_data['game_uuid']
+			game_id = form.cleaned_data['game_id']
 
-			if not GameDataRepository.inCacheOrDB(game_uuid):
+			if not GameDataRepository.inCacheOrDB(game_id):
 				json_payload = {
-					'uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
-					'errors': [f'Game with {game_uuid} not found in db or cache.']
+					'errors': [f'Game with {game_id} not found in db or cache.']
 				}
 				return JsonResponse(json_payload, status=404)
 
-			game = GameDataRepository.fetch(game_uuid)
+			game = GameDataRepository.fetch(game_id)
 
 			game.userInterface = UserInterfaceImpl()
 
@@ -359,7 +358,7 @@ def game_move_unit(request):
 
 			if humanPlayer is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': ['Cannot find human player in game.']
 				}
@@ -377,7 +376,7 @@ def game_move_unit(request):
 
 			if unit_map_type is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Could not parse unit map type from {unit_type}.']
 				}
@@ -385,7 +384,7 @@ def game_move_unit(request):
 
 			if old_loc is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Could not parse location from {old_location}.']
 				}
@@ -393,7 +392,7 @@ def game_move_unit(request):
 
 			if new_loc is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Could not parse location from {new_location}.']
 				}
@@ -404,14 +403,14 @@ def game_move_unit(request):
 
 			if unit is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Could find {unit_map_type} unit at {old_loc}.']}
 				return JsonResponse(json_payload, status=404)
 
 			if unit.player != humanPlayer:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Cannot move units from another player. The unit you are trying to move is from {unit.player.name()}.']
 				}
@@ -422,16 +421,16 @@ def game_move_unit(request):
 
 			if not ret:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Unit {unit} could not be moved from {old_loc} to {new_loc}.']
 				}
 				return JsonResponse(json_payload, status=400)
 
-			GameDataRepository.store(game_uuid, game)
+			GameDataRepository.store(game_id, game)
 
 			json_payload = {
-				'game_uuid': game_uuid,
+				'game_id': game_id,
 				'current_turn': game.currentTurn,
 				'moves': unit.movesLeft(),
 				# notifications to human?
@@ -460,17 +459,17 @@ def game_actions(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
-			game_uuid = form.cleaned_data['game_uuid']
+			game_id = form.cleaned_data['game_id']
 
-			if not GameDataRepository.inCacheOrDB(game_uuid):
+			if not GameDataRepository.inCacheOrDB(game_id):
 				json_payload = {
-					'uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot get unit actions.',
-					'errors': [f'Game with {game_uuid} not found in db or cache.']
+					'errors': [f'Game with {game_id} not found in db or cache.']
 				}
 				return JsonResponse(json_payload, status=404)
 
-			game = GameDataRepository.fetch(game_uuid)
+			game = GameDataRepository.fetch(game_id)
 
 			game.userInterface = UserInterfaceImpl()
 
@@ -478,7 +477,7 @@ def game_actions(request):
 
 			if humanPlayer is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot get unit actions.',
 					'errors': ['Cannot find human player in game.']
 				}
@@ -495,7 +494,7 @@ def game_actions(request):
 
 			if location is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot get unit actions.',
 					'errors': [f'Could not parse location from {location_str}.']
 				}
@@ -505,7 +504,7 @@ def game_actions(request):
 
 			if unit is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot move unit.',
 					'errors': [f'Could find {unit_map_type} unit at {location}.']}
 				return JsonResponse(json_payload, status=404)
@@ -544,7 +543,7 @@ def game_actions(request):
 			action_list.append('ACTION_DISBAND')
 
 			json_payload = {
-				'game_uuid': game_uuid,
+				'game_id': game_id,
 				'current_turn': game.currentTurn,
 				'action_list': action_list
 				# notifications to human?
@@ -573,17 +572,17 @@ def game_found_city(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
-			game_uuid = form.cleaned_data['game_uuid']
+			game_id = form.cleaned_data['game_id']
 
-			if not GameDataRepository.inCacheOrDB(game_uuid):
+			if not GameDataRepository.inCacheOrDB(game_id):
 				json_payload = {
-					'uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot get unit actions.',
-					'errors': [f'Game with {game_uuid} not found in db or cache.']
+					'errors': [f'Game with {game_id} not found in db or cache.']
 				}
 				return JsonResponse(json_payload, status=404)
 
-			game = GameDataRepository.fetch(game_uuid)
+			game = GameDataRepository.fetch(game_id)
 
 			game.userInterface = UserInterfaceImpl()
 
@@ -591,7 +590,7 @@ def game_found_city(request):
 
 			if humanPlayer is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot get unit actions.',
 					'errors': ['Cannot find human player in game.']
 				}
@@ -609,7 +608,7 @@ def game_found_city(request):
 
 			if location is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot found city.',
 					'errors': [f'Could not parse location from {location_str}.']
 				}
@@ -619,14 +618,14 @@ def game_found_city(request):
 
 			if unit is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot found city.',
 					'errors': [f'Could find {unit_map_type} unit at {location}.']}
 				return JsonResponse(json_payload, status=404)
 
 			if not unit.canFoundAt(location, game):
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot found city.',
 					'errors': [f'Unit {unit} cannot found city at {location}.']
 				}
@@ -635,10 +634,10 @@ def game_found_city(request):
 			print(f'INFO: Found city "{city_name}" at {location}.')
 			found = unit.doFoundWith(city_name, game)
 
-			GameDataRepository.store(game_uuid, game)
+			GameDataRepository.store(game_id, game)
 
 			json_payload = {
-				'game_uuid': game_uuid,
+				'game_id': game_id,
 				'current_turn': game.currentTurn,
 				'player': unit.player.identifier(),
 				'found': found
@@ -668,17 +667,17 @@ def game_city_info(request):
 
 		# Check if the form is valid:
 		if form.is_valid():
-			game_uuid = form.cleaned_data['game_uuid']
+			game_id = form.cleaned_data['game_id']
 
-			if not GameDataRepository.inCacheOrDB(game_uuid):
+			if not GameDataRepository.inCacheOrDB(game_id):
 				json_payload = {
-					'uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot find city info.',
-					'errors': [f'Game with {game_uuid} not found in db or cache.']
+					'errors': [f'Game with {game_id} not found in db or cache.']
 				}
 				return JsonResponse(json_payload, status=404)
 
-			game = GameDataRepository.fetch(game_uuid)
+			game = GameDataRepository.fetch(game_id)
 
 			game.userInterface = UserInterfaceImpl()
 
@@ -686,7 +685,7 @@ def game_city_info(request):
 
 			if humanPlayer is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot find city info.',
 					'errors': ['Cannot find human player in game.']
 				}
@@ -699,7 +698,7 @@ def game_city_info(request):
 
 			if location is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot find city info.',
 					'errors': [f'Could not parse location from {location_str}.']
 				}
@@ -708,7 +707,7 @@ def game_city_info(request):
 			city: Optional[City] = game.cityAt(location=location)
 			if city is None:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot find city info.',
 					'errors': [f'Could not find city at {location}.']
 				}
@@ -716,14 +715,14 @@ def game_city_info(request):
 
 			if city.player != humanPlayer:
 				json_payload = {
-					'game_uuid': game_uuid,
+					'game_id': game_id,
 					'status': 'Cannot find city info.',
 					'errors': [f'City {city} is not owned by human player.']
 				}
 				return JsonResponse(json_payload, status=400)
 
 			json_payload = {
-				'game_uuid': game_uuid,
+				'game_id': game_id,
 				'current_turn': game.currentTurn,
 				'player': city.player.identifier(),
 				'info': city.infoDict(game),
@@ -736,4 +735,4 @@ def game_city_info(request):
 			}
 			return JsonResponse(json_payload, status=400)
 	else:
-		return InvalidMethodResponse(request.method)
+		return InvalidMethodResponse(request.method, 400)

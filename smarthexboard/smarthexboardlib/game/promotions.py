@@ -272,7 +272,7 @@ class UnitPromotionType(ExtendedEnum):
 		if combatModifier.roughOnly and not tileIsRough:
 			return None
 
-		return CombatModifier(combatModifier.amount, self.name())
+		return CombatModifier(combatModifier.amount, self.title())
 
 	def openAttackPercent(self) -> int:
 		"""Accessor: Bonus open terrain attack percent"""
