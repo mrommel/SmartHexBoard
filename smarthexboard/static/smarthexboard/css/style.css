@@ -1765,3 +1765,20 @@ h1, h2, h3, h4, h5, h6 {
     width: 300px;
     height: 112px;
 }
+
+/* https://leanrada.com/9-slicer/ */
+#button_normal {
+    border-image: url(../img/ui/9patch/normal.png) 10 10 10 10 fill / 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    font-size: 10px;
+    color: white;
+    text-align: center;
+}
+
+#button_highlight {
+    border-image: url(../img/ui/9patch/highlight.png) 10 10 10 10 fill / 10px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
+    font-size: 10px;
+    color: #212529;
+    text-align: center;
+}

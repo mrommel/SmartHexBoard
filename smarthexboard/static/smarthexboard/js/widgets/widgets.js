@@ -136,3 +136,107 @@ $.widget("smarthexboard.cityViewCitizenBox", {
         return textValue;
     }
 });
+
+$.widget("smarthexboard.normalButton", {
+    // Default options.
+    options: {
+        title: "##title##",
+        icon: "##icon##"
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.title = this._constrainTitle(this.options.title);
+        this.options.text = this._constrainText(this.options.text);
+
+        this.element.addClass("button_normal");
+
+        let imgIcon = $('<img>')
+            .addClass('button_normal_icon')
+            .attr('src', this.options.icon);
+        this.element.append(imgIcon);
+
+        let spanTitle = $('<span>')
+            .addClass('button_normal_title')
+            .text(this.options.title);
+        textContainer.append(spanTitle);
+
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "title") {
+            value = this._constrainTitle( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        let $spanTitle = this.options.title;
+        let $imgIcon = this.options.icon;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).attr('src', $imgIcon);
+            } else if (index === 1) {
+                $(currentElement).text($spanTitle);
+            }
+        });
+    },
+
+    _constrainTitle: function(titleValue) {
+        if (titleValue.length > 30) {
+            titleValue = 100;
+        }
+        if (titleValue.length === 0) {
+            titleValue = '##title##';
+        }
+        return titleValue;
+    }
+});
+
+$.widget("smarthexboard.highlightButton", {
+    // Default options.
+    options: {
+        title: "##title##"
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.title = this._constrainTitle(this.options.title);
+        this.element.addClass("button_highlight");
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "title") {
+            value = this._constrainTitle( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        this.element.text(this.options.title);
+    },
+
+    _constrainTitle: function(titleValue) {
+        if (titleValue.length > 30) {
+            titleValue = 100;
+        }
+        if (titleValue.length === 0) {
+            titleValue = '##title##';
+        }
+        return titleValue;
+    }
+});
