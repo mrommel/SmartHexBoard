@@ -79,5 +79,8 @@ createsuperuser: venv
 render_stable_diffusion: venv
 	./$(VENV)/bin/python3.12 manage.py render_stable_diffusion
 
+profiling: venv
+	./$(VENV)/bin/python3.12 manage.py profiling
+
 # make sure that all targets are used/evaluated even if a file with same name exists
 .PHONY: all venv run clean tests

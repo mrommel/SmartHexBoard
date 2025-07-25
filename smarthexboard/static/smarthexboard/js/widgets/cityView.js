@@ -18,12 +18,21 @@ class CityView {
     constructor() {
         this.cityDetailsTab = CityViewState.none;
 
+        const $cityInfoPanel = $('#city_info_panel');
+
         const $cityInfoHeader = $('#city_info_header');
 
         const $cityDetailsName = $("<div>")
             .attr('id', 'city_details_name')
             .text('City Details');
         $cityInfoHeader.append($cityDetailsName);
+
+        const $cityInfoExitButton = $("<div>")
+            .attr('id', 'city_info_panel_exit')
+            .click(() => {
+                console.log('Close Info Panel');
+            });
+        $cityInfoHeader.append($cityInfoExitButton);
 
         const $cityName = $("<div>")
             .attr('id', 'city_name')
@@ -35,7 +44,7 @@ class CityView {
             .attr('id', 'city_citizen_btn')
             .click(() => {
                 console.log('Clicked city citizen');
-                this._showDetailsTab('citizen');
+                this._showDetailsTab(CityViewState.citizen);
             });
         $cityInfoHeader.append($cityCitizenImg);
 
@@ -44,7 +53,7 @@ class CityView {
             .attr('id', 'city_breakdown_btn')
             .click(() => {
                 console.log('Clicked city breakdown');
-                this._showDetailsTab('breakdown');
+                this._showDetailsTab(CityViewState.breakdown);
             });
         $cityInfoHeader.append($cityBreakdownImg);
 
@@ -53,7 +62,7 @@ class CityView {
             .attr('id', 'city_loyalty_btn')
             .click(() => {
                 console.log('Clicked city loyalty');
-                this._showDetailsTab('loyalty');
+                this._showDetailsTab(CityViewState.loyalty);
             });
         $cityInfoHeader.append($cityLoyaltyImg);
 
@@ -113,7 +122,11 @@ class CityView {
         // new CityViewCitizenBox('abc', $cityInfoContent);
         const citizenBox = $("<div></div>")
             .attr('id', 'citizenBox')
-            .cityViewCitizenBox({title: 'Citizen Growth', text: 'abc', icon: '/static/smarthexboard/img/ui/logo.png'});
+            .cityViewCitizenBox({
+                title: 'Citizens',
+                text: '17 turns until a new citizen is born',
+                icon: '/static/smarthexboard/img/ui/city/citizen_icon_increase.png'
+            });
         $cityInfoContent.append(citizenBox);
 
         const amenitiesHeader = $("<div></div>")

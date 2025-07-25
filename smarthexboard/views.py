@@ -115,7 +115,7 @@ def styleguide(request):
 	for resource in list(ResourceType):
 		resources[resource.value] = resource.texture()
 
-	template = loader.get_template('styleguide/index.html')
+	template = loader.get_template('styleguide.html')
 	context = {
 		'terrains': terrains,
 		'features': features,

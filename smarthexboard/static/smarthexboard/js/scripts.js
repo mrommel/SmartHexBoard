@@ -947,10 +947,10 @@ window.tutorials = function tutorials() {
 
 window.game_options = function tutorials() {
     console.log('options');
-    // changeUIState(UIState.options);
+    changeUIState(UIState.options);
 }
 
 window.credits = function tutorials() {
     console.log('credits');
-    // changeUIState(UIState.credits);
+    changeUIState(UIState.credits);
 }

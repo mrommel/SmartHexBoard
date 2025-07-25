@@ -19,7 +19,7 @@ class UIBuilder {
         this._cityView = new CityView();
     }
 
-    // message
+    // message dialog actions
     message(title, message, callback) {
         this._messageView.show(title, message, callback);
     }
@@ -28,7 +28,7 @@ class UIBuilder {
         this._messageView.hide();
     }
 
-    // input
+    // input dialog actions
     textInput(title, text, callback) {
         this._inputView.show(title, text, callback);
     }
@@ -37,7 +37,7 @@ class UIBuilder {
         this._inputView.hide();
     }
 
-    // unit panel
+    // unit panel actions
     unitPanel(unit, actions, callback) {
         this._unitPanel.show(unit, actions, callback);
     }
@@ -46,6 +46,7 @@ class UIBuilder {
         this._unitPanel.hide();
     }
 
+    // city panel actions
     cityPanel(city, city_info, callback) {
         this._cityView.show(city, city_info, callback);
     }
@@ -67,6 +68,7 @@ class UIState {
 
     static options = new UIState('Options');
     static tutorials = new UIState('Tutorials');
+    static credits = new UIState('Credits');
 
     constructor(name) {
         this.name = name;
