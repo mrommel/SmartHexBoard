@@ -1767,17 +1767,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* https://leanrada.com/9-slicer/ */
-#button_normal {
+.button_normal {
     border-image: url(../img/ui/9patch/normal.png) 10 10 10 10 fill / 10px 10px 10px 10px;
     padding: 10px 10px 10px 10px;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.button_normal_icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.button_normal_title {
     font-size: 10px;
     color: white;
     text-align: center;
 }
 
-#button_highlight {
+.button_highlight {
     border-image: url(../img/ui/9patch/highlight.png) 10 10 10 10 fill / 10px 10px 10px 10px;
     padding: 10px 10px 10px 10px;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+.button_highlight_icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+.button_highlight_title {
     font-size: 10px;
     color: #212529;
     text-align: center;

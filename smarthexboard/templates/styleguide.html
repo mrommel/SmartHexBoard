@@ -380,6 +380,21 @@
                             <div class="col-6 col-lg-6 col-xl-6">
                                 <div class="card m-b-30">
                                     <div class="card-header">
+                                        Button (image + normal)
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="button_normal_image"></div>
+                                        <script>
+                                            const $buttonNormalImage = $('#button_normal_image');
+                                            $buttonNormalImage.normalButton({title: 'Normal', icon: '/static/smarthexboard/img/ui/yields/production@3x.png'});
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-lg-6 col-xl-6">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
                                         Button (highlighted)
                                     </div>
                                     <div class="card-body">
@@ -451,6 +466,7 @@
                             <a class="text-dark" href="#">Resources</a>
                         </h4>
 
+                        <!-- start row -->
                         <div class="row">
                             {% for key, value in resources.items %}
                             <div class="col-3 col-lg-3 col-xl-3">
@@ -467,6 +483,57 @@
                             </div>
                             {% endfor %}
                         </div>
+                        <!-- end row -->
+
+                        <h4 class="mb-0">
+                            <a class="text-dark" href="#">Objects</a>
+                        </h4>
+
+                        <!-- start row -->
+                        <div class="row">
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        shipwreck
+                                    </div>
+                                    <div class="card-body">
+                                        <img src="/static/smarthexboard/img/terrains/terrain_ocean@3x.png" class="terrain-image image" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        abc
+                                    </div>
+                                    <div class="card-body">
+                                        a&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        abc
+                                    </div>
+                                    <div class="card-body">
+                                        b&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 col-lg-3 col-xl-3">
+                                <div class="card m-b-30">
+                                    <div class="card-header">
+                                        abc
+                                    </div>
+                                    <div class="card-body">
+                                        c&nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
 
                     </div>
                 </div>
