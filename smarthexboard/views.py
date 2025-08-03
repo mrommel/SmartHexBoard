@@ -132,7 +132,7 @@ def styleguide(request):
 
 
 def game_create(request):
-	# If this is a POST request then process the Form data
+	# If this is a POST request, then process the Form data
 	if request.method == 'POST':
 
 		# Create a form instance and populate it with data from the request (binding):

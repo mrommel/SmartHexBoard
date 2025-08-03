@@ -5,6 +5,7 @@ from smarthexboard.smarthexboardlib.game.types import CivicType, TechType
 from smarthexboard.smarthexboardlib.map.base import HexPoint
 from smarthexboard.smarthexboardlib.map.types import Yields, TerrainType, FeatureType
 from smarthexboard.smarthexboardlib.core.base import ExtendedEnum, InvalidEnumError
+from gettext import gettext as _
 
 
 class DistrictTypeData:
@@ -44,6 +45,8 @@ class DistrictType(ExtendedEnum):
 	theaterSquare = 'theaterSquare'
 	spaceport = 'spaceport'
 	waterPark = 'waterPark'
+	aerodrome = 'aerodrome'
+	dam = 'dam'
 
 	def title(self) -> str:  # cannot use 'name'
 		return self._data().name
@@ -83,7 +86,7 @@ class DistrictType(ExtendedEnum):
 	def _data(self) -> DistrictTypeData:
 		if self == DistrictType.none:
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_NONE_TITLE',
+				name=_('TXT_KEY_DISTRICT_NONE_TITLE'),
 				specialty=False,
 				effects=[],
 				productionCost=-1,
@@ -97,10 +100,10 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.cityCenter:
 			# https://civilization.fandom.com/wiki/City_Center_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_CITY_CENTER_TITLE',
+				name=_('TXT_KEY_DISTRICT_CITY_CENTER_TITLE'),
 				specialty=False,
 				effects=[
-					'TXT_KEY_DISTRICT_CITY_CENTER_EFFECT1'
+					_('TXT_KEY_DISTRICT_CITY_CENTER_EFFECT1')
 				],
 				productionCost=0,
 				maintenanceCost=0,
@@ -115,12 +118,12 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.preserve:
 			# https://civilization.fandom.com/wiki/Preserve_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_PRESERVE_TITLE',
+				name=_('TXT_KEY_DISTRICT_PRESERVE_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_PRESERVE_EFFECT1',
-					'TXT_KEY_DISTRICT_PRESERVE_EFFECT2',
-					'TXT_KEY_DISTRICT_PRESERVE_EFFECT3'
+					_('TXT_KEY_DISTRICT_PRESERVE_EFFECT1'),
+					_('TXT_KEY_DISTRICT_PRESERVE_EFFECT2'),
+					_('TXT_KEY_DISTRICT_PRESERVE_EFFECT3')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -135,18 +138,18 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.encampment:
 			# https://civilization.fandom.com/wiki/Encampment_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_ENCAMPMENT_TITLE',
+				name=_('TXT_KEY_DISTRICT_ENCAMPMENT_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT1',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT2',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT3',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT4',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT5',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT6',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT7',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT8',
-					'TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT9'
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT1'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT2'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT3'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT4'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT5'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT6'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT7'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT8'),
+					_('TXT_KEY_DISTRICT_ENCAMPMENT_EFFECT9')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -162,15 +165,15 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.campus:
 			# https://civilization.fandom.com/wiki/Campus_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_CAMPUS_TITLE',
+				name=_('TXT_KEY_DISTRICT_CAMPUS_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT1',
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT2',
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT3',
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT4',
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT5',
-					'TXT_KEY_DISTRICT_CAMPUS_EFFECT6'
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT1'),
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT2'),
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT3'),
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT4'),
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT5'),
+					_('TXT_KEY_DISTRICT_CAMPUS_EFFECT6')
 				],
 				productionCost=54,
 				maintenanceCost=1,
@@ -185,14 +188,14 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.entertainmentComplex:
 			# https://civilization.fandom.com/wiki/Entertainment_Complex_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_TITLE',
+				name=_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT1',
-					'TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT2',
-					'TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT3',
-					'TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT4',
-					'TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT5'
+					_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT1'),
+					_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT2'),
+					_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT3'),
+					_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT4'),
+					_('TXT_KEY_DISTRICT_ENTERTAINMENT_COMPLEX_EFFECT5')
 				],
 				productionCost=54,
 				maintenanceCost=1,
@@ -207,14 +210,14 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.commercialHub:
 			# https://civilization.fandom.com/wiki/Commercial_Hub_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_COMMERCIAL_HUB_TITLE',
+				name=_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT1',
-					'TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT2',
-					'TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT3',
-					'TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT4',
-					'TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT5'
+					_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT1'),
+					_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT2'),
+					_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT3'),
+					_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT4'),
+					_('TXT_KEY_DISTRICT_COMMERCIAL_HUB_EFFECT5')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -229,21 +232,21 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.harbor:
 			# https://civilization.fandom.com/wiki/Harbor_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_HARBOR_TITLE',
+				name=_('TXT_KEY_DISTRICT_HARBOR_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT1',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT2',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT3',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT4',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT5',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT6',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT7',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT8',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT9',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT10',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT11',
-					'TXT_KEY_DISTRICT_HARBOR_EFFECT12'
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT1'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT2'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT3'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT4'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT5'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT6'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT7'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT8'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT9'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT10'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT11'),
+					_('TXT_KEY_DISTRICT_HARBOR_EFFECT12')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -259,19 +262,19 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.holySite:
 			# https://civilization.fandom.com/wiki/Holy_Site_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_HOLY_SITE_TITLE',
+				name=_('TXT_KEY_DISTRICT_HOLY_SITE_TITLE'),
 				specialty=True,
 				effects=[
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT1',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT2',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT3',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT4',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT5',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT6',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT7',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT8',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT9',
-					'TXT_KEY_DISTRICT_HOLY_SITE_EFFECT10'
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT1'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT2'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT3'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT4'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT5'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT6'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT7'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT8'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT9'),
+					_('TXT_KEY_DISTRICT_HOLY_SITE_EFFECT10')
 				],
 				productionCost=54,
 				maintenanceCost=1,
@@ -286,10 +289,10 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.neighborhood:
 			# https://civilization.fandom.com/wiki/Neighborhood_(Civ6)
 			return DistrictTypeData(
-				name='TXT_KEY_DISTRICT_NEIGHBORHOOD_TITLE',
+				name=_('TXT_KEY_DISTRICT_NEIGHBORHOOD_TITLE'),
 				specialty=False,
 				effects=[
-					'TXT_KEY_DISTRICT_NEIGHBORHOOD_EFFECT1'
+					_('TXT_KEY_DISTRICT_NEIGHBORHOOD_EFFECT1')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -305,12 +308,12 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.governmentPlaza:
 			# https://civilization.fandom.com/wiki/Government_Plaza_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_TITLE",
+				name=_('TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_TITLE'),
 				specialty=True,
 				effects=[
-					"TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT1",
-					"TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT2",
-					"TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT3"
+					_('TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT1'),
+					_('TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT2'),
+					_('TXT_KEY_DISTRICT_GOVERNMENT_PLAZA_EFFECT3')
 				],
 				productionCost=30,
 				maintenanceCost=1,
@@ -327,15 +330,15 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.aqueduct:
 			# https://civilization.fandom.com/wiki/Aqueduct_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_AQUEDUCT_TITLE",
+				name=_('TXT_KEY_DISTRICT_AQUEDUCT_TITLE'),
 				specialty=False,
 				effects=[
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT1",
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT2",
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT3",
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT4",
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT5",
-					"TXT_KEY_DISTRICT_AQUEDUCT_EFFECT6"
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT1'),
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT2'),
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT3'),
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT4'),
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT5'),
+					_('TXT_KEY_DISTRICT_AQUEDUCT_EFFECT6')
 				],
 				productionCost=36,
 				maintenanceCost=0,
@@ -351,15 +354,15 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.industrialZone:
 			# https://civilization.fandom.com/wiki/Industrial_Zone_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_TITLE",
+				name=_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_TITLE'),
 				specialty=True,
 				effects=[
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT1",
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT2",
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT3",
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT4",
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT5",
-					"TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT6"
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT1'),
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT2'),
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT3'),
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT4'),
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT5'),
+					_('TXT_KEY_DISTRICT_INDUSTRIAL_ZONE_EFFECT6')
 				],
 				productionCost=54,
 				maintenanceCost=0,
@@ -374,18 +377,18 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.theaterSquare:
 			# https://civilization.fandom.com/wiki/Theater_Square_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_THEATER_SQUARE_TITLE",
+				name=_('TXT_KEY_DISTRICT_THEATER_SQUARE_TITLE'),
 				specialty=True,
 				effects=[
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT1",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT2",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT3",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT4",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT5",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT6",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT7",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT8",
-					"TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT9"
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT1'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT2'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT3'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT4'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT5'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT6'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT7'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT8'),
+					_('TXT_KEY_DISTRICT_THEATER_SQUARE_EFFECT9')
 				],
 				productionCost=54,
 				maintenanceCost=1,
@@ -401,10 +404,10 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.spaceport:
 			# https://civilization.fandom.com/wiki/Spaceport_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_SPACEPORT_TITLE",
+				name=_('TXT_KEY_DISTRICT_SPACEPORT_TITLE'),
 				specialty=False,
 				effects=[
-					"TXT_KEY_DISTRICT_SPACEPORT_EFFECT1"
+					_('TXT_KEY_DISTRICT_SPACEPORT_EFFECT1')
 				],
 				productionCost=1800,
 				maintenanceCost=0,
@@ -419,10 +422,10 @@ class DistrictType(ExtendedEnum):
 		elif self == DistrictType.waterPark:
 			# https://civilization.fandom.com/wiki/Water_Park_(Civ6)
 			return DistrictTypeData(
-				name="TXT_KEY_DISTRICT_WATER_PARK_TITLE",
+				name=_('TXT_KEY_DISTRICT_WATER_PARK_TITLE'),
 				specialty=True,
 				effects=[
-					"TXT_KEY_DISTRICT_WATER_PARK_EFFECT1"
+					_('TXT_KEY_DISTRICT_WATER_PARK_EFFECT1')
 				],
 				productionCost=54,
 				maintenanceCost=1,
@@ -433,6 +436,46 @@ class DistrictType(ExtendedEnum):
 				flavors=[
 					Flavor(FlavorType.growth, value=4),
 					Flavor(FlavorType.amenities, value=5)
+				]
+			)
+		elif self == DistrictType.aerodrome:
+			return DistrictTypeData(
+				name=_('TXT_KEY_DISTRICT_AERODROME_TITLE'),
+				specialty=True,
+				effects=[
+					_('TXT_KEY_DISTRICT_AERODROME_EFFECT1'),
+					_('TXT_KEY_DISTRICT_AERODROME_EFFECT2'),
+				],
+				productionCost=54,
+				maintenanceCost=1,
+				requiredTech=TechType.flight,
+				requiredCivic=None,
+				domesticTradeYields=Yields(food=0.0, production=0.0, gold=0.0),
+				foreignTradeYields=Yields(food=0.0, production=0.0, gold=0.0),
+				flavors=[
+					Flavor(FlavorType.air, value=8)
+				]
+			)
+		elif self == DistrictType.dam:
+			# https://civilization.fandom.com/wiki/Dam_(Civ6)
+			return DistrictTypeData(
+				name=_('TXT_KEY_DISTRICT_DAM_TITLE'),
+				specialty=False,
+				effects=[
+					_('TXT_KEY_DISTRICT_DAM_EFFECT1'),
+					_('TXT_KEY_DISTRICT_DAM_EFFECT2'),
+					_('TXT_KEY_DISTRICT_DAM_EFFECT3'),
+					_('TXT_KEY_DISTRICT_DAM_EFFECT4'),
+					_('TXT_KEY_DISTRICT_DAM_EFFECT5'),
+				],
+				productionCost=81,
+				maintenanceCost=0,
+				requiredTech=TechType.buttress,
+				requiredCivic=None,
+				domesticTradeYields=Yields(food=0.0, production=0.0, gold=0.0),
+				foreignTradeYields=Yields(food=0.0, production=0.0, gold=0.0),
+				flavors=[
+					Flavor(FlavorType.production, value=8)
 				]
 			)
 
@@ -492,6 +535,19 @@ class DistrictType(ExtendedEnum):
 			return tile.isLand() and not tile.isHills()
 		elif self == DistrictType.governmentPlaza:
 			return tile.isLand()
+		elif self == DistrictType.aerodrome:
+			return tile.isLand() and not tile.isHills()
+		elif self == DistrictType.dam:
+			# Must be built adjacent to a River.
+			if not tile.isLand():
+				return False
+
+			for neighbor in tile.point.neighbors():
+				neighborTile = simulation.tileAt(neighbor)
+				if neighborTile is not None and neighborTile.isRiver():
+					return True
+
+			return False
 
 		raise InvalidEnumError(self)
 

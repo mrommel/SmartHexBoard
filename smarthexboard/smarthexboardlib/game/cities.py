@@ -1494,6 +1494,12 @@ class CityReligion:
 			# GC.GetEngineUserInterface()->setDirty(CityInfo_DIRTY_BIT, true);
 			self.logFollowersChange(reason)
 
+	def cityConvertsReligion(self, eMajority, oldMajorityReligion, responsibleParty):
+		raise NotImplementedError("cityConvertsReligion")
+
+	def logFollowersChange(self, reason):
+		raise NotImplementedError("logFollowersChange method")
+
 
 class CityTradingPosts:
 	def __init__(self, city):
@@ -1546,6 +1552,10 @@ class CityTourism:
 			if self.city.hasBuilding(BuildingType.arena):
 				# arena - +1 Tourism(with Conservation)
 				rtnValue += 1.0
+
+		if self.city.hasBuilding(BuildingType.shoppingMall):
+			# shoppingMall - +4 Tourism
+			rtnValue += 4.0
 
 		# great works in buildings
 
@@ -4578,7 +4588,11 @@ class City:
 
 		# audienceChamber - +2 Amenities and +4 Housing in Cities with Governors.
 		if self.buildings.hasBuilding(BuildingType.audienceChamber) and self.governor() is not None:
-			amenitiesFromBuildings += 2
+			amenitiesFromBuildings += 2.0
+
+		# shoppingCenter - +1 Amenities
+		if self.buildings.hasBuilding(BuildingType.shoppingMall):
+			amenitiesFromBuildings += 1.0
 
 		return amenitiesFromBuildings
 
