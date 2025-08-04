@@ -242,7 +242,20 @@ $.widget("smarthexboard.highlightButton", {
     },
 
     refresh: function() {
-        this.element.text(this.options.title);
+        let $spanTitle = this.options.title;
+        let $imgIcon = this.options.icon;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).attr('src', $imgIcon);
+                if ($imgIcon === '##icon##') {
+                    $(currentElement).hide();
+                }
+            } else if (index === 1) {
+                $(currentElement).text($spanTitle);
+            }
+        });
     },
 
     _constrainTitle: function(titleValue) {
@@ -253,5 +266,79 @@ $.widget("smarthexboard.highlightButton", {
             titleValue = '##title##';
         }
         return titleValue;
+    }
+});
+
+$.widget("smarthexboard.keyValueRow", {
+    // Default options.
+    options: {
+        key: "##key##",
+        value: "##value##"
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.key = this._constrainKey(this.options.key);
+        this.options.value = this._constrainValue(this.options.value);
+
+        this.element.addClass("key_value_row");
+
+        let spanKey = $('<span>')
+            .addClass('key_title')
+            .text(this.options.key);
+        this.element.append(spanKey);
+
+        let spanValue = $('<span>')
+            .addClass('key_value')
+            .text(this.options.value);
+        this.element.append(spanValue);
+
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "key") {
+            value = this._constrainKey( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        let $spanKey = this.options.key;
+        let $spanValue = this.options.value;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).text($spanKey);
+            } else if (index === 1) {
+                $(currentElement).text($spanValue);
+            }
+        });
+    },
+
+    _constrainKey: function(keyValue) {
+        if (keyValue.length > 30) {
+            keyValue = 100;
+        }
+        if (keyValue.length === 0) {
+            keyValue = '##key##';
+        }
+        return keyValue;
+    },
+
+    _constrainValue: function(valueValue) {
+        if (valueValue.length > 30) {
+            valueValue = 100;
+        }
+        if (valueValue.length === 0) {
+            valueValue = '##value##';
+        }
+        return valueValue;
     }
 });

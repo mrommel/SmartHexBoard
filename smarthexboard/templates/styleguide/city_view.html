@@ -1,0 +1,75 @@
+<!doctype html>{% load static %}{% load i18n %}{% load define_action %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{% translate "City View" %}</title>
+
+    <!--favicon icon-->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'smarthexboard/img/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'smarthexboard/img/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'smarthexboard/img/icons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'smarthexboard/img/icons/site.webmanifest' %}">
+
+    <!-- font -->
+    <link rel="preload" href="{% static 'smarthexboard/font/CinzelDecorative-Regular.woff2' %}" as="font" type="font/woff2" crossorigin>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/bootstrap.min.css' %}">
+
+    <!--custom css-->
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/dialogs.css' %}">
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/styleguide.css' %}">
+
+    <!--jQuery-->
+    <script src="{% static 'smarthexboard/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/jquery-ui.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'smarthexboard/css/jquery-ui.css' %}">
+
+    <!-- custom js -->
+    <script src="{% static 'smarthexboard/js/widgets/widgets.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/prototypes.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/base/point.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/dom.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/renderer.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/ui.js' %}"></script>
+    <script src="{% static 'smarthexboard/js/dialogs.js' %}"></script>
+    <script type="module" src="{% static 'smarthexboard/js/scripts.js' %}"></script>
+</head>
+
+<body>
+</body>
+    <!--full screen canvas container-->
+    <div id="game">
+        <div id="tooltip">Tile</div>
+    </div>
+
+    <div id="ui">
+
+        <div id="uistate-game">
+            {% top_bar %}
+            {% header_bar_left %}
+            {% header_bar_right %}
+
+            {% city_view %}
+        </div>
+    </div>
+    <style>
+        #ui {
+            background-color: #1a2035;
+        }
+        #uistate-game {
+            display: block !important;
+        }
+        #uistate-game #city_panel {
+            display: block !important;
+        }
+    </style>
+    <script>
+        // $('#city_panel').show();
+    </script>
+</html>

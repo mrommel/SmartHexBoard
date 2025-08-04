@@ -3,3 +3,7 @@ components:
   tech_info: "components/tech_info.html"
   button: "components/button.html"
   spinner: "components/spinner.html"
+  top_bar: "components/top_bar.html"
+  header_bar_left: "components/header_bar_left.html"
+  header_bar_right: "components/header_bar_right.html"
+  city_view: "components/city_view.html"

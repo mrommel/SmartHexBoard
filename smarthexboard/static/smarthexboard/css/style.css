@@ -1776,8 +1776,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .button_normal_icon {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     margin-right: 4px;
 }
 
@@ -1796,8 +1796,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .button_highlight_icon {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
     margin-right: 4px;
 }
 
@@ -1805,4 +1805,45 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 10px;
     color: #212529;
     text-align: center;
+}
+
+.infoContainer {
+    width: 280.5px;
+    background-image: url(../img/ui/city/citizen_box.png);
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 2px 5px 0;
+    gap: 2px;
+}
+
+.key_value_row {
+    width: 100%;
+    height: 18px;
+    background-color: #0d376f;
+    padding-left: 3px;
+    padding-right: 3px;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.key_title {
+    font-size: 12px;
+    color: white;
+}
+
+.key_value {
+    margin-left: auto;
+    font-size: 12px;
+    color: white;
+}
+
+.city_info_line {
+    width: 100%;
+    height: 5px;
+    background-image: url(../img/ui/city/line.png);
+    background-size: cover;
 }

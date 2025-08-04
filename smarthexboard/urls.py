@@ -25,4 +25,5 @@ urlpatterns = [
 
     # debug
     path('styleguide', views.styleguide, name='styleguide'),
+    path('city_view', views.city_view, name='city_view'),
 ]

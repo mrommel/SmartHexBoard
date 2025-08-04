@@ -115,11 +115,19 @@ def styleguide(request):
 	for resource in list(ResourceType):
 		resources[resource.value] = resource.texture()
 
-	template = loader.get_template('styleguide.html')
+	template = loader.get_template('styleguide/index.html')
 	context = {
 		'terrains': terrains,
 		'features': features,
 		'resources': resources,
+	}
+	return HttpResponse(template.render(context, request))
+
+
+def city_view(request):
+	template = loader.get_template('styleguide/city_view.html')
+	context = {
+
 	}
 	return HttpResponse(template.render(context, request))
 

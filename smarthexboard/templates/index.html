@@ -189,74 +189,9 @@
 
         <!--ui state: game-->
         <div id="uistate-game">
-            <div id="top-bar">
-                <div id="top-bar-left">
-                    <div id="scienceYield" class="yield">
-                        <img src="{% static 'smarthexboard/img/ui/yields/science@3x.png' %}" class="yield-icon" />
-                        <span id="scienceYieldValue" class="yield-value">+0.0</span>
-                    </div>
-                    <div id="cultureYield" class="yield">
-                        <img src="{% static 'smarthexboard/img/ui/yields/culture@3x.png' %}" class="yield-icon" />
-                        <span id="cultureYieldValue" class="yield-value">+0.0</span>
-                    </div>
-                    <div id="faithYield" class="yield">
-                        <img src="{% static 'smarthexboard/img/ui/yields/faith@3x.png' %}" class="yield-icon" />
-                        <span id="faithYieldValue" class="yield-value">+0.0</span>
-                        <span id="faithIncomeValue" class="delta-value">abc</span>
-                    </div>
-                    <div id="goldYield" class="yield">
-                        <img src="{% static 'smarthexboard/img/ui/yields/gold@3x.png' %}" class="yield-icon" />
-                        <span id="goldYieldValue" class="yield-value">+0.0</span>
-                        <span id="goldIncomeValue" class="delta-value">abc</span>
-                    </div>
-                    <div id="tourismYield" class="yield">
-                        <img src="{% static 'smarthexboard/img/ui/yields/tourism@3x.png' %}" class="yield-icon" />
-                        <span id="tourismYieldValue" class="yield-value">+0.0</span>
-                    </div>
-                </div>
-                <!--spacer-->
-                <div id="top-bar-right">
-                    <div id="turnLbl">4.000 BC, Turn 0</div>
-                    <div id="btnMenu">
-                        <a href="#" onclick="openGameMenu(); return false;">
-                            <img src="{% static 'smarthexboard/img/ui/menu@3x.png' %}" class="menu-icon" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div id="header-bar-left">
-                <div class="header">
-                    <a id="scienceHeader" href="#" onclick="openTechDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="cultureHeader" href="#" onclick="openCivicDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="governmentHeader" href="#" onclick="openGovernmentDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="religionHeader" href="#" onclick="openReligionDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="greatPeopleHeader" href="#" onclick="openGreatPeoplesDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="governorsHeader" href="#" onclick="openGovernorsDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="momentsHeader" href="#" onclick="openMomentsDialog(); return false;"></a>
-                </div>
-            </div>
-
-            <div id="header-bar-right">
-                <div class="header">
-                    <a id="abHeader" href="#" onclick="openADCDialog(); return false;"></a>
-                </div>
-                <div class="header">
-                    <a id="cdHeader" href="#" onclick="openBdeDialog(); return false;"></a>
-                </div>
-            </div>
-
+            {% top_bar %}
+            {% header_bar_left %}
+            {% header_bar_right %}
             <div id="tech_progress">
                 <img src="{% static 'smarthexboard/img/science_progress/science_progress_0.png' %}" id="tech_progress_value" />
                 <img src="{% static 'smarthexboard/img/techs/tech-default@3x.png' %}" id="tech_progress_icon" />
@@ -277,17 +212,7 @@
 
             </div>
 
-            <div id="city_panel">
-                <div id="city_info_panel">
-                    <div id="city_info_header"></div>
-                    <div id="city_info_content"></div>
-                </div>
-                <div id="city_base_panel"></div>
-                <div id="city_production_panel">
-                    <div id="city_production_header"></div>
-                    <div id="city_production_content"></div>
-                </div>
-            </div>
+            {% city_view %}
 
             <div id="left_footer_container">
                 <div id="unit_container">

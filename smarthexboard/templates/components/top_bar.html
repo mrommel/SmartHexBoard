@@ -1,0 +1,37 @@
+<!-- start top-bar -->
+<div id="top-bar">{% load static %}
+    <div id="top-bar-left">
+        <div id="scienceYield" class="yield">
+            <img src="{% static 'smarthexboard/img/ui/yields/science@3x.png' %}" class="yield-icon" />
+            <span id="scienceYieldValue" class="yield-value">+0.0</span>
+        </div>
+        <div id="cultureYield" class="yield">
+            <img src="{% static 'smarthexboard/img/ui/yields/culture@3x.png' %}" class="yield-icon" />
+            <span id="cultureYieldValue" class="yield-value">+0.0</span>
+        </div>
+        <div id="faithYield" class="yield">
+            <img src="{% static 'smarthexboard/img/ui/yields/faith@3x.png' %}" class="yield-icon" />
+            <span id="faithYieldValue" class="yield-value">+0.0</span>
+            <span id="faithIncomeValue" class="delta-value">abc</span>
+        </div>
+        <div id="goldYield" class="yield">
+            <img src="{% static 'smarthexboard/img/ui/yields/gold@3x.png' %}" class="yield-icon" />
+            <span id="goldYieldValue" class="yield-value">+0.0</span>
+            <span id="goldIncomeValue" class="delta-value">abc</span>
+        </div>
+        <div id="tourismYield" class="yield">
+            <img src="{% static 'smarthexboard/img/ui/yields/tourism@3x.png' %}" class="yield-icon" />
+            <span id="tourismYieldValue" class="yield-value">+0.0</span>
+        </div>
+    </div>
+    <!--spacer-->
+    <div id="top-bar-right">
+        <div id="turnLbl">4.000 BC, Turn 0</div>
+        <div id="btnMenu">
+            <a href="#" onclick="openGameMenu(); return false;">
+                <img src="{% static 'smarthexboard/img/ui/menu@3x.png' %}" class="menu-icon" />
+            </a>
+        </div>
+    </div>
+</div>
+<!-- end top-bar -->

@@ -129,6 +129,78 @@ class CityView {
             });
         $cityInfoContent.append(citizenBox);
 
+        // --- foodContainer -----
+
+        const $foodContainer = $("<div></div>")
+            .addClass('infoContainer');
+        $cityInfoContent.append($foodContainer);
+
+        const $foodPerTurnRow = $("<div></div>")
+            .attr('id', 'foodPerTurnRow')
+            .keyValueRow({key: 'Food per turn', value: '-5'});
+        $foodContainer.append($foodPerTurnRow);
+
+        const $foodConsumptionRow = $("<div></div>")
+            .attr('id', 'foodConsumptionRow')
+            .keyValueRow({key: 'Food consumption', value: '12%'});
+        $foodContainer.append($foodConsumptionRow);
+
+        const $line1 = $("<div></div>")
+            .addClass('city_info_line');
+        $foodContainer.append($line1);
+
+        // --- growthContainer -----
+
+        const $growthContainer = $("<div></div>")
+            .addClass('infoContainer');
+        $cityInfoContent.append($growthContainer);
+
+        const $growthFoodPerTurnRow = $("<div></div>")
+            .attr('id', 'growthFoodPerTurnRow')
+            .keyValueRow({key: 'Growth food per turn', value: '-5'});
+        $growthContainer.append($growthFoodPerTurnRow);
+
+        const $amenitiesGrowthBonusRow = $("<div></div>")
+            .attr('id', 'amenitiesGrowthBonusRow')
+            .keyValueRow({key: 'Amenities growth bonus', value: '0%'});
+        $growthContainer.append($amenitiesGrowthBonusRow);
+
+        const $otherGrowthBonusesRow = $("<div></div>")
+            .attr('id', 'otherGrowthBonusesRow')
+            .keyValueRow({key: 'Other growth bonuses', value: '0%'});
+        $growthContainer.append($otherGrowthBonusesRow);
+
+        const $line2 = $("<div></div>")
+            .addClass('city_info_line');
+        $growthContainer.append($line2);
+
+        // --- modifiedGrowthContainer -----
+
+        const $modifiedGrowthContainer = $("<div></div>")
+            .addClass('infoContainer');
+        $cityInfoContent.append($modifiedGrowthContainer);
+
+        const $modifiedGrowthPerTurnRow = $("<div></div>")
+            .attr('id', 'modifiedGrowthPerTurnRow')
+            .keyValueRow({key: 'Modified growth per turn', value: '+4'});
+        $modifiedGrowthContainer.append($modifiedGrowthPerTurnRow);
+
+        const $housingModifierRow = $("<div></div>")
+            .attr('id', 'housingModifierRow')
+            .keyValueRow({key: 'Housing modifier', value: '1'});
+        $modifiedGrowthContainer.append($housingModifierRow);
+
+        const $occupiedCityMultiplierRow = $("<div></div>")
+            .attr('id', 'occupiedCityMultiplierRow')
+            .keyValueRow({key: 'Occupied city multiplier', value: 'N/A'});
+        $modifiedGrowthContainer.append($occupiedCityMultiplierRow);
+
+        const $line3 = $("<div></div>")
+            .addClass('city_info_line');
+        $modifiedGrowthContainer.append($line3);
+
+        // --- amenities -----
+
         const amenitiesHeader = $("<div></div>")
             .attr('id', 'amenitiesHeader')
             .cityViewSubHeader({title: 'Amenities'});
