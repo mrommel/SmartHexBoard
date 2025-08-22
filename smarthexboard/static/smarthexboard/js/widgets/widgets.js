@@ -70,8 +70,14 @@ $.widget("smarthexboard.cityViewCitizenBox", {
         textContainer.append(spanTitle);
 
         let spanText = $('<span>')
-            .addClass('city_citizen_box_text')
-            .text(this.options.text);
+            .addClass('city_citizen_box_text');
+
+        if (this.options.text.includes('\n')) {
+
+        } else {
+            spanText.text(this.options.text);
+        }
+
         textContainer.append(spanText);
 
         // <div class="text-content">
@@ -109,7 +115,19 @@ $.widget("smarthexboard.cityViewCitizenBox", {
                     if (innerIndex === 0) {
                         $(innerElement).text($spanTitle);
                     } else if (innerIndex === 1) {
-                        $(innerElement).text($spanText);
+                        if ($spanText.includes('\n')) {
+                            const textLines = $spanText.split('\n');
+                            $(innerElement).empty(); // Clear previous content
+                            textLines.forEach(function(elem, idx, array) {
+                                const lineSpan = $('<span>').text(elem);
+                                $(innerElement).append(lineSpan);
+                                if (idx !== textLines.length - 1) {
+                                    $(innerElement).append('<br>'); // Add line break
+                                }
+                            });
+                        } else {
+                            $(innerElement).text($spanText);
+                        }
                     }
                 });
             }
@@ -290,6 +308,80 @@ $.widget("smarthexboard.keyValueRow", {
 
         let spanValue = $('<span>')
             .addClass('key_value')
+            .text(this.options.value);
+        this.element.append(spanValue);
+
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "key") {
+            value = this._constrainKey( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        let $spanKey = this.options.key;
+        let $spanValue = this.options.value;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).text($spanKey);
+            } else if (index === 1) {
+                $(currentElement).text($spanValue);
+            }
+        });
+    },
+
+    _constrainKey: function(keyValue) {
+        if (keyValue.length > 30) {
+            keyValue = 100;
+        }
+        if (keyValue.length === 0) {
+            keyValue = '##key##';
+        }
+        return keyValue;
+    },
+
+    _constrainValue: function(valueValue) {
+        if (valueValue.length > 30) {
+            valueValue = 100;
+        }
+        if (valueValue.length === 0) {
+            valueValue = '##value##';
+        }
+        return valueValue;
+    }
+});
+
+$.widget("smarthexboard.cityProgress", {
+    // Default options.
+    options: {
+        key: "##key##",
+        value: "##value##"
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.key = this._constrainKey(this.options.key);
+        this.options.value = this._constrainValue(this.options.value);
+
+        this.element.addClass("city_progress");
+
+        let spanKey = $('<span>')
+            .addClass('city_progress_title')
+            .text(this.options.key);
+        this.element.append(spanKey);
+
+        let spanValue = $('<span>')
+            .addClass('city_progres_value')
             .text(this.options.value);
         this.element.append(spanValue);
 

@@ -1603,7 +1603,7 @@ h1, h2, h3, h4, h5, h6 {
     position: fixed;
     width: 300px;
     height: 100%;
-    background-color: rgb(100, 100, 100, 0.5);
+    background-color: rgb(100, 100, 100, 0.0);
     z-index: 300;
     padding-top: 32px;
     pointer-events: all;
@@ -1633,11 +1633,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #uistate-game #city_panel #city_info_panel #city_info_header #city_name {
-    width: 300px;
+    width: 280.5px;
     height: 20px;
     text-align: center;
     position: fixed;
     top: 58px;
+    color: white;
 }
 
 #uistate-game #city_panel #city_info_panel #city_info_header #city_citizen_btn {
@@ -1694,6 +1695,12 @@ h1, h2, h3, h4, h5, h6 {
     background-image: url(../img/ui/city/city_info_button_loyalty_selected.png);
 }
 
+#city_info_content {
+    overflow: auto;
+    /*height: 300px;*/
+    width: 280.5px;
+}
+
 .city_sub_header {
     width: 280.5px;
     height: 31px;
@@ -1744,6 +1751,32 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 12px;
     line-height: 1.0;
     padding-top: 2px;
+}
+
+.city_progress {
+    width: 280.5px;
+    height: 30px;
+    background-image: url(../img/ui/city/city_progress.png);
+    background-size: contain;
+    padding-left: 3px;
+    padding-right: 3px;
+    padding-top: 4px;
+    display: flex;
+    flex-direction: row;
+}
+
+.city_progress span.city_progress_title {
+    color: white;
+    font-size: 14px;
+    width: 110px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.city_progress span.city_progres_value {
+    color: white;
+    font-size: 14px;
+    width: 170.5px;
 }
 
 /* production */
@@ -1810,7 +1843,7 @@ h1, h2, h3, h4, h5, h6 {
 .infoContainer {
     width: 280.5px;
     background-image: url(../img/ui/city/citizen_box.png);
-    background-size: cover;
+    background-size: contain;
 
     display: flex;
     flex-direction: column;

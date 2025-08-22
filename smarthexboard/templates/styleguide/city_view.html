@@ -42,14 +42,12 @@
 </head>
 
 <body>
-</body>
     <!--full screen canvas container-->
     <div id="game">
         <div id="tooltip">Tile</div>
     </div>
 
     <div id="ui">
-
         <div id="uistate-game">
             {% top_bar %}
             {% header_bar_left %}
@@ -66,10 +64,31 @@
             display: block !important;
         }
         #uistate-game #city_panel {
-            display: block !important;
+            display: block;
         }
     </style>
     <script>
         // $('#city_panel').show();
+        function updateContainer() {
+            const $city_info_content = $('#city_info_content');
+            if ($city_info_content.length) {
+                console.log('Updating container height...');
+                // Calculate the height of the container based on the window height and the heights of the top
+                // console.log('$(window).height()=' + $(window).height());
+                // console.log('$("#top-bar").outerHeight()=' + $('#top-bar').outerHeight());
+                // console.log('$("#city_info_header").outerHeight()=' + $('#city_info_header').outerHeight());
+
+                // Set the height of the city_info_content element
+                const containerHeight = $(window).height() - $('#top-bar').outerHeight() - $('#city_info_header').outerHeight();
+                $city_info_content.css('height', containerHeight + 'px');
+            }
+        }
+        $(document).ready(function () {
+            updateContainer();
+            $(window).resize(function() {
+                updateContainer();
+            });
+        });
     </script>
+</body>
 </html>

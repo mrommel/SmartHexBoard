@@ -18,7 +18,7 @@ class CityView {
     constructor() {
         this.cityDetailsTab = CityViewState.none;
 
-        const $cityInfoPanel = $('#city_info_panel');
+        // const $cityInfoPanel = $('#city_info_panel');
 
         const $cityInfoHeader = $('#city_info_header');
 
@@ -31,6 +31,7 @@ class CityView {
             .attr('id', 'city_info_panel_exit')
             .click(() => {
                 console.log('Close Info Panel');
+                this.hide();
             });
         $cityInfoHeader.append($cityInfoExitButton);
 
@@ -119,7 +120,6 @@ class CityView {
             .cityViewSubHeader({title: 'Citizen Growth'});
         $cityInfoContent.append(citizenGrowthHeader);
 
-        // new CityViewCitizenBox('abc', $cityInfoContent);
         const citizenBox = $("<div></div>")
             .attr('id', 'citizenBox')
             .cityViewCitizenBox({
@@ -199,12 +199,101 @@ class CityView {
             .addClass('city_info_line');
         $modifiedGrowthContainer.append($line3);
 
+        const $totalFoodSurplusRow = $("<div></div>")
+            .attr('id', 'totalFoodSurplusRow')
+            .addClass('mb-2')
+            .keyValueRow({key: 'Total food surplus', value: '+3.4'});
+        $modifiedGrowthContainer.append($totalFoodSurplusRow);
+
+        // --- city growth progress -----
+
+        const $cityProgressRow = $("<div></div>")
+            .attr('id', 'cityProgressRow')
+            .addClass('mb-2')
+            .cityProgress({key: 'Growth in', value: '11'});
+        $cityInfoContent.append($cityProgressRow);
+
         // --- amenities -----
 
         const amenitiesHeader = $("<div></div>")
             .attr('id', 'amenitiesHeader')
             .cityViewSubHeader({title: 'Amenities'});
         $cityInfoContent.append(amenitiesHeader);
+
+        // 27 amenities of 20 required
+        // status: Ecstatic
+
+        const citizenAmenitiesBox = $("<div></div>")
+            .attr('id', 'citizenAmenitiesBox')
+            .cityViewCitizenBox({
+                title: ' ',
+                text: '+20% Citizen growth\n+10% Non-food yields',
+                icon: '/static/smarthexboard/img/ui/city/citizen_icon_increase.png'
+            });
+        $cityInfoContent.append(citizenAmenitiesBox);
+
+        const $amenitiesContainer = $("<div></div>")
+            .addClass('infoContainer');
+        $cityInfoContent.append($amenitiesContainer);
+
+        const $amenitiesFromLuxuriesRow = $("<div></div>")
+            .attr('id', 'amenitiesFromLuxuriesRow')
+            .keyValueRow({key: 'Amenities from Luxuries', value: '10'});
+        $amenitiesContainer.append($amenitiesFromLuxuriesRow);
+
+        const $amenitiesFromCivicsRow = $("<div></div>")
+            .attr('id', 'amenitiesFromCivicsRow')
+            .keyValueRow({key: 'Amenities from Civics', value: '2'});
+        $amenitiesContainer.append($amenitiesFromCivicsRow);
+
+        const $amenitiesFromEntertainmentRow = $("<div></div>")
+            .attr('id', 'amenitiesFromEntertainmentRow')
+            .keyValueRow({key: 'Amenities from Entertainment', value: '9'});
+        $amenitiesContainer.append($amenitiesFromEntertainmentRow);
+
+        const $amenitiesFromGreatPeopleRow = $("<div></div>")
+            .attr('id', 'amenitiesFromGreatPeopleRow')
+            .keyValueRow({key: 'Amenities from Great People', value: '2'});
+        $amenitiesContainer.append($amenitiesFromGreatPeopleRow);
+
+        const $amenitiesFromCityStatesRow = $("<div></div>")
+            .attr('id', 'amenitiesFromCityStatesRow')
+            .keyValueRow({key: 'Amenities from City-States', value: '5'});
+        $amenitiesContainer.append($amenitiesFromCityStatesRow);
+
+        const $amenitiesFromReligionRow = $("<div></div>")
+            .attr('id', 'amenitiesFromReligionRow')
+            .keyValueRow({key: 'Amenities from Religion', value: '3'});
+        $amenitiesContainer.append($amenitiesFromReligionRow);
+
+        const $amenitiesFromNationalParksRow = $("<div></div>")
+            .attr('id', 'amenitiesFromNationalParksRow')
+            .keyValueRow({key: 'Amenities from National Parks', value: '2'});
+        $amenitiesContainer.append($amenitiesFromNationalParksRow);
+
+        const $amenitiesFromWarWearinessRow = $("<div></div>")
+            .attr('id', 'amenitiesFromWarWearinessRow')
+            .keyValueRow({key: 'Amenities from War Weariness', value: '13'});
+        $amenitiesContainer.append($amenitiesFromWarWearinessRow);
+
+        const $amenitiesFromBankruptcyRow = $("<div></div>")
+            .attr('id', 'amenitiesFromBankruptcyRow')
+            .keyValueRow({key: 'Amenities from Bankruptcy', value: '0'});
+        $amenitiesContainer.append($amenitiesFromBankruptcyRow);
+
+        const $amenitiesFromGovernorsRow = $("<div></div>")
+            .attr('id', 'amenitiesFromGovernorsRow')
+            .keyValueRow({key: 'Amenities from Governors', value: '1'});
+        $amenitiesContainer.append($amenitiesFromGovernorsRow);
+
+        const $line4 = $("<div></div>")
+            .addClass('city_info_line');
+        $amenitiesContainer.append($line4);
+
+        const $amenitiesTotalsRow = $("<div></div>")
+            .attr('id', 'amenitiesTotalsRow')
+            .keyValueRow({key: 'Total Amenities', value: '27'});
+        $amenitiesContainer.append($amenitiesTotalsRow);
     }
 
     _showBreakdownContent() {
