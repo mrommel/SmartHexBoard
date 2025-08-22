@@ -30,7 +30,7 @@ $.widget("smarthexboard.cityViewSubHeader", {
 
     _constrainTitle: function(titleValue) {
         if (titleValue.length > 30) {
-            titleValue = 100;
+            titleValue = '...';
         }
         if (titleValue.length === 0) {
             titleValue = '##title##';
@@ -212,7 +212,7 @@ $.widget("smarthexboard.normalButton", {
 
     _constrainTitle: function(titleValue) {
         if (titleValue.length > 30) {
-            titleValue = 100;
+            titleValue = '...';
         }
         if (titleValue.length === 0) {
             titleValue = '##title##';
@@ -278,7 +278,7 @@ $.widget("smarthexboard.highlightButton", {
 
     _constrainTitle: function(titleValue) {
         if (titleValue.length > 30) {
-            titleValue = 100;
+            titleValue = '...';
         }
         if (titleValue.length === 0) {
             titleValue = '##title##';
@@ -432,5 +432,71 @@ $.widget("smarthexboard.cityProgress", {
             valueValue = '##value##';
         }
         return valueValue;
+    }
+});
+
+$.widget("smarthexboard.districtHeader", {
+    // Default options.
+    options: {
+        title: "##title##",
+        icon: "##icon##"
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.title = this._constrainTitle(this.options.title);
+
+        this.element.addClass("district_header");
+
+        let imgIcon = $('<img>')
+            .addClass('district_header_icon')
+            .attr('src', this.options.icon);
+        this.element.append(imgIcon);
+
+        let spanTitle = $('<span>')
+            .addClass('district_header_title')
+            .text(this.options.title);
+        this.element.append(spanTitle);
+
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "title") {
+            value = this._constrainTitle( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        let $spanTitle = this.options.title;
+        let $imgIcon = this.options.icon;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).attr('src', $imgIcon);
+                if ($imgIcon === '##icon##') {
+                    $(currentElement).hide();
+                }
+            } else if (index === 1) {
+                $(currentElement).text($spanTitle);
+            }
+        });
+    },
+
+    _constrainTitle: function(titleValue) {
+        if (titleValue.length > 30) {
+            titleValue = '...';
+        }
+        if (titleValue.length === 0) {
+            titleValue = '##title##';
+        }
+        return titleValue;
     }
 });

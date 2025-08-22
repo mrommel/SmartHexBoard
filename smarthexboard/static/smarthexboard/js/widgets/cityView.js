@@ -299,6 +299,48 @@ class CityView {
     _showBreakdownContent() {
         const $cityInfoContent = $('#city_info_content');
         $cityInfoContent.empty(); // reset
+
+        const breakDownHeader = $("<div></div>")
+            .attr('id', 'breakDownHeader')
+            .cityViewSubHeader({title: 'City Breakdown'});
+        $cityInfoContent.append(breakDownHeader);
+
+        const $districtsContainer = $("<div></div>")
+            .addClass('infoContainer');
+        $cityInfoContent.append($districtsContainer);
+
+        const $districtsConstructedRow = $("<div></div>")
+            .attr('id', 'districtsConstructedRow')
+            .keyValueRow({key: 'Districts Constructed', value: '3'});
+        $districtsContainer.append($districtsConstructedRow);
+
+        const $districtsPossibleRow = $("<div></div>")
+            .attr('id', 'districtsPossibleRow')
+            .keyValueRow({key: 'of Districts Possible', value: '3'});
+        $districtsContainer.append($districtsPossibleRow);
+
+        // Buildings and Districts
+        const buildingsAndDistrictsHeader = $("<div></div>")
+            .attr('id', 'buildingsAndDistrictsHeader')
+            .cityViewSubHeader({title: 'Buildings and Districts'});
+        $cityInfoContent.append(buildingsAndDistrictsHeader);
+
+        const cityCenterDistrictHeader = $("<div></div>")
+            .attr('id', 'cityCenterDistrictHeader')
+            .districtHeader({title: 'City Center', icon: '/static/smarthexboard/img/districts/district_cityCenter@3x.png'});
+        $cityInfoContent.append(cityCenterDistrictHeader);
+
+        // Wonders
+        const wondersHeader = $("<div></div>")
+            .attr('id', 'wondersHeader')
+            .cityViewSubHeader({title: 'Wonders'});
+        $cityInfoContent.append(wondersHeader);
+
+        // Trading Posts
+        const tradingPostHeader = $("<div></div>")
+            .attr('id', 'tradingPostHeader')
+            .cityViewSubHeader({title: 'Trading Posts'});
+        $cityInfoContent.append(tradingPostHeader);
     }
 
     _showLoyaltyContent() {
