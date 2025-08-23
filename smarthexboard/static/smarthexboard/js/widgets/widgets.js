@@ -1,3 +1,4 @@
+
 $.widget("smarthexboard.cityViewSubHeader", {
 
     // Default options.
@@ -486,6 +487,114 @@ $.widget("smarthexboard.districtHeader", {
                 }
             } else if (index === 1) {
                 $(currentElement).text($spanTitle);
+            }
+        });
+    },
+
+    _constrainTitle: function(titleValue) {
+        if (titleValue.length > 30) {
+            titleValue = '...';
+        }
+        if (titleValue.length === 0) {
+            titleValue = '##title##';
+        }
+        return titleValue;
+    }
+});
+
+$.widget("smarthexboard.buildingItem", {
+    // Default options.
+    options: {
+        icon: "##icon##",
+        title: "##title##",
+        yields: null, // Yields
+    },
+
+    // The constructor.
+    _create: function() {
+        this.options.title = this._constrainTitle(this.options.title);
+
+        this.element.addClass("building_item");
+
+        let imgIcon = $('<img>')
+            .addClass('building_item_icon')
+            .attr('src', this.options.icon);
+        this.element.append(imgIcon);
+
+        let spanTitle = $('<span>')
+            .addClass('building_item_title')
+            .text(this.options.title);
+        this.element.append(spanTitle);
+
+        let yieldsContainer = $('<div>')
+            .addClass('building_item_yields');
+        this.element.append(yieldsContainer);
+
+        this.refresh();
+    },
+
+    _setOption: function(key, value) {
+        if (key === "title") {
+            value = this._constrainTitle( value );
+        }
+        this._super( key, value );
+    },
+
+    _setOptions: function(options) {
+        this._super(options);
+        this.refresh();
+    },
+
+    refresh: function() {
+        let $spanTitle = this.options.title;
+        let $imgIcon = this.options.icon;
+        let $yields = this.options.yields;
+
+        this.element.children().each(function (index, currentElement) {
+            // console.info(currentElement);
+            if (index === 0) {
+                $(currentElement).attr('src', $imgIcon);
+                if ($imgIcon === '##icon##') {
+                    $(currentElement).hide();
+                }
+            } else if (index === 1) {
+                $(currentElement).text($spanTitle);
+            } else if (index === 2) {
+                // Yields container
+                let $yieldsContainer = $(currentElement);
+                $yieldsContainer.empty(); // Clear previous content
+                console.log($yields);
+                if ($yields) {
+                    const food = $yields.food;
+                    if (food > 0) {
+                        let yieldImg = $('<img>')
+                            .addClass('building_item_yield_icon')
+                            .attr('src', '/static/smarthexboard/img/yields/food@3x.png');
+                        $yieldsContainer.append(yieldImg);
+                        let yieldSpan = $('<span>')
+                            .addClass('building_item_yield_value')
+                            .text('+' + food);
+                        $yieldsContainer.append(yieldSpan);
+                    }
+                    const production = $yields.production;
+                    if (production > 0) {
+                        let yieldSpan = $('<span>')
+                            .addClass('building_item_yield')
+                            .text('+' + production + '⚒️');
+                        $yieldsContainer.append(yieldSpan);
+                    }
+                    const gold = $yields.gold;
+                    const science = $yields.science;
+                    const culture = $yields.culture;
+                    const faith = $yields.faith;
+                    const tourism = $yields.tourism;
+                    /*$yields.forEach(function(yieldItem) {
+                        let yieldSpan = $('<span>')
+                            .addClass('building_item_yield')
+                            .text(yieldItem);
+                        $yieldsContainer.append(yieldSpan);
+                    });*/
+                }
             }
         });
     },

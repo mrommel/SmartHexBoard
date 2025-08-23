@@ -1,3 +1,5 @@
+import {Yields} from "../game/types.js";
+
 class CityViewState {
     static none = new CityViewState('None');
 
@@ -329,6 +331,13 @@ class CityView {
             .attr('id', 'cityCenterDistrictHeader')
             .districtHeader({title: 'City Center', icon: '/static/smarthexboard/img/districts/district_cityCenter@3x.png'});
         $cityInfoContent.append(cityCenterDistrictHeader);
+
+        // Monument
+        const monumentYields = new Yields(1, 0, 0, 0, 0, 0);
+        const monumentBuildingItem = $("<div></div>")
+            .attr('id', 'monumentBuildingRow')
+            .buildingItem({title: 'Monument', icon: '/static/smarthexboard/img/buildings/Monument.png', yields: monumentYields });
+        $cityInfoContent.append(monumentBuildingItem);
 
         // Wonders
         const wondersHeader = $("<div></div>")

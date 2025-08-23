@@ -6,9 +6,9 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
- // EraType Constructor
+// EraType Constructor
 
- function EraType(name) {
+function EraType(name) {
     this.name = name;
 }
 
@@ -239,9 +239,40 @@ var TechTypes = {
     case futureTech*/
 }
 
+// YieldType Constructor
+
+const YieldTypes = Object.freeze({
+    FOOD:   Symbol("food"),
+    PRODUCTION:  Symbol("production"),
+    GOLD: Symbol("gold"),
+    SCIENCE: Symbol("science"),
+    CULTURE: Symbol("culture"),
+    FAITH: Symbol("faith"),
+    TOURISM: Symbol("tourism"),
+});
+
+// Yields Constructor
+
+function Yields(food=0, production=0, gold=0, science=0, culture=0, faith=0, tourism=0) {
+    this.food = food;
+    this.production = production;
+    this.gold = gold;
+    this.science = science;
+    this.culture = culture;
+    this.faith = faith;
+    this.tourism = tourism;
+}
+
+Yields.prototype.toString = function() {
+    return '[Yields: food=' + this.food + ', production=' + this.production + ', gold=' + this.gold + ', science=' + this.science + ', culture=' + this.culture + ', faith=' + this.faith + ', tourism=' + this.tourism + ']';
+}
+
+
 export {
     EraType,
     EraTypes,
     TechType,
     TechTypes,
+    YieldTypes,
+    Yields,
 };
