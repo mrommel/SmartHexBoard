@@ -565,35 +565,28 @@ $.widget("smarthexboard.buildingItem", {
                 $yieldsContainer.empty(); // Clear previous content
                 console.log($yields);
                 if ($yields) {
-                    const food = $yields.food;
-                    if (food > 0) {
-                        let yieldImg = $('<img>')
-                            .addClass('building_item_yield_icon')
-                            .attr('src', '/static/smarthexboard/img/yields/food@3x.png');
-                        $yieldsContainer.append(yieldImg);
-                        let yieldSpan = $('<span>')
-                            .addClass('building_item_yield_value')
-                            .text('+' + food);
-                        $yieldsContainer.append(yieldSpan);
-                    }
-                    const production = $yields.production;
-                    if (production > 0) {
-                        let yieldSpan = $('<span>')
-                            .addClass('building_item_yield')
-                            .text('+' + production + '⚒️');
-                        $yieldsContainer.append(yieldSpan);
-                    }
-                    const gold = $yields.gold;
-                    const science = $yields.science;
-                    const culture = $yields.culture;
-                    const faith = $yields.faith;
-                    const tourism = $yields.tourism;
-                    /*$yields.forEach(function(yieldItem) {
-                        let yieldSpan = $('<span>')
-                            .addClass('building_item_yield')
-                            .text(yieldItem);
-                        $yieldsContainer.append(yieldSpan);
-                    });*/
+                    const yieldTypes = [
+                        { key: 'food', src: '/static/smarthexboard/img/yields/food@3x.png' },
+                        { key: 'production', src: '/static/smarthexboard/img/yields/production@3x.png' },
+                        { key: 'gold', src: '/static/smarthexboard/img/yields/gold@3x.png' },
+                        { key: 'science', src: '/static/smarthexboard/img/yields/science@3x.png' },
+                        { key: 'culture', src: '/static/smarthexboard/img/yields/culture@3x.png' },
+                        { key: 'faith', src: '/static/smarthexboard/img/yields/faith@3x.png' }
+                    ];
+
+                    yieldTypes.forEach(({key, src}) => {
+                        const value = $yields[key];
+                        if (value > 0) {
+                            let yieldImg = $('<img>')
+                                .addClass('building_item_yield_icon')
+                                .attr('src', src);
+                            $yieldsContainer.append(yieldImg);
+                            let yieldSpan = $('<span>')
+                                .addClass('building_item_yield_value')
+                                .text('+' + value);
+                            $yieldsContainer.append(yieldSpan);
+                        }
+                    });
                 }
             }
         });

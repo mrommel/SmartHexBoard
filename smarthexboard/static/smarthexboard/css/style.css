@@ -1933,7 +1933,7 @@ h1, h2, h3, h4, h5, h6 {
 .building_item_yields {
     margin-left: auto;
     width: 120px;
-    height: 24px;
+    min-height: 24px;
 
     align-items: center;
 }
@@ -1942,7 +1942,6 @@ h1, h2, h3, h4, h5, h6 {
     width: 16px;
     height: 24px;
     position: relative;
-    float: left;
     margin-left: auto;
     padding-bottom: 4px;
     padding-top: 4px;

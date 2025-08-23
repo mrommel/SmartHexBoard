@@ -333,7 +333,7 @@ class CityView {
         $cityInfoContent.append(cityCenterDistrictHeader);
 
         // Monument
-        const monumentYields = new Yields(1, 0, 0, 0, 0, 0);
+        const monumentYields = new Yields(1, 2, 3, 4, 5, 6);
         const monumentBuildingItem = $("<div></div>")
             .attr('id', 'monumentBuildingRow')
             .buildingItem({title: 'Monument', icon: '/static/smarthexboard/img/buildings/Monument.png', yields: monumentYields });
