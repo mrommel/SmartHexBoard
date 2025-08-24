@@ -20,6 +20,7 @@ jQuery(function ($) {
         test3_HexCube_constructor();
         test4_HexCube_fromHexPoint();
         test5_HexCube_distanceTo();
+        test6_HexCube_distanceTo();
 
         // hide pre-loader
         $('#preloader').delay(200).fadeOut('fade');
@@ -28,9 +29,9 @@ jQuery(function ($) {
 }); // JQuery end
 
 function test1_HexPoint_constructor() {
-    var pt0 = new HexPoint();
+    const pt0 = new HexPoint();
 
-    if (pt0.x == 0 && pt0.y == 0) {
+    if (pt0.x === 0 && pt0.y === 0) {
         $('#tests').append('<p>Test1.0 successful</p>');
     } else {
         $('#tests').append('<p>Test1.0 failed: ' + pt0 + '</p>');

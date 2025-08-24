@@ -46,7 +46,7 @@ EraType.fromString = function(era_identifier) {
             return EraTypes.future.clone();
 
         default:
-            throw Error('Unsupported era identifier: ' + tech_identifier);
+            throw Error('Unsupported era identifier: ' + era_identifier);
     }
 }
 
@@ -82,7 +82,7 @@ TechType.prototype.cost = function() {
 }
 
 TechType.prototype.required = function() {
-    var techs = [];
+    const techs = [];
     this.requiredTechs.forEach(tech_name => {
         techs.append(TechType.fromString(tech_name));
     });
@@ -90,11 +90,11 @@ TechType.prototype.required = function() {
 }
 
 TechType.prototype.leadsTo = function() {
-    var leadingTo = []
+    const leadingTo = [];
 
     Object.values(TechTypes).forEach(techType => {
-        if (tech.required().contains(this)) {
-            leadingTo.append(tech)
+        if (techType.required().contains(this)) {
+            leadingTo.append(techType)
         }
     });
 
@@ -263,6 +263,34 @@ function Yields(food=0, production=0, gold=0, science=0, culture=0, faith=0, tou
     this.tourism = tourism;
 }
 
+Yields.prototype.addValue = function(yieldType, value) {
+    switch (yieldType) {
+        case YieldTypes.FOOD:
+            this.food += value;
+            break;
+        case YieldTypes.PRODUCTION:
+            this.production += value;
+            break;
+        case YieldTypes.GOLD:
+            this.gold += value;
+            break;
+        case YieldTypes.SCIENCE:
+            this.science += value;
+            break;
+        case YieldTypes.CULTURE:
+            this.culture += value;
+            break;
+        case YieldTypes.FAITH:
+            this.faith += value;
+            break;
+        case YieldTypes.TOURISM:
+            this.tourism += value;
+            break;
+        default:
+            throw Error('Unsupported yield type: ' + yieldType.toString());
+    }
+}
+
 Yields.prototype.toString = function() {
     return '[Yields: food=' + this.food + ', production=' + this.production + ', gold=' + this.gold + ', science=' + this.science + ', culture=' + this.culture + ', faith=' + this.faith + ', tourism=' + this.tourism + ']';
 }
@@ -276,12 +304,12 @@ class DistrictType {
     }
 }
 
-var DistrictTypes = {
+const DistrictTypes = {
     // default
     none: new DistrictType("none", ""),
 
     cityCenter: new DistrictType("City Center", 'district-cityCenter@3x.png'),
-}
+};
 
 // BuildingType Constructor
 
@@ -292,7 +320,7 @@ class BuildingType {
     }
 }
 
-var BuildingTypes = {
+const BuildingTypes = {
     // default
     none: new BuildingType("none", "building-none@3x.png"),
 
