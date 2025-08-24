@@ -439,24 +439,21 @@ $.widget("smarthexboard.cityProgress", {
 $.widget("smarthexboard.districtHeader", {
     // Default options.
     options: {
-        title: "##title##",
-        icon: "##icon##"
+        district: null // DistrictType
     },
 
     // The constructor.
     _create: function() {
-        this.options.title = this._constrainTitle(this.options.title);
-
         this.element.addClass("district_header");
 
         let imgIcon = $('<img>')
-            .addClass('district_header_icon')
-            .attr('src', this.options.icon);
+            .addClass('district_header_icon');
+            // .attr('src', this.options.icon);
         this.element.append(imgIcon);
 
         let spanTitle = $('<span>')
-            .addClass('district_header_title')
-            .text(this.options.title);
+            .addClass('district_header_title');
+            // .text(this.options.title);
         this.element.append(spanTitle);
 
         this.refresh();
@@ -475,8 +472,14 @@ $.widget("smarthexboard.districtHeader", {
     },
 
     refresh: function() {
-        let $spanTitle = this.options.title;
-        let $imgIcon = this.options.icon;
+        let $spanTitle = 'District';
+        if (this.options.district && this.options.district.name) {
+            $spanTitle = this._constrainTitle(this.options.district.name);
+        }
+        let $imgIcon = '/static/smarthexboard/img/districts/district-none@3x.png';
+        if (this.options.district && this.options.district.icon) {
+            $imgIcon = '/static/smarthexboard/img/districts/' + this.options.district.icon;
+        }
 
         this.element.children().each(function (index, currentElement) {
             // console.info(currentElement);
@@ -505,25 +508,22 @@ $.widget("smarthexboard.districtHeader", {
 $.widget("smarthexboard.buildingItem", {
     // Default options.
     options: {
-        icon: "##icon##",
-        title: "##title##",
+        building: null, // BuildingType
         yields: null, // Yields
     },
 
     // The constructor.
     _create: function() {
-        this.options.title = this._constrainTitle(this.options.title);
-
         this.element.addClass("building_item");
 
         let imgIcon = $('<img>')
-            .addClass('building_item_icon')
-            .attr('src', this.options.icon);
+            .addClass('building_item_icon');
+            //.attr('src', this.options.icon);
         this.element.append(imgIcon);
 
         let spanTitle = $('<span>')
-            .addClass('building_item_title')
-            .text(this.options.title);
+            .addClass('building_item_title');
+            //.text(this.options.title);
         this.element.append(spanTitle);
 
         let yieldsContainer = $('<div>')
@@ -546,10 +546,16 @@ $.widget("smarthexboard.buildingItem", {
     },
 
     refresh: function() {
-        let $spanTitle = this.options.title;
-        let $imgIcon = this.options.icon;
-        let $yields = this.options.yields;
+        let $spanTitle = 'Building';
+        if (this.options.building && this.options.building.name) {
+            $spanTitle = this._constrainTitle(this.options.building.name);
+        }
+        let $imgIcon = '/static/smarthexboard/img/buildings/building-none@3x.png';
+        if (this.options.building && this.options.building.icon) {
+            $imgIcon = '/static/smarthexboard/img/buildings/' + this.options.building.icon;
+        }
 
+        let $yields = this.options.yields;
         this.element.children().each(function (index, currentElement) {
             // console.info(currentElement);
             if (index === 0) {

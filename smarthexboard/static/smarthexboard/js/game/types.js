@@ -267,6 +267,38 @@ Yields.prototype.toString = function() {
     return '[Yields: food=' + this.food + ', production=' + this.production + ', gold=' + this.gold + ', science=' + this.science + ', culture=' + this.culture + ', faith=' + this.faith + ', tourism=' + this.tourism + ']';
 }
 
+// DistrictType Constructor
+
+class DistrictType {
+    constructor(name, icon) {
+        this.name = name;
+        this.icon = icon;
+    }
+}
+
+var DistrictTypes = {
+    // default
+    none: new DistrictType("none", ""),
+
+    cityCenter: new DistrictType("City Center", 'district-cityCenter@3x.png'),
+}
+
+// BuildingType Constructor
+
+class BuildingType {
+    constructor(name, icon) {
+        this.name = name;
+        this.icon = icon;
+    }
+}
+
+var BuildingTypes = {
+    // default
+    none: new BuildingType("none", "building-none@3x.png"),
+
+    monument: new BuildingType("monument", "building-monument@3x.png"),
+};
+
 
 export {
     EraType,
@@ -275,4 +307,6 @@ export {
     TechTypes,
     YieldTypes,
     Yields,
+    DistrictTypes,
+    BuildingTypes,
 };

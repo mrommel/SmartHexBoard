@@ -25,4 +25,7 @@ urlpatterns = [
     path('smarthexboard/', include('smarthexboard.urls')),
     path('smarthexassets/', include('smarthexassets.urls')),
     path('admin/', admin.site.urls),
+    path('.well-known/appspecific/com.chrome.devtools.json', RedirectView.as_view(
+        url='/static/com.chrome.devtools.json', permanent=True
+    )),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
