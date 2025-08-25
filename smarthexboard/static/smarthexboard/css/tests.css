@@ -1,0 +1,11 @@
+#game {
+    border: 0 !important;
+}
+
+.tests {
+    background-color: #dff8ff;
+}
+
+#tests_list {
+    min-width: 800px;
+}

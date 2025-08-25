@@ -266,24 +266,31 @@ function Yields(food=0, production=0, gold=0, science=0, culture=0, faith=0, tou
 Yields.prototype.addValue = function(yieldType, value) {
     switch (yieldType) {
         case YieldTypes.FOOD:
+        case 'food':
             this.food += value;
             break;
         case YieldTypes.PRODUCTION:
+        case 'production':
             this.production += value;
             break;
         case YieldTypes.GOLD:
+        case 'gold':
             this.gold += value;
             break;
         case YieldTypes.SCIENCE:
+        case 'science':
             this.science += value;
             break;
         case YieldTypes.CULTURE:
+        case 'culture':
             this.culture += value;
             break;
         case YieldTypes.FAITH:
+        case 'faith':
             this.faith += value;
             break;
         case YieldTypes.TOURISM:
+        case 'tourism':
             this.tourism += value;
             break;
         default:

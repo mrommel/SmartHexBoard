@@ -6,7 +6,7 @@
  * http://www.gnu.org/licenses/gpl.html
  */
 
- import { CGSize, CGPoint } from './prototypes.js';
+import {CGPoint, CGSize} from './prototypes.js';
 
 function HexOrientation() {
     this.f0 = 3.0 / 2.0;
@@ -17,7 +17,7 @@ function HexOrientation() {
     this.b1 = 0.0;
     this.b2 = -1.0 / 3.0;
     this.b3 = Math.sqrt(3.0) / 3.0;
-    this.startAngle = 0.0;
+    // this.startAngle = 0.0;
 }
 
 function HexLayout() {
@@ -27,39 +27,39 @@ function HexLayout() {
 }
 
 HexLayout.prototype.toHex = function(screenPoint) {
-    var point = new CGPoint((screenPoint.x - this.origin.x) / this.size.width, (screenPoint.y - this.origin.y) / this.size.height);
-    var q = this.orientation.b0 * point.x + this.orientation.b1 * point.y;
-    var r = this.orientation.b2 * point.x + this.orientation.b3 * point.y;
-    var s = -q - r;
+    const point = new CGPoint((screenPoint.x - this.origin.x) / this.size.width, (screenPoint.y - this.origin.y) / this.size.height);
+    const q = this.orientation.b0 * point.x + this.orientation.b1 * point.y;
+    const r = this.orientation.b2 * point.x + this.orientation.b3 * point.y;
+    const s = -q - r;
 
     return new HexCube(q, r, s);
 }
 
 HexLayout.prototype.toScreen = function(hexCube) {
     // console.log('HexLayout.toScreen(' + hexCube + ')');
-    var x = (this.orientation.f0 * hexCube.q + this.orientation.f1 * hexCube.r) * this.size.width;
-    var y = (this.orientation.f2 * hexCube.q + this.orientation.f3 * hexCube.r) * this.size.height;
+    const x = (this.orientation.f0 * hexCube.q + this.orientation.f1 * hexCube.r) * this.size.width;
+    const y = (this.orientation.f2 * hexCube.q + this.orientation.f3 * hexCube.r) * this.size.height;
 
     return new CGPoint(x + this.origin.x, y + this.origin.y);
 }
 
-var layout = new HexLayout();
+const layout = new HexLayout();
 
 // HexPoint Constructor
 
 function HexPoint(x, y) {
     if (x instanceof HexCube && typeof (y) == 'undefined') {
         // construct HexPoint from HexCube
-        var hexCube = x;
+        const hexCube = x;
         this.x = hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2;
         this.y = hexCube.s;
     } else if (x instanceof CGPoint && typeof (y) == 'undefined') {
         // construct HexPoint from screen Point: CGPoint
-        var screenPoint = x;
+        const screenPoint = x;
         // hm, not sure why this is needed
         screenPoint.x -= 20;
         screenPoint.y -= 15;
-        var hexCube = new HexCube(screenPoint);
+        const hexCube = new HexCube(screenPoint);
         // console.log('hexCube=' + hexCube);
         this.x = Math.floor(hexCube.q + (hexCube.s + (hexCube.s & 1)) / 2);
         this.y = Math.floor(hexCube.s);
@@ -90,7 +90,7 @@ HexPoint.prototype.fromHexCube = function(hexCube) {
 }
 
 HexPoint.prototype.toScreen = function() {
-    var hexCube = new HexCube(this);
+    const hexCube = new HexCube(this);
     // console.log('HexPoint.toScreen=' + hexCube);
     return hexCube.toScreen();
 }
@@ -104,11 +104,11 @@ HexPoint.prototype.neighborIn = function(direction, distance) {
     }
 
     // console.log('try to get neighborIn ' + direction + ' of ' + this);
-    var dir = direction.cubeDirection();
+    let dir = direction.cubeDirection();
     dir = dir.mul(distance);
     // console.log('dir=' + dir);
 
-    var cubeNeighbor = new HexCube(this);
+    let cubeNeighbor = new HexCube(this);
     // console.log('cubeNeighbor1=' + cubeNeighbor);
     cubeNeighbor = cubeNeighbor.add(dir);
     // console.log('cubeNeighbor2=' + cubeNeighbor);
@@ -117,7 +117,7 @@ HexPoint.prototype.neighborIn = function(direction, distance) {
 }
 
 HexPoint.prototype.neighbors = function() {
-    var neighboring = [];
+    const neighboring = [];
 
     neighboring.push(this.neighborIn(HexDirections.north, 1));
     neighboring.push(this.neighborIn(HexDirections.northEast, 1));
@@ -244,13 +244,12 @@ const HexDirections = {
 
 function HexCube(q, r, s) {
     if (q instanceof HexPoint && typeof (r) == 'undefined' && typeof (s) == 'undefined') {
-        var hex = q;
+        const hex = q;
         this.q = hex.x - (hex.y + (hex.y&1)) / 2;
         this.s = hex.y;
         this.r = -this.q - this.s
     } else if (q instanceof CGPoint && typeof (r) == 'undefined' && typeof (s) == 'undefined') {
-        var screenPoint = q;
-        var hexCube = layout.toHex(screenPoint);
+        const hexCube = layout.toHex(q);
 
         this.q = hexCube.q;
         this.s = hexCube.s;
@@ -306,4 +305,4 @@ HexCube.prototype.toString = function() {
     return '[HexCube q: ' + this.q + ', r: ' + this.r + ', s: ' + this.s + ']';
 }
 
-export { HexPoint, HexDirections, HexDirection };
+export { HexCube, HexPoint, HexDirections, HexDirection };

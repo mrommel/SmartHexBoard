@@ -70,6 +70,8 @@ class UIState {
     static tutorials = new UIState('Tutorials');
     static credits = new UIState('Credits');
 
+    static tests = new UIState('Tests');
+
     constructor(name) {
         this.name = name;
     }

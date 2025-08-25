@@ -1,105 +1,106 @@
-/*================
- Template Name:
- Description: All type of data science, artificial intelligence & machine learning template.
- Version: 1.0
- Author:
-=======================*/
+import { HexCube, HexPoint } from "./base/point.js";
+import {Yields} from "./game/types.js";
 
-// TABLE OF CONTENTS
-// 1. preloader
-// 2. canvas full screen
+function Tester() {
+    this.tests = {
+        'HexPoint.constructor': test1_HexPoint_constructor,
+        'HexPoint.fromHexCube': test2_HexPoint_fromHexCube,
+        'HexCube.constructor': test3_HexCube_constructor,
+        'HexCube.fromHexPoint': test4_HexCube_fromHexPoint,
+        'HexCube.distanceTo': test5_HexCube_distanceTo,
+        'Yields.addValue': test6_Yields_addValue
+    }
+}
 
-jQuery(function ($) {
+Tester.prototype.runTests = function(callback) {
+    console.log('starting tests...');
+    for (const [test_name, test_method] of Object.entries(this.tests)) {
+        try {
+            console.log('running ' + test_name + '...');
+            test_method();
+            console.log(test_name + ' passed.');
+            callback(true, test_name, 'passed');
+        } catch (error) {
+            console.error(test_name + ' failed: ' + error.message);
+            callback(false, test_name, 'failed: ' + error.message);
+        }
+    }
+    console.log('finished testing...');
+}
 
-    'use strict';
-
-    // make canvas full screen
-    $(document).ready(function () {
-        test1_HexPoint_constructor();
-        test2_HexPoint_fromHexCube();
-        test3_HexCube_constructor();
-        test4_HexCube_fromHexPoint();
-        test5_HexCube_distanceTo();
-        test6_HexCube_distanceTo();
-
-        // hide pre-loader
-        $('#preloader').delay(200).fadeOut('fade');
-    });
-
-}); // JQuery end
+function expect(received){
+    return {
+        toBe: (expected) => {
+            if (received !== expected) {
+                throw new Error(`Expected ${expected} but received ${received}.`);
+            }
+            return true;
+        }
+    }
+}
 
 function test1_HexPoint_constructor() {
     const pt0 = new HexPoint();
+    expect(pt0.x).toBe(0);
+    expect(pt0.y).toBe(0);
 
-    if (pt0.x === 0 && pt0.y === 0) {
-        $('#tests').append('<p>Test1.0 successful</p>');
-    } else {
-        $('#tests').append('<p>Test1.0 failed: ' + pt0 + '</p>');
-    }
-
-    var pt1 = new HexPoint(1, 1);
-
-    if (pt1.x == 1 && pt1.y == 1) {
-        $('#tests').append('<p>Test1.1 successful</p>');
-    } else {
-        $('#tests').append('<p>Test1.1 failed: ' + pt1 + '</p>');
-    }
+    const pt1 = new HexPoint(1, 1);
+    expect(pt1.x).toBe(1);
+    expect(pt1.y).toBe(1);
 }
 
 function test2_HexPoint_fromHexCube() {
-    var pt = new HexPoint(1, 1);
-    var cb = new HexCube(0, 0, 0);
+    const pt = new HexPoint(1, 1);
+    const cb = new HexCube(0, 0, 0);
     pt.fromHexCube(cb);
 
-    if (pt.x == 0 && pt.y == 0) {
-        $('#tests').append('<p>Test2 successful</p>');
-    } else {
-        $('#tests').append('<p>Test2 failed: ' + pt + '</p>');
-    }
+    expect(pt.x).toBe(0);
+    expect(pt.y).toBe(0);
 }
 
 function test3_HexCube_constructor() {
-    var cb = new HexCube(1, 1, 4);
+    const cb = new HexCube(1, 1, 4);
 
-    if (cb.q == 1 && cb.r == 1 && cb.s == 4) {
-        $('#tests').append('<p>Test2 successful</p>');
-    } else {
-        $('#tests').append('<p>Test2 failed: ' + cb + '</p>');
-    }
+    expect(cb.q).toBe(1);
+    expect(cb.r).toBe(1);
+    expect(cb.s).toBe(4);
 }
 
 function test4_HexCube_fromHexPoint() {
-    var pt = new HexPoint(1, 1);
-    var cb = new HexCube(pt);
-    // cb.fromHexPoint(pt);
+    const pt = new HexPoint(1, 1);
+    const cb = new HexCube(pt);
 
-    if (cb.q == 0 && cb.r == -1 && cb.s == 1) {
-        $('#tests').append('<p>Test3 successful</p>');
-    } else {
-        $('#tests').append('<p>Test3 failed: ' + cb + '</p>');
-    }
+    expect(cb.q).toBe(0);
+    expect(cb.r).toBe(-1);
+    expect(cb.s).toBe(1);
 }
 
 function test5_HexCube_distanceTo() {
-    var cb1 = new HexCube(0, 0, 0);
-    var cb2 = new HexCube(1, 1, 1);
-    var dist = cb1.distanceTo(cb2);
+    const cb1 = new HexCube(0, 0, 0);
+    const cb2 = new HexCube(1, 1, 1);
+    const dist = cb1.distanceTo(cb2);
 
-    if (dist === 1) {
-        $('#tests').append('<p>Test4 successful</p>');
-    } else {
-        $('#tests').append('<p>Test4 failed: ' + dist + '</p>');
-    }
+    expect(dist).toBe(1);
 }
 
-function test6_HexCube_distanceTo() {
-    var cb1 = new HexCube(0, 0, 0);
-    var cb2 = new HexCube(1, 1, 1);
-    var dist = cb1.distanceTo(cb2);
-
-    if (dist === 1) {
-        $('#tests').append('<p>Test4 successful</p>');
-    } else {
-        $('#tests').append('<p>Test4 failed: ' + dist + '</p>');
-    }
+function test6_Yields_addValue() {
+    const y = new Yields(1, 2, 3, 4, 5, 6, 7);
+    y.addValue('food', 2);
+    expect(y.food).toBe(3);
+    y.addValue('production', 3);
+    expect(y.production).toBe(5);
+    y.addValue('gold', 4);
+    expect(y.gold).toBe(7);
+    y.addValue('science', 5);
+    expect(y.science).toBe(9);
+    y.addValue('culture', 6);
+    expect(y.culture).toBe(11);
+    y.addValue('faith', 7);
+    expect(y.faith).toBe(13);
+    y.addValue('tourism', 8);
+    expect(y.tourism).toBe(15);
 }
+
+export {
+    Tester
+};

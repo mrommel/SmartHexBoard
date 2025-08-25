@@ -17,6 +17,7 @@ import { ActionState } from "./actions/actions.js";
 import { handleError } from "./errorHandling.js";
 import "./widgets/widgets.js";
 import { UIState, UIBuilder } from "./ui.js";
+import { Tester } from "./tests.js";
 
 // TABLE OF CONTENTS
 // 1. preloader
@@ -454,6 +455,18 @@ function changeUIState(newState) {
             $('#ui').addClass('blurred');
             break;
 
+        case UIState.tests:
+            console.log('uistate > tests');
+            $('#uistate-splash').hide();
+            $('#uistate-menu').hide();
+            $('#uistate-play-game').hide();
+            $('#uistate-create-game').hide();
+            $('#uistate-generate').hide();
+            $('#uistate-game').hide();
+            $('#uistate-game-menu').hide();
+            $('#uistate-options').hide();
+            break;
+
         default:
             throw new Error(uiState + ' not handled');
     }
@@ -464,8 +477,72 @@ function initUI() {
 
     // start caching images ...
     renderer.cacheImages(function() {
-        // ... and switch to 'menu' state when done
-        changeUIState(UIState.menu);
+
+        // ... check for tests
+        if (window.location.href.indexOf('tests') !== -1) {
+            changeUIState(UIState.tests);
+            console.log('Found tests in URL, running tests...');
+            let tester = new Tester();
+            // build tests
+            const $tests_list = $('#tests_list');
+            for (const [key, value] of Object.entries(tester.tests)) {
+                 //.append('<li>' + test_name + '</li>');
+                let container = $('<div>')
+                    .addClass('list-group-item')
+                    .addClass('list-group-item-action')
+                    .addClass('d-flex')
+                    .addClass('gap-3')
+                    .addClass('py-3');
+                $tests_list.append(container);
+
+                let icon = $('<img>')
+                    .addClass('flex-shrink-0')
+                    .attr('id', 'img_' + key.replace(/\W/g, '_'))
+                    .attr('src', "/static/smarthexboard/img/tests/dot_grey.png")
+                    .attr('width', 32)
+                    .attr('height', 32);
+                container.append(icon);
+
+                let content = $('<div>')
+                    .addClass('d-flex')
+                    .addClass('gap-2')
+                    .addClass('w-100')
+                    .addClass('justify-content-between');
+                container.append(content);
+
+                let text_content = $('<div>')
+                    .addClass('ml-2');
+                content.append(text_content);
+
+                let content_header = $('<h6>')
+                    .addClass('mb-0')
+                    .text(key);
+                text_content.append(content_header);
+
+                let content_text = $('<p>')
+                    .addClass('mb-0')
+                    .addClass('opacity-75')
+                    .attr('id', 'test_' + key.replace(/\W/g, '_'))
+                    .text('Loading...');
+                text_content.append(content_text);
+            }
+            tester.runTests(
+                function (success, test_name, result) {
+                    const key = test_name.replace(/\W/g, '_');
+                    if (success) {
+                        $('#img_' + key).attr('src', "/static/smarthexboard/img/tests/dot_green.png");
+                        $('#test_' + key).text('Passed');
+                    } else {
+                        $('#img_' + key).attr('src', "/static/smarthexboard/img/tests/dot_red.png");
+                        $('#test_' + key).text(result);
+                    }
+                    console.log(result);
+                }
+            )
+        } else {
+            // ... and switch to 'menu' state when done
+            changeUIState(UIState.menu);
+        }
     });
 }
 
