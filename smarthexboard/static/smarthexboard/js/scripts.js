@@ -491,8 +491,8 @@ function initUI() {
                     .addClass('list-group-item')
                     .addClass('list-group-item-action')
                     .addClass('d-flex')
-                    .addClass('gap-3')
-                    .addClass('py-3');
+                    .addClass('gap-2')
+                    .addClass('py-2');
                 $tests_list.append(container);
 
                 let icon = $('<img>')
